@@ -38,8 +38,6 @@ class payments extends Command
      */
     public function handle()
     {
-        // Take API from .env
-        // Add BTC volume param
 
         $nonce = time();
         $uri = '/api/v1/wallet/payment';
@@ -54,8 +52,7 @@ class payments extends Command
             'amount': . $amount
             }";
 
-        dd($requestBody);
-
+        
         $signature = hash_hmac('sha256', $uri . $nonce . $apiToken . $requestBody, $secret); // Signature preparation
 
         // CURL

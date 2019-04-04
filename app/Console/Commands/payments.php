@@ -38,7 +38,6 @@ class payments extends Command
      */
     public function handle()
     {
-
         $nonce = time();
         $uri = '/api/v1/wallet/payment';
         $apiToken = $_ENV['API_TOKEN'];
@@ -52,7 +51,6 @@ class payments extends Command
             'amount': . $amount
             }";
 
-        
         $signature = hash_hmac('sha256', $uri . $nonce . $apiToken . $requestBody, $secret); // Signature preparation
 
         // CURL

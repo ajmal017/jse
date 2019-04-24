@@ -23,5 +23,8 @@ Route::group(['prefix' => 'auth'], function ($router) {
     Route::post('logout', 'AuthController@logout');
     Route::post('refresh', 'AuthController@refresh');
     Route::post('me', 'AuthController@me');
+});
 
+Route::group(['prefix' => 'trading'], function ($router) {
+    Route::get('history', 'Exchange\HistoryBars@load');
 });

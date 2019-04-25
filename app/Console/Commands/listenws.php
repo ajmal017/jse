@@ -2,6 +2,7 @@
 
 namespace App\Console\Commands;
 
+use App\Classes\Trading\CandleMaker;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Cache;
 use Ratchet\Client\WebSocket;
@@ -35,9 +36,7 @@ class listenws extends Command
     }
 
     /**
-     * Execute the console command.
-     *
-     * @return mixed
+     * @param CandleMaker $candleMaker
      */
     public function handle()
     {
@@ -46,13 +45,10 @@ class listenws extends Command
          * @see https://github.com/ratchetphp/Pawl
          */
         $loop = \React\EventLoop\Factory::create();
-        $reactConnector = new \React\Socket\Connector($loop, [
-            'dns' => '8.8.8.8', // Does not work through OKADO internet provider. Timeout error
-            'timeout' => 10
-        ]);
+        $reactConnector = new \React\Socket\Connector($loop, ['dns' => '8.8.8.8', 'timeout' => 10]);
 
         $connector = new \Ratchet\Client\Connector($loop, $reactConnector);
-        \App\Classes\BitmexWsListener::subscribe($connector, $loop, $this);
+        \App\Classes\WebSocket\BitmexWsListener::subscribe($connector, $loop, $this, $candleMaker = new CandleMaker());
 
     }
 }

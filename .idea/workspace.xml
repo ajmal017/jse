@@ -2,12 +2,13 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="0ab8c352-e91a-41d2-a602-98135f1f3232" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/app/Classes/Indicators/PriceChannel.php" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/app/Classes/WsApiMessages/PusherApiMessage.php" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/app/Classes/Trading/CandleMaker.php" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/app/Classes/WebSocket/ConsoleWebSocket.php" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/Classes/Trading/History.php" afterPath="$PROJECT_DIR$/app/Classes/Trading/History.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/Console/Commands/hist.php" afterPath="$PROJECT_DIR$/app/Console/Commands/hist.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/Http/Controllers/Exchange/HistoryBars.php" afterPath="$PROJECT_DIR$/app/Http/Controllers/Exchange/HistoryBars.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/Console/Commands/listenws.php" afterPath="$PROJECT_DIR$/app/Console/Commands/listenws.php" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/app/Classes/BitmexWsListener.php" afterPath="$PROJECT_DIR$/app/Classes/WebSocket/BitmexWsListener.php" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/app/Classes/WsApiMessages/PusherApiMessage.php" afterPath="$PROJECT_DIR$/app/Classes/WebSocket/PusherApiMessage.php" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -21,10 +22,47 @@
       <file leaf-file-name="listenws.php" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/app/Console/Commands/listenws.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="51">
-              <caret line="17" column="36" lean-forward="false" selection-start-line="17" selection-start-column="36" selection-end-line="17" selection-end-column="36" />
+            <state relative-caret-position="390">
+              <caret line="48" column="0" lean-forward="true" selection-start-line="48" selection-start-column="0" selection-end-line="48" selection-end-column="0" />
               <folding>
-                <element signature="e#40#71#0#PHP" expanded="true" />
+                <element signature="e#40#76#0#PHP" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="BitmexWsListener.php" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/app/Classes/WebSocket/BitmexWsListener.php">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="-136">
+              <caret line="14" column="0" lean-forward="false" selection-start-line="14" selection-start-column="0" selection-end-line="14" selection-end-column="0" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="ConsoleWebSocket.php" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/app/Classes/WebSocket/ConsoleWebSocket.php">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="204">
+              <caret line="17" column="39" lean-forward="true" selection-start-line="17" selection-start-column="39" selection-end-line="17" selection-end-column="39" />
+              <folding>
+                <element signature="e#126#162#0#PHP" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="CandleMaker.php" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/app/Classes/Trading/CandleMaker.php">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="-282">
+              <caret line="153" column="97" lean-forward="false" selection-start-line="153" selection-start-column="97" selection-end-line="153" selection-end-column="97" />
+              <folding>
+                <element signature="e#123#163#0#PHP" expanded="true" />
+                <element signature="e#1719#2500#0#PHP" expanded="false" />
+                <element signature="e#3947#4170#0#PHP" expanded="false" />
+                <element signature="e#4335#5031#0#PHP" expanded="false" />
               </folding>
             </state>
           </provider>
@@ -43,8 +81,8 @@
       <file leaf-file-name="HistoryBars.php" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/app/Http/Controllers/Exchange/HistoryBars.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="237">
-              <caret line="68" column="14" lean-forward="false" selection-start-line="68" selection-start-column="14" selection-end-line="68" selection-end-column="14" />
+            <state relative-caret-position="390">
+              <caret line="77" column="26" lean-forward="true" selection-start-line="77" selection-start-column="26" selection-end-line="77" selection-end-column="26" />
               <folding>
                 <element signature="e#49#77#0#PHP" expanded="true" />
               </folding>
@@ -52,54 +90,14 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="PusherApiMessage.php" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/app/Classes/WsApiMessages/PusherApiMessage.php">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-426">
-              <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="History.php" pinned="false" current-in-tab="true">
+      <file leaf-file-name="History.php" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/app/Classes/Trading/History.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="204">
-              <caret line="12" column="25" lean-forward="false" selection-start-line="12" selection-start-column="25" selection-end-line="12" selection-end-column="25" />
+            <state relative-caret-position="271">
+              <caret line="32" column="32" lean-forward="true" selection-start-line="32" selection-start-column="32" selection-end-line="32" selection-end-column="65" />
               <folding>
                 <element signature="e#6#90#0#PHP" expanded="true" />
               </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="AuthController.php" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/app/Http/Controllers/AuthController.php">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="68">
-              <caret line="4" column="28" lean-forward="true" selection-start-line="4" selection-start-column="28" selection-end-line="4" selection-end-column="28" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="hist.php" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/app/Console/Commands/hist.php">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="441">
-              <caret line="41" column="74" lean-forward="false" selection-start-line="41" selection-start-column="74" selection-end-line="41" selection-end-column="74" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="BitmexWsListener.php" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/app/Classes/BitmexWsListener.php">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="357">
-              <caret line="26" column="63" lean-forward="false" selection-start-line="26" selection-start-column="63" selection-end-line="26" selection-end-column="63" />
-              <folding />
             </state>
           </provider>
         </entry>
@@ -112,6 +110,14 @@
       <find>auth</find>
       <find>volum</find>
       <find>50</find>
+      <find>settings</find>
+      <find>$command</find>
+      <find>$this-&gt;settings</find>
+      <find>time to c</find>
+      <find>tickdate</find>
+      <find>dd</find>
+      <find>$messageArray['flag']</find>
+      <find>$messageArray</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -133,7 +139,6 @@
         <option value="$PROJECT_DIR$/app/Http/Kernel.php" />
         <option value="$PROJECT_DIR$/config/cors.php" />
         <option value="$PROJECT_DIR$/app/Console/Commands/bitmexlisten.php" />
-        <option value="$PROJECT_DIR$/app/Console/Commands/listenws.php" />
         <option value="$PROJECT_DIR$/.env" />
         <option value="$PROJECT_DIR$/app/Events/jseevent.php" />
         <option value="$PROJECT_DIR$/app/Classes/BitmexWsListener.php" />
@@ -144,7 +149,12 @@
         <option value="$PROJECT_DIR$/app/Http/Controllers/Exchange/HistoryBars.php" />
         <option value="$PROJECT_DIR$/app/Classes/Indicators/PriceChannel.php" />
         <option value="$PROJECT_DIR$/app/Console/Commands/hist.php" />
+        <option value="$PROJECT_DIR$/app/Classes/WebSocket/PusherApiMessage.php" />
+        <option value="$PROJECT_DIR$/app/Classes/WebSocket/ConsoleWebSocket.php" />
+        <option value="$PROJECT_DIR$/app/Classes/WebSocket/BitmexWsListener.php" />
         <option value="$PROJECT_DIR$/app/Classes/Trading/History.php" />
+        <option value="$PROJECT_DIR$/app/Console/Commands/listenws.php" />
+        <option value="$PROJECT_DIR$/app/Classes/Trading/CandleMaker.php" />
       </list>
     </option>
   </component>
@@ -167,7 +177,7 @@
     <handled-path value="$PROJECT_DIR$/node_modules" />
   </component>
   <component name="PhpWorkspaceProjectConfiguration" backward_compatibility_performed="true" />
-  <component name="ProjectFrameBounds" extendedState="6">
+  <component name="ProjectFrameBounds" extendedState="7">
     <option name="x" value="841" />
     <option name="width" value="606" />
     <option name="height" value="675" />
@@ -227,7 +237,7 @@
               <item name="jse.kk" type="2a2b976b:PhpTreeStructureProvider$1" />
               <item name="app" type="2a2b976b:PhpTreeStructureProvider$1" />
               <item name="Classes" type="2a2b976b:PhpTreeStructureProvider$1" />
-              <item name="WsApiMessages" type="2a2b976b:PhpTreeStructureProvider$1" />
+              <item name="WebSocket" type="2a2b976b:PhpTreeStructureProvider$1" />
             </path>
             <path>
               <item name="jse.kk" type="b2602c69:ProjectViewProjectNode" />
@@ -314,6 +324,7 @@
       <recent name="W:\domains\jse.kk\app\Classes" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="W:\domains\jse.kk\app\Classes\WebSocket" />
       <recent name="W:\domains\jse.kk\app\Http\Controllers\Exchnage" />
     </key>
   </component>
@@ -349,18 +360,18 @@
       <workItem from="1555509754471" duration="748000" />
       <workItem from="1555543687647" duration="548000" />
       <workItem from="1555701520971" duration="7532000" />
-      <workItem from="1556125670035" duration="15345000" />
+      <workItem from="1556125670035" duration="30816000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="59371000" />
+    <option name="totallyTimeSpent" value="74842000" />
   </component>
   <component name="ToolWindowManager">
-    <frame x="-8" y="-8" width="1382" height="744" extended-state="6" />
+    <frame x="-8" y="-8" width="1382" height="744" extended-state="7" />
     <editor active="true" />
     <layout>
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.22844176" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.19062027" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
@@ -391,14 +402,6 @@
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/.env">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="782">
-          <caret line="46" column="49" lean-forward="false" selection-start-line="46" selection-start-column="13" selection-end-line="46" selection-end-column="49" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/Console/Commands/payment.php" />
     <entry file="file://$PROJECT_DIR$/app/Console/Commands/payments.php" />
     <entry file="file://$PROJECT_DIR$/app/Console/Commands/balance.php" />
     <entry file="file://$PROJECT_DIR$/routes/api.php">
@@ -586,36 +589,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/Http/Controllers/AuthController.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="68">
-          <caret line="4" column="28" lean-forward="true" selection-start-line="4" selection-start-column="28" selection-end-line="4" selection-end-column="28" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/routes/api.php">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="237">
           <caret line="16" column="28" lean-forward="true" selection-start-line="16" selection-start-column="28" selection-end-line="16" selection-end-column="28" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/Http/Controllers/Exchange/HistoryBars.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="237">
-          <caret line="68" column="14" lean-forward="false" selection-start-line="68" selection-start-column="14" selection-end-line="68" selection-end-column="14" />
-          <folding>
-            <element signature="e#49#77#0#PHP" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/Classes/WsApiMessages/PusherApiMessage.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-426">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding />
         </state>
       </provider>
@@ -628,31 +605,11 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/Classes/BitmexWsListener.php">
+    <entry file="file://$PROJECT_DIR$/app/Classes/WebSocket/PusherApiMessage.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="357">
-          <caret line="26" column="63" lean-forward="false" selection-start-line="26" selection-start-column="63" selection-end-line="26" selection-end-column="63" />
+        <state relative-caret-position="153">
+          <caret line="14" column="54" lean-forward="true" selection-start-line="14" selection-start-column="54" selection-end-line="14" selection-end-column="54" />
           <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/Classes/Indicators/PriceChannel.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="240">
-          <caret line="41" column="22" lean-forward="false" selection-start-line="41" selection-start-column="22" selection-end-line="41" selection-end-column="22" />
-          <folding>
-            <element signature="e#126#160#0#PHP" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/Console/Commands/listenws.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="51">
-          <caret line="17" column="36" lean-forward="false" selection-start-line="17" selection-start-column="36" selection-end-line="17" selection-end-column="36" />
-          <folding>
-            <element signature="e#40#71#0#PHP" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -664,12 +621,79 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/Classes/Trading/History.php">
+    <entry file="file://$PROJECT_DIR$/app/Http/Controllers/AuthController.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="68">
+          <caret line="4" column="28" lean-forward="true" selection-start-line="4" selection-start-column="28" selection-end-line="4" selection-end-column="28" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/Classes/WebSocket/BitmexWsListener.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-136">
+          <caret line="14" column="0" lean-forward="false" selection-start-line="14" selection-start-column="0" selection-end-line="14" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/Classes/Indicators/PriceChannel.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="194">
+          <caret line="26" column="6" lean-forward="false" selection-start-line="26" selection-start-column="6" selection-end-line="26" selection-end-column="6" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/Console/Commands/listenws.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="390">
+          <caret line="48" column="0" lean-forward="true" selection-start-line="48" selection-start-column="0" selection-end-line="48" selection-end-column="0" />
+          <folding>
+            <element signature="e#40#76#0#PHP" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/Classes/WebSocket/ConsoleWebSocket.php">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="204">
-          <caret line="12" column="25" lean-forward="false" selection-start-line="12" selection-start-column="25" selection-end-line="12" selection-end-column="25" />
+          <caret line="17" column="39" lean-forward="true" selection-start-line="17" selection-start-column="39" selection-end-line="17" selection-end-column="39" />
+          <folding>
+            <element signature="e#126#162#0#PHP" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/Http/Controllers/Exchange/HistoryBars.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="390">
+          <caret line="77" column="26" lean-forward="true" selection-start-line="77" selection-start-column="26" selection-end-line="77" selection-end-column="26" />
+          <folding>
+            <element signature="e#49#77#0#PHP" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/Classes/Trading/History.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="271">
+          <caret line="32" column="32" lean-forward="true" selection-start-line="32" selection-start-column="32" selection-end-line="32" selection-end-column="65" />
           <folding>
             <element signature="e#6#90#0#PHP" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/Classes/Trading/CandleMaker.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-282">
+          <caret line="153" column="97" lean-forward="false" selection-start-line="153" selection-start-column="97" selection-end-line="153" selection-end-column="97" />
+          <folding>
+            <element signature="e#123#163#0#PHP" expanded="true" />
+            <element signature="e#1719#2500#0#PHP" expanded="false" />
+            <element signature="e#3947#4170#0#PHP" expanded="false" />
+            <element signature="e#4335#5031#0#PHP" expanded="false" />
           </folding>
         </state>
       </provider>

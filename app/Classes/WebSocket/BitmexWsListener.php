@@ -6,14 +6,17 @@
  * Time: 9:15 PM
  */
 
-namespace App\Classes;
+namespace App\Classes\WebSocket;
 
 class BitmexWsListener
 {
     public static $console;
-    public static function subscribe($connector, $loop, $console){
+    public static $candleMaker;
+
+    public static function subscribe($connector, $loop, $console, $candleMaker){
 
         self::$console = $console;
+        self::$candleMaker = $candleMaker;
 
         /** Pick up the right websocket endpoint accordingly to the exchange */
         $exchangeWebSocketEndPoint = "wss://www.bitmex.com/realtime";
@@ -24,10 +27,13 @@ class BitmexWsListener
                     dump($jsonMessage);
 
                     // Event fire
-                    event(new \App\Events\jseevent($jsonMessage));
+                    // event(new \App\Events\jseevent($jsonMessage)); // Sent to Chart.vue
 
                     if (array_key_exists('data', $jsonMessage)){
                         if (array_key_exists('lastPrice', $jsonMessage['data'][0])){
+
+                            \App\Classes\WebSocket\ConsoleWebSocket::messageParse($jsonMessage, self::$console, self::$candleMaker );
+
                             // WebSocketStream::Parse($jsonMessage['data']); // Update quotes, send events to vue
                             // WebSocketStream::stopLossCheck($jsonMessage['data']); // Stop loss execution
                         }

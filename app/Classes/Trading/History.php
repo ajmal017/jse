@@ -28,11 +28,9 @@ class History
 
         DB::table('asset_1')->truncate();
         foreach(array_reverse($bars) as $bar){
-            // dump(gmdate("Y-m-d G:i:s", strtotime($bar->timestamp))); // Regular data
-            // dump(strtotime($bar->timestamp)); // Timestamp
             DB::table('asset_1')->insert(array(
-                'date' => gmdate("Y-m-d G:i:s", strtotime($bar->timestamp)),
-                'time_stamp' => strtotime($bar->timestamp) * 1000,
+                'date' => gmdate("Y-m-d G:i:s", strtotime($bar->timestamp)), // Regular date
+                'time_stamp' => strtotime($bar->timestamp) * 1000, // Timestamp
                 'open' => $bar->open,
                 'close' => $bar->close,
                 'high' => $bar->high,
@@ -42,7 +40,7 @@ class History
         }
 
         // Send event to the chart and reload it
-        $pusherApiMessage = new \App\Classes\WsApiMessages\PusherApiMessage();
+        $pusherApiMessage = new \App\Classes\WebSocket\PusherApiMessage();
         $pusherApiMessage->clientId = 12345;
         $pusherApiMessage->messageType = 'reloadChartAfterHistoryLoaded';
         event(new \App\Events\jseevent($pusherApiMessage->toArray()));

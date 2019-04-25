@@ -6,7 +6,7 @@
  * Time: 8:22 AM
  */
 
-namespace App\Classes\WsApiMessages;
+namespace App\Classes\WebSocket;
 
 /**
  * Send message to Vue.js via pusher.

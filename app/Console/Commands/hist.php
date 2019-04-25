@@ -11,7 +11,7 @@ class hist extends Command
      *
      * @var string
      */
-    protected $signature = 'hist';
+    protected $signature = 'hist {symbol}';
 
     /**
      * The console command description.
@@ -37,6 +37,10 @@ class hist extends Command
      */
     public function handle()
     {
-        \App\Classes\Trading\History::loadPeriod();
+        //dd($this->argument('symbol'));
+
+        \App\Classes\Trading\History::loadPeriod($this->argument('symbol'));
+        \App\Classes\Indicators\PriceChannel::calculate();
+        // Subscribe and start broadcasting
     }
 }

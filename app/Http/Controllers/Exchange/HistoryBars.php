@@ -67,7 +67,6 @@ class HistoryBars extends \App\Http\Controllers\Controller
                 //$rowValue->net_profit
                 $rowValue->accumulated_profit // Profit diagram without commission
             ];
-
         }
 
         $seriesData = array(

@@ -12,11 +12,17 @@ class BitmexWsListener
 {
     public static $console;
     public static $candleMaker;
+    public static $chart;
+    private static $symbol;
+    private static $indicatorPeriod;
 
-    public static function subscribe($connector, $loop, $console, $candleMaker){
+    public static function subscribe($connector, $loop, $console, $candleMaker, $chart, $symbol, $indicatorPeriod){
 
         self::$console = $console;
         self::$candleMaker = $candleMaker;
+        self::$chart = $chart;
+        self::$symbol = $symbol;
+        self::$indicatorPeriod = $indicatorPeriod;
 
         /** Pick up the right websocket endpoint accordingly to the exchange */
         $exchangeWebSocketEndPoint = "wss://www.bitmex.com/realtime";
@@ -24,18 +30,11 @@ class BitmexWsListener
             ->then(function(\Ratchet\Client\WebSocket $conn) use ($loop) {
                 $conn->on('message', function(\Ratchet\RFC6455\Messaging\MessageInterface $socketMessage) use ($conn, $loop) {
                     $jsonMessage = json_decode($socketMessage->getPayload(), true);
-                    dump($jsonMessage);
-
                     // Event fire
                     // event(new \App\Events\jseevent($jsonMessage)); // Sent to Chart.vue
-
                     if (array_key_exists('data', $jsonMessage)){
                         if (array_key_exists('lastPrice', $jsonMessage['data'][0])){
-
-                            \App\Classes\WebSocket\ConsoleWebSocket::messageParse($jsonMessage, self::$console, self::$candleMaker );
-
-                            // WebSocketStream::Parse($jsonMessage['data']); // Update quotes, send events to vue
-                            // WebSocketStream::stopLossCheck($jsonMessage['data']); // Stop loss execution
+                            \App\Classes\WebSocket\ConsoleWebSocket::messageParse($jsonMessage, self::$console, self::$candleMaker, self::$chart, self::$indicatorPeriod);
                         }
                     }
                 });
@@ -51,7 +50,7 @@ class BitmexWsListener
                 /* Manual subscription object */
                 $requestObject = json_encode([
                     "op" => "subscribe",
-                    "args" => ["instrument:XBTUSD"] // ["instrument:XBTUSD", "instrument:ETHUSD"]
+                    "args" => ["instrument:" . self::$symbol] // ["instrument:XBTUSD", "instrument:ETHUSD"]
                 ]);
                 $conn->send($requestObject);
 

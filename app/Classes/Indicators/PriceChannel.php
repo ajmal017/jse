@@ -26,20 +26,19 @@ use Illuminate\Support\Facades\Log;
  */
 class PriceChannel
 {
-    public static function calculate()
+    public static function calculate($period)
     {
-
         /* @var int $priceChannelPeriod */
         //$priceChannelPeriod = DB::table('settings_realtime')
         //    ->where('id', 1)
         //    ->value('price_channel_period');
-        $priceChannelPeriod = 5;
+        $priceChannelPeriod = $period;
 
         /* @var int $smaPeriod */
         //$smaPeriod = DB::table('settings_realtime')
         //    ->where('id', 1)
         // ->value('sma_period');
-        $smaPeriod = 5;
+        $smaPeriod = $period;
 
         /**
          * @var int elementIndex Loop index. If the price channel period is 5 the loop will go from 0 to 4.

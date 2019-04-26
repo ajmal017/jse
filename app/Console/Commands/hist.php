@@ -11,7 +11,7 @@ class hist extends Command
      *
      * @var string
      */
-    protected $signature = 'hist {symbol}';
+    protected $signature = 'hist {historySymbol}{orderSymbol}';
 
     /**
      * The console command description.
@@ -37,9 +37,13 @@ class hist extends Command
      */
     public function handle()
     {
-        //dd($this->argument('symbol'));
+        // History: XBTUSD, Order: BTC/USD
+        // History: ETHUSD, Order: ETH/USD
 
-        \App\Classes\Trading\History::loadPeriod($this->argument('symbol'));
+        // dump($this->argument('historySymbol'));
+        // dd($this->argument('orderSymbol'));
+
+        \App\Classes\Trading\History::loadPeriod($this->argument('historySymbol'));
         \App\Classes\Indicators\PriceChannel::calculate();
         // Subscribe and start broadcasting
     }

@@ -3,6 +3,8 @@
 namespace App\Console\Commands;
 
 use App\Classes\Trading\CandleMaker;
+use App\Classes\Trading\Chart;
+use App\Classes\Trading\Exchange;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Cache;
 use Ratchet\Client\WebSocket;
@@ -16,7 +18,7 @@ class listenws extends Command
      *
      * @var string
      */
-    protected $signature = 'listenws';
+    protected $signature = 'listenws {historySymbol}{orderSymbol}{period}';
 
     /**
      * The console command description.
@@ -46,9 +48,21 @@ class listenws extends Command
          */
         $loop = \React\EventLoop\Factory::create();
         $reactConnector = new \React\Socket\Connector($loop, ['dns' => '8.8.8.8', 'timeout' => 10]);
-
         $connector = new \Ratchet\Client\Connector($loop, $reactConnector);
-        \App\Classes\WebSocket\BitmexWsListener::subscribe($connector, $loop, $this, $candleMaker = new CandleMaker());
 
+        // History: XBTUSD, Order: BTC/USD
+        // History: ETHUSD, Order: ETH/USD
+
+        \App\Classes\Trading\History::loadPeriod($this->argument('historySymbol'));
+        \App\Classes\Indicators\PriceChannel::calculate($this->argument('period'));
+        \App\Classes\WebSocket\BitmexWsListener::subscribe(
+            $connector,
+            $loop,
+            $this,
+            $candleMaker = new CandleMaker(),
+            $chart = new Chart($this->argument('orderSymbol')),
+            $this->argument('historySymbol'),
+            $this->argument('period') // Indicator period
+        );
     }
 }

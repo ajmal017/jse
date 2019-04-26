@@ -46,7 +46,7 @@ class CandleMaker
      * @param collection    $settings Row of settings from DB
      * @param Command       $command Needed for throwing colored messages to the console output (->info, ->error etc.)
      */
-    public function index($tickPrice, $tickDateFullTime, $tickVolume, $command){
+    public function index($tickPrice, $tickDateFullTime, $tickVolume, $chart, $command, $indicatorPeriod){
 
 
         echo "********************************************** CandleMaker.php<br>\n";
@@ -114,14 +114,11 @@ class CandleMaker
              * PriceChannel::calculate() may result as two different SMA values - one on the chart and one in DB. This makes hard
              * to trace and debug the code.
              */
-            PriceChannel::calculate();
+            PriceChannel::calculate($indicatorPeriod);
 
-            // SEND TICK TO CHART
-            /** Send tick to Chart.php in order to calculate profit and add bars to D
-             * ($mode, $barDate, $timeStamp, $barClosePrice, $id)
-             */
+            /** Call Chart.php and calculate profit */
             // @todo 25.04.19 Disabled. Need to run the real time chart without trades first
-            // $chart->index("history", gmdate("Y-m-d G:i:s", ($tickDate / 1000)), $tickDate, $tickPrice, null);
+            $chart->index(gmdate("Y-m-d G:i:s", strtotime($tickDateFullTime)), $this->tickDate);
 
             /** Add bar to DB */
             DB::table('asset_1')->insert(array(
@@ -153,7 +150,7 @@ class CandleMaker
              *
              * @todo price channel calculated twice! This is the second time! This must be fixed.
              */
-            PriceChannel::calculate();
+            PriceChannel::calculate($indicatorPeriod);
 
             /** This flag informs Chart.vue that it needs to add new bar to the chart.
              * We reach this code only when new bar is issued and only in this case this flag is added.

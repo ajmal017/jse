@@ -14,27 +14,26 @@ use Illuminate\Support\Facades\Cache;
 use Ratchet\Client\WebSocket;
 
 /**
- * php artisan listenws XBTUSD BTC/USD 15 1
- * php artisan listenws ETHUSD ETH/USD 13 5
+ * php artisan pc XBTUSD BTC/USD 15 1
+ * php artisan pc ETHUSD ETH/USD 13 5
  * params:
  * 1. History symbol name
  * 2. Execution symbol name
- * 3. Order size
- * 4. Indicator period
+ * 3. Order size (Contracts)
+ * 4. Indicator period (Bars. One bar can be any time frame 1m, 5m, 1h, etc.)
  *
  * Class listenws
  * @package App\Console\Commands
  */
 
-class listenws extends Command
+class Pc extends Command
 {
-
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
-    protected $signature = 'listenws {historySymbol}{orderSymbol}{orderVolume}{period}';
+    protected $signature = 'pc {historySymbol}{orderSymbol}{orderVolume}{priceChannelPeriod}';
 
     /**
      * The console command description.
@@ -58,7 +57,6 @@ class listenws extends Command
      */
     public function handle()
     {
-
         /**
          * Ratchet/pawl websocket library
          * @see https://github.com/ratchetphp/Pawl
@@ -68,27 +66,23 @@ class listenws extends Command
         $connector = new \Ratchet\Client\Connector($loop, $reactConnector);
         \App\Classes\Trading\History::loadPeriod($this->argument('historySymbol'));
 
-        PriceChannel::calculate($this->argument('period'));
+        PriceChannel::calculate($this->argument('priceChannelPeriod'));
 
-        Sma::calculate('close',5, 'sma1');
-        Sma::calculate('close',10, 'sma2');
-        Ema::calculate('close', 5, 'sma1', 'ema1');
-        Ema::calculate('close',10, 'sma2', 'ema2');
-        Macd::calculate(12, 26, 9); // 12, 26, 9
-        Sma::calculate('macd_line', 9, 'macd_signal_line');
+        // Reload chart
+        $pusherApiMessage = new \App\Classes\WebSocket\PusherApiMessage();
+        $pusherApiMessage->clientId = 12345;
+        $pusherApiMessage->messageType = 'reloadChartAfterHistoryLoaded';
+        event(new \App\Events\jseevent($pusherApiMessage->toArray()));
 
         \App\Classes\WebSocket\BitmexWsListener::subscribe(
             $connector,
             $loop,
             $this, // For colored messages in console
-            $candleMaker = new CandleMaker(),
+            $candleMaker = new CandleMaker('priceChannel'),
             $chart = new Chart($this->argument('orderSymbol'), $this->argument('orderVolume')),
             $this->argument('historySymbol'),
-            $this->argument('period') // Indicator period
+            $this->argument('priceChannelPeriod'), // Indicator period
+            null
         );
     }
 }
-
-// 1. Add a second command: listenws MACD
-// 2. Create a copy of Chart.php class which is gonna react for MACD cross
-// 3. This command will execute MACD indicator calc and it's own Chart.php class

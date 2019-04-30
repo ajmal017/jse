@@ -7,6 +7,7 @@
  */
 
 namespace App\Classes\Trading;
+use App\Classes\Indicators\Macd;
 use App\Classes\Indicators\PriceChannel;
 use App\Classes\WebSocket\PusherApiMessage;
 use App\Console\Commands\RatchetPawlSocket;
@@ -33,10 +34,12 @@ class CandleMaker
     private $tickDate;
 
     private $pusherApiMessage;
+    private $indicator;
 
-    public function __construct()
+    public function __construct($indicator)
     {
         $this->isFirstTickInBar = true;
+        $this->indicator = $indicator;
     }
 
     /**
@@ -45,8 +48,9 @@ class CandleMaker
      * @param double        $tickVolume The volume of the trade. Can be less than 1
      * @param collection    $settings Row of settings from DB
      * @param Command       $command Needed for throwing colored messages to the console output (->info, ->error etc.)
+     * @param date          $priceChannelPeriod
      */
-    public function index($tickPrice, $tickDateFullTime, $tickVolume, $chart, $command, $indicatorPeriod){
+    public function index($tickPrice, $tickDateFullTime, $tickVolume, $chart, $command, $priceChannelPeriod, $macdSettings){
         echo "********************************************** CandleMaker.php<br>\n";
         /** @todo remove this variable. use just $settings*/
         // $this->settings = $settings;
@@ -112,7 +116,9 @@ class CandleMaker
              * PriceChannel::calculate() may result as two different SMA values - one on the chart and one in DB. This makes hard
              * to trace and debug the code.
              */
-            PriceChannel::calculate($indicatorPeriod);
+
+            if ($this->indicator == 'priceChannel') PriceChannel::calculate($priceChannelPeriod);
+            if ($this->indicator == 'macd') Macd::calculate($macdSettings);
 
             /** Call Chart.php and calculate profit */
             // @todo 25.04.19 Disabled. Need to run the real time chart without trades first
@@ -148,7 +154,8 @@ class CandleMaker
              *
              * @todo price channel calculated twice! This is the second time! This must be fixed.
              */
-            PriceChannel::calculate($indicatorPeriod);
+            if ($this->indicator == 'priceChannel') PriceChannel::calculate($priceChannelPeriod);
+            if ($this->indicator == 'macd') Macd::calculate($macdSettings);
 
             /** This flag informs Chart.vue that it needs to add new bar to the chart.
              * We reach this code only when new bar is issued and only in this case this flag is added.

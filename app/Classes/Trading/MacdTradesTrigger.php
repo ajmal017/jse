@@ -18,14 +18,14 @@ use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Cache;
 
 /**
- * Chart class provides collection preparation for chart drawing functionality:
- * History bars (candles)
- * Indicators and diagrams (price channel, volume, profit diagram etc.)
- * Trades (long, short, stop-loss mark)
- * DB actions (trades, profit, accumulated profit etc.)
- * Index method is called on each tick occurrence in RatchetPawlSocket class which reads the trades broadcast stream
+ * Trigger trades based on MACD
+ *
+ * Class PrTradesTrigger
+ * @package App\Classes\Trading
+ *
+ * @see Classes and backtest scheme https://drive.google.com/file/d/1IDBxR2dWDDsbFbradNapSo7QYxv36EQM/view?usp=sharing
  */
-class Chart
+class MacdTradesTrigger
 {
     public $trade_flag; // The value is stored in DB. This flag indicates what trade should be opened next. When there is not trades, it is set to all. When long trade has been opened, the next (closing) one must be long and vise vera.
     public $add_bar_long = true; // Count closed position on the same be the signal occurred. The problem is when the position is closed the close price of this bar goes to the next position
@@ -37,19 +37,6 @@ class Chart
     public $tradeProfit;
     private $executionSymbolName;
 
-    /**
-     * Received message in RatchetPawlSocket.php is sent to this method as an argument.
-     * A message is processed, bars are added to DB, profit is calculated.
-     *
-     * @param \Ratchet\RFC6455\Messaging\MessageInterface $socketMessage
-     * @param Command Variable type for colored and formatted console messages like alert, warning, error etc.
-     * @return array $messageArray Array which has OHLC of the bar, new bar flag and other parameters. The array is
-     * generated on each tick (each websocket message) and then passed as an event to the browser. These messages
-     * are transmitted over websocket pusher broadcast service.
-     * @see https://pusher.com/
-     * @see Classes and backtest scheme https://drive.google.com/file/d/1IDBxR2dWDDsbFbradNapSo7QYxv36EQM/view?usp=sharing
-     */
-
     public function __construct($executionSymbolName, $orderVolume)
     {
         $this->volume = $orderVolume;
@@ -57,9 +44,13 @@ class Chart
         $this->trade_flag = 'all';
     }
 
+
+    // Macd line > Macd signal line => go long
+    // Macd line < Macd signal line => go short
+
     public function index($barDate, $timeStamp)
     {
-        echo "********************************************** Chart.php!<br>\n";
+        echo "********************************************** MacdTradesTrigger.php!<br>\n";
 
         // Realtime mode. No ID of the record is sent. Get the quantity of all records.
         /** In this case we do the same request, take the last record from the DB */
@@ -70,7 +61,8 @@ class Chart
         $recordId = $assetRow[0]->id;
 
         // SMA filter ON?
-        $barClosePrice = $assetRow[0]->sma1;
+        // $barClosePrice = $assetRow[0]->sma1;
+        $barClosePrice = $assetRow[0]->close;
 
         /**
          * We do this check because sometimes, don't really understand under which circumstances, we get
@@ -126,9 +118,9 @@ class Chart
 
         //$this->dateCompeareFlag = true;
 
+        //if (($barClosePrice > $penUltimanteRow->price_channel_high_value) && ($this->trade_flag == "all" || $this->trade_flag == "long")){
+        if (($assetRow[0]->macd_line > $assetRow[0]->macd_signal_line) && ($this->trade_flag == "all" || $this->trade_flag == "long")){
 
-        // $this->trade_flag == "all" is used only when the first trade occurs, then it turns to "long" or "short".
-        if (($barClosePrice > $penUltimanteRow->price_channel_high_value) && ($this->trade_flag == "all" || $this->trade_flag == "long")){
             echo "####### HIGH TRADE!<br>\n";
             // Is it the first trade ever?
             if ($this->trade_flag == "all"){
@@ -168,8 +160,9 @@ class Chart
         } // BUY trade
 
 
-        // If < low price channel. SELL
-        if (($barClosePrice < $penUltimanteRow->price_channel_low_value) && ($this->trade_flag == "all"  || $this->trade_flag == "short")) {
+        // $assetRow[0]->macd_line > $assetRow[0]->macd_signal_line
+        //if (($barClosePrice < $penUltimanteRow->price_channel_low_value) && ($this->trade_flag == "all"  || $this->trade_flag == "short")) {
+        if (($assetRow[0]->macd_line < $assetRow[0]->macd_signal_line) && ($this->trade_flag == "all"  || $this->trade_flag == "short")) {
             echo "####### LOW TRADE!<br>\n";
 
             // Is the the first trade ever?

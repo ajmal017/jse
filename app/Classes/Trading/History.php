@@ -18,9 +18,10 @@ use Illuminate\Support\Facades\DB;
 class History
 {
     public static function loadPeriod($symbol){
+        $barsToLoad = env('BARS_TO_LOAD');
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_URL,
-            "https://www.bitmex.com/api/v1/trade/bucketed?binSize=1m&partial=false&symbol=$symbol&count=200&reverse=true");
+            "https://www.bitmex.com/api/v1/trade/bucketed?binSize=1m&partial=false&symbol=$symbol&count=$barsToLoad&reverse=true");
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
         curl_setopt($ch, CURLOPT_HEADER, FALSE);
         $bars = json_decode(curl_exec($ch));
@@ -38,11 +39,5 @@ class History
                 'volume' => $bar->volume,
             ));
         }
-
-        // Send event to the chart and reload it
-        $pusherApiMessage = new \App\Classes\WebSocket\PusherApiMessage();
-        $pusherApiMessage->clientId = 12345;
-        $pusherApiMessage->messageType = 'reloadChartAfterHistoryLoaded';
-        event(new \App\Events\jseevent($pusherApiMessage->toArray()));
     }
 }

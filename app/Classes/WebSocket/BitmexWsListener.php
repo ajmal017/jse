@@ -14,15 +14,17 @@ class BitmexWsListener
     public static $candleMaker;
     public static $chart;
     private static $symbol;
-    private static $indicatorPeriod;
+    private static $priceChannelPeriod;
+    private static $macdSettings;
 
-    public static function subscribe($connector, $loop, $console, $candleMaker, $chart, $symbol, $indicatorPeriod){
+    public static function subscribe($connector, $loop, $console, $candleMaker, $chart, $symbol, $priceChannelPeriod, $macdSettings){
 
         self::$console = $console;
         self::$candleMaker = $candleMaker;
         self::$chart = $chart;
         self::$symbol = $symbol;
-        self::$indicatorPeriod = $indicatorPeriod;
+        self::$priceChannelPeriod = $priceChannelPeriod;
+        self::$macdSettings = $macdSettings;
 
         /** Pick up the right websocket endpoint accordingly to the exchange */
         $exchangeWebSocketEndPoint = "wss://www.bitmex.com/realtime";
@@ -34,7 +36,7 @@ class BitmexWsListener
                     // event(new \App\Events\jseevent($jsonMessage)); // Sent to Chart.vue
                     if (array_key_exists('data', $jsonMessage)){
                         if (array_key_exists('lastPrice', $jsonMessage['data'][0])){
-                            \App\Classes\WebSocket\ConsoleWebSocket::messageParse($jsonMessage, self::$console, self::$candleMaker, self::$chart, self::$indicatorPeriod);
+                            \App\Classes\WebSocket\ConsoleWebSocket::messageParse($jsonMessage, self::$console, self::$candleMaker, self::$chart, self::$priceChannelPeriod, self::$macdSettings);
                         }
                     }
                 });

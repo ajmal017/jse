@@ -20,7 +20,7 @@ class History
     public static function loadPeriod($symbol){
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_URL,
-            "https://www.bitmex.com/api/v1/trade/bucketed?binSize=1m&partial=false&symbol=$symbol&count=50&reverse=true");
+            "https://www.bitmex.com/api/v1/trade/bucketed?binSize=1m&partial=false&symbol=$symbol&count=200&reverse=true");
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
         curl_setopt($ch, CURLOPT_HEADER, FALSE);
         $bars = json_decode(curl_exec($ch));

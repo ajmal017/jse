@@ -61,18 +61,16 @@ class Chart
      * @see Classes and backtest scheme https://drive.google.com/file/d/1IDBxR2dWDDsbFbradNapSo7QYxv36EQM/view?usp=sharing
      */
 
-    public function __construct($executionSymbolName)
+    public function __construct($executionSymbolName, $orderVolume)
     {
+        $this->volume = $orderVolume;
         $this->executionSymbolName = $executionSymbolName;
+        $this->trade_flag = 'all';
     }
 
     public function index($barDate, $timeStamp)
     {
         echo "********************************************** Chart.php!<br>\n";
-
-        $this->volume = 1; // Trade volume?
-        // $this->trade_flag = DB::table('settings_realtime')->where('id', 1)->value('trade_flag');
-        $this->trade_flag = 'all';
 
         // Realtime mode. No ID of the record is sent. Get the quantity of all records.
         /** In this case we do the same request, take the last record from the DB */
@@ -82,7 +80,7 @@ class Chart
                 ->get();
         $recordId = $assetRow[0]->id;
 
-        $barClosePrice = $assetRow[0]->sma;
+        $barClosePrice = $assetRow[0]->sma1;
 
         /**
          * We do this check because sometimes, don't really understand under which circumstances, we get
@@ -137,55 +135,32 @@ class Chart
         }
 
         $this->dateCompeareFlag = true;
-
-        /** TRADES WATCH. Channel value of previous (penultimate bar)*/
-
         /**
+         * TRADES WATCH. Channel value of previous (penultimate bar)
          * @todo Read the whole row as a single collection then access it by keys. No need to make several request. Get rid of settings_tester
          */
         $allow_trading = false;
 
-        // If > high price channel. BUY
-        // price > price channel
+
         // $this->trade_flag == "all" is used only when the first trade occurs, then it turns to "long" or "short".
-        // When the trade is about to happen we don't know yet
-        // whether it is gonna be long or short. This condition allows to enter both IF, long and short.
-
-        if (($barClosePrice > $penUltimanteRow->price_channel_high_value) &&
-            ($this->trade_flag == "all" || $this->trade_flag == "long")){
+        if (($barClosePrice > $penUltimanteRow->price_channel_high_value) && ($this->trade_flag == "all" || $this->trade_flag == "long")){
             echo "####### HIGH TRADE!<br>\n";
-
-            // Trading allowed? This value is pulled from DB. If false orders are not sent to the exchange
-            if ($allow_trading == 1){
-
-                // Is it the first trade ever?
-                if ($this->trade_flag == "all"){
-                    // open order buy vol = vol
-                    echo "---------------------- FIRST EVER TRADE<br>\n";
-                    //app('App\Http\Controllers\PlaceOrder\BitFinexAuthApi')->placeOrder("buy"); // Works good
-                    Cache::put('webSocketObject' . env("DB_DATABASE"), json_encode(['symbol' => 'EUR', 'currency' => 'USD', 'direction' => 'BUY', 'volume' => 1]), 5);
-                }
-                else // Not the first trade. Close the current position and open opposite trade. vol = vol * 2
-                {
-                    // open order buy vol = vol * 2
-                    echo "---------------------- NOT FIRST EVER TRADE. CLOSE + OPEN. VOL*2<br>\n";
-                    // app('App\Http\Controllers\PlaceOrder\BitFinexAuthApi')->placeOrder("buy");
-                    // app('App\Http\Controllers\PlaceOrder\BitFinexAuthApi')->placeOrder("buy");
-                    Cache::put('webSocketObject' . env("DB_DATABASE"), json_encode(['symbol' => 'EUR', 'currency' => 'USD', 'direction' => 'BUY', 'volume' => 1]), 5);
-                }
+            // Is it the first trade ever?
+            if ($this->trade_flag == "all"){
+                // open order buy vol = vol
+                echo "---------------------- FIRST EVER TRADE<br>\n";
+                Exchange::placeMarketBuyOrder($this->executionSymbolName, $this->volume);
             }
-            else{ // trading is not allowed
-                echo "---------------------- TRADING NOT ALLOWED\n";
-                // Start placing limit order
-                // DB::table('jobs')->where('queue', env("DB_DATABASE"))->delete(); // Empty jobs table
-                // Artisan::queue('ccxt:start', ['--buy' => true])->onQueue(env("DB_DATABASE"));
-                Exchange::placeMarketBuyOrder($this->executionSymbolName);
+            else // Not the first trade. Close the current position and open opposite trade. vol = vol * 2
+            {
+                // open order buy vol = vol * 2
+                echo "---------------------- NOT FIRST EVER TRADE. CLOSE + OPEN. VOL * 2\n";
+                Exchange::placeMarketBuyOrder($this->executionSymbolName, $this->volume);
+                Exchange::placeMarketBuyOrder($this->executionSymbolName, $this->volume);
             }
 
             // Trade flag. If this flag set to short -> don't enter this IF and wait for channel low crossing (IF below)
-            // DB::table("settings_realtime")->where('id', 1)->update(['trade_flag' => 'short']);
             $this->trade_flag = 'short';
-
             $this->position = "long";
             $this->add_bar_long = true;
 
@@ -204,54 +179,30 @@ class Chart
                 ]);
 
             echo "Trade price: " . $assetRow[0]->close . "<br>\n";
-            //$messageArray['flag'] = "buy"; // Send flag to VueJS app.js. On this event VueJS is informed that the trade occurred
 
         } // BUY trade
 
 
         // If < low price channel. SELL
-        if (($barClosePrice < $penUltimanteRow->price_channel_low_value) &&
-            ($this->trade_flag == "all"  || $this->trade_flag == "short")) {
+        if (($barClosePrice < $penUltimanteRow->price_channel_low_value) && ($this->trade_flag == "all"  || $this->trade_flag == "short")) {
             echo "####### LOW TRADE!<br>\n";
 
-            // trading allowed?
-            if ($allow_trading == 1){
-
-                // Is the the first trade ever?
-                if ($this->trade_flag == "all"){
-                    // open order buy vol = vol
-                    echo "---------------------- FIRST EVER TRADE<br>\n";
-                    //event(new \App\Events\BushBounce('First ever trade'));
-                    //app('App\Http\Controllers\PlaceOrder\BitFinexAuthApi')->placeOrder("sell");
-                    Cache::put('webSocketObject' . env("DB_DATABASE"), json_encode(['symbol' => 'EUR', 'currency' => 'USD', 'direction' => 'SELL', 'volume' => 1]), 5);
-                    // event(new \App\Events\ConnectionError("INFO. Chart.php line 274. SELL ORDER. "));
-                }
-                else // Not the first trade. Close the current position and open opposite trade. vol = vol * 2
-                {
-                    // open order buy vol = vol * 2
-                    echo "---------------------- NOT FIRST EVER TRADE. CLOSE + OPEN. VOL*2<br>\n";
-                    //app('App\Http\Controllers\PlaceOrder\BitFinexAuthApi')->placeOrder("sell");
-                    //app('App\Http\Controllers\PlaceOrder\BitFinexAuthApi')->placeOrder("sell");
-                    Cache::put('webSocketObject' . env("DB_DATABASE"), json_encode(['symbol' => 'EUR', 'currency' => 'USD', 'direction' => 'SELL', 'volume' => 1]), 5);
-                    // event(new \App\Events\ConnectionError("INFO. Chart.php line 285. SELL ORDER. "));
-
-                }
+            // Is the the first trade ever?
+            if ($this->trade_flag == "all"){
+                echo "---------------------- FIRST EVER TRADE<br>\n";
+                Exchange::placeMarketSellOrder($this->executionSymbolName, $this->volume);
             }
-            else{
-                echo "---------------------- TRADING NOT ALLOWED<br>\n";
-                // Start placing limit order
-                //Artisan::call('ccxtd:start', ['direction' => 'sell']);
-                //PlaceLimitOrder::dispatch('sell')->onQueue('orders');
-                // DB::table('jobs')->where('queue', env("DB_DATABASE"))->delete(); // Empty jobs table
-                // Artisan::queue('ccxt:start', ['--buy' => false])->onQueue(env("DB_DATABASE"));
-                Exchange::placeMarketSellOrder($this->executionSymbolName);
+            else // Not the first trade. Close the current position and open opposite trade. vol = vol * 2
+            {
+                echo "---------------------- NOT FIRST EVER TRADE. CLOSE + OPEN. VOL * 2\n";
+                Exchange::placeMarketSellOrder($this->executionSymbolName, $this->volume);
+                Exchange::placeMarketSellOrder($this->executionSymbolName, $this->volume);
             }
 
             // DB::table("settings_realtime")->where('id', 1)->update(['trade_flag' => 'long']);
             $this->trade_flag = 'long';
             $this->position = "short";
             $this->add_bar_short = true;
-
 
             // Add(update) trade info to the last(current) bar(record)
             // EXCLUDE THIS CODE TO SEPARATE CLASS!!!!!!!!!!!!!!!!!!!
@@ -269,9 +220,6 @@ class Chart
                     // IB Forex comission
                     'accumulated_commission' => DB::table('asset_1')->sum('trade_commission') + 2,
                 ]);
-
-            //$messageArray['flag'] = "sell"; // Send flag to VueJS app.js
-
-        } // Sell trade
+        } // SELL trade
     }
 }

@@ -47,8 +47,6 @@ class CandleMaker
      * @param Command       $command Needed for throwing colored messages to the console output (->info, ->error etc.)
      */
     public function index($tickPrice, $tickDateFullTime, $tickVolume, $chart, $command, $indicatorPeriod){
-
-
         echo "********************************************** CandleMaker.php<br>\n";
         /** @todo remove this variable. use just $settings*/
         // $this->settings = $settings;

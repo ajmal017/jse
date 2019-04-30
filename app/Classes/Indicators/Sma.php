@@ -8,30 +8,12 @@
 
 namespace App\Classes\Indicators;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Log;
 
-
-/**
- * Class PriceChannel calculates price channel high and low values based on data read from DB loaded from www.bitfinex.com.
- * Also SMA indicator is calculated which is used as a filter. Trades are open not when bar close value is higher (lower)
- * the price channel but value of calculated SMA
- * Values are recorded (updated) in DB when calculated.
- * This class is called in 3 cases:
- * 1. On the first start of the application when the DB is empty and contains no historical data.
- * 2. When a new bar is issued.
- * 3. When Initial start button is clicked from GUI in ChartControl.vue.
- *
- * @package App\Classes
- * @return void
- */
-class PriceChannel
+class Sma
 {
-    public static function calculate($period)
+    public static function calculate($close, $period, $smaColumn)
     {
         /* @var int $priceChannelPeriod */
-        //$priceChannelPeriod = DB::table('settings_realtime')
-        //    ->where('id', 1)
-        //    ->value('price_channel_period');
         $priceChannelPeriod = $period;
 
         /* @var int $smaPeriod */
@@ -65,8 +47,8 @@ class PriceChannel
 
         /** @var int $quantityOfBars The quantity of bars for which the price channel will be calculated */
         $quantityOfBars = (DB::table('asset_1')
-            ->orderBy('id', 'desc')
-            ->first())->id - $priceChannelPeriod - 1;
+                ->orderBy('id', 'desc')
+                ->first())->id - $priceChannelPeriod - 1;
 
         /**
          * Calculate price channel max, min.
@@ -83,37 +65,21 @@ class PriceChannel
              */
             if ($elementIndex <= $quantityOfBars)
             {
-                // Go from right to left (from present to last bar). Records in DB are encasing
-                for ($i = $elementIndex ; $i < $elementIndex + $priceChannelPeriod; $i++)
-                {
-                    /** Find max value in interval */
-                    if ($records[$i]->high > $priceChannelHighValue)
-                        $priceChannelHighValue = $records[$i]->high;
-
-                    /** Find low value in interval */
-                    if ($records[$i]->low < $priceChannelLowValue)
-                        $priceChannelLowValue = $records[$i]->low;
-                }
+                // Go from right to left (from present to last bar)
 
                 // For SMA
                 for ($j = $elementIndex  ; $j < $elementIndex + $smaPeriod; $j++)
                 {
                     /** SMA calculation */
-                    $sma += $records[$j]->close; // SMA based on close value
+                    $sma += $records[$j]->$close; // SMA based on close value
                 }
 
                 /** Update high and low values, sma values in DB */
                 DB::table("asset_1")
                     ->where('time_stamp', $records[$elementIndex]->time_stamp)
                     ->update([
-                        'price_channel_high_value' => $priceChannelHighValue,
-                        'price_channel_low_value' => $priceChannelLowValue,
-                        'sma1' => $sma / $smaPeriod,
+                        $smaColumn => $sma / $smaPeriod,
                     ]);
-
-                /* Reset high, low price channel values */
-                $priceChannelHighValue = 0;
-                $priceChannelLowValue = 999999;
 
             }
             else
@@ -128,9 +94,7 @@ class PriceChannel
                 DB::table("asset_1")
                     ->where('time_stamp', $records[$elementIndex]->time_stamp)
                     ->update([
-                        'price_channel_high_value' => null,
-                        'price_channel_low_value' => null,
-                        'sma1' => null
+                        $smaColumn => null
                     ]);
 
             }

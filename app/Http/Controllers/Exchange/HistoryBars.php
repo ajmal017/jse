@@ -12,9 +12,11 @@ class HistoryBars extends \App\Http\Controllers\Controller
         $priceChannelHighValues = array();
         $priceChannelLowValues = array();
         $longTradeMarkers = array();
-        $shortTradeMarkers = array();
-        $sma = array();
+        $sma1 = array();
+        $macdLine = array();
+        $macdSignalLine = array();
 
+        $shortTradeMarkers = array();
         $allDbValues = DB::table("asset_1")->get(); // Read the whole table from BD to $allDbValues
 
         foreach ($allDbValues as $rowValue) { // Go through all DB records
@@ -56,9 +58,9 @@ class HistoryBars extends \App\Http\Controllers\Controller
             }
 
             // Add SMA
-            $sma[] = [
+            $sma1[] = [
                 $rowValue->time_stamp,
-                $rowValue->sma
+                $rowValue->sma1
             ];
 
             // Add profit diagram
@@ -67,6 +69,19 @@ class HistoryBars extends \App\Http\Controllers\Controller
                 //$rowValue->net_profit
                 $rowValue->accumulated_profit // Profit diagram without commission
             ];
+
+            // Add MACD line
+            $macdLine[] = [
+                $rowValue->time_stamp,
+                $rowValue->macd_line
+            ];
+
+            // Add MACD signal line
+            $macdSignalLine[] = [
+                $rowValue->time_stamp,
+                $rowValue->macd_signal_line
+            ];
+
         }
 
         $seriesData = array(
@@ -75,8 +90,10 @@ class HistoryBars extends \App\Http\Controllers\Controller
             "priceChannelLowValues" => $priceChannelLowValues,
             "longTradeMarkers" => $longTradeMarkers,
             "shortTradeMarkers" => $shortTradeMarkers,
-            "sma" => $sma,
-            "profitDiagram" => $profitDiagram
+            "sma1" => $sma1,
+            "profitDiagram" => $profitDiagram,
+            "macdLine" => $macdLine,
+            "macdSignalLine" => $macdSignalLine
         );
 
         //              0                   1                       2                   3                   4              5

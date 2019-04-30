@@ -24,7 +24,15 @@ class AssetTable extends Migration
             $table->bigInteger('volume')->nullable();
             $table->double('price_channel_high_value')->nullable();
             $table->double('price_channel_low_value')->nullable();
-            $table->double('sma')->nullable();
+            // SMA
+            $table->double('sma1')->nullable(); // Used for price channel filter
+            $table->double('sma2')->nullable(); // Used for MACD
+            // MACD
+            $table->double('ema1')->nullable();
+            $table->double('ema2')->nullable();
+            $table->double('macd_line')->nullable();
+            $table->double('macd_signal_line')->nullable();
+
             $table->dateTime('trade_date')->nullable();
             $table->double('trade_price')->nullable();
             $table->double('trade_commission')->nullable();

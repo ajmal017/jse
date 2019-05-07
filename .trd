@@ -1,0 +1,9 @@
+# Bitmex live or testnet API endpoint. test - test.bitmex.com (testnet), api - bitmex.com (live api)
+BITMEX_API_PATH="test"
+
+# Bitmex account. Can be either live or test
+BITMEX_API_KEY="AdpGKvlnElQmowv-SgKu9kiF"
+BITMEX_API_KEY="KrcRtZ8SfAx_4xOSEm1DHon1gPF2wcSHPVZkyJ7SmOmCX0j1"
+
+# Quantity of hostory bars to load from an exchnage
+BARS_TO_LOAD=50

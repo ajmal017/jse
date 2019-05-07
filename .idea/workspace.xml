@@ -2,17 +2,11 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="0ab8c352-e91a-41d2-a602-98135f1f3232" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/app/Classes/Indicators/MacdSettings.php" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/app/Classes/Trading/MacdTradesTrigger.php" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/app/Console/Commands/Mc.php" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.trd" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/config/bot.php" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/Classes/Indicators/Macd.php" afterPath="$PROJECT_DIR$/app/Classes/Indicators/Macd.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/Classes/Trading/CandleMaker.php" afterPath="$PROJECT_DIR$/app/Classes/Trading/CandleMaker.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/Classes/Trading/Chart.php" afterPath="$PROJECT_DIR$/app/Classes/Trading/Chart.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/Classes/Trading/Exchange.php" afterPath="$PROJECT_DIR$/app/Classes/Trading/Exchange.php" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/Classes/Trading/History.php" afterPath="$PROJECT_DIR$/app/Classes/Trading/History.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/Classes/WebSocket/BitmexWsListener.php" afterPath="$PROJECT_DIR$/app/Classes/WebSocket/BitmexWsListener.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/Classes/WebSocket/ConsoleWebSocket.php" afterPath="$PROJECT_DIR$/app/Classes/WebSocket/ConsoleWebSocket.php" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/app/Console/Commands/listenws.php" afterPath="$PROJECT_DIR$/app/Console/Commands/Pc.php" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -23,11 +17,11 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="Pc.php" pinned="false" current-in-tab="true">
+      <file leaf-file-name="Pc.php" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/app/Console/Commands/Pc.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="187">
-              <caret line="17" column="33" lean-forward="true" selection-start-line="17" selection-start-column="3" selection-end-line="17" selection-end-column="37" />
+            <state relative-caret-position="255">
+              <caret line="58" column="5" lean-forward="false" selection-start-line="58" selection-start-column="5" selection-end-line="58" selection-end-column="5" />
               <folding>
                 <element signature="e#40#71#0#PHP" expanded="true" />
               </folding>
@@ -38,18 +32,8 @@
       <file leaf-file-name="History.php" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/app/Classes/Trading/History.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="410">
-              <caret line="40" column="9" lean-forward="false" selection-start-line="40" selection-start-column="9" selection-end-line="40" selection-end-column="9" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="HistoryBars.php" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/app/Http/Controllers/Exchange/HistoryBars.php">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="373">
-              <caret line="95" column="47" lean-forward="false" selection-start-line="95" selection-start-column="47" selection-end-line="95" selection-end-column="47" />
+            <state relative-caret-position="84">
+              <caret line="20" column="22" lean-forward="false" selection-start-line="20" selection-start-column="22" selection-end-line="20" selection-end-column="48" />
               <folding />
             </state>
           </provider>
@@ -58,7 +42,7 @@
       <file leaf-file-name="MacdTradesTrigger.php" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/app/Classes/Trading/MacdTradesTrigger.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="374">
+            <state relative-caret-position="2584">
               <caret line="164" column="38" lean-forward="false" selection-start-line="164" selection-start-column="38" selection-end-line="164" selection-end-column="38" />
               <folding />
             </state>
@@ -68,8 +52,8 @@
       <file leaf-file-name="Mc.php" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/app/Console/Commands/Mc.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="425">
-              <caret line="93" column="80" lean-forward="true" selection-start-line="93" selection-start-column="80" selection-end-line="93" selection-end-column="80" />
+            <state relative-caret-position="187">
+              <caret line="22" column="3" lean-forward="false" selection-start-line="22" selection-start-column="3" selection-end-line="22" selection-end-column="42" />
               <folding>
                 <element signature="e#40#71#0#PHP" expanded="true" />
               </folding>
@@ -80,7 +64,7 @@
       <file leaf-file-name="BitmexWsListener.php" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/app/Classes/WebSocket/BitmexWsListener.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="391">
+            <state relative-caret-position="561">
               <caret line="38" column="75" lean-forward="false" selection-start-line="38" selection-start-column="75" selection-end-line="38" selection-end-column="75" />
               <folding />
             </state>
@@ -91,22 +75,28 @@
         <entry file="file://$PROJECT_DIR$/app/Classes/WebSocket/ConsoleWebSocket.php">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="272">
-              <caret line="23" column="100" lean-forward="true" selection-start-line="23" selection-start-column="100" selection-end-line="23" selection-end-column="100" />
+              <caret line="23" column="100" lean-forward="false" selection-start-line="23" selection-start-column="100" selection-end-line="23" selection-end-column="100" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="CandleMaker.php" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/app/Classes/Trading/CandleMaker.php">
+      <file leaf-file-name="bot.php" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/config/bot.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="177">
-              <caret line="52" column="20" lean-forward="false" selection-start-line="52" selection-start-column="20" selection-end-line="52" selection-end-column="20" />
-              <folding>
-                <element signature="e#123#155#0#PHP" expanded="true" />
-                <element signature="e#1915#2696#0#PHP" expanded="false" />
-                <element signature="e#4143#4366#0#PHP" expanded="false" />
-              </folding>
+            <state relative-caret-position="170">
+              <caret line="10" column="23" lean-forward="false" selection-start-line="10" selection-start-column="23" selection-end-line="10" selection-end-column="23" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="Exchange.php" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/app/Classes/Trading/Exchange.php">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="221">
+              <caret line="18" column="55" lean-forward="false" selection-start-line="18" selection-start-column="55" selection-end-line="18" selection-end-column="55" />
+              <folding />
             </state>
           </provider>
         </entry>
@@ -115,8 +105,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>auth</find>
-      <find>volum</find>
       <find>50</find>
       <find>settings</find>
       <find>$command</find>
@@ -145,6 +133,8 @@
       <find>indicatorPeriod</find>
       <find>indicator</find>
       <find>period</find>
+      <find>minu</find>
+      <find>env</find>
     </findStrings>
     <replaceStrings>
       <replace>$ema1Value</replace>
@@ -152,6 +142,7 @@
       <replace>'sma1'</replace>
       <replace>$emaValue</replace>
       <replace>priceChannelPeriod</replace>
+      <replace>trd</replace>
     </replaceStrings>
   </component>
   <component name="Git.Settings">
@@ -184,23 +175,25 @@
         <option value="$PROJECT_DIR$/app/Classes/Indicators/PriceChannel.php" />
         <option value="$PROJECT_DIR$/app/Classes/Indicators/Ema.php" />
         <option value="$PROJECT_DIR$/app/Http/Controllers/Exchange/HistoryBars.php" />
-        <option value="$PROJECT_DIR$/app/Classes/Trading/Exchange.php" />
         <option value="$PROJECT_DIR$/app/Console/Commands/listenws.php" />
         <option value="$PROJECT_DIR$/app/Console/Commands/macd.php" />
         <option value="$PROJECT_DIR$/app/Console/Commands/Macd.php" />
         <option value="$PROJECT_DIR$/app/Classes/Indicators/Sma.php" />
-        <option value="$PROJECT_DIR$/.env" />
         <option value="$PROJECT_DIR$/app/Classes/Trading/Chart.php" />
         <option value="$PROJECT_DIR$/app/Classes/Trading/PrTradesTrigger.php" />
-        <option value="$PROJECT_DIR$/app/Classes/Trading/History.php" />
         <option value="$PROJECT_DIR$/app/Classes/WebSocket/BitmexWsListener.php" />
         <option value="$PROJECT_DIR$/app/Classes/Indicators/MacdSettings.php" />
         <option value="$PROJECT_DIR$/app/Classes/Indicators/Macd.php" />
         <option value="$PROJECT_DIR$/app/Classes/Trading/CandleMaker.php" />
-        <option value="$PROJECT_DIR$/app/Console/Commands/Pc.php" />
         <option value="$PROJECT_DIR$/app/Console/Commands/Mc.php" />
         <option value="$PROJECT_DIR$/app/Classes/Trading/MacdTradesTrigger.php" />
         <option value="$PROJECT_DIR$/app/Classes/WebSocket/ConsoleWebSocket.php" />
+        <option value="$PROJECT_DIR$/.env" />
+        <option value="$PROJECT_DIR$/.trd" />
+        <option value="$PROJECT_DIR$/config/bot.php" />
+        <option value="$PROJECT_DIR$/app/Console/Commands/Pc.php" />
+        <option value="$PROJECT_DIR$/app/Classes/Trading/History.php" />
+        <option value="$PROJECT_DIR$/app/Classes/Trading/Exchange.php" />
       </list>
     </option>
   </component>
@@ -245,7 +238,6 @@
     </navigator>
     <panes>
       <pane id="Scope" />
-      <pane id="Scratches" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -328,6 +320,11 @@
             <path>
               <item name="jse.kk" type="b2602c69:ProjectViewProjectNode" />
               <item name="jse.kk" type="2a2b976b:PhpTreeStructureProvider$1" />
+              <item name="config" type="2a2b976b:PhpTreeStructureProvider$1" />
+            </path>
+            <path>
+              <item name="jse.kk" type="b2602c69:ProjectViewProjectNode" />
+              <item name="jse.kk" type="2a2b976b:PhpTreeStructureProvider$1" />
               <item name="database" type="2a2b976b:PhpTreeStructureProvider$1" />
             </path>
             <path>
@@ -356,6 +353,7 @@
           <select />
         </subPane>
       </pane>
+      <pane id="Scratches" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -408,18 +406,19 @@
       <workItem from="1555701520971" duration="7532000" />
       <workItem from="1556125670035" duration="63360000" />
       <workItem from="1556578999312" duration="5241000" />
-      <workItem from="1556641402771" duration="13113000" />
+      <workItem from="1556641402771" duration="16291000" />
+      <workItem from="1556934203086" duration="7679000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="125740000" />
+    <option name="totallyTimeSpent" value="136597000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1382" height="744" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.24886535" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.2526475" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
@@ -470,8 +469,6 @@
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/app/Console/Commands/balance.php" />
-    <entry file="file://$PROJECT_DIR$/app/Console/Commands/account.php" />
     <entry file="file://$PROJECT_DIR$/.env">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="782">
@@ -655,22 +652,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/Classes/Trading/Exchange.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="221">
-          <caret line="18" column="65" lean-forward="false" selection-start-line="18" selection-start-column="28" selection-end-line="18" selection-end-column="65" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/.env">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="532">
-          <caret line="55" column="14" lean-forward="false" selection-start-line="55" selection-start-column="14" selection-end-line="55" selection-end-column="14" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/app/Classes/Trading/Chart.php">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="1003">
@@ -687,26 +668,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/Http/Controllers/Exchange/HistoryBars.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="373">
-          <caret line="95" column="47" lean-forward="false" selection-start-line="95" selection-start-column="47" selection-end-line="95" selection-end-column="47" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/app/Classes/Indicators/Sma.php">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-935">
           <caret line="11" column="6" lean-forward="false" selection-start-line="11" selection-start-column="6" selection-end-line="11" selection-end-column="6" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/Classes/Trading/History.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="410">
-          <caret line="40" column="9" lean-forward="false" selection-start-line="40" selection-start-column="9" selection-end-line="40" selection-end-column="9" />
           <folding />
         </state>
       </provider>
@@ -727,40 +692,56 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/app/Classes/Trading/MacdTradesTrigger.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="2584">
+          <caret line="164" column="38" lean-forward="false" selection-start-line="164" selection-start-column="38" selection-end-line="164" selection-end-column="38" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/Classes/WebSocket/BitmexWsListener.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="561">
+          <caret line="38" column="75" lean-forward="false" selection-start-line="38" selection-start-column="75" selection-end-line="38" selection-end-column="75" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/app/Console/Commands/Mc.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="425">
-          <caret line="93" column="80" lean-forward="true" selection-start-line="93" selection-start-column="80" selection-end-line="93" selection-end-column="80" />
+        <state relative-caret-position="187">
+          <caret line="22" column="3" lean-forward="false" selection-start-line="22" selection-start-column="3" selection-end-line="22" selection-end-column="42" />
           <folding>
             <element signature="e#40#71#0#PHP" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/Classes/Trading/MacdTradesTrigger.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="374">
-          <caret line="164" column="38" lean-forward="false" selection-start-line="164" selection-start-column="38" selection-end-line="164" selection-end-column="38" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/app/Classes/Trading/CandleMaker.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="177">
-          <caret line="52" column="20" lean-forward="false" selection-start-line="52" selection-start-column="20" selection-end-line="52" selection-end-column="20" />
+        <state relative-caret-position="160">
+          <caret line="77" column="12" lean-forward="false" selection-start-line="77" selection-start-column="12" selection-end-line="77" selection-end-column="58" />
           <folding>
-            <element signature="e#123#155#0#PHP" expanded="true" />
+            <element signature="e#123#155#0#PHP" expanded="false" />
             <element signature="e#1915#2696#0#PHP" expanded="false" />
             <element signature="e#4143#4366#0#PHP" expanded="false" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/Classes/WebSocket/BitmexWsListener.php">
+    <entry file="file://$PROJECT_DIR$/.env">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="391">
-          <caret line="38" column="75" lean-forward="false" selection-start-line="38" selection-start-column="75" selection-end-line="38" selection-end-column="75" />
+        <state relative-caret-position="481">
+          <caret line="46" column="0" lean-forward="false" selection-start-line="46" selection-start-column="0" selection-end-line="46" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/.trd">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="8" selection-end-column="15" />
           <folding />
         </state>
       </provider>
@@ -768,18 +749,50 @@
     <entry file="file://$PROJECT_DIR$/app/Classes/WebSocket/ConsoleWebSocket.php">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="272">
-          <caret line="23" column="100" lean-forward="true" selection-start-line="23" selection-start-column="100" selection-end-line="23" selection-end-column="100" />
+          <caret line="23" column="100" lean-forward="false" selection-start-line="23" selection-start-column="100" selection-end-line="23" selection-end-column="100" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/config/bot.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="170">
+          <caret line="10" column="23" lean-forward="false" selection-start-line="10" selection-start-column="23" selection-end-line="10" selection-end-column="23" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/app/Console/Commands/Pc.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="187">
-          <caret line="17" column="33" lean-forward="true" selection-start-line="17" selection-start-column="3" selection-end-line="17" selection-end-column="37" />
+        <state relative-caret-position="255">
+          <caret line="58" column="5" lean-forward="false" selection-start-line="58" selection-start-column="5" selection-end-line="58" selection-end-column="5" />
           <folding>
             <element signature="e#40#71#0#PHP" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/Http/Controllers/Exchange/HistoryBars.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1598">
+          <caret line="95" column="47" lean-forward="false" selection-start-line="95" selection-start-column="47" selection-end-line="95" selection-end-column="47" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/Classes/Trading/History.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="84">
+          <caret line="20" column="22" lean-forward="false" selection-start-line="20" selection-start-column="22" selection-end-line="20" selection-end-column="48" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/Classes/Trading/Exchange.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="221">
+          <caret line="18" column="55" lean-forward="false" selection-start-line="18" selection-start-column="55" selection-end-line="18" selection-end-column="55" />
+          <folding />
         </state>
       </provider>
     </entry>

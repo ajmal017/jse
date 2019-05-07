@@ -18,7 +18,7 @@ use Illuminate\Support\Facades\DB;
 class History
 {
     public static function loadPeriod($symbol){
-        $barsToLoad = env('BARS_TO_LOAD');
+        $barsToLoad = config('bot.bars_to_load');
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_URL,
             "https://www.bitmex.com/api/v1/trade/bucketed?binSize=1m&partial=false&symbol=$symbol&count=$barsToLoad&reverse=true");

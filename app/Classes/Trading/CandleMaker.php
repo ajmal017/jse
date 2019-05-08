@@ -25,15 +25,11 @@ use Illuminate\Support\Facades\Log;
 class CandleMaker
 {
     private $symbol;
-    private $tt; // Time
-    //private $timeFrame;
+    private $tt;
     private $barHigh = 0; // For high value calculation
     private $barLow = 9999999;
-    private $settings;
     private $isFirstTickInBar;
     private $tickDate;
-
-    private $pusherApiMessage;
     private $indicator;
 
     public function __construct($indicator)
@@ -52,8 +48,6 @@ class CandleMaker
      */
     public function index($tickPrice, $tickDateFullTime, $tickVolume, $chart, $command, $priceChannelPeriod, $macdSettings){
         echo "********************************************** CandleMaker.php<br>\n";
-        /** @todo remove this variable. use just $settings*/
-        // $this->settings = $settings;
 
         /** First time ever application run check. Table is empty */
         /*if(!DB::table('asset_1')->first())
@@ -72,22 +66,31 @@ class CandleMaker
             ));
         }*/
 
-        /** Take seconds off and add 1 min. Do it only once per interval (for example 1min) */
+        $lastRecordId = DB::table('asset_1')->orderBy('time_stamp', 'desc')->first()->id;
+
+        /* Take seconds off and add 1 min. Do it only once per interval (for example 1min) */
         if ($this->isFirstTickInBar) {
             $this->tickDate = strtotime($tickDateFullTime) * 1000;
             $x = date("Y-m-d H:i", $this->tickDate / 1000) . "\n"; // Take seconds off. Convert timestamp to date
             $this->tt = strtotime($x . "1minute"); // // *** TIME FRAME IS HERE!! ***
             $this->isFirstTickInBar = false;
 
-            // dump($tickDateFullTime); // Existing time
-            // dd(gmdate("Y-m-d G:i:s", $this->tt)); // Time + time frame
+            /**
+             * The first tick after a bar is added can go up or down.
+             * At this tick make barHigh and barLow = tickPrice
+             * This may bring the shadow of the bar to the opposite side of the bar which looks like the shadow goes
+             * into the bar. In this case if the price goes up, we keep low bar shadow = open and vise versa.
+             */
+            if($tickPrice > (DB::table('asset_1')->where('id', $lastRecordId))->value('open')){
+                $this->barLow = (DB::table('asset_1')->where('id', $lastRecordId))->value('open');
+            } else {
+                $this->barHigh = (DB::table('asset_1')->where('id', $lastRecordId))->value('open');
+            }
         }
 
-        /** Calculate high and low of the bar then pass it to the chart in $messageArray */
-        if ($tickPrice > $this->barHigh) $this->barHigh = $tickPrice; // HIgh
-        if ($tickPrice < $this->barLow) $this->barLow = $tickPrice; // Low
-
-        $lastRecordId = DB::table('asset_1')->orderBy('time_stamp', 'desc')->first()->id;
+        /* Calculate high and low of the bar then pass it to the chart in $messageArray */
+        if ($tickPrice > $this->barHigh) $this->barHigh = $tickPrice;
+        if ($tickPrice < $this->barLow) $this->barLow = $tickPrice;
 
         DB::table('asset_1')
             ->where('id', $lastRecordId) // id of the last record. desc - descent order
@@ -132,7 +135,7 @@ class CandleMaker
                 'close' => $tickPrice,
                 'high' => $tickPrice,
                 'low' => $tickPrice,
-                'volume' => $tickVolume,
+                'volume' => $tickVolume
             ));
 
             /**
@@ -145,7 +148,8 @@ class CandleMaker
             /** Set flag to true in order to drop seconds of the time and add time frame */
             $this->isFirstTickInBar = true;
 
-            /** Calculate price channel. All records in the DB are gonna be used.
+            /**
+             * Calculate price channel. All records in the DB are gonna be used.
              * @todo When bars are added, no need go through all bars and calculate price channel. We can go only
              * through price channel period bars and get the value. In this case PriceChannel class must have a parameter
              * whether to calculate the whole data or just a period.
@@ -157,7 +161,8 @@ class CandleMaker
             if ($this->indicator == 'priceChannel') PriceChannel::calculate($priceChannelPeriod);
             if ($this->indicator == 'macd') Macd::calculate($macdSettings);
 
-            /** This flag informs Chart.vue that it needs to add new bar to the chart.
+            /**
+             * This flag informs Chart.vue that it needs to add new bar to the chart.
              * We reach this code only when new bar is issued and only in this case this flag is added.
              * In all other cases $messageArray[] array does not contain flag ['flag'] which means that Chart.vue is
              * not adding new bar and updating the current one
@@ -165,24 +170,36 @@ class CandleMaker
             $messageArray['flag'] = true;
         }
 
-        /** Prepare message array */
+        /*Prepare message array */
         $messageArray['tradeDate'] = $this->tickDate;
         $messageArray['tradePrice'] = $tickPrice; // Tick price = current price and close (when a bar is closed)
 
-        /** These values are used for showing at the form */
+        /* These values are used for showing at the form */
         $messageArray['tradeVolume'] = $tickVolume;
         $messageArray['tradeBarHigh'] = $this->barHigh; // High value of the bar
         $messageArray['tradeBarLow'] = $this->barLow; // Low value of the bar
 
-        /** Get price channel values. Sometimes we get non object value error. In this case we have to do null check
+        /**
+         * Get price channel values. Sometimes we get non object value error. In this case we have to do null check
          * Get value. Do the null check
          * If null - add zero to the message array
          */
-        $messageArray['priceChannelHighValue'] = (DB::table('asset_1')->orderBy('id', 'desc')->first())->price_channel_high_value;
-        $messageArray['priceChannelLowValue'] = (DB::table('asset_1')->orderBy('id', 'desc')->first())->price_channel_low_value;
+        //$messageArray['priceChannelHighValue'] = (DB::table('asset_1')->orderBy('id', 'desc')->first())->price_channel_high_value;
+        //$messageArray['priceChannelLowValue'] = (DB::table('asset_1')->orderBy('id', 'desc')->first())->price_channel_low_value;
 
-        /** Send the information to the chart. Event is received in Chart.vue */
-        //event(new \App\Events\BushBounce($messageArray));
+        $messageArray['priceChannelHighValue'] =
+            (DB::table('asset_1')
+            ->where('id', $lastRecordId - 1)
+            ->value('price_channel_high_value'));
+
+        $messageArray['priceChannelLowValue'] =
+            (DB::table('asset_1')
+                ->where('id', $lastRecordId - 1)
+                ->value('price_channel_low_value'));
+
+
+
+        /* Send the information to the chart. Event is received in Chart.vue */
 
         $pusherApiMessage = new PusherApiMessage();
         $pusherApiMessage->clientId = 12345;

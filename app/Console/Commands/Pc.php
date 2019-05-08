@@ -66,7 +66,9 @@ class Pc extends Command
         $connector = new \Ratchet\Client\Connector($loop, $reactConnector);
         \App\Classes\Trading\History::loadPeriod($this->argument('historySymbol'));
 
+        // Initial indicators calculation
         PriceChannel::calculate($this->argument('priceChannelPeriod'));
+        Sma::calculate('close', 2, 'sma1');
 
         // Reload chart
         $pusherApiMessage = new \App\Classes\WebSocket\PusherApiMessage();
@@ -81,7 +83,7 @@ class Pc extends Command
             $candleMaker = new CandleMaker('priceChannel'),
             $chart = new Chart($this->argument('orderSymbol'), $this->argument('orderVolume')),
             $this->argument('historySymbol'),
-            $this->argument('priceChannelPeriod'), // Indicator period
+            $this->argument('priceChannelPeriod'),
             null
         );
     }

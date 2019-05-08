@@ -11,6 +11,11 @@ use Illuminate\Support\Facades\DB;
 
 class Sma
 {
+    /**
+     * @param string $close         Based on which part of a bar the SMA should be calculated. open, close, high, low.
+     * @param string $period        SMA period.
+     * @param sting $smaColumn      Output DB columnt for SMA calculated values.
+     */
     public static function calculate($close, $period, $smaColumn)
     {
         /* @var int $priceChannelPeriod */

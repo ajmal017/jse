@@ -15,7 +15,8 @@ class AssetTable extends Migration
     {
         Schema::create('asset_1', function (Blueprint $table) {
             $table->increments('id');
-            $table->dateTime('date')->nullable(); // Use nullable if this field can be blank
+            $table->string('symbol')->nullable(); // Use nullable if this field can be blank
+            $table->dateTime('date')->nullable();
             $table->bigInteger('time_stamp')->nullable();
             $table->double('open')->nullable();
             $table->double('close')->nullable();

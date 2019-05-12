@@ -10,6 +10,7 @@ namespace App\Classes\Trading;
 use Illuminate\Support\Facades\DB;
 
 /**
+ * Load historical data from bitmex and store in the DB.
  * Symbol: XBTUSD, ETHUSD
  *
  * Class History
@@ -30,6 +31,7 @@ class History
         DB::table('asset_1')->truncate();
         foreach(array_reverse($bars) as $bar){
             DB::table('asset_1')->insert(array(
+                'symbol' => $symbol,
                 'date' => gmdate("Y-m-d G:i:s", strtotime($bar->timestamp)), // Regular date
                 'time_stamp' => strtotime($bar->timestamp) * 1000, // Timestamp
                 'open' => $bar->open,

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Exchange;
 
+use App\Console\Commands\Pc;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -82,6 +83,9 @@ class HistoryBars extends \App\Http\Controllers\Controller
                 $rowValue->macd_signal_line
             ];
 
+            // Add Symbol name
+            $symbol = "sampleSymbol_History_Bars.php";
+
         }
 
         $seriesData = array(
@@ -93,7 +97,8 @@ class HistoryBars extends \App\Http\Controllers\Controller
             "sma1" => $sma1,
             "profitDiagram" => $profitDiagram,
             "macdLine" => $macdLine,
-            "macdSignalLine" => $macdSignalLine
+            "macdSignalLine" => $macdSignalLine,
+            "symbol" => $allDbValues[0]->symbol
         );
 
         //              0                   1                       2                   3                   4              5

@@ -197,10 +197,7 @@ class CandleMaker
                 ->where('id', $lastRecordId - 1)
                 ->value('price_channel_low_value'));
 
-
-
         /* Send the information to the chart. Event is received in Chart.vue */
-
         $pusherApiMessage = new PusherApiMessage();
         $pusherApiMessage->clientId = 12345;
         $pusherApiMessage->messageType = 'symbolTickPriceResponse'; // symbolTickPriceResponse, error

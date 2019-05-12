@@ -8,7 +8,9 @@
 
 namespace App\Classes\Trading;
 
+use App\Classes\LogToFile;
 use App\Jobs\PlaceLimitOrder;
+use App\Jobs\PlaceOrder;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\DB;
 use App\Events\eventTrigger;
@@ -59,7 +61,7 @@ class Chart
 
     public function index($barDate, $timeStamp)
     {
-        echo "********************************************** Chart.php!<br>\n";
+        dump(__FILE__);
 
         // Realtime mode. No ID of the record is sent. Get the quantity of all records.
         /** In this case we do the same request, take the last record from the DB */
@@ -68,9 +70,6 @@ class Chart
                 ->orderBy('id', 'desc')->take(1)
                 ->get();
         $recordId = $assetRow[0]->id;
-
-        // SMA filter ON?
-        $barClosePrice = $assetRow[0]->sma1;
 
         /**
          * We do this check because sometimes, don't really understand under which circumstances, we get
@@ -124,24 +123,25 @@ class Chart
             echo "trade profit calculated. Chart.php line 165: " . $this->tradeProfit . "\n";
         }
 
-        //$this->dateCompeareFlag = true;
-
-
-        // $this->trade_flag == "all" is used only when the first trade occurs, then it turns to "long" or "short".
-        if (($barClosePrice > $penUltimanteRow->price_channel_high_value) && ($this->trade_flag == "all" || $this->trade_flag == "long")){
+        /* $this->trade_flag == "all" is used only when the first trade occurs, then it turns to "long" or "short". */
+        // if (($barClosePrice > $penUltimanteRow->price_channel_high_value) && ($this->trade_flag == "all" || $this->trade_flag == "long")){
+        // SMA noise filter is ON
+        if (($assetRow[0]->sma1 > $penUltimanteRow->price_channel_high_value) && ($this->trade_flag == "all" || $this->trade_flag == "long")){
             echo "####### HIGH TRADE!<br>\n";
             // Is it the first trade ever?
             if ($this->trade_flag == "all"){
                 // open order buy vol = vol
                 echo "---------------------- FIRST EVER TRADE<br>\n";
-                Exchange::placeMarketBuyOrder($this->executionSymbolName, $this->volume);
+                //Exchange::placeMarketBuyOrder($this->executionSymbolName, $this->volume);
+                PlaceOrder::dispatch('buy', $this->executionSymbolName, $this->volume);
             }
             else // Not the first trade. Close the current position and open opposite trade. vol = vol * 2
             {
                 // open order buy vol = vol * 2
                 echo "---------------------- NOT FIRST EVER TRADE. CLOSE + OPEN. VOL * 2\n";
-                Exchange::placeMarketBuyOrder($this->executionSymbolName, $this->volume);
-                Exchange::placeMarketBuyOrder($this->executionSymbolName, $this->volume);
+                //Exchange::placeMarketBuyOrder($this->executionSymbolName, $this->volume);
+                //Exchange::placeMarketBuyOrder($this->executionSymbolName, $this->volume);
+                PlaceOrder::dispatch('buy', $this->executionSymbolName, $this->volume * 2);
             }
 
             // Trade flag. If this flag set to short -> don't enter this IF and wait for channel low crossing (IF below)
@@ -167,21 +167,23 @@ class Chart
 
         } // BUY trade
 
-
         // If < low price channel. SELL
-        if (($barClosePrice < $penUltimanteRow->price_channel_low_value) && ($this->trade_flag == "all"  || $this->trade_flag == "short")) {
+        // if (($barClosePrice < $penUltimanteRow->price_channel_low_value) && ($this->trade_flag == "all"  || $this->trade_flag == "short")) {
+        if (($assetRow[0]->sma1 < $penUltimanteRow->price_channel_low_value) && ($this->trade_flag == "all"  || $this->trade_flag == "short")) {
             echo "####### LOW TRADE!<br>\n";
 
             // Is the the first trade ever?
             if ($this->trade_flag == "all"){
                 echo "---------------------- FIRST EVER TRADE<br>\n";
-                Exchange::placeMarketSellOrder($this->executionSymbolName, $this->volume);
+                //Exchange::placeMarketSellOrder($this->executionSymbolName, $this->volume);
+                PlaceOrder::dispatch('sell', $this->executionSymbolName, $this->volume);
             }
             else // Not the first trade. Close the current position and open opposite trade. vol = vol * 2
             {
                 echo "---------------------- NOT FIRST EVER TRADE. CLOSE + OPEN. VOL * 2\n";
-                Exchange::placeMarketSellOrder($this->executionSymbolName, $this->volume);
-                Exchange::placeMarketSellOrder($this->executionSymbolName, $this->volume);
+                //Exchange::placeMarketSellOrder($this->executionSymbolName, $this->volume);
+                //Exchange::placeMarketSellOrder($this->executionSymbolName, $this->volume);
+                PlaceOrder::dispatch('sell', $this->executionSymbolName, $this->volume * 2);
             }
 
             $this->trade_flag = 'long';

@@ -9,9 +9,10 @@ use App\Classes\Indicators\Sma;
 use App\Classes\Trading\CandleMaker;
 use App\Classes\Trading\Chart;
 use App\Classes\Trading\Exchange;
+use App\Jobs\PlaceOrder;
 use Illuminate\Console\Command;
-use Illuminate\Support\Facades\Cache;
 use Ratchet\Client\WebSocket;
+use Illuminate\Support\Facades\DB;
 
 /**
  * php artisan pc XBTUSD BTC/USD 15 1
@@ -57,6 +58,8 @@ class Pc extends Command
      */
     public function handle()
     {
+        DB::table('jobs')->truncate();
+
         /**
          * Ratchet/pawl websocket library
          * @see https://github.com/ratchetphp/Pawl

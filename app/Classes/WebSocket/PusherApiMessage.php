@@ -45,7 +45,6 @@ class PusherApiMessage
         if ($name == "payload") $this->payload = $value;
     }
 
-
     /**
      * Json serialization.
      * @see https://stackoverflow.com/questions/6836592/serializing-php-object-to-json

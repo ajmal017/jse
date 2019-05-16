@@ -32,6 +32,8 @@ class CandleMaker
     private $tickDate;
     private $indicator;
     private $tableName;
+    private $isFirstTimeTickCheck;
+    private $addedTickTime;
 
     public function __construct($indicator, $botSettings)
     {
@@ -130,6 +132,7 @@ class CandleMaker
             // @todo 25.04.19 Disabled. Need to run the real time chart without trades first
             $chart->index(gmdate("Y-m-d G:i:s", strtotime($tickDateFullTime)), $this->tickDate);
 
+            /* @todo MOVE TO A SEPARATE METHOD */
             /** Add bar to DB */
             DB::table($this->tableName)->insert(array(
                 'date' => gmdate("Y-m-d G:i:s", strtotime($tickDateFullTime)), // Date in regular format. Converted from unix timestamp
@@ -205,14 +208,39 @@ class CandleMaker
         $pusherApiMessage->clientId = $this->botSettings['frontEndId'];
         $pusherApiMessage->messageType = 'symbolTickPriceResponse'; // symbolTickPriceResponse, error
         $pusherApiMessage->payload = $messageArray;
-        dump($pusherApiMessage->toArray());
+        //dump($pusherApiMessage->toArray());
 
-        event(new \App\Events\jseevent($pusherApiMessage->toArray()));
+        //dump('here: ' .  strtotime($tickDateFullTime));
+        //die(); // 2019-05-16T23:16:46.529Z
+        // strtotime($message[0]['timestamp'])
+
+        /* @TOD SEPARATE METHOD! */
+        /*if ($this->isFirstTimeTickCheck || strtotime($tickDateFullTime) >= $this->addedTickTime) {
+            $this->isFirstTimeTickCheck = false;
+            $this->addedTickTime = strtotime($tickDateFullTime) + 2; // Allow ticks not more than twice a second
+
+            dump(strtotime($tickDateFullTime));
+        }*/
+
+        if ($this->rateLimitCheck($tickDateFullTime)) dump('rate limit works');
+        //event(new \App\Events\jseevent($pusherApiMessage->toArray()));
 
         /** Reset high, low of the bar but do not out send these values to the chart. Next bar will be started from scratch */
         if ($this->isFirstTickInBar == true){
             $this->barHigh = 0;
             $this->barLow = 9999999;
+        }
+    }
+
+    private function rateLimitCheck($tickDateFullTime){
+        if ($this->isFirstTimeTickCheck || strtotime($tickDateFullTime) >= $this->addedTickTime) {
+            $this->isFirstTimeTickCheck = false;
+            $this->addedTickTime = strtotime($tickDateFullTime) + 5; // Allow ticks not more than twice a second
+            //event(new \App\Events\jseevent($pusherApiMessage->toArray()));
+            dump(strtotime($tickDateFullTime));
+            return true;
+        } else {
+            return false;
         }
     }
 }

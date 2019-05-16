@@ -85,7 +85,7 @@ class Pc extends Command
         $pusherApiMessage = new \App\Classes\WebSocket\PusherApiMessage();
         $pusherApiMessage->clientId = $botSettings['frontEndId'];
         $pusherApiMessage->messageType = 'reloadChartAfterHistoryLoaded';
-        event(new \App\Events\jseevent($pusherApiMessage->toArray()));
+        //event(new \App\Events\jseevent($pusherApiMessage->toArray()));
 
         \App\Classes\WebSocket\BitmexWsListener::subscribe(
             $connector,

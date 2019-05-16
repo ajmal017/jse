@@ -16,7 +16,7 @@ class Sma
      * @param string $period        SMA period.
      * @param sting $smaColumn      Output DB columnt for SMA calculated values.
      */
-    public static function calculate($close, $period, $smaColumn)
+    public static function calculate($close, $period, $smaColumn, $tableName)
     {
         /* @var int $priceChannelPeriod */
         $priceChannelPeriod = $period;
@@ -46,12 +46,12 @@ class Sma
          * @todo FIX WHAT BUTSH SAYS
          * https://laravel.com/docs/5.6/collections
          */
-        $records = DB::table("asset_1")
+        $records = DB::table($tableName)
             ->orderBy('time_stamp', 'desc')
             ->get(); // desc, asc - order. Read the whole table from BD to $records
 
         /** @var int $quantityOfBars The quantity of bars for which the price channel will be calculated */
-        $quantityOfBars = (DB::table('asset_1')
+        $quantityOfBars = (DB::table($tableName)
                 ->orderBy('id', 'desc')
                 ->first())->id - $priceChannelPeriod - 1;
 
@@ -80,7 +80,7 @@ class Sma
                 }
 
                 /** Update high and low values, sma values in DB */
-                DB::table("asset_1")
+                DB::table($tableName)
                     ->where('time_stamp', $records[$elementIndex]->time_stamp)
                     ->update([
                         $smaColumn => $sma / $smaPeriod,
@@ -96,12 +96,11 @@ class Sma
                  *  In order to prevent this, for those bars that were not used for computation, price channel values are set to null
                  */
 
-                DB::table("asset_1")
+                DB::table($tableName)
                     ->where('time_stamp', $records[$elementIndex]->time_stamp)
                     ->update([
                         $smaColumn => null
                     ]);
-
             }
             $elementIndex++;
         }

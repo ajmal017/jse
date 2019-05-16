@@ -32,8 +32,7 @@ class BitmexWsListener
             ->then(function(\Ratchet\Client\WebSocket $conn) use ($loop) {
                 $conn->on('message', function(\Ratchet\RFC6455\Messaging\MessageInterface $socketMessage) use ($conn, $loop) {
                     $jsonMessage = json_decode($socketMessage->getPayload(), true);
-                    // Event fire
-                    // event(new \App\Events\jseevent($jsonMessage)); // Sent to Chart.vue
+                    // Event fire. Sent to Chart.vue
                     if (array_key_exists('data', $jsonMessage)){
                         if (array_key_exists('lastPrice', $jsonMessage['data'][0])){
                             \App\Classes\WebSocket\ConsoleWebSocket::messageParse($jsonMessage, self::$console, self::$candleMaker, self::$chart, self::$priceChannelPeriod, self::$macdSettings);

@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\DB;
 
 class HistoryBars extends \App\Http\Controllers\Controller
 {
-    public function load(){
+    public function load($botId){
         $candles = array();
         $priceChannelHighValues = array();
         $priceChannelLowValues = array();
@@ -16,9 +16,8 @@ class HistoryBars extends \App\Http\Controllers\Controller
         $sma1 = array();
         $macdLine = array();
         $macdSignalLine = array();
-
         $shortTradeMarkers = array();
-        $allDbValues = DB::table("asset_1")->get(); // Read the whole table from BD to $allDbValues
+        $allDbValues = DB::table(config('bot.bots')[$botId]['botTitle'])->get();
 
         foreach ($allDbValues as $rowValue) { // Go through all DB records
             $candles[] = [
@@ -28,9 +27,6 @@ class HistoryBars extends \App\Http\Controllers\Controller
                 $rowValue->low,
                 $rowValue->close,
             ];
-
-            //$rowValue->price_channel_high_value,
-            //$rowValue->price_channel_low_value
 
             $priceChannelHighValues[] = [
                 $rowValue->time_stamp,

@@ -18,7 +18,6 @@ use Illuminate\Http\Request;
 });*/
 
 Route::group(['prefix' => 'auth'], function ($router) {
-
     Route::post('login', 'AuthController@login');
     Route::post('logout', 'AuthController@logout');
     Route::post('refresh', 'AuthController@refresh');
@@ -26,5 +25,5 @@ Route::group(['prefix' => 'auth'], function ($router) {
 });
 
 Route::group(['prefix' => 'trading'], function ($router) {
-    Route::get('history', 'Exchange\HistoryBars@load');
+    Route::get('history/{id}', 'Exchange\HistoryBars@load');
 });

@@ -31,11 +31,14 @@ class CandleMaker
     private $isFirstTickInBar;
     private $tickDate;
     private $indicator;
+    private $tableName;
 
-    public function __construct($indicator)
+    public function __construct($indicator, $botSettings)
     {
         $this->isFirstTickInBar = true;
         $this->indicator = $indicator;
+        $this->botSettings = $botSettings;
+        $this->tableName = $botSettings['botTitle'];
     }
 
     /**
@@ -55,7 +58,7 @@ class CandleMaker
             echo "CandleMaker.php Application first ever run. Add first record to the table where OLHC = tick price\n";
             //History::load(); // After the history is loaded - get price channel calculated
             //PriceChannel::calculate(); // Calculate price channel
-            DB::table('asset_1')->insert(array( // Record to DB
+            DB::table($this->tableName)->insert(array( // Record to DB
                 'date' => gmdate("Y-m-d G:i:s", ($tickDate / 1000)), // Date in regular format. Converted from unix timestamp
                 'time_stamp' => $tickDate,
                 'open' => $tickPrice,
@@ -66,7 +69,7 @@ class CandleMaker
             ));
         }*/
 
-        $lastRecordId = DB::table('asset_1')->orderBy('time_stamp', 'desc')->first()->id;
+        $lastRecordId = DB::table($this->tableName)->orderBy('time_stamp', 'desc')->first()->id;
 
         /* Take seconds off and add 1 min. Do it only once per interval (for example 1min) */
         if ($this->isFirstTickInBar) {
@@ -81,10 +84,10 @@ class CandleMaker
              * This may bring the shadow of the bar to the opposite side of the bar which looks like the shadow goes
              * into the bar. In this case if the price goes up, we keep low bar shadow = open and vise versa.
              */
-            if($tickPrice > (DB::table('asset_1')->where('id', $lastRecordId))->value('open')){
-                $this->barLow = (DB::table('asset_1')->where('id', $lastRecordId))->value('open');
+            if($tickPrice > (DB::table($this->tableName)->where('id', $lastRecordId))->value('open')){
+                $this->barLow = (DB::table($this->tableName)->where('id', $lastRecordId))->value('open');
             } else {
-                $this->barHigh = (DB::table('asset_1')->where('id', $lastRecordId))->value('open');
+                $this->barHigh = (DB::table($this->tableName)->where('id', $lastRecordId))->value('open');
             }
         }
 
@@ -92,7 +95,7 @@ class CandleMaker
         if ($tickPrice > $this->barHigh) $this->barHigh = $tickPrice;
         if ($tickPrice < $this->barLow) $this->barLow = $tickPrice;
 
-        DB::table('asset_1')
+        DB::table($this->tableName)
             ->where('id', $lastRecordId) // id of the last record. desc - descent order
             ->update([
                 'close' => $tickPrice,
@@ -120,7 +123,7 @@ class CandleMaker
              * to trace and debug the code.
              */
 
-            if ($this->indicator == 'priceChannel') PriceChannel::calculate($priceChannelPeriod);
+            if ($this->indicator == 'priceChannel') PriceChannel::calculate($priceChannelPeriod, $this->tableName);
             if ($this->indicator == 'macd') Macd::calculate($macdSettings);
 
             /** Call Chart.php and calculate profit */
@@ -128,7 +131,7 @@ class CandleMaker
             $chart->index(gmdate("Y-m-d G:i:s", strtotime($tickDateFullTime)), $this->tickDate);
 
             /** Add bar to DB */
-            DB::table('asset_1')->insert(array(
+            DB::table($this->tableName)->insert(array(
                 'date' => gmdate("Y-m-d G:i:s", strtotime($tickDateFullTime)), // Date in regular format. Converted from unix timestamp
                 'time_stamp' => strtotime($tickDateFullTime) * 1000,
                 'open' => $tickPrice,
@@ -158,7 +161,7 @@ class CandleMaker
              *
              * @todo price channel calculated twice! This is the second time! This must be fixed.
              */
-            if ($this->indicator == 'priceChannel') PriceChannel::calculate($priceChannelPeriod);
+            if ($this->indicator == 'priceChannel') PriceChannel::calculate($priceChannelPeriod, $this->botSettings['botTitle']);
             if ($this->indicator == 'macd') Macd::calculate($macdSettings);
 
             /**
@@ -170,7 +173,7 @@ class CandleMaker
             $messageArray['flag'] = true;
         }
 
-        /*Prepare message array */
+        /* Prepare message array */
         $messageArray['tradeDate'] = $this->tickDate;
         $messageArray['tradePrice'] = $tickPrice; // Tick price = current price and close (when a bar is closed)
 
@@ -184,22 +187,22 @@ class CandleMaker
          * Get value. Do the null check
          * If null - add zero to the message array
          */
-        //$messageArray['priceChannelHighValue'] = (DB::table('asset_1')->orderBy('id', 'desc')->first())->price_channel_high_value;
-        //$messageArray['priceChannelLowValue'] = (DB::table('asset_1')->orderBy('id', 'desc')->first())->price_channel_low_value;
+        //$messageArray['priceChannelHighValue'] = (DB::table($this->tableName)->orderBy('id', 'desc')->first())->price_channel_high_value;
+        //$messageArray['priceChannelLowValue'] = (DB::table($this->tableName)->orderBy('id', 'desc')->first())->price_channel_low_value;
 
         $messageArray['priceChannelHighValue'] =
-            (DB::table('asset_1')
+            (DB::table($this->tableName)
             ->where('id', $lastRecordId - 1)
             ->value('price_channel_high_value'));
 
         $messageArray['priceChannelLowValue'] =
-            (DB::table('asset_1')
+            (DB::table($this->tableName)
                 ->where('id', $lastRecordId - 1)
                 ->value('price_channel_low_value'));
 
         /* Send the information to the chart. Event is received in Chart.vue */
         $pusherApiMessage = new PusherApiMessage();
-        $pusherApiMessage->clientId = 12345;
+        $pusherApiMessage->clientId = $this->botSettings['frontEndId'];
         $pusherApiMessage->messageType = 'symbolTickPriceResponse'; // symbolTickPriceResponse, error
         $pusherApiMessage->payload = $messageArray;
         dump($pusherApiMessage->toArray());

@@ -11,8 +11,10 @@ use App\Classes\Trading\Chart;
 use App\Classes\Trading\Exchange;
 use App\Jobs\PlaceOrder;
 use Illuminate\Console\Command;
+use Illuminate\Support\Facades\Artisan;
 use Ratchet\Client\WebSocket;
 use Illuminate\Support\Facades\DB;
+use Tymon\JWTAuth\Providers\Auth\Illuminate;
 
 /**
  * php artisan pc XBTUSD BTC/USD 15 1
@@ -34,7 +36,7 @@ class Pc extends Command
      *
      * @var string
      */
-    protected $signature = 'pc {historySymbol}{orderSymbol}{orderVolume}{priceChannelPeriod}';
+    protected $signature = 'pc {botInstance}';
 
     /**
      * The console command description.
@@ -58,7 +60,12 @@ class Pc extends Command
      */
     public function handle()
     {
+
         DB::table('jobs')->truncate();
+        $botSettings = config('bot.bots')[$this->argument('botInstance')];
+        $migration = new \App\Classes\DB\TradingTable($botSettings['botTitle']);
+        $migration->down();
+        $migration->up();
 
         /**
          * Ratchet/pawl websocket library
@@ -67,15 +74,16 @@ class Pc extends Command
         $loop = \React\EventLoop\Factory::create();
         $reactConnector = new \React\Socket\Connector($loop, ['dns' => '8.8.8.8', 'timeout' => 10]);
         $connector = new \Ratchet\Client\Connector($loop, $reactConnector);
-        \App\Classes\Trading\History::loadPeriod($this->argument('historySymbol'));
+        \App\Classes\Trading\History::loadPeriod($botSettings);
 
         // Initial indicators calculation
-        PriceChannel::calculate($this->argument('priceChannelPeriod'));
-        Sma::calculate('close', 2, 'sma1');
+        // PriceChannel::calculate($this->argument('priceChannelPeriod'));
+        PriceChannel::calculate($botSettings['strategyParams']['priceChannelPeriod'], $botSettings['botTitle']);
+        Sma::calculate('close', 2, 'sma1', $botSettings['botTitle']);
 
         // Reload chart
         $pusherApiMessage = new \App\Classes\WebSocket\PusherApiMessage();
-        $pusherApiMessage->clientId = 12345;
+        $pusherApiMessage->clientId = $botSettings['frontEndId'];
         $pusherApiMessage->messageType = 'reloadChartAfterHistoryLoaded';
         event(new \App\Events\jseevent($pusherApiMessage->toArray()));
 
@@ -83,10 +91,11 @@ class Pc extends Command
             $connector,
             $loop,
             $this, // For colored messages in console
-            $candleMaker = new CandleMaker('priceChannel'),
-            $chart = new Chart($this->argument('orderSymbol'), $this->argument('orderVolume')),
-            $this->argument('historySymbol'),
-            $this->argument('priceChannelPeriod'),
+            $candleMaker = new CandleMaker('priceChannel', $botSettings),
+            //$chart = new Chart($this->argument('orderSymbol'), $this->argument('orderVolume')),
+            $chart = new Chart($botSettings['executionSymbol'], $botSettings['volume'], $botSettings),
+            $botSettings['historySymbol'],
+            $botSettings['strategyParams']['priceChannelPeriod'],
             null
         );
     }

@@ -38,6 +38,7 @@ class Chart
     public $firstEverTradeFlag; // True - when the bot is started and the first trade is executed. Then flag turns to false and trade volume is doubled for closing current position and opening the opposite
     public $tradeProfit;
     private $executionSymbolName;
+    private $botSettings;
 
     /**
      * Received message in RatchetPawlSocket.php is sent to this method as an argument.
@@ -52,11 +53,12 @@ class Chart
      * @see Classes and backtest scheme https://drive.google.com/file/d/1IDBxR2dWDDsbFbradNapSo7QYxv36EQM/view?usp=sharing
      */
 
-    public function __construct($executionSymbolName, $orderVolume)
+    public function __construct($executionSymbolName, $orderVolume, $botSettings)
     {
         $this->volume = $orderVolume;
         $this->executionSymbolName = $executionSymbolName;
         $this->trade_flag = 'all';
+        $this->botSettings = $botSettings;
     }
 
     public function index($barDate, $timeStamp)
@@ -66,7 +68,7 @@ class Chart
         // Realtime mode. No ID of the record is sent. Get the quantity of all records.
         /** In this case we do the same request, take the last record from the DB */
         $assetRow =
-            DB::table('asset_1')
+            DB::table($this->botSettings['botTitle'])
                 ->orderBy('id', 'desc')->take(1)
                 ->get();
         $recordId = $assetRow[0]->id;
@@ -75,11 +77,11 @@ class Chart
          * We do this check because sometimes, don't really understand under which circumstances, we get
          * Trying to get property of non-object error
          */
-        if (!is_null(DB::table('asset_1')->where('id', $recordId - 1)->get()->first()))
+        if (!is_null(DB::table($this->botSettings['botTitle'])->where('id', $recordId - 1)->get()->first()))
         {
             // Get the penultimate row
             $penUltimanteRow =
-                DB::table('asset_1')
+                DB::table($this->botSettings['botTitle'])
                     ->where('id', $recordId - 1)
                     ->get() // Get row as a collection. A collection can contain may elements in it
                     ->first(); // Get the first element from the collection. In this case there is only one
@@ -99,7 +101,7 @@ class Chart
 
             // Get the price of the last trade
             $lastTradePrice = // Last trade price
-                DB::table('asset_1')
+                DB::table($this->botSettings['botTitle'])
                     ->whereNotNull('trade_price') // Not null trade price value
                     //->where('time_stamp', '<', $timeStamp) // Find the last trade. This check is needed only for historical back testing.
                     ->orderBy('id', 'desc') // Form biggest to smallest values
@@ -111,7 +113,7 @@ class Chart
                     ($lastTradePrice - $assetRow[0]->close) * $this->volume)
                 );
 
-            DB::table('asset_1')
+            DB::table($this->botSettings['botTitle'])
                 ->where('id', $recordId)
                 ->update([
                     // Calculate trade profit only if the position is open.
@@ -150,7 +152,7 @@ class Chart
             $this->add_bar_long = true;
 
             // Update trade info to the last(current) bar(record)
-            DB::table('asset_1')
+            DB::table($this->botSettings['botTitle'])
                 ->where('id', $recordId)
                 ->update([
                     'trade_date' => gmdate("Y-m-d G:i:s", ($timeStamp / 1000)),
@@ -159,8 +161,8 @@ class Chart
                     'trade_volume' => $this->volume,
                     //'trade_commission' => round(($assetRow[0]->close * $commisionValue / 100) * $this->volume, 4),
                     'trade_commission' => 0.35, // Fixed commission
-                    //'accumulated_commission' => round(DB::table('asset_1')->sum('trade_commission') + ($assetRow[0]->close * $commisionValue / 100) * $this->volume, 4),
-                    'accumulated_commission' => DB::table('asset_1')->sum('trade_commission')
+                    //'accumulated_commission' => round(DB::table($this->botSettings['botTitle'])->sum('trade_commission') + ($assetRow[0]->close * $commisionValue / 100) * $this->volume, 4),
+                    'accumulated_commission' => DB::table($this->botSettings['botTitle'])->sum('trade_commission')
                 ]);
 
             echo "Trade price: " . $assetRow[0]->close . "<br>\n";
@@ -192,7 +194,7 @@ class Chart
 
             // Add(update) trade info to the last(current) bar(record)
             // EXCLUDE THIS CODE TO SEPARATE CLASS!!!!!!!!!!!!!!!!!!!
-            DB::table('asset_1')
+            DB::table($this->botSettings['botTitle'])
                 ->where('id', $recordId)
                 ->update([
                     'trade_date' => gmdate("Y-m-d G:i:s", ($timeStamp / 1000)),
@@ -202,9 +204,9 @@ class Chart
                     //'trade_commission' => round(($assetRow[0]->close * $commisionValue / 100) * $this->volume, 4),
                     'trade_commission' => 2,
 
-                    //'accumulated_commission' => round(DB::table('asset_1')->sum('trade_commission') + ($assetRow[0]->close * $commisionValue / 100) * $this->volume, 4),
+                    //'accumulated_commission' => round(DB::table($this->botSettings['botTitle'])->sum('trade_commission') + ($assetRow[0]->close * $commisionValue / 100) * $this->volume, 4),
                     // IB Forex comission
-                    'accumulated_commission' => DB::table('asset_1')->sum('trade_commission') + 2,
+                    'accumulated_commission' => DB::table($this->botSettings['botTitle'])->sum('trade_commission') + 2,
                 ]);
         } // SELL trade
     }

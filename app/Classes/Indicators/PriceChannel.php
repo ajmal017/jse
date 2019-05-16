@@ -26,7 +26,7 @@ use Illuminate\Support\Facades\Log;
  */
 class PriceChannel
 {
-    public static function calculate($period)
+    public static function calculate($period, $tableName)
     {
         /* @var int $priceChannelPeriod */
         $priceChannelPeriod = $period;
@@ -47,17 +47,17 @@ class PriceChannel
         Then we compare current value with 999999. It is, $priceChannelLowValue = current value*/
         $priceChannelLowValue = 999999;
 
-        /*
+        /**
          * desc - from big values to small. asc - from small to big
          * in this case: desc. [0] element is the last record in DB.
          * Its id - quantity of records.
          */
-        $records = DB::table("asset_1")
+        $records = DB::table($tableName)
             ->orderBy('time_stamp', 'desc')
             ->get();
 
         /* @var int $quantityOfBars The quantity of bars for which the price channel will be calculated */
-        $quantityOfBars = (DB::table('asset_1')
+        $quantityOfBars = (DB::table($tableName)
             ->orderBy('id', 'desc')
             ->first())->id - $priceChannelPeriod - 1;
 
@@ -91,19 +91,11 @@ class PriceChannel
                 }
 
                 // Calculate SMA
-                \App\Classes\Indicators\Sma::calculate('close', 2, 'sma1');
-
-                // For SMA
-                // Try to exclude SAM to another calss
-                /*for ($j = $elementIndex  ; $j < $elementIndex + $smaPeriod; $j++)
-                {
-                    // SMA calculation
-                    $sma += $records[$j]->close; // SMA based on close value
-                }*/
+                \App\Classes\Indicators\Sma::calculate('close', 2, 'sma1', $tableName);
 
 
                 /** Update high and low values, sma values in DB */
-                DB::table("asset_1")
+                DB::table($tableName)
                     ->where('time_stamp', $records[$elementIndex]->time_stamp)
                     ->update([
                         'price_channel_high_value' => $priceChannelHighValue,
@@ -125,28 +117,22 @@ class PriceChannel
                  *  remain in DB and spoil the chart. The price channel lines start to contain both values in the same series.
                  *  In order to prevent this, for those bars that were not used for computation, price channel values are set to null
                  */
-
-                DB::table("asset_1")
+                DB::table($tableName)
                     ->where('time_stamp', $records[$elementIndex]->time_stamp)
                     ->update([
                         'price_channel_high_value' => null,
                         'price_channel_low_value' => null,
                         'sma1' => null
                     ]);
-
             }
             $elementIndex++;
         }
 
-
-
-
-        DB::table("asset_1")
-            ->where('id', DB::table("asset_1")->orderBy('time_stamp', 'desc')->take(1)->value('id'))
+        DB::table($tableName)
+            ->where('id', DB::table($tableName)->orderBy('time_stamp', 'desc')->take(1)->value('id'))
             ->update([
-                'price_channel_high_value' => DB::table("asset_1")->orderBy('time_stamp', 'desc')->skip(1)->take(1)->value('price_channel_high_value'),
-                'price_channel_low_value' => DB::table("asset_1")->orderBy('time_stamp', 'desc')->skip(1)->take(1)->value('price_channel_low_value'),
-                //'sma1' => $sma / $smaPeriod,
+                'price_channel_high_value' => DB::table($tableName)->orderBy('time_stamp', 'desc')->skip(1)->take(1)->value('price_channel_high_value'),
+                'price_channel_low_value' => DB::table($tableName)->orderBy('time_stamp', 'desc')->skip(1)->take(1)->value('price_channel_low_value'),
             ]);
     }
 }

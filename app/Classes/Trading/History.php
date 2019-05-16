@@ -18,8 +18,10 @@ use Illuminate\Support\Facades\DB;
  */
 class History
 {
-    public static function loadPeriod($symbol){
-        $barsToLoad = config('bot.bars_to_load');
+    public static function loadPeriod($botSettings){
+        //$barsToLoad = config('bot.bars_to_load');
+        $barsToLoad = $botSettings['barsToLoad'];
+        $symbol = $botSettings['historySymbol'];
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_URL,
             "https://www.bitmex.com/api/v1/trade/bucketed?binSize=1m&partial=false&symbol=$symbol&count=$barsToLoad&reverse=true");
@@ -28,9 +30,9 @@ class History
         $bars = json_decode(curl_exec($ch));
         curl_close($ch);
 
-        DB::table('asset_1')->truncate();
+        DB::table($botSettings['botTitle'])->truncate();
         foreach(array_reverse($bars) as $bar){
-            DB::table('asset_1')->insert(array(
+            DB::table($botSettings['botTitle'])->insert(array(
                 'symbol' => $symbol,
                 'date' => gmdate("Y-m-d G:i:s", strtotime($bar->timestamp)), // Regular date
                 'time_stamp' => strtotime($bar->timestamp) * 1000, // Timestamp

@@ -209,5 +209,47 @@ class Chart
                     'accumulated_commission' => DB::table($this->botSettings['botTitle'])->sum('trade_commission') + 2,
                 ]);
         } // SELL trade
+
+
+
+        if ($this->trade_flag != "all") {
+
+            /** @var int $z Get the last record from the asset table */
+            $z = DB::table($this->botSettings['botTitle'])
+                    //->where('id', $recordId)
+                    ->get()
+                    ->last();
+
+            /** @var array $temp The revious record from asset table where trade_direction is not null */
+            $temp =
+                DB::table($this->botSettings['botTitle'])
+                    //->where('id', $z->id - 1)
+                    ->whereNotNull('trade_direction')
+                    ->get();
+
+            //dump($z);
+            //die($temp);
+
+            // Need to check whether $assetRow and $z are equal
+            /** On this code we get this error: Trying to get property of non object */
+            if ($z->trade_direction == "buy" || $z->trade_direction == "sell") {
+                DB::table($this->botSettings['botTitle'])
+                    ->where('id', $recordId)
+                    ->update([
+                        'accumulated_profit' => (count($temp) > 1 ? $temp[count($temp) - 2]->accumulated_profit + $this->tradeProfit : 9)
+                    ]);
+
+            } else
+            {
+                DB::table($this->botSettings['botTitle'])
+                    ->where('id', $recordId)
+                    ->update([
+                        'accumulated_profit' => (count($temp) > 1 ? $temp[count($temp) - 1]->accumulated_profit + $this->tradeProfit : 99)
+                    ]);
+            }
+        }
+
+
+
     }
 }

@@ -64,7 +64,8 @@ class HistoryBars extends \App\Http\Controllers\Controller
             $profitDiagram[] = [
                 $rowValue->time_stamp,
                 //$rowValue->net_profit
-                $rowValue->accumulated_profit // Profit diagram without commission
+                //$rowValue->accumulated_profit // Profit diagram without commission
+                $rowValue->trade_profit
             ];
 
             // Add MACD line

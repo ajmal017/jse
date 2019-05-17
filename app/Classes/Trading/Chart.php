@@ -135,7 +135,7 @@ class Chart
                 // open order buy vol = vol
                 echo "---------------------- FIRST EVER TRADE<br>\n";
                 //Exchange::placeMarketBuyOrder($this->executionSymbolName, $this->volume);
-                PlaceOrder::dispatch('buy', $this->executionSymbolName, $this->volume);
+                PlaceOrder::dispatch('buy', $this->executionSymbolName, $this->volume, $this->botSettings);
             }
             else // Not the first trade. Close the current position and open opposite trade. vol = vol * 2
             {
@@ -143,7 +143,7 @@ class Chart
                 echo "---------------------- NOT FIRST EVER TRADE. CLOSE + OPEN. VOL * 2\n";
                 //Exchange::placeMarketBuyOrder($this->executionSymbolName, $this->volume);
                 //Exchange::placeMarketBuyOrder($this->executionSymbolName, $this->volume);
-                PlaceOrder::dispatch('buy', $this->executionSymbolName, $this->volume * 2);
+                PlaceOrder::dispatch('buy', $this->executionSymbolName, $this->volume * 2, $this->botSettings);
             }
 
             // Trade flag. If this flag set to short -> don't enter this IF and wait for channel low crossing (IF below)
@@ -178,14 +178,14 @@ class Chart
             if ($this->trade_flag == "all"){
                 echo "---------------------- FIRST EVER TRADE<br>\n";
                 //Exchange::placeMarketSellOrder($this->executionSymbolName, $this->volume);
-                PlaceOrder::dispatch('sell', $this->executionSymbolName, $this->volume);
+                PlaceOrder::dispatch('sell', $this->executionSymbolName, $this->volume, $this->botSettings);
             }
             else // Not the first trade. Close the current position and open opposite trade. vol = vol * 2
             {
                 echo "---------------------- NOT FIRST EVER TRADE. CLOSE + OPEN. VOL * 2\n";
                 //Exchange::placeMarketSellOrder($this->executionSymbolName, $this->volume);
                 //Exchange::placeMarketSellOrder($this->executionSymbolName, $this->volume);
-                PlaceOrder::dispatch('sell', $this->executionSymbolName, $this->volume * 2);
+                PlaceOrder::dispatch('sell', $this->executionSymbolName, $this->volume * 2, $this->botSettings);
             }
 
             $this->trade_flag = 'long';

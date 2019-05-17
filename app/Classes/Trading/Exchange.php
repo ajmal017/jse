@@ -13,11 +13,11 @@ use Mockery\Exception;
 class Exchange
 {
     private static $response;
-    public static function placeMarketBuyOrder($symbol, $volume){
+    public static function placeMarketBuyOrder($symbol, $volume, $botSettings){
         $exchange = new bitmex();
-        $exchange->urls['api'] = $exchange->urls[config('bot.bitmex_api_path')]; // Testnet or Live
-        $exchange->apiKey = config('bot.bitmex_api_key');
-        $exchange->secret = config('bot.bitmex_api_secret');
+        $exchange->urls['api'] = $exchange->urls[$botSettings['bitmex_api_path']]; // Testnet or live
+        $exchange->apiKey = ($botSettings['bitmex_api_path'] == 'api' ? $botSettings['bitmex_api_key'] : config('bot.testNetSettings')['bitmex_testnet_api_key']);
+        $exchange->secret = ($botSettings['bitmex_api_path'] == 'api' ? $botSettings['bitmex_api_secret'] : config('bot.testNetSettings')['bitmex_testnet_api_secret']);
         try{
             self::$response = $exchange->createMarketBuyOrder($symbol, $volume, []); // BTC/USD ETH/USD
         }
@@ -30,11 +30,11 @@ class Exchange
         self::checkResponse();
     }
 
-    public static function placeMarketSellOrder($symbol, $volume){
+    public static function placeMarketSellOrder($symbol, $volume, $botSettings){
         $exchange = new bitmex();
-        $exchange->urls['api'] = $exchange->urls[config('bot.bitmex_api_path')];
-        $exchange->apiKey = (config('bot.bitmex_api_path') == 'api' ? config('bot.bitmex_api_key') : config('bot.bitmex_testnet_api_key')); //
-        $exchange->secret = (config('bot.bitmex_api_path') == 'api' ? config('bot.bitmex_api_secret') : config('bot.bitmex_testnet_api_secret')); //
+        $exchange->urls['api'] = $exchange->urls[$botSettings['bitmex_api_path']];
+        $exchange->apiKey = ($botSettings['bitmex_api_path'] == 'api' ? $botSettings['bitmex_api_key'] : config('bot.testNetSettings')['bitmex_testnet_api_key']);
+        $exchange->secret = ($botSettings['bitmex_api_path'] == 'api' ? $botSettings['bitmex_api_secret'] : config('bot.testNetSettings')['bitmex_testnet_api_secret']);
         try{
             self::$response = $exchange->createMarketSellOrder($symbol, $volume, []); // BTC/USD ETH/USD
         }

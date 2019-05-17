@@ -17,17 +17,19 @@ class PlaceOrder implements ShouldQueue
     private $symbol;
     private $direction;
     private $volume;
+    private $botSettings;
 
     /**
      * Create a new job instance.
      *
      * @return void
      */
-    public function __construct($direction, $symbol, $volume)
+    public function __construct($direction, $symbol, $volume, $botSettings)
     {
         $this->symbol = $symbol;
         $this->direction = $direction;
         $this->volume = $volume;
+        $this->botSettings = $botSettings;
     }
 
     /**
@@ -38,9 +40,9 @@ class PlaceOrder implements ShouldQueue
     public function handle()
     {
         if($this->direction == 'buy'){
-            Exchange::placeMarketBuyOrder($this->symbol, $this->volume);
+            Exchange::placeMarketBuyOrder($this->symbol, $this->volume, $this->botSettings);
         } else {
-            Exchange::placeMarketSellOrder($this->symbol, $this->volume);
+            Exchange::placeMarketSellOrder($this->symbol, $this->volume, $this->botSettings);
         }
     }
 }

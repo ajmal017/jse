@@ -107,7 +107,7 @@ class CandleMaker
 
         $command->error("current tick   : " . gmdate("Y-m-d G:i:s", strtotime($tickDateFullTime)) . " price: $tickPrice");
         echo "time to compare: " . gmdate("Y-m-d G:i:s", ($this->tt)) . "\n";
-        echo "time frame: \n";
+        echo "time frame: " . $this->botSettings['timeFrame'] . "\n";
 
         /*
          * New bar is issued.
@@ -132,17 +132,8 @@ class CandleMaker
             // @todo 25.04.19 Disabled. Need to run the real time chart without trades first
             $chart->index(gmdate("Y-m-d G:i:s", strtotime($tickDateFullTime)), $this->tickDate);
 
-            /* @todo MOVE TO A SEPARATE METHOD */
             /** Add bar to DB */
-            DB::table($this->tableName)->insert(array(
-                'date' => gmdate("Y-m-d G:i:s", strtotime($tickDateFullTime)), // Date in regular format. Converted from unix timestamp
-                'time_stamp' => strtotime($tickDateFullTime) * 1000,
-                'open' => $tickPrice,
-                'close' => $tickPrice,
-                'high' => $tickPrice,
-                'low' => $tickPrice,
-                'volume' => $tickVolume
-            ));
+            $this->addBarToDb($this->tableName, $tickDateFullTime, $tickPrice, $tickVolume);
 
             /**
              * We get settings values from DB one more time just in case it was changed.
@@ -208,22 +199,8 @@ class CandleMaker
         $pusherApiMessage->clientId = $this->botSettings['frontEndId'];
         $pusherApiMessage->messageType = 'symbolTickPriceResponse'; // symbolTickPriceResponse, error
         $pusherApiMessage->payload = $messageArray;
-        //dump($pusherApiMessage->toArray());
 
-        //dump('here: ' .  strtotime($tickDateFullTime));
-        //die(); // 2019-05-16T23:16:46.529Z
-        // strtotime($message[0]['timestamp'])
-
-        /* @TOD SEPARATE METHOD! */
-        /*if ($this->isFirstTimeTickCheck || strtotime($tickDateFullTime) >= $this->addedTickTime) {
-            $this->isFirstTimeTickCheck = false;
-            $this->addedTickTime = strtotime($tickDateFullTime) + 2; // Allow ticks not more than twice a second
-
-            dump(strtotime($tickDateFullTime));
-        }*/
-
-        if ($this->rateLimitCheck($tickDateFullTime)) dump('rate limit works');
-        //event(new \App\Events\jseevent($pusherApiMessage->toArray()));
+        if ($this->rateLimitCheck($tickDateFullTime, $pusherApiMessage)) event(new \App\Events\jseevent($pusherApiMessage->toArray()));
 
         /** Reset high, low of the bar but do not out send these values to the chart. Next bar will be started from scratch */
         if ($this->isFirstTickInBar == true){
@@ -232,16 +209,27 @@ class CandleMaker
         }
     }
 
-    private function rateLimitCheck($tickDateFullTime){
+    private function rateLimitCheck($tickDateFullTime, $pusherApiMessage){
         if ($this->isFirstTimeTickCheck || strtotime($tickDateFullTime) >= $this->addedTickTime) {
             $this->isFirstTimeTickCheck = false;
-            $this->addedTickTime = strtotime($tickDateFullTime) + 5; // Allow ticks not more than twice a second
-            //event(new \App\Events\jseevent($pusherApiMessage->toArray()));
-            dump(strtotime($tickDateFullTime));
+            $this->addedTickTime = strtotime($tickDateFullTime) + $this->botSettings['rateLimit']; // Allow ticks not more than twice a second
+            event(new \App\Events\jseevent($pusherApiMessage->toArray()));
             return true;
         } else {
             return false;
         }
+    }
+
+    private function addBarToDb($tableName, $tickDateFullTime, $tickPrice, $tickVolume){
+        DB::table($tableName)->insert(array(
+            'date' => gmdate("Y-m-d G:i:s", strtotime($tickDateFullTime)), // Date in regular format. Converted from unix timestamp
+            'time_stamp' => strtotime($tickDateFullTime) * 1000,
+            'open' => $tickPrice,
+            'close' => $tickPrice,
+            'high' => $tickPrice,
+            'low' => $tickPrice,
+            'volume' => $tickVolume
+        ));
     }
 }
 

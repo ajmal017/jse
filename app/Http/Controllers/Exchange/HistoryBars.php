@@ -17,6 +17,7 @@ class HistoryBars extends \App\Http\Controllers\Controller
         $macdLine = array();
         $macdSignalLine = array();
         $shortTradeMarkers = array();
+
         $allDbValues = DB::table(config('bot.bots')[$botId]['botTitle'])->get();
 
         foreach ($allDbValues as $rowValue) { // Go through all DB records
@@ -38,7 +39,7 @@ class HistoryBars extends \App\Http\Controllers\Controller
                 $rowValue->price_channel_low_value
             ];
 
-            // Add long trade markers
+            // Long trade markers
             if ($rowValue->trade_direction == "buy") {
                 $longTradeMarkers[] = [
                     $rowValue->time_stamp,
@@ -46,7 +47,7 @@ class HistoryBars extends \App\Http\Controllers\Controller
                 ];
             }
 
-            // Add short trade markers
+            // Short trade markers
             if ($rowValue->trade_direction == "sell") {
                 $shortTradeMarkers[] = [
                     $rowValue->time_stamp,
@@ -54,27 +55,28 @@ class HistoryBars extends \App\Http\Controllers\Controller
                 ];
             }
 
-            // Add SMA
             $sma1[] = [
                 $rowValue->time_stamp,
                 $rowValue->sma1
             ];
 
-            // Add profit diagram
-            $profitDiagram[] = [
+            $accumulatedProfit[] = [
                 $rowValue->time_stamp,
                 //$rowValue->net_profit
-                //$rowValue->accumulated_profit // Profit diagram without commission
-                $rowValue->trade_profit
+                $rowValue->accumulated_profit // Profit diagram without commission
+                //$rowValue->trade_profit
             ];
 
-            // Add MACD line
+            $netProfit[] = [
+                $rowValue->time_stamp,
+                $rowValue->net_profit
+            ];
+
             $macdLine[] = [
                 $rowValue->time_stamp,
                 $rowValue->macd_line
             ];
 
-            // Add MACD signal line
             $macdSignalLine[] = [
                 $rowValue->time_stamp,
                 $rowValue->macd_signal_line
@@ -92,14 +94,13 @@ class HistoryBars extends \App\Http\Controllers\Controller
             "longTradeMarkers" => $longTradeMarkers,
             "shortTradeMarkers" => $shortTradeMarkers,
             "sma1" => $sma1,
-            "profitDiagram" => $profitDiagram,
+            "accumulatedProfit" => $accumulatedProfit,
+            "netProfit" => $netProfit,
             "macdLine" => $macdLine,
             "macdSignalLine" => $macdSignalLine,
             "symbol" => $allDbValues[0]->symbol
         );
 
-        //              0                   1                       2                   3                   4              5
-        //$seriesData = [$candles, $priceChannelHighValue, $priceChannelLowValue, $longTradeMarkers, $shortTradeMarkers, $sma];
         return json_encode($seriesData);
     }
 }

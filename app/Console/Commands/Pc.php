@@ -12,6 +12,7 @@ use App\Classes\Trading\Exchange;
 use App\Jobs\PlaceOrder;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Artisan;
+use Mockery\Exception;
 use Ratchet\Client\WebSocket;
 use Illuminate\Support\Facades\DB;
 use Tymon\JWTAuth\Providers\Auth\Illuminate;
@@ -60,7 +61,6 @@ class Pc extends Command
      */
     public function handle()
     {
-
         DB::table('jobs')->truncate();
         $botSettings = config('bot.bots')[$this->argument('botInstance')];
         $migration = new \App\Classes\DB\TradingTable($botSettings['botTitle']);
@@ -76,16 +76,10 @@ class Pc extends Command
         $connector = new \Ratchet\Client\Connector($loop, $reactConnector);
         \App\Classes\Trading\History::loadPeriod($botSettings);
 
-        // Initial indicators calculation
-        // PriceChannel::calculate($this->argument('priceChannelPeriod'));
+        /* Initial indicators calculation and chart reload*/
         PriceChannel::calculate($botSettings['strategyParams']['priceChannelPeriod'], $botSettings['botTitle']);
         Sma::calculate('close', 2, 'sma1', $botSettings['botTitle']);
-
-        // Reload chart
-        $pusherApiMessage = new \App\Classes\WebSocket\PusherApiMessage();
-        $pusherApiMessage->clientId = $botSettings['frontEndId'];
-        $pusherApiMessage->messageType = 'reloadChartAfterHistoryLoaded';
-        event(new \App\Events\jseevent($pusherApiMessage->toArray()));
+        $this->reloadChart($botSettings);
 
         \App\Classes\WebSocket\BitmexWsListener::subscribe(
             $connector,
@@ -98,5 +92,18 @@ class Pc extends Command
             $botSettings['strategyParams']['priceChannelPeriod'],
             null
         );
+    }
+
+    private function reloadChart ($botSettings){
+        $pusherApiMessage = new \App\Classes\WebSocket\PusherApiMessage();
+        $pusherApiMessage->clientId = $botSettings['frontEndId'];
+        $pusherApiMessage->messageType = 'reloadChartAfterHistoryLoaded';
+        try{
+            event(new \App\Events\jseevent($pusherApiMessage->toArray()));
+        } catch (\Exception $e)
+        {
+            echo __FILE__ . " " . __LINE__ . "\n";
+            dump($e);
+        }
     }
 }

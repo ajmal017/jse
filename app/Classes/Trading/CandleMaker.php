@@ -78,6 +78,8 @@ class CandleMaker
             $this->tickDate = strtotime($tickDateFullTime) * 1000;
             $x = date("Y-m-d H:i", $this->tickDate / 1000) . "\n"; // Take seconds off. Convert timestamp to date
             $this->tt = strtotime($x . "1minute"); // // *** TIME FRAME IS HERE!! ***
+            //$this->tt = strtotime($x . "+30 seconds");
+
             $this->isFirstTickInBar = false;
 
             /**
@@ -200,7 +202,8 @@ class CandleMaker
         $pusherApiMessage->messageType = 'symbolTickPriceResponse'; // symbolTickPriceResponse, error
         $pusherApiMessage->payload = $messageArray;
 
-        if ($this->rateLimitCheck($tickDateFullTime, $pusherApiMessage)) event(new \App\Events\jseevent($pusherApiMessage->toArray()));
+        //if ($this->rateLimitCheck($tickDateFullTime, $pusherApiMessage)) event(new \App\Events\jseevent($pusherApiMessage->toArray()));
+        $this->rateLimitCheck($tickDateFullTime, $pusherApiMessage);
 
         /** Reset high, low of the bar but do not out send these values to the chart. Next bar will be started from scratch */
         if ($this->isFirstTickInBar == true){
@@ -213,10 +216,17 @@ class CandleMaker
         if ($this->isFirstTimeTickCheck || strtotime($tickDateFullTime) >= $this->addedTickTime) {
             $this->isFirstTimeTickCheck = false;
             $this->addedTickTime = strtotime($tickDateFullTime) + $this->botSettings['rateLimit']; // Allow ticks not more than twice a second
-            event(new \App\Events\jseevent($pusherApiMessage->toArray()));
-            return true;
+
+            try{
+                event(new \App\Events\jseevent($pusherApiMessage->toArray()));
+            } catch (\Exception $e) {
+                echo __FILE__ . " " . __LINE__ . "\n";
+                dump($e);
+            }
+
+            //return true;
         } else {
-            return false;
+            //return false;
         }
     }
 

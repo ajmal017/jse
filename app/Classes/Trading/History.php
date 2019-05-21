@@ -30,6 +30,8 @@ class History
         $bars = json_decode(curl_exec($ch));
         curl_close($ch);
 
+        if (!$bars) die('Symbol trading name is worng. ' . __FILE__ . ' ' . __LINE__);
+
         DB::table($botSettings['botTitle'])->truncate();
         foreach(array_reverse($bars) as $bar){
             DB::table($botSettings['botTitle'])->insert(array(

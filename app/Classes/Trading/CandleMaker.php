@@ -123,8 +123,8 @@ class CandleMaker
              * method call. The only affected variable is SMA. If to disable this call - sma value at the chart and the
              * $barClosePrice variable (Chart.php line 108) will not be the same. SMA is calculated using a bar closes within
              * a determined SMA filter period. Close value is rewritten on each tick received from www.bitfinex.com. This two
-             * PriceChannel::calculate() may result as two different SMA values - one on the chart and one in DB. This makes hard
-             * to trace and debug the code.
+             * PriceChannel::calculate() may result as two different SMA values - one on the chart and one in DB.
+             * This makes the code haed to debug.
              */
 
             if ($this->indicator == 'priceChannel') PriceChannel::calculate($priceChannelPeriod, $this->tableName);
@@ -223,10 +223,6 @@ class CandleMaker
                 echo __FILE__ . " " . __LINE__ . "\n";
                 dump($e);
             }
-
-            //return true;
-        } else {
-            //return false;
         }
     }
 

@@ -128,6 +128,11 @@ class PriceChannel
             $elementIndex++;
         }
 
+        /**
+         * Make the last value of the calculated price channel equal to the value form the previous row.
+         * This is needed to not let the price channel to squeeze.
+         * If to disable this code, on each new bar both high and low price channel values will be equal to bar open.
+         */
         DB::table($tableName)
             ->where('id', DB::table($tableName)->orderBy('time_stamp', 'desc')->take(1)->value('id'))
             ->update([

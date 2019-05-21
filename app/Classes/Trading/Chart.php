@@ -235,5 +235,7 @@ class Chart
                     'net_profit' => round($accumulatedProfit - $accumulatedCommission, 4)
                 ]);
         }
+
+        echo __FILE__ . " " . __LINE__ . "execution finished";
     }
 }

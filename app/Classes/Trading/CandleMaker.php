@@ -9,11 +9,12 @@
 namespace App\Classes\Trading;
 use App\Classes\Indicators\Macd;
 use App\Classes\Indicators\PriceChannel;
+use App\Classes\Indicators\Sma;
 use App\Classes\WebSocket\PusherApiMessage;
 use App\Console\Commands\RatchetPawlSocket;
 use Illuminate\Support\Facades\DB;
-use Mockery\Exception;
-use Illuminate\Support\Facades\Log;
+//use Mockery\Exception;
+//use Illuminate\Support\Facades\Log;
 
 /**
  * Class CandleMaker
@@ -70,7 +71,6 @@ class CandleMaker
                 'volume' => $tickVolume,
             ));
         }*/
-
         $lastRecordId = DB::table($this->tableName)->orderBy('time_stamp', 'desc')->first()->id;
 
         /* Take seconds off and add 1 min. Do it only once per interval (for example 1min) */
@@ -79,7 +79,6 @@ class CandleMaker
             $x = date("Y-m-d H:i", $this->tickDate / 1000) . "\n"; // Take seconds off. Convert timestamp to date
             $this->tt = strtotime($x . $this->botSettings['timeFrame'] . "minute"); // // *** TIME FRAME IS HERE!! ***
             //$this->tt = strtotime($x . "+30 seconds");
-
             $this->isFirstTickInBar = false;
 
             /**
@@ -111,10 +110,9 @@ class CandleMaker
         echo "time to compare: " . gmdate("Y-m-d G:i:s", ($this->tt)) . "\n";
         echo "time frame: " . $this->botSettings['timeFrame'] . "\n";
 
-        /*
-         * New bar is issued.
+        /**
+         * New bar is issued. This code is executed once per time frame.
          * When the time of the tick is > added time - add this bar to the DB.
-         * @todo now volume is not accumulated. We record it as the last volume of the trade (tick)
          */
         if (floor(strtotime($tickDateFullTime)) >= $this->tt){
             $command->info("------------------- NEW BAR ISSUED ----------------------");
@@ -126,25 +124,15 @@ class CandleMaker
              * PriceChannel::calculate() may result as two different SMA values - one on the chart and one in DB.
              * This makes the code haed to debug.
              */
+            $this->indicatorsCalculate($priceChannelPeriod, $this->tableName,$macdSettings);
 
-            if ($this->indicator == 'priceChannel') PriceChannel::calculate($priceChannelPeriod, $this->tableName);
-            if ($this->indicator == 'macd') Macd::calculate($macdSettings);
-
-            /** Call Chart.php and calculate profit */
-            // @todo 25.04.19 Disabled. Need to run the real time chart without trades first
+            /* Call Chart.php and calculate profit */
             $chart->index(gmdate("Y-m-d G:i:s", strtotime($tickDateFullTime)), $this->tickDate);
 
-            /** Add bar to DB */
+            /* Add bar to DB */
             $this->addBarToDb($this->tableName, $tickDateFullTime, $tickPrice, $tickVolume);
 
-            /**
-             * We get settings values from DB one more time just in case it was changed.
-             * For example the price channel value. Otherwise the price channel value will remain the same
-             * and the only option to update it would be restarting the application from console
-             */
-            //$this->settings = DB::table('settings_realtime')->first();
-
-            /** Set flag to true in order to drop seconds of the time and add time frame */
+            /*Set flag to true in order to drop seconds of the time and add time frame */
             $this->isFirstTickInBar = true;
 
             /**
@@ -154,11 +142,13 @@ class CandleMaker
              * whether to calculate the whole data or just a period.
              * This price channel calculation is applied when a new bar is added to the chart. Right after it was added
              * we calculate price channel and inform front end that the chart mast be reloaded
-             *
-             * @todo price channel calculated twice! This is the second time! This must be fixed.
              */
-            if ($this->indicator == 'priceChannel') PriceChannel::calculate($priceChannelPeriod, $this->botSettings['botTitle']);
-            if ($this->indicator == 'macd') Macd::calculate($macdSettings);
+
+
+            // Actually this code is called once per time frame
+            // We can only call priceChannel::calculate for last bars only from here
+            // while from pc.php the full priceChannel::calculate must be called
+            $this->indicatorsCalculate($priceChannelPeriod, $this->tableName, $macdSettings);
 
             /**
              * This flag informs Chart.vue that it needs to add new bar to the chart.
@@ -173,18 +163,10 @@ class CandleMaker
         $messageArray['tradeDate'] = $this->tickDate;
         $messageArray['tradePrice'] = $tickPrice; // Tick price = current price and close (when a bar is closed)
 
-        /* These values are used for showing at the form */
+        /* These values are used for showing on the form */
         $messageArray['tradeVolume'] = $tickVolume;
         $messageArray['tradeBarHigh'] = $this->barHigh; // High value of the bar
         $messageArray['tradeBarLow'] = $this->barLow; // Low value of the bar
-
-        /**
-         * Get price channel values. Sometimes we get non object value error. In this case we have to do null check
-         * Get value. Do the null check
-         * If null - add zero to the message array
-         */
-        //$messageArray['priceChannelHighValue'] = (DB::table($this->tableName)->orderBy('id', 'desc')->first())->price_channel_high_value;
-        //$messageArray['priceChannelLowValue'] = (DB::table($this->tableName)->orderBy('id', 'desc')->first())->price_channel_low_value;
 
         $messageArray['priceChannelHighValue'] =
             (DB::table($this->tableName)
@@ -202,10 +184,9 @@ class CandleMaker
         $pusherApiMessage->messageType = 'symbolTickPriceResponse'; // symbolTickPriceResponse, error
         $pusherApiMessage->payload = $messageArray;
 
-        //if ($this->rateLimitCheck($tickDateFullTime, $pusherApiMessage)) event(new \App\Events\jseevent($pusherApiMessage->toArray()));
         $this->rateLimitCheck($tickDateFullTime, $pusherApiMessage);
 
-        /** Reset high, low of the bar but do not out send these values to the chart. Next bar will be started from scratch */
+        /* Reset high, low of the bar but do not out send these values to the chart. Next bar will be started from scratch */
         if ($this->isFirstTickInBar == true){
             $this->barHigh = 0;
             $this->barLow = 9999999;
@@ -236,6 +217,14 @@ class CandleMaker
             'low' => $tickPrice,
             'volume' => $tickVolume
         ));
+    }
+
+    private function indicatorsCalculate($priceChannelPeriod, $tableName, $macdSettings){
+        if ($this->indicator == 'priceChannel'){
+            PriceChannel::calculate($priceChannelPeriod, $this->tableName, false);
+            Sma::calculate('close', 2, 'sma1', $tableName, false); // Calculate SMA together with price channel. This sam used as a filter.
+        }
+        if ($this->indicator == 'macd') Macd::calculate($macdSettings);
     }
 }
 

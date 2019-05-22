@@ -16,10 +16,10 @@ class Sma
      * @param string $period        SMA period.
      * @param sting $smaColumn      Output DB columnt for SMA calculated values.
      */
-    public static function calculate($close, $period, $smaColumn, $tableName)
+    public static function calculate($close, $period, $smaColumn, $tableName, $isInitialCalculation)
     {
         /* @var int $priceChannelPeriod */
-        $priceChannelPeriod = $period;
+        //$priceChannelPeriod = $period;
 
         /* @var int $smaPeriod */
         $smaPeriod = $period;
@@ -31,11 +31,11 @@ class Sma
         $elementIndex = 0;
 
         /** @var int $priceChannelHighValue Base value for high value search*/
-        $priceChannelHighValue = 0;
+        //$priceChannelHighValue = 0;
 
         /** @var int $priceChannelLowValue Base value for low value search. Really big value is needed at the beginning.
         Then we compare current value with 999999. It is, $priceChannelLowValue = current value*/
-        $priceChannelLowValue = 999999;
+        //$priceChannelLowValue = 999999;
 
         /**
          * desc - from big values to small. asc - from small to big
@@ -51,9 +51,18 @@ class Sma
             ->get(); // desc, asc - order. Read the whole table from BD to $records
 
         /** @var int $quantityOfBars The quantity of bars for which the price channel will be calculated */
-        $quantityOfBars = (DB::table($tableName)
+        /*$quantityOfBars = (DB::table($tableName)
                 ->orderBy('id', 'desc')
-                ->first())->id - $priceChannelPeriod - 1;
+                ->first())->id - $priceChannelPeriod - 1;*/
+
+        if ($isInitialCalculation){
+            $quantityOfBars = (DB::table($tableName)
+                    ->orderBy('id', 'desc')
+                    ->first())->id - $period - 1;
+        } else {
+            $quantityOfBars = $period;
+        }
+
 
         /**
          * Calculate price channel max, min.
@@ -85,11 +94,13 @@ class Sma
                     ->update([
                         $smaColumn => $sma / $smaPeriod,
                     ]);
-
             }
-            else
+            elseif (false)
             {
-                /** Update high and low values in DB for bars which were not used in calculation
+                /**
+                 * @todo 21.05.19 use this code only when doing back testing
+                 *
+                 * Update high and low values in DB for bars which were not used in calculation
                  *  There is a case when first price channel with period 5 is calculated
                  *  Then next price channel is calculated with period 6. This causes that calculated values from period 5
                  *  remain in DB and spoil the chart. The price channel lines start to contain both values in the same series.

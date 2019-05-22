@@ -74,12 +74,18 @@ class Pc extends Command
         $loop = \React\EventLoop\Factory::create();
         $reactConnector = new \React\Socket\Connector($loop, ['dns' => '8.8.8.8', 'timeout' => 10]);
         $connector = new \Ratchet\Client\Connector($loop, $reactConnector);
+
+
         \App\Classes\Trading\History::loadPeriod($botSettings);
+        dump('history loaded');
 
         /* Initial indicators calculation and chart reload*/
-        PriceChannel::calculate($botSettings['strategyParams']['priceChannelPeriod'], $botSettings['botTitle']);
-        Sma::calculate('close', 2, 'sma1', $botSettings['botTitle']);
+        dump($this->mt());
+        PriceChannel::calculate($botSettings['strategyParams']['priceChannelPeriod'], $botSettings['botTitle'], true);
+        Sma::calculate('close', 2, 'sma1', $botSettings['botTitle'], true);
+        dump($this->mt());
         $this->reloadChart($botSettings);
+
 
         \App\Classes\WebSocket\BitmexWsListener::subscribe(
             $connector,
@@ -105,5 +111,14 @@ class Pc extends Command
             echo __FILE__ . " " . __LINE__ . "\n";
             dump($e);
         }
+    }
+
+    function mt(){
+        $m = microtime();
+        list($mc, $s) = explode(' ', $m);
+        $n = $s + $mc;
+        $ret = $n - (isset($GLOBALS['last']) ? $GLOBALS['last'] : time());
+        $GLOBALS['last'] = $n;
+        return $ret;
     }
 }

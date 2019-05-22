@@ -26,14 +26,8 @@ use Illuminate\Support\Facades\Log;
  */
 class PriceChannel
 {
-    public static function calculate($period, $tableName)
+    public static function calculate($priceChannelPeriod, $tableName, $isInitialCalculation)
     {
-        /* @var int $priceChannelPeriod */
-        $priceChannelPeriod = $period;
-
-        /* @var int $smaPeriod */
-        $smaPeriod = $period;
-
         /**
          * @var int elementIndex Loop index. If the price channel period is 5 the loop will go from 0 to 4.
          * The loop is started on each candle while running through all candles in the array.
@@ -57,9 +51,13 @@ class PriceChannel
             ->get();
 
         /* @var int $quantityOfBars The quantity of bars for which the price channel will be calculated */
-        $quantityOfBars = (DB::table($tableName)
-            ->orderBy('id', 'desc')
-            ->first())->id - $priceChannelPeriod - 1;
+        if ($isInitialCalculation){
+            $quantityOfBars = (DB::table($tableName)
+                    ->orderBy('id', 'desc')
+                    ->first())->id - $priceChannelPeriod - 1;
+        } else {
+            $quantityOfBars = $priceChannelPeriod;
+        }
 
         /**
          * Calculate price channel max, min.
@@ -68,9 +66,6 @@ class PriceChannel
          * We go from right to the left.
          */
         foreach ($records as $record) {
-
-            /* @var double $sma Calculated simple moving average value sma value is reset each iteration */
-            $sma = 0;
 
             /**
              * Indexes go like this 0,1,2,3,4,5,6 from left to the right
@@ -90,11 +85,11 @@ class PriceChannel
                         $priceChannelLowValue = $records[$i]->low;
                 }
 
-                // Calculate SMA
-                \App\Classes\Indicators\Sma::calculate('close', 2, 'sma1', $tableName);
+                /* Calculate SMA */
+                //\App\Classes\Indicators\Sma::calculate('close', 2, 'sma1', $tableName);
 
 
-                /** Update high and low values, sma values in DB */
+                /* Update high and low values, sma values in DB */
                 DB::table($tableName)
                     ->where('time_stamp', $records[$elementIndex]->time_stamp)
                     ->update([
@@ -108,10 +103,12 @@ class PriceChannel
                 $priceChannelLowValue = 999999;
 
             }
-            else
+            elseif (false)
             {
                 /**
-                 * Update high and low values in DB for bars which were not used in calculation
+                 * @todo 21.05.19 execute this code only when back testing mode is calculated
+                 *
+                 *  Update high and low values in DB for bars which were not used in calculation
                  *  There is a case when first price channel with period 5 is calculated
                  *  Then next price channel is calculated with period 6. This causes that calculated values from period 5
                  *  remain in DB and spoil the chart. The price channel lines start to contain both values in the same series.

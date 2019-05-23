@@ -20,26 +20,27 @@ use Illuminate\Support\Facades\DB;
  */
 class Macd
 {
-    public static function calculate($macdSettings){
-        Sma::calculate('close',$macdSettings['ema1Period'], 'sma1'); // SMA1
-        Sma::calculate('close',$macdSettings['ema2Period'], 'sma2'); // SMA2
-        Ema::calculate('close', $macdSettings['ema1Period'], 'sma1', 'ema1'); // EMA1
-        Ema::calculate('close', $macdSettings['ema2Period'], 'sma2', 'ema2'); // EMA2
+    public static function calculate($macdSettings, $botSettings, $isInitialCalculation){
+        Sma::calculate('close',$macdSettings['ema1Period'], 'sma1', $botSettings['botTitle'], $isInitialCalculation); // SMA1
+        Sma::calculate('close',$macdSettings['ema2Period'], 'sma2', $botSettings['botTitle'], $isInitialCalculation); // SMA2
 
-        $bars = DB::table('asset_1')
+        Ema::calculate('close', $macdSettings['ema1Period'], 'sma1', 'ema1', $botSettings['botTitle'], $isInitialCalculation); // EMA1
+        Ema::calculate('close', $macdSettings['ema2Period'], 'sma2', 'ema2', $botSettings['botTitle'], $isInitialCalculation); // EMA2
+
+        $bars = DB::table($botSettings['botTitle'])
             ->where('ema2','!=', null)
             ->orderBy('time_stamp', 'asc') // desc, asc - order. Read the whole table from BD to $records
             ->get();
 
         foreach ($bars as $bar){
-            DB::table("asset_1")
+            DB::table($botSettings['botTitle'])
                 ->where('time_stamp', $bar->time_stamp)
                 ->update([
-                    'macd_line' => DB::table('asset_1')->where('id', $bar->id)->value('ema1') -
-                        DB::table('asset_1')->where('id', $bar->id)->value('sma2')
+                    'macd_line' => DB::table($botSettings['botTitle'])->where('id', $bar->id)->value('ema1') -
+                        DB::table($botSettings['botTitle'])->where('id', $bar->id)->value('sma2')
                 ]);
         }
 
-        Sma::calculate('macd_line', $macdSettings['ema3Period'], 'macd_signal_line'); // MACD signal line as SMA from MACD line
+        Sma::calculate('macd_line', $macdSettings['ema3Period'], 'macd_signal_line', $botSettings['botTitle'], $isInitialCalculation); // MACD signal line as SMA from MACD line
     }
 }

@@ -8,7 +8,11 @@
 
 namespace App\Classes\Trading;
 
+use App\Classes\Accounting\AccumulatedProfit;
+use App\Classes\Accounting\NetProfit;
+use App\Classes\Accounting\TradeProfit;
 use App\Jobs\PlaceLimitOrder;
+use App\Jobs\PlaceOrder;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\DB;
 use App\Events\eventTrigger;
@@ -37,50 +41,38 @@ class MacdTradesTrigger
     public $tradeProfit;
     private $executionSymbolName;
 
-    public function __construct($executionSymbolName, $orderVolume)
+    public function __construct($executionSymbolName, $orderVolume, $botSettings)
     {
         $this->volume = $orderVolume;
         $this->executionSymbolName = $executionSymbolName;
         $this->trade_flag = 'all';
+        $this->botSettings = $botSettings;
     }
-
 
     // Macd line > Macd signal line => go long
     // Macd line < Macd signal line => go short
 
     public function index($barDate, $timeStamp)
     {
-        echo "********************************************** MacdTradesTrigger.php!<br>\n";
-
+        dump(__FILE__);
         // Realtime mode. No ID of the record is sent. Get the quantity of all records.
         /** In this case we do the same request, take the last record from the DB */
-        $assetRow =
-            DB::table('asset_1')
-                ->orderBy('id', 'desc')->take(1)
-                ->get();
-        $recordId = $assetRow[0]->id;
+        $lastRow = DB::table($this->botSettings['botTitle'])->orderBy('id', 'desc')->take(1)->get();
+
+
+        $recordId = $lastRow[0]->id;
 
         // SMA filter ON?
-        // $barClosePrice = $assetRow[0]->sma1;
-        $barClosePrice = $assetRow[0]->close;
+        // $barClosePrice = $lastRow[0]->sma1;
+        $barClosePrice = $lastRow[0]->close;
 
-        /**
-         * We do this check because sometimes, don't really understand under which circumstances, we get
-         * Trying to get property of non-object error
-         */
-        if (!is_null(DB::table('asset_1')->where('id', $recordId - 1)->get()->first()))
-        {
-            // Get the penultimate row
-            $penUltimanteRow =
-                DB::table('asset_1')
-                    ->where('id', $recordId - 1)
-                    ->get() // Get row as a collection. A collection can contain may elements in it
-                    ->first(); // Get the first element from the collection. In this case there is only one
-        }
-        else
-        {
-            echo "Null check. Chart.php " . __LINE__;
-        }
+
+        // Get the penultimate row
+        $penUltimanteRow =
+            DB::table($this->botSettings['botTitle'])
+                ->where('id', $recordId - 1)
+                ->get() // Get row as a collection. A collection can contain may elements in it
+                ->first(); // Get the first element from the collection. In this case there is only one
 
         /**
          * Do not calculate profit if there is no open position. If do not do this check - zeros in table occu
@@ -92,48 +84,36 @@ class MacdTradesTrigger
 
             // Get the price of the last trade
             $lastTradePrice = // Last trade price
-                DB::table('asset_1')
+                DB::table($this->botSettings['botTitle'])
                     ->whereNotNull('trade_price') // Not null trade price value
-                    //->where('time_stamp', '<', $timeStamp) // Find the last trade. This check is needed only for historical back testing.
                     ->orderBy('id', 'desc') // Form biggest to smallest values
                     ->value('trade_price'); // Get trade price value
 
             $this->tradeProfit =
                 (($this->position == "long" ?
-                    ($assetRow[0]->close - $lastTradePrice) * $this->volume :
-                    ($lastTradePrice - $assetRow[0]->close) * $this->volume)
+                    ($lastRow[0]->close - $lastTradePrice) * $this->volume :
+                    ($lastTradePrice - $lastRow[0]->close) * $this->volume)
                 );
 
-            DB::table('asset_1')
-                ->where('id', $recordId)
-                ->update([
-                    // Calculate trade profit only if the position is open.
-                    // Because we reach this code on each new bar is issued when high or low price channel boundary is exceeded
-                    'trade_profit' => round($this->tradeProfit, 4),
-                ]);
-
-            //event(new \App\Events\ConnectionError("INFO. Chart.php line 164. trade profit calculated "));
+            TradeProfit::calculate($this->botSettings, $this->tradeProfit);
             echo "trade profit calculated. Chart.php line 165: " . $this->tradeProfit . "\n";
         }
 
-        //$this->dateCompeareFlag = true;
-
-        //if (($barClosePrice > $penUltimanteRow->price_channel_high_value) && ($this->trade_flag == "all" || $this->trade_flag == "long")){
-        if (($assetRow[0]->macd_line > $assetRow[0]->macd_signal_line) && ($this->trade_flag == "all" || $this->trade_flag == "long")){
+        if (($lastRow[0]->macd_line > $lastRow[0]->macd_signal_line) && ($this->trade_flag == "all" || $this->trade_flag == "long")){
 
             echo "####### HIGH TRADE!<br>\n";
             // Is it the first trade ever?
             if ($this->trade_flag == "all"){
                 // open order buy vol = vol
                 echo "---------------------- FIRST EVER TRADE<br>\n";
-                Exchange::placeMarketBuyOrder($this->executionSymbolName, $this->volume);
+                PlaceOrder::dispatch('buy', $this->executionSymbolName, $this->volume, $this->botSettings);
+
             }
             else // Not the first trade. Close the current position and open opposite trade. vol = vol * 2
             {
                 // open order buy vol = vol * 2
                 echo "---------------------- NOT FIRST EVER TRADE. CLOSE + OPEN. VOL * 2\n";
-                Exchange::placeMarketBuyOrder($this->executionSymbolName, $this->volume);
-                Exchange::placeMarketBuyOrder($this->executionSymbolName, $this->volume);
+                PlaceOrder::dispatch('buy', $this->executionSymbolName, $this->volume * 2, $this->botSettings);
             }
 
             // Trade flag. If this flag set to short -> don't enter this IF and wait for channel low crossing (IF below)
@@ -141,62 +121,41 @@ class MacdTradesTrigger
             $this->position = "long";
             $this->add_bar_long = true;
 
-            // Update trade info to the last(current) bar(record)
-            DB::table('asset_1')
-                ->where('id', $recordId)
-                ->update([
-                    'trade_date' => gmdate("Y-m-d G:i:s", ($timeStamp / 1000)),
-                    'trade_price' => $assetRow[0]->close,
-                    'trade_direction' => "buy",
-                    'trade_volume' => $this->volume,
-                    //'trade_commission' => round(($assetRow[0]->close * $commisionValue / 100) * $this->volume, 4),
-                    'trade_commission' => 0.35, // Fixed commission
-                    //'accumulated_commission' => round(DB::table('asset_1')->sum('trade_commission') + ($assetRow[0]->close * $commisionValue / 100) * $this->volume, 4),
-                    'accumulated_commission' => DB::table('asset_1')->sum('trade_commission')
-                ]);
-
-            echo "Trade price: " . $assetRow[0]->close . "<br>\n";
-
+            \App\Classes\Accounting\TradeBar::update($this->botSettings, $timeStamp, "buy");
+            \App\Classes\Accounting\Commission::accumulate($this->botSettings);
         } // BUY trade
 
-
-        // $assetRow[0]->macd_line > $assetRow[0]->macd_signal_line
-        //if (($barClosePrice < $penUltimanteRow->price_channel_low_value) && ($this->trade_flag == "all"  || $this->trade_flag == "short")) {
-        if (($assetRow[0]->macd_line < $assetRow[0]->macd_signal_line) && ($this->trade_flag == "all"  || $this->trade_flag == "short")) {
+        if (($lastRow[0]->macd_line < $lastRow[0]->macd_signal_line) && ($this->trade_flag == "all"  || $this->trade_flag == "short")) {
             echo "####### LOW TRADE!<br>\n";
 
             // Is the the first trade ever?
             if ($this->trade_flag == "all"){
                 echo "---------------------- FIRST EVER TRADE<br>\n";
-                Exchange::placeMarketSellOrder($this->executionSymbolName, $this->volume);
+                PlaceOrder::dispatch('sell', $this->executionSymbolName, $this->volume, $this->botSettings);
             }
             else // Not the first trade. Close the current position and open opposite trade. vol = vol * 2
             {
                 echo "---------------------- NOT FIRST EVER TRADE. CLOSE + OPEN. VOL * 2\n";
-                Exchange::placeMarketSellOrder($this->executionSymbolName, $this->volume);
-                Exchange::placeMarketSellOrder($this->executionSymbolName, $this->volume);
+                PlaceOrder::dispatch('sell', $this->executionSymbolName, $this->volume * 2, $this->botSettings);
             }
 
             $this->trade_flag = 'long';
             $this->position = "short";
             $this->add_bar_short = true;
 
-            // Add(update) trade info to the last(current) bar(record)
-            // EXCLUDE THIS CODE TO SEPARATE CLASS!!!!!!!!!!!!!!!!!!!
-            DB::table('asset_1')
-                ->where('id', $recordId)
-                ->update([
-                    'trade_date' => gmdate("Y-m-d G:i:s", ($timeStamp / 1000)),
-                    'trade_price' => $assetRow[0]->close,
-                    'trade_direction' => "sell",
-                    'trade_volume' => $this->volume,
-                    //'trade_commission' => round(($assetRow[0]->close * $commisionValue / 100) * $this->volume, 4),
-                    'trade_commission' => 2,
-
-                    //'accumulated_commission' => round(DB::table('asset_1')->sum('trade_commission') + ($assetRow[0]->close * $commisionValue / 100) * $this->volume, 4),
-                    // IB Forex comission
-                    'accumulated_commission' => DB::table('asset_1')->sum('trade_commission') + 2,
-                ]);
+            /* Update the last bar/record in the DB */
+            \App\Classes\Accounting\TradeBar::update($this->botSettings, $timeStamp, "sell");
+            \App\Classes\Accounting\Commission::accumulate($this->botSettings);
         } // SELL trade
+
+        /**
+         * Do not calculate profit if there are no trades.
+         * If trade_flag is set to all, it means that no trades hav been executed yet.
+         */
+        if ($this->trade_flag != "all") {
+
+            AccumulatedProfit::calculate($this->botSettings, $lastRow[0]->id);
+            NetProfit::calculate($this->position, $this->botSettings, $lastRow[0]->id);
+        }
     }
 }

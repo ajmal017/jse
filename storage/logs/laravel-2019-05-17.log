@@ -1,819 +1,0 @@
-[2019-05-17 04:09:06] local.ERROR: Cannot use object of type stdClass as array {"exception":"[object] (Symfony\\Component\\Debug\\Exception\\FatalThrowableError(code: 0): Cannot use object of type stdClass as array at W:\\domains\\jse.kk\\app\\Classes\\Trading\\Chart.php:232)
-[stacktrace]
-#0 W:\\domains\\jse.kk\\app\\Classes\\Trading\\CandleMaker.php(133): App\\Classes\\Trading\\Chart->index('2019-05-17 4:09...', 1558066106000)
-#1 W:\\domains\\jse.kk\\app\\Classes\\WebSocket\\ConsoleWebSocket.php(32): App\\Classes\\Trading\\CandleMaker->index(7427.5, '2019-05-17T04:0...', 1, Object(App\\Classes\\Trading\\Chart), Object(App\\Console\\Commands\\Pc), 1, NULL)
-#2 W:\\domains\\jse.kk\\app\\Classes\\WebSocket\\BitmexWsListener.php(38): App\\Classes\\WebSocket\\ConsoleWebSocket::messageParse(Array, Object(App\\Console\\Commands\\Pc), Object(App\\Classes\\Trading\\CandleMaker), Object(App\\Classes\\Trading\\Chart), 1, NULL)
-#3 W:\\domains\\jse.kk\\vendor\\evenement\\evenement\\src\\Evenement\\EventEmitterTrait.php(123): App\\Classes\\WebSocket\\BitmexWsListener::App\\Classes\\WebSocket\\{closure}(Object(Ratchet\\RFC6455\\Messaging\\Message), Object(Ratchet\\Client\\WebSocket))
-#4 W:\\domains\\jse.kk\\vendor\atchet\\pawl\\src\\WebSocket.php(72): Ratchet\\Client\\WebSocket->emit('message', Array)
-#5 W:\\domains\\jse.kk\\vendor\atchet\fc6455\\src\\Messaging\\MessageBuffer.php(108): Ratchet\\Client\\WebSocket->Ratchet\\Client\\{closure}(Object(Ratchet\\RFC6455\\Messaging\\Message))
-#6 W:\\domains\\jse.kk\\vendor\atchet\fc6455\\src\\Messaging\\MessageBuffer.php(60): Ratchet\\RFC6455\\Messaging\\MessageBuffer->processData('\\x81~\\x00\\x9E{\"table\":\"i...')
-#7 W:\\domains\\jse.kk\\vendor\\evenement\\evenement\\src\\Evenement\\EventEmitterTrait.php(123): Ratchet\\RFC6455\\Messaging\\MessageBuffer->onData('\\x81~\\x00\\x9E{\"table\":\"i...')
-#8 W:\\domains\\jse.kk\\vendor\eact\\stream\\src\\Util.php(71): Evenement\\EventEmitter->emit('data', Array)
-#9 W:\\domains\\jse.kk\\vendor\\evenement\\evenement\\src\\Evenement\\EventEmitterTrait.php(123): React\\Stream\\Util::React\\Stream\\{closure}('\\x81~\\x00\\x99{\"table\":\"i...')
-#10 W:\\domains\\jse.kk\\vendor\eact\\stream\\src\\DuplexResourceStream.php(193): Evenement\\EventEmitter->emit('data', Array)
-#11 W:\\domains\\jse.kk\\vendor\eact\\event-loop\\src\\StreamSelectLoop.php(244): React\\Stream\\DuplexResourceStream->handleData(Resource id #569)
-#12 W:\\domains\\jse.kk\\vendor\eact\\event-loop\\src\\StreamSelectLoop.php(211): React\\EventLoop\\StreamSelectLoop->waitForStreamActivity(NULL)
-#13 W:\\domains\\jse.kk\\app\\Classes\\WebSocket\\BitmexWsListener.php(66): React\\EventLoop\\StreamSelectLoop->run()
-#14 W:\\domains\\jse.kk\\app\\Console\\Commands\\Pc.php(99): App\\Classes\\WebSocket\\BitmexWsListener::subscribe(Object(Ratchet\\Client\\Connector), Object(React\\EventLoop\\StreamSelectLoop), Object(App\\Console\\Commands\\Pc), Object(App\\Classes\\Trading\\CandleMaker), Object(App\\Classes\\Trading\\Chart), 'XBTUSD', 1, NULL)
-#15 [internal function]: App\\Console\\Commands\\Pc->handle()
-#16 W:\\domains\\jse.kk\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\BoundMethod.php(32): call_user_func_array(Array, Array)
-#17 W:\\domains\\jse.kk\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\BoundMethod.php(90): Illuminate\\Container\\BoundMethod::Illuminate\\Container\\{closure}()
-#18 W:\\domains\\jse.kk\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\BoundMethod.php(34): Illuminate\\Container\\BoundMethod::callBoundMethod(Object(Illuminate\\Foundation\\Application), Array, Object(Closure))
-#19 W:\\domains\\jse.kk\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\Container.php(580): Illuminate\\Container\\BoundMethod::call(Object(Illuminate\\Foundation\\Application), Array, Array, NULL)
-#20 W:\\domains\\jse.kk\\vendor\\laravel\\framework\\src\\Illuminate\\Console\\Command.php(183): Illuminate\\Container\\Container->call(Array)
-#21 W:\\domains\\jse.kk\\vendor\\symfony\\console\\Command\\Command.php(255): Illuminate\\Console\\Command->execute(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Illuminate\\Console\\OutputStyle))
-#22 W:\\domains\\jse.kk\\vendor\\laravel\\framework\\src\\Illuminate\\Console\\Command.php(170): Symfony\\Component\\Console\\Command\\Command->run(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Illuminate\\Console\\OutputStyle))
-#23 W:\\domains\\jse.kk\\vendor\\symfony\\console\\Application.php(908): Illuminate\\Console\\Command->run(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
-#24 W:\\domains\\jse.kk\\vendor\\symfony\\console\\Application.php(269): Symfony\\Component\\Console\\Application->doRunCommand(Object(App\\Console\\Commands\\Pc), Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
-#25 W:\\domains\\jse.kk\\vendor\\symfony\\console\\Application.php(145): Symfony\\Component\\Console\\Application->doRun(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
-#26 W:\\domains\\jse.kk\\vendor\\laravel\\framework\\src\\Illuminate\\Console\\Application.php(90): Symfony\\Component\\Console\\Application->run(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
-#27 W:\\domains\\jse.kk\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Console\\Kernel.php(122): Illuminate\\Console\\Application->run(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
-#28 W:\\domains\\jse.kk\\artisan(37): Illuminate\\Foundation\\Console\\Kernel->handle(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
-#29 {main}
-"} 
-[2019-05-17 04:11:04] local.ERROR: Cannot use object of type stdClass as array {"exception":"[object] (Symfony\\Component\\Debug\\Exception\\FatalThrowableError(code: 0): Cannot use object of type stdClass as array at W:\\domains\\jse.kk\\app\\Classes\\Trading\\Chart.php:232)
-[stacktrace]
-#0 W:\\domains\\jse.kk\\app\\Classes\\Trading\\CandleMaker.php(133): App\\Classes\\Trading\\Chart->index('2019-05-17 4:11...', 1558066257000)
-#1 W:\\domains\\jse.kk\\app\\Classes\\WebSocket\\ConsoleWebSocket.php(32): App\\Classes\\Trading\\CandleMaker->index(7392.5, '2019-05-17T04:1...', 1, Object(App\\Classes\\Trading\\Chart), Object(App\\Console\\Commands\\Pc), 1, NULL)
-#2 W:\\domains\\jse.kk\\app\\Classes\\WebSocket\\BitmexWsListener.php(38): App\\Classes\\WebSocket\\ConsoleWebSocket::messageParse(Array, Object(App\\Console\\Commands\\Pc), Object(App\\Classes\\Trading\\CandleMaker), Object(App\\Classes\\Trading\\Chart), 1, NULL)
-#3 W:\\domains\\jse.kk\\vendor\\evenement\\evenement\\src\\Evenement\\EventEmitterTrait.php(123): App\\Classes\\WebSocket\\BitmexWsListener::App\\Classes\\WebSocket\\{closure}(Object(Ratchet\\RFC6455\\Messaging\\Message), Object(Ratchet\\Client\\WebSocket))
-#4 W:\\domains\\jse.kk\\vendor\atchet\\pawl\\src\\WebSocket.php(72): Ratchet\\Client\\WebSocket->emit('message', Array)
-#5 W:\\domains\\jse.kk\\vendor\atchet\fc6455\\src\\Messaging\\MessageBuffer.php(108): Ratchet\\Client\\WebSocket->Ratchet\\Client\\{closure}(Object(Ratchet\\RFC6455\\Messaging\\Message))
-#6 W:\\domains\\jse.kk\\vendor\atchet\fc6455\\src\\Messaging\\MessageBuffer.php(60): Ratchet\\RFC6455\\Messaging\\MessageBuffer->processData('\\x81~\\x00\\xBB{\"table\":\"i...')
-#7 W:\\domains\\jse.kk\\vendor\\evenement\\evenement\\src\\Evenement\\EventEmitterTrait.php(123): Ratchet\\RFC6455\\Messaging\\MessageBuffer->onData('\\x81~\\x00\\xBB{\"table\":\"i...')
-#8 W:\\domains\\jse.kk\\vendor\eact\\stream\\src\\Util.php(71): Evenement\\EventEmitter->emit('data', Array)
-#9 W:\\domains\\jse.kk\\vendor\\evenement\\evenement\\src\\Evenement\\EventEmitterTrait.php(123): React\\Stream\\Util::React\\Stream\\{closure}('\\x81~\\x00\\xBB{\"table\":\"i...')
-#10 W:\\domains\\jse.kk\\vendor\eact\\stream\\src\\DuplexResourceStream.php(193): Evenement\\EventEmitter->emit('data', Array)
-#11 W:\\domains\\jse.kk\\vendor\eact\\event-loop\\src\\StreamSelectLoop.php(244): React\\Stream\\DuplexResourceStream->handleData(Resource id #569)
-#12 W:\\domains\\jse.kk\\vendor\eact\\event-loop\\src\\StreamSelectLoop.php(211): React\\EventLoop\\StreamSelectLoop->waitForStreamActivity(NULL)
-#13 W:\\domains\\jse.kk\\app\\Classes\\WebSocket\\BitmexWsListener.php(66): React\\EventLoop\\StreamSelectLoop->run()
-#14 W:\\domains\\jse.kk\\app\\Console\\Commands\\Pc.php(99): App\\Classes\\WebSocket\\BitmexWsListener::subscribe(Object(Ratchet\\Client\\Connector), Object(React\\EventLoop\\StreamSelectLoop), Object(App\\Console\\Commands\\Pc), Object(App\\Classes\\Trading\\CandleMaker), Object(App\\Classes\\Trading\\Chart), 'XBTUSD', 1, NULL)
-#15 [internal function]: App\\Console\\Commands\\Pc->handle()
-#16 W:\\domains\\jse.kk\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\BoundMethod.php(32): call_user_func_array(Array, Array)
-#17 W:\\domains\\jse.kk\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\BoundMethod.php(90): Illuminate\\Container\\BoundMethod::Illuminate\\Container\\{closure}()
-#18 W:\\domains\\jse.kk\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\BoundMethod.php(34): Illuminate\\Container\\BoundMethod::callBoundMethod(Object(Illuminate\\Foundation\\Application), Array, Object(Closure))
-#19 W:\\domains\\jse.kk\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\Container.php(580): Illuminate\\Container\\BoundMethod::call(Object(Illuminate\\Foundation\\Application), Array, Array, NULL)
-#20 W:\\domains\\jse.kk\\vendor\\laravel\\framework\\src\\Illuminate\\Console\\Command.php(183): Illuminate\\Container\\Container->call(Array)
-#21 W:\\domains\\jse.kk\\vendor\\symfony\\console\\Command\\Command.php(255): Illuminate\\Console\\Command->execute(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Illuminate\\Console\\OutputStyle))
-#22 W:\\domains\\jse.kk\\vendor\\laravel\\framework\\src\\Illuminate\\Console\\Command.php(170): Symfony\\Component\\Console\\Command\\Command->run(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Illuminate\\Console\\OutputStyle))
-#23 W:\\domains\\jse.kk\\vendor\\symfony\\console\\Application.php(908): Illuminate\\Console\\Command->run(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
-#24 W:\\domains\\jse.kk\\vendor\\symfony\\console\\Application.php(269): Symfony\\Component\\Console\\Application->doRunCommand(Object(App\\Console\\Commands\\Pc), Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
-#25 W:\\domains\\jse.kk\\vendor\\symfony\\console\\Application.php(145): Symfony\\Component\\Console\\Application->doRun(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
-#26 W:\\domains\\jse.kk\\vendor\\laravel\\framework\\src\\Illuminate\\Console\\Application.php(90): Symfony\\Component\\Console\\Application->run(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
-#27 W:\\domains\\jse.kk\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Console\\Kernel.php(122): Illuminate\\Console\\Application->run(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
-#28 W:\\domains\\jse.kk\\artisan(37): Illuminate\\Foundation\\Console\\Kernel->handle(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
-#29 {main}
-"} 
-[2019-05-17 04:13:07] local.ERROR: Argument 3 passed to Lcobucci\JWT\Signer\Hmac::doVerify() must be an instance of Lcobucci\JWT\Signer\Key, null given, called in W:\domains\jse.kk\vendor\lcobucci\jwt\src\Signer\BaseSigner.php on line 42 {"exception":"[object] (Symfony\\Component\\Debug\\Exception\\FatalThrowableError(code: 0): Argument 3 passed to Lcobucci\\JWT\\Signer\\Hmac::doVerify() must be an instance of Lcobucci\\JWT\\Signer\\Key, null given, called in W:\\domains\\jse.kk\\vendor\\lcobucci\\jwt\\src\\Signer\\BaseSigner.php on line 42 at W:\\domains\\jse.kk\\vendor\\lcobucci\\jwt\\src\\Signer\\Hmac.php:29)
-[stacktrace]
-#0 W:\\domains\\jse.kk\\vendor\\lcobucci\\jwt\\src\\Signer\\BaseSigner.php(42): Lcobucci\\JWT\\Signer\\Hmac->doVerify('\\x02\\xB8\\xEE\\fW\\xF4\\xE3T\\xEB\\x01\\xF4\\xCD\\xAFu\\x12...', 'eyJ0eXAiOiJKV1Q...', NULL)
-#1 W:\\domains\\jse.kk\\vendor\\lcobucci\\jwt\\src\\Signature.php(47): Lcobucci\\JWT\\Signer\\BaseSigner->verify('\\x02\\xB8\\xEE\\fW\\xF4\\xE3T\\xEB\\x01\\xF4\\xCD\\xAFu\\x12...', 'eyJ0eXAiOiJKV1Q...', NULL)
-#2 W:\\domains\\jse.kk\\vendor\\lcobucci\\jwt\\src\\Token.php(201): Lcobucci\\JWT\\Signature->verify(Object(Lcobucci\\JWT\\Signer\\Hmac\\Sha256), 'eyJ0eXAiOiJKV1Q...', NULL)
-#3 W:\\domains\\jse.kk\\vendor\\tymon\\jwt-auth\\src\\Providers\\JWT\\Lcobucci.php(136): Lcobucci\\JWT\\Token->verify(Object(Lcobucci\\JWT\\Signer\\Hmac\\Sha256), NULL)
-#4 W:\\domains\\jse.kk\\vendor\\tymon\\jwt-auth\\src\\Manager.php(101): Tymon\\JWTAuth\\Providers\\JWT\\Lcobucci->decode('eyJ0eXAiOiJKV1Q...')
-#5 W:\\domains\\jse.kk\\vendor\\tymon\\jwt-auth\\src\\JWT.php(200): Tymon\\JWTAuth\\Manager->decode(Object(Tymon\\JWTAuth\\Token))
-#6 W:\\domains\\jse.kk\\vendor\\tymon\\jwt-auth\\src\\JWT.php(136): Tymon\\JWTAuth\\JWT->getPayload()
-#7 W:\\domains\\jse.kk\\vendor\\tymon\\jwt-auth\\src\\JWT.php(149): Tymon\\JWTAuth\\JWT->checkOrFail()
-#8 W:\\domains\\jse.kk\\vendor\\tymon\\jwt-auth\\src\\JWTGuard.php(79): Tymon\\JWTAuth\\JWT->check(true)
-#9 W:\\domains\\jse.kk\\vendor\\laravel\\framework\\src\\Illuminate\\Auth\\AuthManager.php(54): Tymon\\JWTAuth\\JWTGuard->user()
-#10 [internal function]: Illuminate\\Auth\\AuthManager->Illuminate\\Auth\\{closure}(NULL)
-#11 W:\\domains\\jse.kk\\vendor\\laravel\\framework\\src\\Illuminate\\Auth\\AuthServiceProvider.php(86): call_user_func(Object(Closure), NULL)
-#12 [internal function]: Illuminate\\Auth\\AuthServiceProvider->Illuminate\\Auth\\{closure}(NULL)
-#13 W:\\domains\\jse.kk\\vendor\\laravel\\framework\\src\\Illuminate\\Http\\Request.php(519): call_user_func(Object(Closure), NULL)
-#14 W:\\domains\\jse.kk\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Middleware\\ThrottleRequests.php(96): Illuminate\\Http\\Request->user()
-#15 W:\\domains\\jse.kk\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Middleware\\ThrottleRequests.php(48): Illuminate\\Routing\\Middleware\\ThrottleRequests->resolveRequestSignature(Object(Illuminate\\Http\\Request))
-#16 W:\\domains\\jse.kk\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(163): Illuminate\\Routing\\Middleware\\ThrottleRequests->handle(Object(Illuminate\\Http\\Request), Object(Closure), '60', '1')
-#17 W:\\domains\\jse.kk\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Pipeline.php(53): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
-#18 W:\\domains\\jse.kk\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(104): Illuminate\\Routing\\Pipeline->Illuminate\\Routing\\{closure}(Object(Illuminate\\Http\\Request))
-#19 W:\\domains\\jse.kk\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Router.php(682): Illuminate\\Pipeline\\Pipeline->then(Object(Closure))
-#20 W:\\domains\\jse.kk\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Router.php(657): Illuminate\\Routing\\Router->runRouteWithinStack(Object(Illuminate\\Routing\\Route), Object(Illuminate\\Http\\Request))
-#21 W:\\domains\\jse.kk\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Router.php(623): Illuminate\\Routing\\Router->runRoute(Object(Illuminate\\Http\\Request), Object(Illuminate\\Routing\\Route))
-#22 W:\\domains\\jse.kk\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Router.php(612): Illuminate\\Routing\\Router->dispatchToRoute(Object(Illuminate\\Http\\Request))
-#23 W:\\domains\\jse.kk\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Kernel.php(176): Illuminate\\Routing\\Router->dispatch(Object(Illuminate\\Http\\Request))
-#24 W:\\domains\\jse.kk\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Pipeline.php(30): Illuminate\\Foundation\\Http\\Kernel->Illuminate\\Foundation\\Http\\{closure}(Object(Illuminate\\Http\\Request))
-#25 W:\\domains\\jse.kk\\vendor\\barryvdh\\laravel-cors\\src\\HandleCors.php(58): Illuminate\\Routing\\Pipeline->Illuminate\\Routing\\{closure}(Object(Illuminate\\Http\\Request))
-#26 W:\\domains\\jse.kk\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(163): Barryvdh\\Cors\\HandleCors->handle(Object(Illuminate\\Http\\Request), Object(Closure))
-#27 W:\\domains\\jse.kk\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Pipeline.php(53): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
-#28 W:\\domains\\jse.kk\\vendor\\fideloper\\proxy\\src\\TrustProxies.php(57): Illuminate\\Routing\\Pipeline->Illuminate\\Routing\\{closure}(Object(Illuminate\\Http\\Request))
-#29 W:\\domains\\jse.kk\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(163): Fideloper\\Proxy\\TrustProxies->handle(Object(Illuminate\\Http\\Request), Object(Closure))
-#30 W:\\domains\\jse.kk\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Pipeline.php(53): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
-#31 W:\\domains\\jse.kk\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Middleware\\TransformsRequest.php(21): Illuminate\\Routing\\Pipeline->Illuminate\\Routing\\{closure}(Object(Illuminate\\Http\\Request))
-#32 W:\\domains\\jse.kk\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(163): Illuminate\\Foundation\\Http\\Middleware\\TransformsRequest->handle(Object(Illuminate\\Http\\Request), Object(Closure))
-#33 W:\\domains\\jse.kk\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Pipeline.php(53): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
-#34 W:\\domains\\jse.kk\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Middleware\\TransformsRequest.php(21): Illuminate\\Routing\\Pipeline->Illuminate\\Routing\\{closure}(Object(Illuminate\\Http\\Request))
-#35 W:\\domains\\jse.kk\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(163): Illuminate\\Foundation\\Http\\Middleware\\TransformsRequest->handle(Object(Illuminate\\Http\\Request), Object(Closure))
-#36 W:\\domains\\jse.kk\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Pipeline.php(53): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
-#37 W:\\domains\\jse.kk\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Middleware\\ValidatePostSize.php(27): Illuminate\\Routing\\Pipeline->Illuminate\\Routing\\{closure}(Object(Illuminate\\Http\\Request))
-#38 W:\\domains\\jse.kk\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(163): Illuminate\\Foundation\\Http\\Middleware\\ValidatePostSize->handle(Object(Illuminate\\Http\\Request), Object(Closure))
-#39 W:\\domains\\jse.kk\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Pipeline.php(53): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
-#40 W:\\domains\\jse.kk\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Middleware\\CheckForMaintenanceMode.php(62): Illuminate\\Routing\\Pipeline->Illuminate\\Routing\\{closure}(Object(Illuminate\\Http\\Request))
-#41 W:\\domains\\jse.kk\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(163): Illuminate\\Foundation\\Http\\Middleware\\CheckForMaintenanceMode->handle(Object(Illuminate\\Http\\Request), Object(Closure))
-#42 W:\\domains\\jse.kk\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Pipeline.php(53): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
-#43 W:\\domains\\jse.kk\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(104): Illuminate\\Routing\\Pipeline->Illuminate\\Routing\\{closure}(Object(Illuminate\\Http\\Request))
-#44 W:\\domains\\jse.kk\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Kernel.php(151): Illuminate\\Pipeline\\Pipeline->then(Object(Closure))
-#45 W:\\domains\\jse.kk\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Kernel.php(116): Illuminate\\Foundation\\Http\\Kernel->sendRequestThroughRouter(Object(Illuminate\\Http\\Request))
-#46 W:\\domains\\jse.kk\\public\\index.php(55): Illuminate\\Foundation\\Http\\Kernel->handle(Object(Illuminate\\Http\\Request))
-#47 {main}
-"} 
-[2019-05-17 04:16:07] local.ERROR: Argument 3 passed to Lcobucci\JWT\Signer\Hmac::doVerify() must be an instance of Lcobucci\JWT\Signer\Key, null given, called in W:\domains\jse.kk\vendor\lcobucci\jwt\src\Signer\BaseSigner.php on line 42 {"exception":"[object] (Symfony\\Component\\Debug\\Exception\\FatalThrowableError(code: 0): Argument 3 passed to Lcobucci\\JWT\\Signer\\Hmac::doVerify() must be an instance of Lcobucci\\JWT\\Signer\\Key, null given, called in W:\\domains\\jse.kk\\vendor\\lcobucci\\jwt\\src\\Signer\\BaseSigner.php on line 42 at W:\\domains\\jse.kk\\vendor\\lcobucci\\jwt\\src\\Signer\\Hmac.php:29)
-[stacktrace]
-#0 W:\\domains\\jse.kk\\vendor\\lcobucci\\jwt\\src\\Signer\\BaseSigner.php(42): Lcobucci\\JWT\\Signer\\Hmac->doVerify('\\x02\\xB8\\xEE\\fW\\xF4\\xE3T\\xEB\\x01\\xF4\\xCD\\xAFu\\x12...', 'eyJ0eXAiOiJKV1Q...', NULL)
-#1 W:\\domains\\jse.kk\\vendor\\lcobucci\\jwt\\src\\Signature.php(47): Lcobucci\\JWT\\Signer\\BaseSigner->verify('\\x02\\xB8\\xEE\\fW\\xF4\\xE3T\\xEB\\x01\\xF4\\xCD\\xAFu\\x12...', 'eyJ0eXAiOiJKV1Q...', NULL)
-#2 W:\\domains\\jse.kk\\vendor\\lcobucci\\jwt\\src\\Token.php(201): Lcobucci\\JWT\\Signature->verify(Object(Lcobucci\\JWT\\Signer\\Hmac\\Sha256), 'eyJ0eXAiOiJKV1Q...', NULL)
-#3 W:\\domains\\jse.kk\\vendor\\tymon\\jwt-auth\\src\\Providers\\JWT\\Lcobucci.php(136): Lcobucci\\JWT\\Token->verify(Object(Lcobucci\\JWT\\Signer\\Hmac\\Sha256), NULL)
-#4 W:\\domains\\jse.kk\\vendor\\tymon\\jwt-auth\\src\\Manager.php(101): Tymon\\JWTAuth\\Providers\\JWT\\Lcobucci->decode('eyJ0eXAiOiJKV1Q...')
-#5 W:\\domains\\jse.kk\\vendor\\tymon\\jwt-auth\\src\\JWT.php(200): Tymon\\JWTAuth\\Manager->decode(Object(Tymon\\JWTAuth\\Token))
-#6 W:\\domains\\jse.kk\\vendor\\tymon\\jwt-auth\\src\\JWT.php(136): Tymon\\JWTAuth\\JWT->getPayload()
-#7 W:\\domains\\jse.kk\\vendor\\tymon\\jwt-auth\\src\\JWT.php(149): Tymon\\JWTAuth\\JWT->checkOrFail()
-#8 W:\\domains\\jse.kk\\vendor\\tymon\\jwt-auth\\src\\JWTGuard.php(79): Tymon\\JWTAuth\\JWT->check(true)
-#9 W:\\domains\\jse.kk\\vendor\\laravel\\framework\\src\\Illuminate\\Auth\\AuthManager.php(54): Tymon\\JWTAuth\\JWTGuard->user()
-#10 [internal function]: Illuminate\\Auth\\AuthManager->Illuminate\\Auth\\{closure}(NULL)
-#11 W:\\domains\\jse.kk\\vendor\\laravel\\framework\\src\\Illuminate\\Auth\\AuthServiceProvider.php(86): call_user_func(Object(Closure), NULL)
-#12 [internal function]: Illuminate\\Auth\\AuthServiceProvider->Illuminate\\Auth\\{closure}(NULL)
-#13 W:\\domains\\jse.kk\\vendor\\laravel\\framework\\src\\Illuminate\\Http\\Request.php(519): call_user_func(Object(Closure), NULL)
-#14 W:\\domains\\jse.kk\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Middleware\\ThrottleRequests.php(96): Illuminate\\Http\\Request->user()
-#15 W:\\domains\\jse.kk\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Middleware\\ThrottleRequests.php(48): Illuminate\\Routing\\Middleware\\ThrottleRequests->resolveRequestSignature(Object(Illuminate\\Http\\Request))
-#16 W:\\domains\\jse.kk\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(163): Illuminate\\Routing\\Middleware\\ThrottleRequests->handle(Object(Illuminate\\Http\\Request), Object(Closure), '60', '1')
-#17 W:\\domains\\jse.kk\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Pipeline.php(53): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
-#18 W:\\domains\\jse.kk\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(104): Illuminate\\Routing\\Pipeline->Illuminate\\Routing\\{closure}(Object(Illuminate\\Http\\Request))
-#19 W:\\domains\\jse.kk\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Router.php(682): Illuminate\\Pipeline\\Pipeline->then(Object(Closure))
-#20 W:\\domains\\jse.kk\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Router.php(657): Illuminate\\Routing\\Router->runRouteWithinStack(Object(Illuminate\\Routing\\Route), Object(Illuminate\\Http\\Request))
-#21 W:\\domains\\jse.kk\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Router.php(623): Illuminate\\Routing\\Router->runRoute(Object(Illuminate\\Http\\Request), Object(Illuminate\\Routing\\Route))
-#22 W:\\domains\\jse.kk\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Router.php(612): Illuminate\\Routing\\Router->dispatchToRoute(Object(Illuminate\\Http\\Request))
-#23 W:\\domains\\jse.kk\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Kernel.php(176): Illuminate\\Routing\\Router->dispatch(Object(Illuminate\\Http\\Request))
-#24 W:\\domains\\jse.kk\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Pipeline.php(30): Illuminate\\Foundation\\Http\\Kernel->Illuminate\\Foundation\\Http\\{closure}(Object(Illuminate\\Http\\Request))
-#25 W:\\domains\\jse.kk\\vendor\\barryvdh\\laravel-cors\\src\\HandleCors.php(58): Illuminate\\Routing\\Pipeline->Illuminate\\Routing\\{closure}(Object(Illuminate\\Http\\Request))
-#26 W:\\domains\\jse.kk\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(163): Barryvdh\\Cors\\HandleCors->handle(Object(Illuminate\\Http\\Request), Object(Closure))
-#27 W:\\domains\\jse.kk\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Pipeline.php(53): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
-#28 W:\\domains\\jse.kk\\vendor\\fideloper\\proxy\\src\\TrustProxies.php(57): Illuminate\\Routing\\Pipeline->Illuminate\\Routing\\{closure}(Object(Illuminate\\Http\\Request))
-#29 W:\\domains\\jse.kk\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(163): Fideloper\\Proxy\\TrustProxies->handle(Object(Illuminate\\Http\\Request), Object(Closure))
-#30 W:\\domains\\jse.kk\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Pipeline.php(53): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
-#31 W:\\domains\\jse.kk\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Middleware\\TransformsRequest.php(21): Illuminate\\Routing\\Pipeline->Illuminate\\Routing\\{closure}(Object(Illuminate\\Http\\Request))
-#32 W:\\domains\\jse.kk\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(163): Illuminate\\Foundation\\Http\\Middleware\\TransformsRequest->handle(Object(Illuminate\\Http\\Request), Object(Closure))
-#33 W:\\domains\\jse.kk\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Pipeline.php(53): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
-#34 W:\\domains\\jse.kk\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Middleware\\TransformsRequest.php(21): Illuminate\\Routing\\Pipeline->Illuminate\\Routing\\{closure}(Object(Illuminate\\Http\\Request))
-#35 W:\\domains\\jse.kk\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(163): Illuminate\\Foundation\\Http\\Middleware\\TransformsRequest->handle(Object(Illuminate\\Http\\Request), Object(Closure))
-#36 W:\\domains\\jse.kk\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Pipeline.php(53): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
-#37 W:\\domains\\jse.kk\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Middleware\\ValidatePostSize.php(27): Illuminate\\Routing\\Pipeline->Illuminate\\Routing\\{closure}(Object(Illuminate\\Http\\Request))
-#38 W:\\domains\\jse.kk\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(163): Illuminate\\Foundation\\Http\\Middleware\\ValidatePostSize->handle(Object(Illuminate\\Http\\Request), Object(Closure))
-#39 W:\\domains\\jse.kk\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Pipeline.php(53): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
-#40 W:\\domains\\jse.kk\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Middleware\\CheckForMaintenanceMode.php(62): Illuminate\\Routing\\Pipeline->Illuminate\\Routing\\{closure}(Object(Illuminate\\Http\\Request))
-#41 W:\\domains\\jse.kk\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(163): Illuminate\\Foundation\\Http\\Middleware\\CheckForMaintenanceMode->handle(Object(Illuminate\\Http\\Request), Object(Closure))
-#42 W:\\domains\\jse.kk\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Pipeline.php(53): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
-#43 W:\\domains\\jse.kk\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(104): Illuminate\\Routing\\Pipeline->Illuminate\\Routing\\{closure}(Object(Illuminate\\Http\\Request))
-#44 W:\\domains\\jse.kk\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Kernel.php(151): Illuminate\\Pipeline\\Pipeline->then(Object(Closure))
-#45 W:\\domains\\jse.kk\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Kernel.php(116): Illuminate\\Foundation\\Http\\Kernel->sendRequestThroughRouter(Object(Illuminate\\Http\\Request))
-#46 W:\\domains\\jse.kk\\public\\index.php(55): Illuminate\\Foundation\\Http\\Kernel->handle(Object(Illuminate\\Http\\Request))
-#47 {main}
-"} 
-[2019-05-17 04:40:20] local.ERROR: Argument 3 passed to Lcobucci\JWT\Signer\Hmac::doVerify() must be an instance of Lcobucci\JWT\Signer\Key, null given, called in W:\domains\jse.kk\vendor\lcobucci\jwt\src\Signer\BaseSigner.php on line 42 {"exception":"[object] (Symfony\\Component\\Debug\\Exception\\FatalThrowableError(code: 0): Argument 3 passed to Lcobucci\\JWT\\Signer\\Hmac::doVerify() must be an instance of Lcobucci\\JWT\\Signer\\Key, null given, called in W:\\domains\\jse.kk\\vendor\\lcobucci\\jwt\\src\\Signer\\BaseSigner.php on line 42 at W:\\domains\\jse.kk\\vendor\\lcobucci\\jwt\\src\\Signer\\Hmac.php:29)
-[stacktrace]
-#0 W:\\domains\\jse.kk\\vendor\\lcobucci\\jwt\\src\\Signer\\BaseSigner.php(42): Lcobucci\\JWT\\Signer\\Hmac->doVerify('\\x02\\xB8\\xEE\\fW\\xF4\\xE3T\\xEB\\x01\\xF4\\xCD\\xAFu\\x12...', 'eyJ0eXAiOiJKV1Q...', NULL)
-#1 W:\\domains\\jse.kk\\vendor\\lcobucci\\jwt\\src\\Signature.php(47): Lcobucci\\JWT\\Signer\\BaseSigner->verify('\\x02\\xB8\\xEE\\fW\\xF4\\xE3T\\xEB\\x01\\xF4\\xCD\\xAFu\\x12...', 'eyJ0eXAiOiJKV1Q...', NULL)
-#2 W:\\domains\\jse.kk\\vendor\\lcobucci\\jwt\\src\\Token.php(201): Lcobucci\\JWT\\Signature->verify(Object(Lcobucci\\JWT\\Signer\\Hmac\\Sha256), 'eyJ0eXAiOiJKV1Q...', NULL)
-#3 W:\\domains\\jse.kk\\vendor\\tymon\\jwt-auth\\src\\Providers\\JWT\\Lcobucci.php(136): Lcobucci\\JWT\\Token->verify(Object(Lcobucci\\JWT\\Signer\\Hmac\\Sha256), NULL)
-#4 W:\\domains\\jse.kk\\vendor\\tymon\\jwt-auth\\src\\Manager.php(101): Tymon\\JWTAuth\\Providers\\JWT\\Lcobucci->decode('eyJ0eXAiOiJKV1Q...')
-#5 W:\\domains\\jse.kk\\vendor\\tymon\\jwt-auth\\src\\JWT.php(200): Tymon\\JWTAuth\\Manager->decode(Object(Tymon\\JWTAuth\\Token))
-#6 W:\\domains\\jse.kk\\vendor\\tymon\\jwt-auth\\src\\JWT.php(136): Tymon\\JWTAuth\\JWT->getPayload()
-#7 W:\\domains\\jse.kk\\vendor\\tymon\\jwt-auth\\src\\JWT.php(149): Tymon\\JWTAuth\\JWT->checkOrFail()
-#8 W:\\domains\\jse.kk\\vendor\\tymon\\jwt-auth\\src\\JWTGuard.php(79): Tymon\\JWTAuth\\JWT->check(true)
-#9 W:\\domains\\jse.kk\\vendor\\laravel\\framework\\src\\Illuminate\\Auth\\AuthManager.php(54): Tymon\\JWTAuth\\JWTGuard->user()
-#10 [internal function]: Illuminate\\Auth\\AuthManager->Illuminate\\Auth\\{closure}(NULL)
-#11 W:\\domains\\jse.kk\\vendor\\laravel\\framework\\src\\Illuminate\\Auth\\AuthServiceProvider.php(86): call_user_func(Object(Closure), NULL)
-#12 [internal function]: Illuminate\\Auth\\AuthServiceProvider->Illuminate\\Auth\\{closure}(NULL)
-#13 W:\\domains\\jse.kk\\vendor\\laravel\\framework\\src\\Illuminate\\Http\\Request.php(519): call_user_func(Object(Closure), NULL)
-#14 W:\\domains\\jse.kk\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Middleware\\ThrottleRequests.php(96): Illuminate\\Http\\Request->user()
-#15 W:\\domains\\jse.kk\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Middleware\\ThrottleRequests.php(48): Illuminate\\Routing\\Middleware\\ThrottleRequests->resolveRequestSignature(Object(Illuminate\\Http\\Request))
-#16 W:\\domains\\jse.kk\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(163): Illuminate\\Routing\\Middleware\\ThrottleRequests->handle(Object(Illuminate\\Http\\Request), Object(Closure), '60', '1')
-#17 W:\\domains\\jse.kk\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Pipeline.php(53): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
-#18 W:\\domains\\jse.kk\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(104): Illuminate\\Routing\\Pipeline->Illuminate\\Routing\\{closure}(Object(Illuminate\\Http\\Request))
-#19 W:\\domains\\jse.kk\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Router.php(682): Illuminate\\Pipeline\\Pipeline->then(Object(Closure))
-#20 W:\\domains\\jse.kk\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Router.php(657): Illuminate\\Routing\\Router->runRouteWithinStack(Object(Illuminate\\Routing\\Route), Object(Illuminate\\Http\\Request))
-#21 W:\\domains\\jse.kk\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Router.php(623): Illuminate\\Routing\\Router->runRoute(Object(Illuminate\\Http\\Request), Object(Illuminate\\Routing\\Route))
-#22 W:\\domains\\jse.kk\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Router.php(612): Illuminate\\Routing\\Router->dispatchToRoute(Object(Illuminate\\Http\\Request))
-#23 W:\\domains\\jse.kk\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Kernel.php(176): Illuminate\\Routing\\Router->dispatch(Object(Illuminate\\Http\\Request))
-#24 W:\\domains\\jse.kk\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Pipeline.php(30): Illuminate\\Foundation\\Http\\Kernel->Illuminate\\Foundation\\Http\\{closure}(Object(Illuminate\\Http\\Request))
-#25 W:\\domains\\jse.kk\\vendor\\barryvdh\\laravel-cors\\src\\HandleCors.php(58): Illuminate\\Routing\\Pipeline->Illuminate\\Routing\\{closure}(Object(Illuminate\\Http\\Request))
-#26 W:\\domains\\jse.kk\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(163): Barryvdh\\Cors\\HandleCors->handle(Object(Illuminate\\Http\\Request), Object(Closure))
-#27 W:\\domains\\jse.kk\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Pipeline.php(53): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
-#28 W:\\domains\\jse.kk\\vendor\\fideloper\\proxy\\src\\TrustProxies.php(57): Illuminate\\Routing\\Pipeline->Illuminate\\Routing\\{closure}(Object(Illuminate\\Http\\Request))
-#29 W:\\domains\\jse.kk\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(163): Fideloper\\Proxy\\TrustProxies->handle(Object(Illuminate\\Http\\Request), Object(Closure))
-#30 W:\\domains\\jse.kk\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Pipeline.php(53): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
-#31 W:\\domains\\jse.kk\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Middleware\\TransformsRequest.php(21): Illuminate\\Routing\\Pipeline->Illuminate\\Routing\\{closure}(Object(Illuminate\\Http\\Request))
-#32 W:\\domains\\jse.kk\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(163): Illuminate\\Foundation\\Http\\Middleware\\TransformsRequest->handle(Object(Illuminate\\Http\\Request), Object(Closure))
-#33 W:\\domains\\jse.kk\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Pipeline.php(53): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
-#34 W:\\domains\\jse.kk\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Middleware\\TransformsRequest.php(21): Illuminate\\Routing\\Pipeline->Illuminate\\Routing\\{closure}(Object(Illuminate\\Http\\Request))
-#35 W:\\domains\\jse.kk\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(163): Illuminate\\Foundation\\Http\\Middleware\\TransformsRequest->handle(Object(Illuminate\\Http\\Request), Object(Closure))
-#36 W:\\domains\\jse.kk\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Pipeline.php(53): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
-#37 W:\\domains\\jse.kk\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Middleware\\ValidatePostSize.php(27): Illuminate\\Routing\\Pipeline->Illuminate\\Routing\\{closure}(Object(Illuminate\\Http\\Request))
-#38 W:\\domains\\jse.kk\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(163): Illuminate\\Foundation\\Http\\Middleware\\ValidatePostSize->handle(Object(Illuminate\\Http\\Request), Object(Closure))
-#39 W:\\domains\\jse.kk\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Pipeline.php(53): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
-#40 W:\\domains\\jse.kk\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Middleware\\CheckForMaintenanceMode.php(62): Illuminate\\Routing\\Pipeline->Illuminate\\Routing\\{closure}(Object(Illuminate\\Http\\Request))
-#41 W:\\domains\\jse.kk\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(163): Illuminate\\Foundation\\Http\\Middleware\\CheckForMaintenanceMode->handle(Object(Illuminate\\Http\\Request), Object(Closure))
-#42 W:\\domains\\jse.kk\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Pipeline.php(53): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
-#43 W:\\domains\\jse.kk\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(104): Illuminate\\Routing\\Pipeline->Illuminate\\Routing\\{closure}(Object(Illuminate\\Http\\Request))
-#44 W:\\domains\\jse.kk\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Kernel.php(151): Illuminate\\Pipeline\\Pipeline->then(Object(Closure))
-#45 W:\\domains\\jse.kk\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Kernel.php(116): Illuminate\\Foundation\\Http\\Kernel->sendRequestThroughRouter(Object(Illuminate\\Http\\Request))
-#46 W:\\domains\\jse.kk\\public\\index.php(55): Illuminate\\Foundation\\Http\\Kernel->handle(Object(Illuminate\\Http\\Request))
-#47 {main}
-"} 
-[2019-05-17 19:41:05] local.ERROR: Token validated, but invalid for app 777611_
- {"exception":"[object] (Illuminate\\Broadcasting\\BroadcastException(code: 0): Token validated, but invalid for app 777611_
- at W:\\domains\\jse.kk\\vendor\\laravel\\framework\\src\\Illuminate\\Broadcasting\\Broadcasters\\PusherBroadcaster.php:119)
-[stacktrace]
-#0 W:\\domains\\jse.kk\\vendor\\laravel\\framework\\src\\Illuminate\\Broadcasting\\BroadcastEvent.php(48): Illuminate\\Broadcasting\\Broadcasters\\PusherBroadcaster->broadcast(Array, 'App\\\\Events\\\\jsee...', Array)
-#1 [internal function]: Illuminate\\Broadcasting\\BroadcastEvent->handle(Object(Illuminate\\Broadcasting\\Broadcasters\\PusherBroadcaster))
-#2 W:\\domains\\jse.kk\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\BoundMethod.php(32): call_user_func_array(Array, Array)
-#3 W:\\domains\\jse.kk\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\BoundMethod.php(90): Illuminate\\Container\\BoundMethod::Illuminate\\Container\\{closure}()
-#4 W:\\domains\\jse.kk\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\BoundMethod.php(34): Illuminate\\Container\\BoundMethod::callBoundMethod(Object(Illuminate\\Foundation\\Application), Array, Object(Closure))
-#5 W:\\domains\\jse.kk\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\Container.php(580): Illuminate\\Container\\BoundMethod::call(Object(Illuminate\\Foundation\\Application), Array, Array, NULL)
-#6 W:\\domains\\jse.kk\\vendor\\laravel\\framework\\src\\Illuminate\\Bus\\Dispatcher.php(94): Illuminate\\Container\\Container->call(Array)
-#7 W:\\domains\\jse.kk\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(128): Illuminate\\Bus\\Dispatcher->Illuminate\\Bus\\{closure}(Object(Illuminate\\Broadcasting\\BroadcastEvent))
-#8 W:\\domains\\jse.kk\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(104): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Broadcasting\\BroadcastEvent))
-#9 W:\\domains\\jse.kk\\vendor\\laravel\\framework\\src\\Illuminate\\Bus\\Dispatcher.php(98): Illuminate\\Pipeline\\Pipeline->then(Object(Closure))
-#10 W:\\domains\\jse.kk\\vendor\\laravel\\framework\\src\\Illuminate\\Queue\\CallQueuedHandler.php(49): Illuminate\\Bus\\Dispatcher->dispatchNow(Object(Illuminate\\Broadcasting\\BroadcastEvent), false)
-#11 W:\\domains\\jse.kk\\vendor\\laravel\\framework\\src\\Illuminate\\Queue\\Jobs\\Job.php(86): Illuminate\\Queue\\CallQueuedHandler->call(Object(Illuminate\\Queue\\Jobs\\SyncJob), Array)
-#12 W:\\domains\\jse.kk\\vendor\\laravel\\framework\\src\\Illuminate\\Queue\\SyncQueue.php(42): Illuminate\\Queue\\Jobs\\Job->fire()
-#13 W:\\domains\\jse.kk\\vendor\\laravel\\framework\\src\\Illuminate\\Queue\\Queue.php(44): Illuminate\\Queue\\SyncQueue->push(Object(Illuminate\\Broadcasting\\BroadcastEvent), '', NULL)
-#14 W:\\domains\\jse.kk\\vendor\\laravel\\framework\\src\\Illuminate\\Broadcasting\\BroadcastManager.php(128): Illuminate\\Queue\\Queue->pushOn(NULL, Object(Illuminate\\Broadcasting\\BroadcastEvent))
-#15 W:\\domains\\jse.kk\\vendor\\laravel\\framework\\src\\Illuminate\\Events\\Dispatcher.php(267): Illuminate\\Broadcasting\\BroadcastManager->queue(Object(App\\Events\\jseevent))
-#16 W:\\domains\\jse.kk\\vendor\\laravel\\framework\\src\\Illuminate\\Events\\Dispatcher.php(190): Illuminate\\Events\\Dispatcher->broadcastEvent(Object(App\\Events\\jseevent))
-#17 W:\\domains\\jse.kk\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\helpers.php(482): Illuminate\\Events\\Dispatcher->dispatch('App\\\\Events\\\\jsee...')
-#18 W:\\domains\\jse.kk\\app\\Console\\Commands\\Pc.php(88): event(Object(App\\Events\\jseevent))
-#19 [internal function]: App\\Console\\Commands\\Pc->handle()
-#20 W:\\domains\\jse.kk\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\BoundMethod.php(32): call_user_func_array(Array, Array)
-#21 W:\\domains\\jse.kk\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\BoundMethod.php(90): Illuminate\\Container\\BoundMethod::Illuminate\\Container\\{closure}()
-#22 W:\\domains\\jse.kk\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\BoundMethod.php(34): Illuminate\\Container\\BoundMethod::callBoundMethod(Object(Illuminate\\Foundation\\Application), Array, Object(Closure))
-#23 W:\\domains\\jse.kk\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\Container.php(580): Illuminate\\Container\\BoundMethod::call(Object(Illuminate\\Foundation\\Application), Array, Array, NULL)
-#24 W:\\domains\\jse.kk\\vendor\\laravel\\framework\\src\\Illuminate\\Console\\Command.php(183): Illuminate\\Container\\Container->call(Array)
-#25 W:\\domains\\jse.kk\\vendor\\symfony\\console\\Command\\Command.php(255): Illuminate\\Console\\Command->execute(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Illuminate\\Console\\OutputStyle))
-#26 W:\\domains\\jse.kk\\vendor\\laravel\\framework\\src\\Illuminate\\Console\\Command.php(170): Symfony\\Component\\Console\\Command\\Command->run(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Illuminate\\Console\\OutputStyle))
-#27 W:\\domains\\jse.kk\\vendor\\symfony\\console\\Application.php(908): Illuminate\\Console\\Command->run(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
-#28 W:\\domains\\jse.kk\\vendor\\symfony\\console\\Application.php(269): Symfony\\Component\\Console\\Application->doRunCommand(Object(App\\Console\\Commands\\Pc), Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
-#29 W:\\domains\\jse.kk\\vendor\\symfony\\console\\Application.php(145): Symfony\\Component\\Console\\Application->doRun(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
-#30 W:\\domains\\jse.kk\\vendor\\laravel\\framework\\src\\Illuminate\\Console\\Application.php(90): Symfony\\Component\\Console\\Application->run(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
-#31 W:\\domains\\jse.kk\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Console\\Kernel.php(122): Illuminate\\Console\\Application->run(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
-#32 W:\\domains\\jse.kk\\artisan(37): Illuminate\\Foundation\\Console\\Kernel->handle(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
-#33 {main}
-"} 
-[2019-05-17 19:42:28] local.ERROR: Token validated, but invalid for app 777611_
- {"exception":"[object] (Illuminate\\Broadcasting\\BroadcastException(code: 0): Token validated, but invalid for app 777611_
- at W:\\domains\\jse.kk\\vendor\\laravel\\framework\\src\\Illuminate\\Broadcasting\\Broadcasters\\PusherBroadcaster.php:119)
-[stacktrace]
-#0 W:\\domains\\jse.kk\\vendor\\laravel\\framework\\src\\Illuminate\\Broadcasting\\BroadcastEvent.php(48): Illuminate\\Broadcasting\\Broadcasters\\PusherBroadcaster->broadcast(Array, 'App\\\\Events\\\\jsee...', Array)
-#1 [internal function]: Illuminate\\Broadcasting\\BroadcastEvent->handle(Object(Illuminate\\Broadcasting\\Broadcasters\\PusherBroadcaster))
-#2 W:\\domains\\jse.kk\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\BoundMethod.php(32): call_user_func_array(Array, Array)
-#3 W:\\domains\\jse.kk\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\BoundMethod.php(90): Illuminate\\Container\\BoundMethod::Illuminate\\Container\\{closure}()
-#4 W:\\domains\\jse.kk\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\BoundMethod.php(34): Illuminate\\Container\\BoundMethod::callBoundMethod(Object(Illuminate\\Foundation\\Application), Array, Object(Closure))
-#5 W:\\domains\\jse.kk\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\Container.php(580): Illuminate\\Container\\BoundMethod::call(Object(Illuminate\\Foundation\\Application), Array, Array, NULL)
-#6 W:\\domains\\jse.kk\\vendor\\laravel\\framework\\src\\Illuminate\\Bus\\Dispatcher.php(94): Illuminate\\Container\\Container->call(Array)
-#7 W:\\domains\\jse.kk\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(128): Illuminate\\Bus\\Dispatcher->Illuminate\\Bus\\{closure}(Object(Illuminate\\Broadcasting\\BroadcastEvent))
-#8 W:\\domains\\jse.kk\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(104): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Broadcasting\\BroadcastEvent))
-#9 W:\\domains\\jse.kk\\vendor\\laravel\\framework\\src\\Illuminate\\Bus\\Dispatcher.php(98): Illuminate\\Pipeline\\Pipeline->then(Object(Closure))
-#10 W:\\domains\\jse.kk\\vendor\\laravel\\framework\\src\\Illuminate\\Queue\\CallQueuedHandler.php(49): Illuminate\\Bus\\Dispatcher->dispatchNow(Object(Illuminate\\Broadcasting\\BroadcastEvent), false)
-#11 W:\\domains\\jse.kk\\vendor\\laravel\\framework\\src\\Illuminate\\Queue\\Jobs\\Job.php(86): Illuminate\\Queue\\CallQueuedHandler->call(Object(Illuminate\\Queue\\Jobs\\SyncJob), Array)
-#12 W:\\domains\\jse.kk\\vendor\\laravel\\framework\\src\\Illuminate\\Queue\\SyncQueue.php(42): Illuminate\\Queue\\Jobs\\Job->fire()
-#13 W:\\domains\\jse.kk\\vendor\\laravel\\framework\\src\\Illuminate\\Queue\\Queue.php(44): Illuminate\\Queue\\SyncQueue->push(Object(Illuminate\\Broadcasting\\BroadcastEvent), '', NULL)
-#14 W:\\domains\\jse.kk\\vendor\\laravel\\framework\\src\\Illuminate\\Broadcasting\\BroadcastManager.php(128): Illuminate\\Queue\\Queue->pushOn(NULL, Object(Illuminate\\Broadcasting\\BroadcastEvent))
-#15 W:\\domains\\jse.kk\\vendor\\laravel\\framework\\src\\Illuminate\\Events\\Dispatcher.php(267): Illuminate\\Broadcasting\\BroadcastManager->queue(Object(App\\Events\\jseevent))
-#16 W:\\domains\\jse.kk\\vendor\\laravel\\framework\\src\\Illuminate\\Events\\Dispatcher.php(190): Illuminate\\Events\\Dispatcher->broadcastEvent(Object(App\\Events\\jseevent))
-#17 W:\\domains\\jse.kk\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\helpers.php(482): Illuminate\\Events\\Dispatcher->dispatch('App\\\\Events\\\\jsee...')
-#18 W:\\domains\\jse.kk\\app\\Console\\Commands\\Pc.php(90): event(Object(App\\Events\\jseevent))
-#19 [internal function]: App\\Console\\Commands\\Pc->handle()
-#20 W:\\domains\\jse.kk\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\BoundMethod.php(32): call_user_func_array(Array, Array)
-#21 W:\\domains\\jse.kk\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\BoundMethod.php(90): Illuminate\\Container\\BoundMethod::Illuminate\\Container\\{closure}()
-#22 W:\\domains\\jse.kk\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\BoundMethod.php(34): Illuminate\\Container\\BoundMethod::callBoundMethod(Object(Illuminate\\Foundation\\Application), Array, Object(Closure))
-#23 W:\\domains\\jse.kk\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\Container.php(580): Illuminate\\Container\\BoundMethod::call(Object(Illuminate\\Foundation\\Application), Array, Array, NULL)
-#24 W:\\domains\\jse.kk\\vendor\\laravel\\framework\\src\\Illuminate\\Console\\Command.php(183): Illuminate\\Container\\Container->call(Array)
-#25 W:\\domains\\jse.kk\\vendor\\symfony\\console\\Command\\Command.php(255): Illuminate\\Console\\Command->execute(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Illuminate\\Console\\OutputStyle))
-#26 W:\\domains\\jse.kk\\vendor\\laravel\\framework\\src\\Illuminate\\Console\\Command.php(170): Symfony\\Component\\Console\\Command\\Command->run(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Illuminate\\Console\\OutputStyle))
-#27 W:\\domains\\jse.kk\\vendor\\symfony\\console\\Application.php(908): Illuminate\\Console\\Command->run(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
-#28 W:\\domains\\jse.kk\\vendor\\symfony\\console\\Application.php(269): Symfony\\Component\\Console\\Application->doRunCommand(Object(App\\Console\\Commands\\Pc), Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
-#29 W:\\domains\\jse.kk\\vendor\\symfony\\console\\Application.php(145): Symfony\\Component\\Console\\Application->doRun(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
-#30 W:\\domains\\jse.kk\\vendor\\laravel\\framework\\src\\Illuminate\\Console\\Application.php(90): Symfony\\Component\\Console\\Application->run(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
-#31 W:\\domains\\jse.kk\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Console\\Kernel.php(122): Illuminate\\Console\\Application->run(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
-#32 W:\\domains\\jse.kk\\artisan(37): Illuminate\\Foundation\\Console\\Kernel->handle(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
-#33 {main}
-"} 
-[2019-05-17 19:42:55] local.ERROR: Token validated, but invalid for app 777611_
- {"exception":"[object] (Illuminate\\Broadcasting\\BroadcastException(code: 0): Token validated, but invalid for app 777611_
- at W:\\domains\\jse.kk\\vendor\\laravel\\framework\\src\\Illuminate\\Broadcasting\\Broadcasters\\PusherBroadcaster.php:119)
-[stacktrace]
-#0 W:\\domains\\jse.kk\\vendor\\laravel\\framework\\src\\Illuminate\\Broadcasting\\BroadcastEvent.php(48): Illuminate\\Broadcasting\\Broadcasters\\PusherBroadcaster->broadcast(Array, 'App\\\\Events\\\\jsee...', Array)
-#1 [internal function]: Illuminate\\Broadcasting\\BroadcastEvent->handle(Object(Illuminate\\Broadcasting\\Broadcasters\\PusherBroadcaster))
-#2 W:\\domains\\jse.kk\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\BoundMethod.php(32): call_user_func_array(Array, Array)
-#3 W:\\domains\\jse.kk\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\BoundMethod.php(90): Illuminate\\Container\\BoundMethod::Illuminate\\Container\\{closure}()
-#4 W:\\domains\\jse.kk\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\BoundMethod.php(34): Illuminate\\Container\\BoundMethod::callBoundMethod(Object(Illuminate\\Foundation\\Application), Array, Object(Closure))
-#5 W:\\domains\\jse.kk\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\Container.php(580): Illuminate\\Container\\BoundMethod::call(Object(Illuminate\\Foundation\\Application), Array, Array, NULL)
-#6 W:\\domains\\jse.kk\\vendor\\laravel\\framework\\src\\Illuminate\\Bus\\Dispatcher.php(94): Illuminate\\Container\\Container->call(Array)
-#7 W:\\domains\\jse.kk\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(128): Illuminate\\Bus\\Dispatcher->Illuminate\\Bus\\{closure}(Object(Illuminate\\Broadcasting\\BroadcastEvent))
-#8 W:\\domains\\jse.kk\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(104): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Broadcasting\\BroadcastEvent))
-#9 W:\\domains\\jse.kk\\vendor\\laravel\\framework\\src\\Illuminate\\Bus\\Dispatcher.php(98): Illuminate\\Pipeline\\Pipeline->then(Object(Closure))
-#10 W:\\domains\\jse.kk\\vendor\\laravel\\framework\\src\\Illuminate\\Queue\\CallQueuedHandler.php(49): Illuminate\\Bus\\Dispatcher->dispatchNow(Object(Illuminate\\Broadcasting\\BroadcastEvent), false)
-#11 W:\\domains\\jse.kk\\vendor\\laravel\\framework\\src\\Illuminate\\Queue\\Jobs\\Job.php(86): Illuminate\\Queue\\CallQueuedHandler->call(Object(Illuminate\\Queue\\Jobs\\SyncJob), Array)
-#12 W:\\domains\\jse.kk\\vendor\\laravel\\framework\\src\\Illuminate\\Queue\\SyncQueue.php(42): Illuminate\\Queue\\Jobs\\Job->fire()
-#13 W:\\domains\\jse.kk\\vendor\\laravel\\framework\\src\\Illuminate\\Queue\\Queue.php(44): Illuminate\\Queue\\SyncQueue->push(Object(Illuminate\\Broadcasting\\BroadcastEvent), '', NULL)
-#14 W:\\domains\\jse.kk\\vendor\\laravel\\framework\\src\\Illuminate\\Broadcasting\\BroadcastManager.php(128): Illuminate\\Queue\\Queue->pushOn(NULL, Object(Illuminate\\Broadcasting\\BroadcastEvent))
-#15 W:\\domains\\jse.kk\\vendor\\laravel\\framework\\src\\Illuminate\\Events\\Dispatcher.php(267): Illuminate\\Broadcasting\\BroadcastManager->queue(Object(App\\Events\\jseevent))
-#16 W:\\domains\\jse.kk\\vendor\\laravel\\framework\\src\\Illuminate\\Events\\Dispatcher.php(190): Illuminate\\Events\\Dispatcher->broadcastEvent(Object(App\\Events\\jseevent))
-#17 W:\\domains\\jse.kk\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\helpers.php(482): Illuminate\\Events\\Dispatcher->dispatch('App\\\\Events\\\\jsee...')
-#18 W:\\domains\\jse.kk\\app\\Console\\Commands\\Pc.php(90): event(Object(App\\Events\\jseevent))
-#19 [internal function]: App\\Console\\Commands\\Pc->handle()
-#20 W:\\domains\\jse.kk\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\BoundMethod.php(32): call_user_func_array(Array, Array)
-#21 W:\\domains\\jse.kk\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\BoundMethod.php(90): Illuminate\\Container\\BoundMethod::Illuminate\\Container\\{closure}()
-#22 W:\\domains\\jse.kk\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\BoundMethod.php(34): Illuminate\\Container\\BoundMethod::callBoundMethod(Object(Illuminate\\Foundation\\Application), Array, Object(Closure))
-#23 W:\\domains\\jse.kk\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\Container.php(580): Illuminate\\Container\\BoundMethod::call(Object(Illuminate\\Foundation\\Application), Array, Array, NULL)
-#24 W:\\domains\\jse.kk\\vendor\\laravel\\framework\\src\\Illuminate\\Console\\Command.php(183): Illuminate\\Container\\Container->call(Array)
-#25 W:\\domains\\jse.kk\\vendor\\symfony\\console\\Command\\Command.php(255): Illuminate\\Console\\Command->execute(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Illuminate\\Console\\OutputStyle))
-#26 W:\\domains\\jse.kk\\vendor\\laravel\\framework\\src\\Illuminate\\Console\\Command.php(170): Symfony\\Component\\Console\\Command\\Command->run(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Illuminate\\Console\\OutputStyle))
-#27 W:\\domains\\jse.kk\\vendor\\symfony\\console\\Application.php(908): Illuminate\\Console\\Command->run(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
-#28 W:\\domains\\jse.kk\\vendor\\symfony\\console\\Application.php(269): Symfony\\Component\\Console\\Application->doRunCommand(Object(App\\Console\\Commands\\Pc), Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
-#29 W:\\domains\\jse.kk\\vendor\\symfony\\console\\Application.php(145): Symfony\\Component\\Console\\Application->doRun(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
-#30 W:\\domains\\jse.kk\\vendor\\laravel\\framework\\src\\Illuminate\\Console\\Application.php(90): Symfony\\Component\\Console\\Application->run(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
-#31 W:\\domains\\jse.kk\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Console\\Kernel.php(122): Illuminate\\Console\\Application->run(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
-#32 W:\\domains\\jse.kk\\artisan(37): Illuminate\\Foundation\\Console\\Kernel->handle(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
-#33 {main}
-"} 
-[2019-05-17 20:00:21] local.ERROR: Use of undefined constant __LINE - assumed '__LINE' {"exception":"[object] (ErrorException(code: 0): Use of undefined constant __LINE - assumed '__LINE' at W:\\domains\\jse.kk\\app\\Classes\\Trading\\Chart.php:124)
-[stacktrace]
-#0 W:\\domains\\jse.kk\\app\\Classes\\Trading\\Chart.php(124): Illuminate\\Foundation\\Bootstrap\\HandleExceptions->handleError(8, 'Use of undefine...', 'W:\\\\domains\\\\jse....', 124, Array)
-#1 W:\\domains\\jse.kk\\app\\Classes\\Trading\\CandleMaker.php(133): App\\Classes\\Trading\\Chart->index('2019-05-17 20:0...', 1558123141000)
-#2 W:\\domains\\jse.kk\\app\\Classes\\WebSocket\\ConsoleWebSocket.php(32): App\\Classes\\Trading\\CandleMaker->index(7136, '2019-05-17T20:0...', 1, Object(App\\Classes\\Trading\\Chart), Object(App\\Console\\Commands\\Pc), 1, NULL)
-#3 W:\\domains\\jse.kk\\app\\Classes\\WebSocket\\BitmexWsListener.php(38): App\\Classes\\WebSocket\\ConsoleWebSocket::messageParse(Array, Object(App\\Console\\Commands\\Pc), Object(App\\Classes\\Trading\\CandleMaker), Object(App\\Classes\\Trading\\Chart), 1, NULL)
-#4 W:\\domains\\jse.kk\\vendor\\evenement\\evenement\\src\\Evenement\\EventEmitterTrait.php(123): App\\Classes\\WebSocket\\BitmexWsListener::App\\Classes\\WebSocket\\{closure}(Object(Ratchet\\RFC6455\\Messaging\\Message), Object(Ratchet\\Client\\WebSocket))
-#5 W:\\domains\\jse.kk\\vendor\atchet\\pawl\\src\\WebSocket.php(72): Ratchet\\Client\\WebSocket->emit('message', Array)
-#6 W:\\domains\\jse.kk\\vendor\atchet\fc6455\\src\\Messaging\\MessageBuffer.php(108): Ratchet\\Client\\WebSocket->Ratchet\\Client\\{closure}(Object(Ratchet\\RFC6455\\Messaging\\Message))
-#7 W:\\domains\\jse.kk\\vendor\atchet\fc6455\\src\\Messaging\\MessageBuffer.php(60): Ratchet\\RFC6455\\Messaging\\MessageBuffer->processData('\\x81~\\x00\\xB5{\"table\":\"i...')
-#8 W:\\domains\\jse.kk\\vendor\\evenement\\evenement\\src\\Evenement\\EventEmitterTrait.php(123): Ratchet\\RFC6455\\Messaging\\MessageBuffer->onData('\\x81~\\x00\\xB5{\"table\":\"i...')
-#9 W:\\domains\\jse.kk\\vendor\eact\\stream\\src\\Util.php(71): Evenement\\EventEmitter->emit('data', Array)
-#10 W:\\domains\\jse.kk\\vendor\\evenement\\evenement\\src\\Evenement\\EventEmitterTrait.php(123): React\\Stream\\Util::React\\Stream\\{closure}('\\x81~\\x00\\xB5{\"table\":\"i...')
-#11 W:\\domains\\jse.kk\\vendor\eact\\stream\\src\\DuplexResourceStream.php(193): Evenement\\EventEmitter->emit('data', Array)
-#12 W:\\domains\\jse.kk\\vendor\eact\\event-loop\\src\\StreamSelectLoop.php(244): React\\Stream\\DuplexResourceStream->handleData(Resource id #569)
-#13 W:\\domains\\jse.kk\\vendor\eact\\event-loop\\src\\StreamSelectLoop.php(211): React\\EventLoop\\StreamSelectLoop->waitForStreamActivity(NULL)
-#14 W:\\domains\\jse.kk\\app\\Classes\\WebSocket\\BitmexWsListener.php(66): React\\EventLoop\\StreamSelectLoop->run()
-#15 W:\\domains\\jse.kk\\app\\Console\\Commands\\Pc.php(93): App\\Classes\\WebSocket\\BitmexWsListener::subscribe(Object(Ratchet\\Client\\Connector), Object(React\\EventLoop\\StreamSelectLoop), Object(App\\Console\\Commands\\Pc), Object(App\\Classes\\Trading\\CandleMaker), Object(App\\Classes\\Trading\\Chart), 'XBTUSD', 1, NULL)
-#16 [internal function]: App\\Console\\Commands\\Pc->handle()
-#17 W:\\domains\\jse.kk\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\BoundMethod.php(32): call_user_func_array(Array, Array)
-#18 W:\\domains\\jse.kk\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\BoundMethod.php(90): Illuminate\\Container\\BoundMethod::Illuminate\\Container\\{closure}()
-#19 W:\\domains\\jse.kk\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\BoundMethod.php(34): Illuminate\\Container\\BoundMethod::callBoundMethod(Object(Illuminate\\Foundation\\Application), Array, Object(Closure))
-#20 W:\\domains\\jse.kk\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\Container.php(580): Illuminate\\Container\\BoundMethod::call(Object(Illuminate\\Foundation\\Application), Array, Array, NULL)
-#21 W:\\domains\\jse.kk\\vendor\\laravel\\framework\\src\\Illuminate\\Console\\Command.php(183): Illuminate\\Container\\Container->call(Array)
-#22 W:\\domains\\jse.kk\\vendor\\symfony\\console\\Command\\Command.php(255): Illuminate\\Console\\Command->execute(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Illuminate\\Console\\OutputStyle))
-#23 W:\\domains\\jse.kk\\vendor\\laravel\\framework\\src\\Illuminate\\Console\\Command.php(170): Symfony\\Component\\Console\\Command\\Command->run(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Illuminate\\Console\\OutputStyle))
-#24 W:\\domains\\jse.kk\\vendor\\symfony\\console\\Application.php(908): Illuminate\\Console\\Command->run(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
-#25 W:\\domains\\jse.kk\\vendor\\symfony\\console\\Application.php(269): Symfony\\Component\\Console\\Application->doRunCommand(Object(App\\Console\\Commands\\Pc), Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
-#26 W:\\domains\\jse.kk\\vendor\\symfony\\console\\Application.php(145): Symfony\\Component\\Console\\Application->doRun(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
-#27 W:\\domains\\jse.kk\\vendor\\laravel\\framework\\src\\Illuminate\\Console\\Application.php(90): Symfony\\Component\\Console\\Application->run(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
-#28 W:\\domains\\jse.kk\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Console\\Kernel.php(122): Illuminate\\Console\\Application->run(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
-#29 W:\\domains\\jse.kk\\artisan(37): Illuminate\\Foundation\\Console\\Kernel->handle(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
-#30 {main}
-"} 
-[2019-05-17 20:29:44] local.ERROR: Property [trade_direction] does not exist on this collection instance. {"exception":"[object] (Exception(code: 0): Property [trade_direction] does not exist on this collection instance. at W:\\domains\\jse.kk\\vendor\\laravel\\framework\\src\\Illuminate\\Support\\Collection.php:2071)
-[stacktrace]
-#0 W:\\domains\\jse.kk\\app\\Classes\\Trading\\Chart.php(229): Illuminate\\Support\\Collection->__get('trade_direction')
-#1 W:\\domains\\jse.kk\\app\\Classes\\Trading\\CandleMaker.php(135): App\\Classes\\Trading\\Chart->index('2019-05-17 20:2...', 1558124982000)
-#2 W:\\domains\\jse.kk\\app\\Classes\\WebSocket\\ConsoleWebSocket.php(32): App\\Classes\\Trading\\CandleMaker->index(7085.5, '2019-05-17T20:2...', 1, Object(App\\Classes\\Trading\\Chart), Object(App\\Console\\Commands\\Pc), 1, NULL)
-#3 W:\\domains\\jse.kk\\app\\Classes\\WebSocket\\BitmexWsListener.php(38): App\\Classes\\WebSocket\\ConsoleWebSocket::messageParse(Array, Object(App\\Console\\Commands\\Pc), Object(App\\Classes\\Trading\\CandleMaker), Object(App\\Classes\\Trading\\Chart), 1, NULL)
-#4 W:\\domains\\jse.kk\\vendor\\evenement\\evenement\\src\\Evenement\\EventEmitterTrait.php(123): App\\Classes\\WebSocket\\BitmexWsListener::App\\Classes\\WebSocket\\{closure}(Object(Ratchet\\RFC6455\\Messaging\\Message), Object(Ratchet\\Client\\WebSocket))
-#5 W:\\domains\\jse.kk\\vendor\atchet\\pawl\\src\\WebSocket.php(72): Ratchet\\Client\\WebSocket->emit('message', Array)
-#6 W:\\domains\\jse.kk\\vendor\atchet\fc6455\\src\\Messaging\\MessageBuffer.php(108): Ratchet\\Client\\WebSocket->Ratchet\\Client\\{closure}(Object(Ratchet\\RFC6455\\Messaging\\Message))
-#7 W:\\domains\\jse.kk\\vendor\atchet\fc6455\\src\\Messaging\\MessageBuffer.php(60): Ratchet\\RFC6455\\Messaging\\MessageBuffer->processData('\\x81~\\x14R{\"table\":\"i...')
-#8 W:\\domains\\jse.kk\\vendor\\evenement\\evenement\\src\\Evenement\\EventEmitterTrait.php(123): Ratchet\\RFC6455\\Messaging\\MessageBuffer->onData('\\x81~\\x14R{\"table\":\"i...')
-#9 W:\\domains\\jse.kk\\vendor\eact\\stream\\src\\Util.php(71): Evenement\\EventEmitter->emit('data', Array)
-#10 W:\\domains\\jse.kk\\vendor\\evenement\\evenement\\src\\Evenement\\EventEmitterTrait.php(123): React\\Stream\\Util::React\\Stream\\{closure}('\\x81~\\x14R{\"table\":\"i...')
-#11 W:\\domains\\jse.kk\\vendor\eact\\stream\\src\\DuplexResourceStream.php(193): Evenement\\EventEmitter->emit('data', Array)
-#12 W:\\domains\\jse.kk\\vendor\eact\\event-loop\\src\\StreamSelectLoop.php(244): React\\Stream\\DuplexResourceStream->handleData(Resource id #569)
-#13 W:\\domains\\jse.kk\\vendor\eact\\event-loop\\src\\StreamSelectLoop.php(211): React\\EventLoop\\StreamSelectLoop->waitForStreamActivity(NULL)
-#14 W:\\domains\\jse.kk\\app\\Classes\\WebSocket\\BitmexWsListener.php(66): React\\EventLoop\\StreamSelectLoop->run()
-#15 W:\\domains\\jse.kk\\app\\Console\\Commands\\Pc.php(93): App\\Classes\\WebSocket\\BitmexWsListener::subscribe(Object(Ratchet\\Client\\Connector), Object(React\\EventLoop\\StreamSelectLoop), Object(App\\Console\\Commands\\Pc), Object(App\\Classes\\Trading\\CandleMaker), Object(App\\Classes\\Trading\\Chart), 'XBTUSD', 1, NULL)
-#16 [internal function]: App\\Console\\Commands\\Pc->handle()
-#17 W:\\domains\\jse.kk\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\BoundMethod.php(32): call_user_func_array(Array, Array)
-#18 W:\\domains\\jse.kk\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\BoundMethod.php(90): Illuminate\\Container\\BoundMethod::Illuminate\\Container\\{closure}()
-#19 W:\\domains\\jse.kk\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\BoundMethod.php(34): Illuminate\\Container\\BoundMethod::callBoundMethod(Object(Illuminate\\Foundation\\Application), Array, Object(Closure))
-#20 W:\\domains\\jse.kk\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\Container.php(580): Illuminate\\Container\\BoundMethod::call(Object(Illuminate\\Foundation\\Application), Array, Array, NULL)
-#21 W:\\domains\\jse.kk\\vendor\\laravel\\framework\\src\\Illuminate\\Console\\Command.php(183): Illuminate\\Container\\Container->call(Array)
-#22 W:\\domains\\jse.kk\\vendor\\symfony\\console\\Command\\Command.php(255): Illuminate\\Console\\Command->execute(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Illuminate\\Console\\OutputStyle))
-#23 W:\\domains\\jse.kk\\vendor\\laravel\\framework\\src\\Illuminate\\Console\\Command.php(170): Symfony\\Component\\Console\\Command\\Command->run(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Illuminate\\Console\\OutputStyle))
-#24 W:\\domains\\jse.kk\\vendor\\symfony\\console\\Application.php(908): Illuminate\\Console\\Command->run(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
-#25 W:\\domains\\jse.kk\\vendor\\symfony\\console\\Application.php(269): Symfony\\Component\\Console\\Application->doRunCommand(Object(App\\Console\\Commands\\Pc), Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
-#26 W:\\domains\\jse.kk\\vendor\\symfony\\console\\Application.php(145): Symfony\\Component\\Console\\Application->doRun(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
-#27 W:\\domains\\jse.kk\\vendor\\laravel\\framework\\src\\Illuminate\\Console\\Application.php(90): Symfony\\Component\\Console\\Application->run(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
-#28 W:\\domains\\jse.kk\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Console\\Kernel.php(122): Illuminate\\Console\\Application->run(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
-#29 W:\\domains\\jse.kk\\artisan(37): Illuminate\\Foundation\\Console\\Kernel->handle(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
-#30 {main}
-"} 
-[2019-05-17 20:33:53] local.ERROR: Undefined index: trade_direction {"exception":"[object] (ErrorException(code: 0): Undefined index: trade_direction at W:\\domains\\jse.kk\\vendor\\laravel\\framework\\src\\Illuminate\\Support\\Collection.php:1984)
-[stacktrace]
-#0 W:\\domains\\jse.kk\\vendor\\laravel\\framework\\src\\Illuminate\\Support\\Collection.php(1984): Illuminate\\Foundation\\Bootstrap\\HandleExceptions->handleError(8, 'Undefined index...', 'W:\\\\domains\\\\jse....', 1984, Array)
-#1 W:\\domains\\jse.kk\\app\\Classes\\Trading\\Chart.php(229): Illuminate\\Support\\Collection->offsetGet('trade_direction')
-#2 W:\\domains\\jse.kk\\app\\Classes\\Trading\\CandleMaker.php(135): App\\Classes\\Trading\\Chart->index('2019-05-17 20:3...', 1558125232000)
-#3 W:\\domains\\jse.kk\\app\\Classes\\WebSocket\\ConsoleWebSocket.php(32): App\\Classes\\Trading\\CandleMaker->index(7067.5, '2019-05-17T20:3...', 1, Object(App\\Classes\\Trading\\Chart), Object(App\\Console\\Commands\\Pc), 1, NULL)
-#4 W:\\domains\\jse.kk\\app\\Classes\\WebSocket\\BitmexWsListener.php(38): App\\Classes\\WebSocket\\ConsoleWebSocket::messageParse(Array, Object(App\\Console\\Commands\\Pc), Object(App\\Classes\\Trading\\CandleMaker), Object(App\\Classes\\Trading\\Chart), 1, NULL)
-#5 W:\\domains\\jse.kk\\vendor\\evenement\\evenement\\src\\Evenement\\EventEmitterTrait.php(123): App\\Classes\\WebSocket\\BitmexWsListener::App\\Classes\\WebSocket\\{closure}(Object(Ratchet\\RFC6455\\Messaging\\Message), Object(Ratchet\\Client\\WebSocket))
-#6 W:\\domains\\jse.kk\\vendor\atchet\\pawl\\src\\WebSocket.php(72): Ratchet\\Client\\WebSocket->emit('message', Array)
-#7 W:\\domains\\jse.kk\\vendor\atchet\fc6455\\src\\Messaging\\MessageBuffer.php(108): Ratchet\\Client\\WebSocket->Ratchet\\Client\\{closure}(Object(Ratchet\\RFC6455\\Messaging\\Message))
-#8 W:\\domains\\jse.kk\\vendor\atchet\fc6455\\src\\Messaging\\MessageBuffer.php(60): Ratchet\\RFC6455\\Messaging\\MessageBuffer->processData('\\x81~\\x14S{\"table\":\"i...')
-#9 W:\\domains\\jse.kk\\vendor\\evenement\\evenement\\src\\Evenement\\EventEmitterTrait.php(123): Ratchet\\RFC6455\\Messaging\\MessageBuffer->onData('\\x81~\\x14S{\"table\":\"i...')
-#10 W:\\domains\\jse.kk\\vendor\eact\\stream\\src\\Util.php(71): Evenement\\EventEmitter->emit('data', Array)
-#11 W:\\domains\\jse.kk\\vendor\\evenement\\evenement\\src\\Evenement\\EventEmitterTrait.php(123): React\\Stream\\Util::React\\Stream\\{closure}('\\x81~\\x14S{\"table\":\"i...')
-#12 W:\\domains\\jse.kk\\vendor\eact\\stream\\src\\DuplexResourceStream.php(193): Evenement\\EventEmitter->emit('data', Array)
-#13 W:\\domains\\jse.kk\\vendor\eact\\event-loop\\src\\StreamSelectLoop.php(244): React\\Stream\\DuplexResourceStream->handleData(Resource id #569)
-#14 W:\\domains\\jse.kk\\vendor\eact\\event-loop\\src\\StreamSelectLoop.php(211): React\\EventLoop\\StreamSelectLoop->waitForStreamActivity(NULL)
-#15 W:\\domains\\jse.kk\\app\\Classes\\WebSocket\\BitmexWsListener.php(66): React\\EventLoop\\StreamSelectLoop->run()
-#16 W:\\domains\\jse.kk\\app\\Console\\Commands\\Pc.php(93): App\\Classes\\WebSocket\\BitmexWsListener::subscribe(Object(Ratchet\\Client\\Connector), Object(React\\EventLoop\\StreamSelectLoop), Object(App\\Console\\Commands\\Pc), Object(App\\Classes\\Trading\\CandleMaker), Object(App\\Classes\\Trading\\Chart), 'XBTUSD', 1, NULL)
-#17 [internal function]: App\\Console\\Commands\\Pc->handle()
-#18 W:\\domains\\jse.kk\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\BoundMethod.php(32): call_user_func_array(Array, Array)
-#19 W:\\domains\\jse.kk\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\BoundMethod.php(90): Illuminate\\Container\\BoundMethod::Illuminate\\Container\\{closure}()
-#20 W:\\domains\\jse.kk\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\BoundMethod.php(34): Illuminate\\Container\\BoundMethod::callBoundMethod(Object(Illuminate\\Foundation\\Application), Array, Object(Closure))
-#21 W:\\domains\\jse.kk\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\Container.php(580): Illuminate\\Container\\BoundMethod::call(Object(Illuminate\\Foundation\\Application), Array, Array, NULL)
-#22 W:\\domains\\jse.kk\\vendor\\laravel\\framework\\src\\Illuminate\\Console\\Command.php(183): Illuminate\\Container\\Container->call(Array)
-#23 W:\\domains\\jse.kk\\vendor\\symfony\\console\\Command\\Command.php(255): Illuminate\\Console\\Command->execute(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Illuminate\\Console\\OutputStyle))
-#24 W:\\domains\\jse.kk\\vendor\\laravel\\framework\\src\\Illuminate\\Console\\Command.php(170): Symfony\\Component\\Console\\Command\\Command->run(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Illuminate\\Console\\OutputStyle))
-#25 W:\\domains\\jse.kk\\vendor\\symfony\\console\\Application.php(908): Illuminate\\Console\\Command->run(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
-#26 W:\\domains\\jse.kk\\vendor\\symfony\\console\\Application.php(269): Symfony\\Component\\Console\\Application->doRunCommand(Object(App\\Console\\Commands\\Pc), Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
-#27 W:\\domains\\jse.kk\\vendor\\symfony\\console\\Application.php(145): Symfony\\Component\\Console\\Application->doRun(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
-#28 W:\\domains\\jse.kk\\vendor\\laravel\\framework\\src\\Illuminate\\Console\\Application.php(90): Symfony\\Component\\Console\\Application->run(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
-#29 W:\\domains\\jse.kk\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Console\\Kernel.php(122): Illuminate\\Console\\Application->run(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
-#30 W:\\domains\\jse.kk\\artisan(37): Illuminate\\Foundation\\Console\\Kernel->handle(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
-#31 {main}
-"} 
-[2019-05-17 20:34:26] local.ERROR: Undefined index: trade_direction {"exception":"[object] (ErrorException(code: 0): Undefined index: trade_direction at W:\\domains\\jse.kk\\vendor\\laravel\\framework\\src\\Illuminate\\Support\\Collection.php:1984)
-[stacktrace]
-#0 W:\\domains\\jse.kk\\vendor\\laravel\\framework\\src\\Illuminate\\Support\\Collection.php(1984): Illuminate\\Foundation\\Bootstrap\\HandleExceptions->handleError(8, 'Undefined index...', 'W:\\\\domains\\\\jse....', 1984, Array)
-#1 W:\\domains\\jse.kk\\app\\Classes\\Trading\\Chart.php(229): Illuminate\\Support\\Collection->offsetGet('trade_direction')
-#2 W:\\domains\\jse.kk\\app\\Classes\\Trading\\CandleMaker.php(135): App\\Classes\\Trading\\Chart->index('2019-05-17 20:3...', 1558125260000)
-#3 W:\\domains\\jse.kk\\app\\Classes\\WebSocket\\ConsoleWebSocket.php(32): App\\Classes\\Trading\\CandleMaker->index(7076, '2019-05-17T20:3...', 1, Object(App\\Classes\\Trading\\Chart), Object(App\\Console\\Commands\\Pc), 1, NULL)
-#4 W:\\domains\\jse.kk\\app\\Classes\\WebSocket\\BitmexWsListener.php(38): App\\Classes\\WebSocket\\ConsoleWebSocket::messageParse(Array, Object(App\\Console\\Commands\\Pc), Object(App\\Classes\\Trading\\CandleMaker), Object(App\\Classes\\Trading\\Chart), 1, NULL)
-#5 W:\\domains\\jse.kk\\vendor\\evenement\\evenement\\src\\Evenement\\EventEmitterTrait.php(123): App\\Classes\\WebSocket\\BitmexWsListener::App\\Classes\\WebSocket\\{closure}(Object(Ratchet\\RFC6455\\Messaging\\Message), Object(Ratchet\\Client\\WebSocket))
-#6 W:\\domains\\jse.kk\\vendor\atchet\\pawl\\src\\WebSocket.php(72): Ratchet\\Client\\WebSocket->emit('message', Array)
-#7 W:\\domains\\jse.kk\\vendor\atchet\fc6455\\src\\Messaging\\MessageBuffer.php(108): Ratchet\\Client\\WebSocket->Ratchet\\Client\\{closure}(Object(Ratchet\\RFC6455\\Messaging\\Message))
-#8 W:\\domains\\jse.kk\\vendor\atchet\fc6455\\src\\Messaging\\MessageBuffer.php(60): Ratchet\\RFC6455\\Messaging\\MessageBuffer->processData('\\x81~\\x14U{\"table\":\"i...')
-#9 W:\\domains\\jse.kk\\vendor\\evenement\\evenement\\src\\Evenement\\EventEmitterTrait.php(123): Ratchet\\RFC6455\\Messaging\\MessageBuffer->onData('\\x81~\\x14U{\"table\":\"i...')
-#10 W:\\domains\\jse.kk\\vendor\eact\\stream\\src\\Util.php(71): Evenement\\EventEmitter->emit('data', Array)
-#11 W:\\domains\\jse.kk\\vendor\\evenement\\evenement\\src\\Evenement\\EventEmitterTrait.php(123): React\\Stream\\Util::React\\Stream\\{closure}('\\x81~\\x14U{\"table\":\"i...')
-#12 W:\\domains\\jse.kk\\vendor\eact\\stream\\src\\DuplexResourceStream.php(193): Evenement\\EventEmitter->emit('data', Array)
-#13 W:\\domains\\jse.kk\\vendor\eact\\event-loop\\src\\StreamSelectLoop.php(244): React\\Stream\\DuplexResourceStream->handleData(Resource id #569)
-#14 W:\\domains\\jse.kk\\vendor\eact\\event-loop\\src\\StreamSelectLoop.php(211): React\\EventLoop\\StreamSelectLoop->waitForStreamActivity(NULL)
-#15 W:\\domains\\jse.kk\\app\\Classes\\WebSocket\\BitmexWsListener.php(66): React\\EventLoop\\StreamSelectLoop->run()
-#16 W:\\domains\\jse.kk\\app\\Console\\Commands\\Pc.php(93): App\\Classes\\WebSocket\\BitmexWsListener::subscribe(Object(Ratchet\\Client\\Connector), Object(React\\EventLoop\\StreamSelectLoop), Object(App\\Console\\Commands\\Pc), Object(App\\Classes\\Trading\\CandleMaker), Object(App\\Classes\\Trading\\Chart), 'XBTUSD', 1, NULL)
-#17 [internal function]: App\\Console\\Commands\\Pc->handle()
-#18 W:\\domains\\jse.kk\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\BoundMethod.php(32): call_user_func_array(Array, Array)
-#19 W:\\domains\\jse.kk\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\BoundMethod.php(90): Illuminate\\Container\\BoundMethod::Illuminate\\Container\\{closure}()
-#20 W:\\domains\\jse.kk\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\BoundMethod.php(34): Illuminate\\Container\\BoundMethod::callBoundMethod(Object(Illuminate\\Foundation\\Application), Array, Object(Closure))
-#21 W:\\domains\\jse.kk\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\Container.php(580): Illuminate\\Container\\BoundMethod::call(Object(Illuminate\\Foundation\\Application), Array, Array, NULL)
-#22 W:\\domains\\jse.kk\\vendor\\laravel\\framework\\src\\Illuminate\\Console\\Command.php(183): Illuminate\\Container\\Container->call(Array)
-#23 W:\\domains\\jse.kk\\vendor\\symfony\\console\\Command\\Command.php(255): Illuminate\\Console\\Command->execute(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Illuminate\\Console\\OutputStyle))
-#24 W:\\domains\\jse.kk\\vendor\\laravel\\framework\\src\\Illuminate\\Console\\Command.php(170): Symfony\\Component\\Console\\Command\\Command->run(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Illuminate\\Console\\OutputStyle))
-#25 W:\\domains\\jse.kk\\vendor\\symfony\\console\\Application.php(908): Illuminate\\Console\\Command->run(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
-#26 W:\\domains\\jse.kk\\vendor\\symfony\\console\\Application.php(269): Symfony\\Component\\Console\\Application->doRunCommand(Object(App\\Console\\Commands\\Pc), Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
-#27 W:\\domains\\jse.kk\\vendor\\symfony\\console\\Application.php(145): Symfony\\Component\\Console\\Application->doRun(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
-#28 W:\\domains\\jse.kk\\vendor\\laravel\\framework\\src\\Illuminate\\Console\\Application.php(90): Symfony\\Component\\Console\\Application->run(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
-#29 W:\\domains\\jse.kk\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Console\\Kernel.php(122): Illuminate\\Console\\Application->run(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
-#30 W:\\domains\\jse.kk\\artisan(37): Illuminate\\Foundation\\Console\\Kernel->handle(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
-#31 {main}
-"} 
-[2019-05-17 20:34:55] local.ERROR: Cannot use object of type stdClass as array {"exception":"[object] (Symfony\\Component\\Debug\\Exception\\FatalThrowableError(code: 0): Cannot use object of type stdClass as array at W:\\domains\\jse.kk\\app\\Classes\\Trading\\Chart.php:229)
-[stacktrace]
-#0 W:\\domains\\jse.kk\\app\\Classes\\Trading\\CandleMaker.php(135): App\\Classes\\Trading\\Chart->index('2019-05-17 20:3...', 1558125292000)
-#1 W:\\domains\\jse.kk\\app\\Classes\\WebSocket\\ConsoleWebSocket.php(32): App\\Classes\\Trading\\CandleMaker->index(7078.5, '2019-05-17T20:3...', 1, Object(App\\Classes\\Trading\\Chart), Object(App\\Console\\Commands\\Pc), 1, NULL)
-#2 W:\\domains\\jse.kk\\app\\Classes\\WebSocket\\BitmexWsListener.php(38): App\\Classes\\WebSocket\\ConsoleWebSocket::messageParse(Array, Object(App\\Console\\Commands\\Pc), Object(App\\Classes\\Trading\\CandleMaker), Object(App\\Classes\\Trading\\Chart), 1, NULL)
-#3 W:\\domains\\jse.kk\\vendor\\evenement\\evenement\\src\\Evenement\\EventEmitterTrait.php(123): App\\Classes\\WebSocket\\BitmexWsListener::App\\Classes\\WebSocket\\{closure}(Object(Ratchet\\RFC6455\\Messaging\\Message), Object(Ratchet\\Client\\WebSocket))
-#4 W:\\domains\\jse.kk\\vendor\atchet\\pawl\\src\\WebSocket.php(72): Ratchet\\Client\\WebSocket->emit('message', Array)
-#5 W:\\domains\\jse.kk\\vendor\atchet\fc6455\\src\\Messaging\\MessageBuffer.php(108): Ratchet\\Client\\WebSocket->Ratchet\\Client\\{closure}(Object(Ratchet\\RFC6455\\Messaging\\Message))
-#6 W:\\domains\\jse.kk\\vendor\atchet\fc6455\\src\\Messaging\\MessageBuffer.php(60): Ratchet\\RFC6455\\Messaging\\MessageBuffer->processData('\\x81~\\x14T{\"table\":\"i...')
-#7 W:\\domains\\jse.kk\\vendor\\evenement\\evenement\\src\\Evenement\\EventEmitterTrait.php(123): Ratchet\\RFC6455\\Messaging\\MessageBuffer->onData('\\x81~\\x14T{\"table\":\"i...')
-#8 W:\\domains\\jse.kk\\vendor\eact\\stream\\src\\Util.php(71): Evenement\\EventEmitter->emit('data', Array)
-#9 W:\\domains\\jse.kk\\vendor\\evenement\\evenement\\src\\Evenement\\EventEmitterTrait.php(123): React\\Stream\\Util::React\\Stream\\{closure}('\\x81~\\x14T{\"table\":\"i...')
-#10 W:\\domains\\jse.kk\\vendor\eact\\stream\\src\\DuplexResourceStream.php(193): Evenement\\EventEmitter->emit('data', Array)
-#11 W:\\domains\\jse.kk\\vendor\eact\\event-loop\\src\\StreamSelectLoop.php(244): React\\Stream\\DuplexResourceStream->handleData(Resource id #569)
-#12 W:\\domains\\jse.kk\\vendor\eact\\event-loop\\src\\StreamSelectLoop.php(211): React\\EventLoop\\StreamSelectLoop->waitForStreamActivity(NULL)
-#13 W:\\domains\\jse.kk\\app\\Classes\\WebSocket\\BitmexWsListener.php(66): React\\EventLoop\\StreamSelectLoop->run()
-#14 W:\\domains\\jse.kk\\app\\Console\\Commands\\Pc.php(93): App\\Classes\\WebSocket\\BitmexWsListener::subscribe(Object(Ratchet\\Client\\Connector), Object(React\\EventLoop\\StreamSelectLoop), Object(App\\Console\\Commands\\Pc), Object(App\\Classes\\Trading\\CandleMaker), Object(App\\Classes\\Trading\\Chart), 'XBTUSD', 1, NULL)
-#15 [internal function]: App\\Console\\Commands\\Pc->handle()
-#16 W:\\domains\\jse.kk\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\BoundMethod.php(32): call_user_func_array(Array, Array)
-#17 W:\\domains\\jse.kk\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\BoundMethod.php(90): Illuminate\\Container\\BoundMethod::Illuminate\\Container\\{closure}()
-#18 W:\\domains\\jse.kk\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\BoundMethod.php(34): Illuminate\\Container\\BoundMethod::callBoundMethod(Object(Illuminate\\Foundation\\Application), Array, Object(Closure))
-#19 W:\\domains\\jse.kk\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\Container.php(580): Illuminate\\Container\\BoundMethod::call(Object(Illuminate\\Foundation\\Application), Array, Array, NULL)
-#20 W:\\domains\\jse.kk\\vendor\\laravel\\framework\\src\\Illuminate\\Console\\Command.php(183): Illuminate\\Container\\Container->call(Array)
-#21 W:\\domains\\jse.kk\\vendor\\symfony\\console\\Command\\Command.php(255): Illuminate\\Console\\Command->execute(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Illuminate\\Console\\OutputStyle))
-#22 W:\\domains\\jse.kk\\vendor\\laravel\\framework\\src\\Illuminate\\Console\\Command.php(170): Symfony\\Component\\Console\\Command\\Command->run(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Illuminate\\Console\\OutputStyle))
-#23 W:\\domains\\jse.kk\\vendor\\symfony\\console\\Application.php(908): Illuminate\\Console\\Command->run(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
-#24 W:\\domains\\jse.kk\\vendor\\symfony\\console\\Application.php(269): Symfony\\Component\\Console\\Application->doRunCommand(Object(App\\Console\\Commands\\Pc), Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
-#25 W:\\domains\\jse.kk\\vendor\\symfony\\console\\Application.php(145): Symfony\\Component\\Console\\Application->doRun(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
-#26 W:\\domains\\jse.kk\\vendor\\laravel\\framework\\src\\Illuminate\\Console\\Application.php(90): Symfony\\Component\\Console\\Application->run(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
-#27 W:\\domains\\jse.kk\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Console\\Kernel.php(122): Illuminate\\Console\\Application->run(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
-#28 W:\\domains\\jse.kk\\artisan(37): Illuminate\\Foundation\\Console\\Kernel->handle(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
-#29 {main}
-"} 
-[2019-05-17 20:36:20] local.ERROR: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'where `id` = ?' at line 1 (SQL: update `pc_bot1` set  where `id` = 26) {"exception":"[object] (Illuminate\\Database\\QueryException(code: 42000): SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'where `id` = ?' at line 1 (SQL: update `pc_bot1` set  where `id` = 26) at W:\\domains\\jse.kk\\vendor\\laravel\\framework\\src\\Illuminate\\Database\\Connection.php:664, PDOException(code: 42000): SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'where `id` = ?' at line 1 at W:\\domains\\jse.kk\\vendor\\laravel\\framework\\src\\Illuminate\\Database\\Connection.php:479)
-[stacktrace]
-#0 W:\\domains\\jse.kk\\vendor\\laravel\\framework\\src\\Illuminate\\Database\\Connection.php(624): Illuminate\\Database\\Connection->runQueryCallback('update `pc_bot1...', Array, Object(Closure))
-#1 W:\\domains\\jse.kk\\vendor\\laravel\\framework\\src\\Illuminate\\Database\\Connection.php(490): Illuminate\\Database\\Connection->run('update `pc_bot1...', Array, Object(Closure))
-#2 W:\\domains\\jse.kk\\vendor\\laravel\\framework\\src\\Illuminate\\Database\\Connection.php(423): Illuminate\\Database\\Connection->affectingStatement('update `pc_bot1...', Array)
-#3 W:\\domains\\jse.kk\\vendor\\laravel\\framework\\src\\Illuminate\\Database\\Query\\Builder.php(2684): Illuminate\\Database\\Connection->update('update `pc_bot1...', Array)
-#4 W:\\domains\\jse.kk\\app\\Classes\\Trading\\Chart.php(244): Illuminate\\Database\\Query\\Builder->update(Array)
-#5 W:\\domains\\jse.kk\\app\\Classes\\Trading\\CandleMaker.php(135): App\\Classes\\Trading\\Chart->index('2019-05-17 20:3...', 1558125361000)
-#6 W:\\domains\\jse.kk\\app\\Classes\\WebSocket\\ConsoleWebSocket.php(32): App\\Classes\\Trading\\CandleMaker->index(7074.5, '2019-05-17T20:3...', 1, Object(App\\Classes\\Trading\\Chart), Object(App\\Console\\Commands\\Pc), 1, NULL)
-#7 W:\\domains\\jse.kk\\app\\Classes\\WebSocket\\BitmexWsListener.php(38): App\\Classes\\WebSocket\\ConsoleWebSocket::messageParse(Array, Object(App\\Console\\Commands\\Pc), Object(App\\Classes\\Trading\\CandleMaker), Object(App\\Classes\\Trading\\Chart), 1, NULL)
-#8 W:\\domains\\jse.kk\\vendor\\evenement\\evenement\\src\\Evenement\\EventEmitterTrait.php(123): App\\Classes\\WebSocket\\BitmexWsListener::App\\Classes\\WebSocket\\{closure}(Object(Ratchet\\RFC6455\\Messaging\\Message), Object(Ratchet\\Client\\WebSocket))
-#9 W:\\domains\\jse.kk\\vendor\atchet\\pawl\\src\\WebSocket.php(72): Ratchet\\Client\\WebSocket->emit('message', Array)
-#10 W:\\domains\\jse.kk\\vendor\atchet\fc6455\\src\\Messaging\\MessageBuffer.php(108): Ratchet\\Client\\WebSocket->Ratchet\\Client\\{closure}(Object(Ratchet\\RFC6455\\Messaging\\Message))
-#11 W:\\domains\\jse.kk\\vendor\atchet\fc6455\\src\\Messaging\\MessageBuffer.php(60): Ratchet\\RFC6455\\Messaging\\MessageBuffer->processData('\\x81~\\x00\\xB7{\"table\":\"i...')
-#12 W:\\domains\\jse.kk\\vendor\\evenement\\evenement\\src\\Evenement\\EventEmitterTrait.php(123): Ratchet\\RFC6455\\Messaging\\MessageBuffer->onData('\\x81~\\x00\\xB7{\"table\":\"i...')
-#13 W:\\domains\\jse.kk\\vendor\eact\\stream\\src\\Util.php(71): Evenement\\EventEmitter->emit('data', Array)
-#14 W:\\domains\\jse.kk\\vendor\\evenement\\evenement\\src\\Evenement\\EventEmitterTrait.php(123): React\\Stream\\Util::React\\Stream\\{closure}('\\x81~\\x00\\xB7{\"table\":\"i...')
-#15 W:\\domains\\jse.kk\\vendor\eact\\stream\\src\\DuplexResourceStream.php(193): Evenement\\EventEmitter->emit('data', Array)
-#16 W:\\domains\\jse.kk\\vendor\eact\\event-loop\\src\\StreamSelectLoop.php(244): React\\Stream\\DuplexResourceStream->handleData(Resource id #569)
-#17 W:\\domains\\jse.kk\\vendor\eact\\event-loop\\src\\StreamSelectLoop.php(211): React\\EventLoop\\StreamSelectLoop->waitForStreamActivity(NULL)
-#18 W:\\domains\\jse.kk\\app\\Classes\\WebSocket\\BitmexWsListener.php(66): React\\EventLoop\\StreamSelectLoop->run()
-#19 W:\\domains\\jse.kk\\app\\Console\\Commands\\Pc.php(93): App\\Classes\\WebSocket\\BitmexWsListener::subscribe(Object(Ratchet\\Client\\Connector), Object(React\\EventLoop\\StreamSelectLoop), Object(App\\Console\\Commands\\Pc), Object(App\\Classes\\Trading\\CandleMaker), Object(App\\Classes\\Trading\\Chart), 'XBTUSD', 1, NULL)
-#20 [internal function]: App\\Console\\Commands\\Pc->handle()
-#21 W:\\domains\\jse.kk\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\BoundMethod.php(32): call_user_func_array(Array, Array)
-#22 W:\\domains\\jse.kk\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\BoundMethod.php(90): Illuminate\\Container\\BoundMethod::Illuminate\\Container\\{closure}()
-#23 W:\\domains\\jse.kk\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\BoundMethod.php(34): Illuminate\\Container\\BoundMethod::callBoundMethod(Object(Illuminate\\Foundation\\Application), Array, Object(Closure))
-#24 W:\\domains\\jse.kk\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\Container.php(580): Illuminate\\Container\\BoundMethod::call(Object(Illuminate\\Foundation\\Application), Array, Array, NULL)
-#25 W:\\domains\\jse.kk\\vendor\\laravel\\framework\\src\\Illuminate\\Console\\Command.php(183): Illuminate\\Container\\Container->call(Array)
-#26 W:\\domains\\jse.kk\\vendor\\symfony\\console\\Command\\Command.php(255): Illuminate\\Console\\Command->execute(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Illuminate\\Console\\OutputStyle))
-#27 W:\\domains\\jse.kk\\vendor\\laravel\\framework\\src\\Illuminate\\Console\\Command.php(170): Symfony\\Component\\Console\\Command\\Command->run(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Illuminate\\Console\\OutputStyle))
-#28 W:\\domains\\jse.kk\\vendor\\symfony\\console\\Application.php(908): Illuminate\\Console\\Command->run(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
-#29 W:\\domains\\jse.kk\\vendor\\symfony\\console\\Application.php(269): Symfony\\Component\\Console\\Application->doRunCommand(Object(App\\Console\\Commands\\Pc), Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
-#30 W:\\domains\\jse.kk\\vendor\\symfony\\console\\Application.php(145): Symfony\\Component\\Console\\Application->doRun(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
-#31 W:\\domains\\jse.kk\\vendor\\laravel\\framework\\src\\Illuminate\\Console\\Application.php(90): Symfony\\Component\\Console\\Application->run(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
-#32 W:\\domains\\jse.kk\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Console\\Kernel.php(122): Illuminate\\Console\\Application->run(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
-#33 W:\\domains\\jse.kk\\artisan(37): Illuminate\\Foundation\\Console\\Kernel->handle(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
-#34 {main}
-"} 
-[2019-05-17 20:58:15] local.ERROR: Undefined offset: -1 {"exception":"[object] (ErrorException(code: 0): Undefined offset: -1 at W:\\domains\\jse.kk\\vendor\\laravel\\framework\\src\\Illuminate\\Support\\Collection.php:1984)
-[stacktrace]
-#0 W:\\domains\\jse.kk\\vendor\\laravel\\framework\\src\\Illuminate\\Support\\Collection.php(1984): Illuminate\\Foundation\\Bootstrap\\HandleExceptions->handleError(8, 'Undefined offse...', 'W:\\\\domains\\\\jse....', 1984, Array)
-#1 W:\\domains\\jse.kk\\app\\Classes\\Trading\\Chart.php(235): Illuminate\\Support\\Collection->offsetGet(-1)
-#2 W:\\domains\\jse.kk\\app\\Classes\\Trading\\CandleMaker.php(135): App\\Classes\\Trading\\Chart->index('2019-05-17 20:5...', 1558126694000)
-#3 W:\\domains\\jse.kk\\app\\Classes\\WebSocket\\ConsoleWebSocket.php(32): App\\Classes\\Trading\\CandleMaker->index(7114, '2019-05-17T20:5...', 1, Object(App\\Classes\\Trading\\Chart), Object(App\\Console\\Commands\\Pc), 1, NULL)
-#4 W:\\domains\\jse.kk\\app\\Classes\\WebSocket\\BitmexWsListener.php(38): App\\Classes\\WebSocket\\ConsoleWebSocket::messageParse(Array, Object(App\\Console\\Commands\\Pc), Object(App\\Classes\\Trading\\CandleMaker), Object(App\\Classes\\Trading\\Chart), 1, NULL)
-#5 W:\\domains\\jse.kk\\vendor\\evenement\\evenement\\src\\Evenement\\EventEmitterTrait.php(123): App\\Classes\\WebSocket\\BitmexWsListener::App\\Classes\\WebSocket\\{closure}(Object(Ratchet\\RFC6455\\Messaging\\Message), Object(Ratchet\\Client\\WebSocket))
-#6 W:\\domains\\jse.kk\\vendor\atchet\\pawl\\src\\WebSocket.php(72): Ratchet\\Client\\WebSocket->emit('message', Array)
-#7 W:\\domains\\jse.kk\\vendor\atchet\fc6455\\src\\Messaging\\MessageBuffer.php(108): Ratchet\\Client\\WebSocket->Ratchet\\Client\\{closure}(Object(Ratchet\\RFC6455\\Messaging\\Message))
-#8 W:\\domains\\jse.kk\\vendor\atchet\fc6455\\src\\Messaging\\MessageBuffer.php(60): Ratchet\\RFC6455\\Messaging\\MessageBuffer->processData('\\x81~\\x14V{\"table\":\"i...')
-#9 W:\\domains\\jse.kk\\vendor\\evenement\\evenement\\src\\Evenement\\EventEmitterTrait.php(123): Ratchet\\RFC6455\\Messaging\\MessageBuffer->onData('\\x81~\\x14V{\"table\":\"i...')
-#10 W:\\domains\\jse.kk\\vendor\eact\\stream\\src\\Util.php(71): Evenement\\EventEmitter->emit('data', Array)
-#11 W:\\domains\\jse.kk\\vendor\\evenement\\evenement\\src\\Evenement\\EventEmitterTrait.php(123): React\\Stream\\Util::React\\Stream\\{closure}('\\x81~\\x14V{\"table\":\"i...')
-#12 W:\\domains\\jse.kk\\vendor\eact\\stream\\src\\DuplexResourceStream.php(193): Evenement\\EventEmitter->emit('data', Array)
-#13 W:\\domains\\jse.kk\\vendor\eact\\event-loop\\src\\StreamSelectLoop.php(244): React\\Stream\\DuplexResourceStream->handleData(Resource id #569)
-#14 W:\\domains\\jse.kk\\vendor\eact\\event-loop\\src\\StreamSelectLoop.php(211): React\\EventLoop\\StreamSelectLoop->waitForStreamActivity(NULL)
-#15 W:\\domains\\jse.kk\\app\\Classes\\WebSocket\\BitmexWsListener.php(66): React\\EventLoop\\StreamSelectLoop->run()
-#16 W:\\domains\\jse.kk\\app\\Console\\Commands\\Pc.php(93): App\\Classes\\WebSocket\\BitmexWsListener::subscribe(Object(Ratchet\\Client\\Connector), Object(React\\EventLoop\\StreamSelectLoop), Object(App\\Console\\Commands\\Pc), Object(App\\Classes\\Trading\\CandleMaker), Object(App\\Classes\\Trading\\Chart), 'XBTUSD', 1, NULL)
-#17 [internal function]: App\\Console\\Commands\\Pc->handle()
-#18 W:\\domains\\jse.kk\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\BoundMethod.php(32): call_user_func_array(Array, Array)
-#19 W:\\domains\\jse.kk\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\BoundMethod.php(90): Illuminate\\Container\\BoundMethod::Illuminate\\Container\\{closure}()
-#20 W:\\domains\\jse.kk\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\BoundMethod.php(34): Illuminate\\Container\\BoundMethod::callBoundMethod(Object(Illuminate\\Foundation\\Application), Array, Object(Closure))
-#21 W:\\domains\\jse.kk\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\Container.php(580): Illuminate\\Container\\BoundMethod::call(Object(Illuminate\\Foundation\\Application), Array, Array, NULL)
-#22 W:\\domains\\jse.kk\\vendor\\laravel\\framework\\src\\Illuminate\\Console\\Command.php(183): Illuminate\\Container\\Container->call(Array)
-#23 W:\\domains\\jse.kk\\vendor\\symfony\\console\\Command\\Command.php(255): Illuminate\\Console\\Command->execute(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Illuminate\\Console\\OutputStyle))
-#24 W:\\domains\\jse.kk\\vendor\\laravel\\framework\\src\\Illuminate\\Console\\Command.php(170): Symfony\\Component\\Console\\Command\\Command->run(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Illuminate\\Console\\OutputStyle))
-#25 W:\\domains\\jse.kk\\vendor\\symfony\\console\\Application.php(908): Illuminate\\Console\\Command->run(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
-#26 W:\\domains\\jse.kk\\vendor\\symfony\\console\\Application.php(269): Symfony\\Component\\Console\\Application->doRunCommand(Object(App\\Console\\Commands\\Pc), Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
-#27 W:\\domains\\jse.kk\\vendor\\symfony\\console\\Application.php(145): Symfony\\Component\\Console\\Application->doRun(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
-#28 W:\\domains\\jse.kk\\vendor\\laravel\\framework\\src\\Illuminate\\Console\\Application.php(90): Symfony\\Component\\Console\\Application->run(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
-#29 W:\\domains\\jse.kk\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Console\\Kernel.php(122): Illuminate\\Console\\Application->run(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
-#30 W:\\domains\\jse.kk\\artisan(37): Illuminate\\Foundation\\Console\\Kernel->handle(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
-#31 {main}
-"} 
-[2019-05-17 22:45:00] local.ERROR: Class 'Commission' not found {"exception":"[object] (Symfony\\Component\\Debug\\Exception\\FatalThrowableError(code: 0): Class 'Commission' not found at W:\\domains\\jse.kk\\app\\Classes\\Trading\\Chart.php:162)
-[stacktrace]
-#0 W:\\domains\\jse.kk\\app\\Classes\\Trading\\CandleMaker.php(135): App\\Classes\\Trading\\Chart->index('2019-05-17 22:4...', 1558133050000)
-#1 W:\\domains\\jse.kk\\app\\Classes\\WebSocket\\ConsoleWebSocket.php(32): App\\Classes\\Trading\\CandleMaker->index(7248, '2019-05-17T22:4...', 1, Object(App\\Classes\\Trading\\Chart), Object(App\\Console\\Commands\\Pc), 1, NULL)
-#2 W:\\domains\\jse.kk\\app\\Classes\\WebSocket\\BitmexWsListener.php(38): App\\Classes\\WebSocket\\ConsoleWebSocket::messageParse(Array, Object(App\\Console\\Commands\\Pc), Object(App\\Classes\\Trading\\CandleMaker), Object(App\\Classes\\Trading\\Chart), 1, NULL)
-#3 W:\\domains\\jse.kk\\vendor\\evenement\\evenement\\src\\Evenement\\EventEmitterTrait.php(123): App\\Classes\\WebSocket\\BitmexWsListener::App\\Classes\\WebSocket\\{closure}(Object(Ratchet\\RFC6455\\Messaging\\Message), Object(Ratchet\\Client\\WebSocket))
-#4 W:\\domains\\jse.kk\\vendor\atchet\\pawl\\src\\WebSocket.php(72): Ratchet\\Client\\WebSocket->emit('message', Array)
-#5 W:\\domains\\jse.kk\\vendor\atchet\fc6455\\src\\Messaging\\MessageBuffer.php(108): Ratchet\\Client\\WebSocket->Ratchet\\Client\\{closure}(Object(Ratchet\\RFC6455\\Messaging\\Message))
-#6 W:\\domains\\jse.kk\\vendor\atchet\fc6455\\src\\Messaging\\MessageBuffer.php(60): Ratchet\\RFC6455\\Messaging\\MessageBuffer->processData('\\x81~\\x00\\x9C{\"table\":\"i...')
-#7 W:\\domains\\jse.kk\\vendor\\evenement\\evenement\\src\\Evenement\\EventEmitterTrait.php(123): Ratchet\\RFC6455\\Messaging\\MessageBuffer->onData('\\x81~\\x00\\x9C{\"table\":\"i...')
-#8 W:\\domains\\jse.kk\\vendor\eact\\stream\\src\\Util.php(71): Evenement\\EventEmitter->emit('data', Array)
-#9 W:\\domains\\jse.kk\\vendor\\evenement\\evenement\\src\\Evenement\\EventEmitterTrait.php(123): React\\Stream\\Util::React\\Stream\\{closure}('\\x81~\\x00\\x9C{\"table\":\"i...')
-#10 W:\\domains\\jse.kk\\vendor\eact\\stream\\src\\DuplexResourceStream.php(193): Evenement\\EventEmitter->emit('data', Array)
-#11 W:\\domains\\jse.kk\\vendor\eact\\event-loop\\src\\StreamSelectLoop.php(244): React\\Stream\\DuplexResourceStream->handleData(Resource id #569)
-#12 W:\\domains\\jse.kk\\vendor\eact\\event-loop\\src\\StreamSelectLoop.php(211): React\\EventLoop\\StreamSelectLoop->waitForStreamActivity(NULL)
-#13 W:\\domains\\jse.kk\\app\\Classes\\WebSocket\\BitmexWsListener.php(66): React\\EventLoop\\StreamSelectLoop->run()
-#14 W:\\domains\\jse.kk\\app\\Console\\Commands\\Pc.php(93): App\\Classes\\WebSocket\\BitmexWsListener::subscribe(Object(Ratchet\\Client\\Connector), Object(React\\EventLoop\\StreamSelectLoop), Object(App\\Console\\Commands\\Pc), Object(App\\Classes\\Trading\\CandleMaker), Object(App\\Classes\\Trading\\Chart), 'XBTUSD', 1, NULL)
-#15 [internal function]: App\\Console\\Commands\\Pc->handle()
-#16 W:\\domains\\jse.kk\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\BoundMethod.php(32): call_user_func_array(Array, Array)
-#17 W:\\domains\\jse.kk\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\BoundMethod.php(90): Illuminate\\Container\\BoundMethod::Illuminate\\Container\\{closure}()
-#18 W:\\domains\\jse.kk\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\BoundMethod.php(34): Illuminate\\Container\\BoundMethod::callBoundMethod(Object(Illuminate\\Foundation\\Application), Array, Object(Closure))
-#19 W:\\domains\\jse.kk\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\Container.php(580): Illuminate\\Container\\BoundMethod::call(Object(Illuminate\\Foundation\\Application), Array, Array, NULL)
-#20 W:\\domains\\jse.kk\\vendor\\laravel\\framework\\src\\Illuminate\\Console\\Command.php(183): Illuminate\\Container\\Container->call(Array)
-#21 W:\\domains\\jse.kk\\vendor\\symfony\\console\\Command\\Command.php(255): Illuminate\\Console\\Command->execute(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Illuminate\\Console\\OutputStyle))
-#22 W:\\domains\\jse.kk\\vendor\\laravel\\framework\\src\\Illuminate\\Console\\Command.php(170): Symfony\\Component\\Console\\Command\\Command->run(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Illuminate\\Console\\OutputStyle))
-#23 W:\\domains\\jse.kk\\vendor\\symfony\\console\\Application.php(908): Illuminate\\Console\\Command->run(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
-#24 W:\\domains\\jse.kk\\vendor\\symfony\\console\\Application.php(269): Symfony\\Component\\Console\\Application->doRunCommand(Object(App\\Console\\Commands\\Pc), Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
-#25 W:\\domains\\jse.kk\\vendor\\symfony\\console\\Application.php(145): Symfony\\Component\\Console\\Application->doRun(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
-#26 W:\\domains\\jse.kk\\vendor\\laravel\\framework\\src\\Illuminate\\Console\\Application.php(90): Symfony\\Component\\Console\\Application->run(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
-#27 W:\\domains\\jse.kk\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Console\\Kernel.php(122): Illuminate\\Console\\Application->run(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
-#28 W:\\domains\\jse.kk\\artisan(37): Illuminate\\Foundation\\Console\\Kernel->handle(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
-#29 {main}
-"} 
-[2019-05-17 22:51:00] local.ERROR: Class 'App\Classes\Accounting\DB' not found {"exception":"[object] (Symfony\\Component\\Debug\\Exception\\FatalThrowableError(code: 0): Class 'App\\Classes\\Accounting\\DB' not found at W:\\domains\\jse.kk\\app\\Classes\\Accounting\\Commission.php:19)
-[stacktrace]
-#0 W:\\domains\\jse.kk\\app\\Classes\\Trading\\Chart.php(204): App\\Classes\\Accounting\\Commission::accumulate(Array)
-#1 W:\\domains\\jse.kk\\app\\Classes\\Trading\\CandleMaker.php(135): App\\Classes\\Trading\\Chart->index('2019-05-17 22:5...', 1558133406000)
-#2 W:\\domains\\jse.kk\\app\\Classes\\WebSocket\\ConsoleWebSocket.php(32): App\\Classes\\Trading\\CandleMaker->index(7228, '2019-05-17T22:5...', 1, Object(App\\Classes\\Trading\\Chart), Object(App\\Console\\Commands\\Pc), 1, NULL)
-#3 W:\\domains\\jse.kk\\app\\Classes\\WebSocket\\BitmexWsListener.php(38): App\\Classes\\WebSocket\\ConsoleWebSocket::messageParse(Array, Object(App\\Console\\Commands\\Pc), Object(App\\Classes\\Trading\\CandleMaker), Object(App\\Classes\\Trading\\Chart), 1, NULL)
-#4 W:\\domains\\jse.kk\\vendor\\evenement\\evenement\\src\\Evenement\\EventEmitterTrait.php(123): App\\Classes\\WebSocket\\BitmexWsListener::App\\Classes\\WebSocket\\{closure}(Object(Ratchet\\RFC6455\\Messaging\\Message), Object(Ratchet\\Client\\WebSocket))
-#5 W:\\domains\\jse.kk\\vendor\atchet\\pawl\\src\\WebSocket.php(72): Ratchet\\Client\\WebSocket->emit('message', Array)
-#6 W:\\domains\\jse.kk\\vendor\atchet\fc6455\\src\\Messaging\\MessageBuffer.php(108): Ratchet\\Client\\WebSocket->Ratchet\\Client\\{closure}(Object(Ratchet\\RFC6455\\Messaging\\Message))
-#7 W:\\domains\\jse.kk\\vendor\atchet\fc6455\\src\\Messaging\\MessageBuffer.php(60): Ratchet\\RFC6455\\Messaging\\MessageBuffer->processData('\\x81~\\x00\\xB6{\"table\":\"i...')
-#8 W:\\domains\\jse.kk\\vendor\\evenement\\evenement\\src\\Evenement\\EventEmitterTrait.php(123): Ratchet\\RFC6455\\Messaging\\MessageBuffer->onData('\\x81~\\x00\\xB6{\"table\":\"i...')
-#9 W:\\domains\\jse.kk\\vendor\eact\\stream\\src\\Util.php(71): Evenement\\EventEmitter->emit('data', Array)
-#10 W:\\domains\\jse.kk\\vendor\\evenement\\evenement\\src\\Evenement\\EventEmitterTrait.php(123): React\\Stream\\Util::React\\Stream\\{closure}('\\x81~\\x00\\xB6{\"table\":\"i...')
-#11 W:\\domains\\jse.kk\\vendor\eact\\stream\\src\\DuplexResourceStream.php(193): Evenement\\EventEmitter->emit('data', Array)
-#12 W:\\domains\\jse.kk\\vendor\eact\\event-loop\\src\\StreamSelectLoop.php(244): React\\Stream\\DuplexResourceStream->handleData(Resource id #569)
-#13 W:\\domains\\jse.kk\\vendor\eact\\event-loop\\src\\StreamSelectLoop.php(211): React\\EventLoop\\StreamSelectLoop->waitForStreamActivity(NULL)
-#14 W:\\domains\\jse.kk\\app\\Classes\\WebSocket\\BitmexWsListener.php(66): React\\EventLoop\\StreamSelectLoop->run()
-#15 W:\\domains\\jse.kk\\app\\Console\\Commands\\Pc.php(93): App\\Classes\\WebSocket\\BitmexWsListener::subscribe(Object(Ratchet\\Client\\Connector), Object(React\\EventLoop\\StreamSelectLoop), Object(App\\Console\\Commands\\Pc), Object(App\\Classes\\Trading\\CandleMaker), Object(App\\Classes\\Trading\\Chart), 'XBTUSD', 1, NULL)
-#16 [internal function]: App\\Console\\Commands\\Pc->handle()
-#17 W:\\domains\\jse.kk\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\BoundMethod.php(32): call_user_func_array(Array, Array)
-#18 W:\\domains\\jse.kk\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\BoundMethod.php(90): Illuminate\\Container\\BoundMethod::Illuminate\\Container\\{closure}()
-#19 W:\\domains\\jse.kk\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\BoundMethod.php(34): Illuminate\\Container\\BoundMethod::callBoundMethod(Object(Illuminate\\Foundation\\Application), Array, Object(Closure))
-#20 W:\\domains\\jse.kk\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\Container.php(580): Illuminate\\Container\\BoundMethod::call(Object(Illuminate\\Foundation\\Application), Array, Array, NULL)
-#21 W:\\domains\\jse.kk\\vendor\\laravel\\framework\\src\\Illuminate\\Console\\Command.php(183): Illuminate\\Container\\Container->call(Array)
-#22 W:\\domains\\jse.kk\\vendor\\symfony\\console\\Command\\Command.php(255): Illuminate\\Console\\Command->execute(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Illuminate\\Console\\OutputStyle))
-#23 W:\\domains\\jse.kk\\vendor\\laravel\\framework\\src\\Illuminate\\Console\\Command.php(170): Symfony\\Component\\Console\\Command\\Command->run(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Illuminate\\Console\\OutputStyle))
-#24 W:\\domains\\jse.kk\\vendor\\symfony\\console\\Application.php(908): Illuminate\\Console\\Command->run(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
-#25 W:\\domains\\jse.kk\\vendor\\symfony\\console\\Application.php(269): Symfony\\Component\\Console\\Application->doRunCommand(Object(App\\Console\\Commands\\Pc), Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
-#26 W:\\domains\\jse.kk\\vendor\\symfony\\console\\Application.php(145): Symfony\\Component\\Console\\Application->doRun(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
-#27 W:\\domains\\jse.kk\\vendor\\laravel\\framework\\src\\Illuminate\\Console\\Application.php(90): Symfony\\Component\\Console\\Application->run(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
-#28 W:\\domains\\jse.kk\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Console\\Kernel.php(122): Illuminate\\Console\\Application->run(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
-#29 W:\\domains\\jse.kk\\artisan(37): Illuminate\\Foundation\\Console\\Kernel->handle(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
-#30 {main}
-"} 
-[2019-05-17 22:53:04] local.ERROR: Call to undefined method Illuminate\Database\Query\Builder::order_by() {"exception":"[object] (BadMethodCallException(code: 0): Call to undefined method Illuminate\\Database\\Query\\Builder::order_by() at W:\\domains\\jse.kk\\vendor\\laravel\\framework\\src\\Illuminate\\Support\\Traits\\ForwardsCalls.php:50)
-[stacktrace]
-#0 W:\\domains\\jse.kk\\vendor\\laravel\\framework\\src\\Illuminate\\Database\\Query\\Builder.php(2996): Illuminate\\Database\\Query\\Builder::throwBadMethodCallException('order_by')
-#1 W:\\domains\\jse.kk\\app\\Classes\\Accounting\\Commission.php(21): Illuminate\\Database\\Query\\Builder->__call('order_by', Array)
-#2 W:\\domains\\jse.kk\\app\\Classes\\Trading\\Chart.php(204): App\\Classes\\Accounting\\Commission::accumulate(Array)
-#3 W:\\domains\\jse.kk\\app\\Classes\\Trading\\CandleMaker.php(135): App\\Classes\\Trading\\Chart->index('2019-05-17 22:5...', 1558133540000)
-#4 W:\\domains\\jse.kk\\app\\Classes\\WebSocket\\ConsoleWebSocket.php(32): App\\Classes\\Trading\\CandleMaker->index(7226.5, '2019-05-17T22:5...', 1, Object(App\\Classes\\Trading\\Chart), Object(App\\Console\\Commands\\Pc), 1, NULL)
-#5 W:\\domains\\jse.kk\\app\\Classes\\WebSocket\\BitmexWsListener.php(38): App\\Classes\\WebSocket\\ConsoleWebSocket::messageParse(Array, Object(App\\Console\\Commands\\Pc), Object(App\\Classes\\Trading\\CandleMaker), Object(App\\Classes\\Trading\\Chart), 1, NULL)
-#6 W:\\domains\\jse.kk\\vendor\\evenement\\evenement\\src\\Evenement\\EventEmitterTrait.php(123): App\\Classes\\WebSocket\\BitmexWsListener::App\\Classes\\WebSocket\\{closure}(Object(Ratchet\\RFC6455\\Messaging\\Message), Object(Ratchet\\Client\\WebSocket))
-#7 W:\\domains\\jse.kk\\vendor\atchet\\pawl\\src\\WebSocket.php(72): Ratchet\\Client\\WebSocket->emit('message', Array)
-#8 W:\\domains\\jse.kk\\vendor\atchet\fc6455\\src\\Messaging\\MessageBuffer.php(108): Ratchet\\Client\\WebSocket->Ratchet\\Client\\{closure}(Object(Ratchet\\RFC6455\\Messaging\\Message))
-#9 W:\\domains\\jse.kk\\vendor\atchet\fc6455\\src\\Messaging\\MessageBuffer.php(60): Ratchet\\RFC6455\\Messaging\\MessageBuffer->processData('\\x81~\\x00\\x9E{\"table\":\"i...')
-#10 W:\\domains\\jse.kk\\vendor\\evenement\\evenement\\src\\Evenement\\EventEmitterTrait.php(123): Ratchet\\RFC6455\\Messaging\\MessageBuffer->onData('\\x81~\\x00\\x9E{\"table\":\"i...')
-#11 W:\\domains\\jse.kk\\vendor\eact\\stream\\src\\Util.php(71): Evenement\\EventEmitter->emit('data', Array)
-#12 W:\\domains\\jse.kk\\vendor\\evenement\\evenement\\src\\Evenement\\EventEmitterTrait.php(123): React\\Stream\\Util::React\\Stream\\{closure}('\\x81~\\x00\\x9E{\"table\":\"i...')
-#13 W:\\domains\\jse.kk\\vendor\eact\\stream\\src\\DuplexResourceStream.php(193): Evenement\\EventEmitter->emit('data', Array)
-#14 W:\\domains\\jse.kk\\vendor\eact\\event-loop\\src\\StreamSelectLoop.php(244): React\\Stream\\DuplexResourceStream->handleData(Resource id #569)
-#15 W:\\domains\\jse.kk\\vendor\eact\\event-loop\\src\\StreamSelectLoop.php(211): React\\EventLoop\\StreamSelectLoop->waitForStreamActivity(NULL)
-#16 W:\\domains\\jse.kk\\app\\Classes\\WebSocket\\BitmexWsListener.php(66): React\\EventLoop\\StreamSelectLoop->run()
-#17 W:\\domains\\jse.kk\\app\\Console\\Commands\\Pc.php(93): App\\Classes\\WebSocket\\BitmexWsListener::subscribe(Object(Ratchet\\Client\\Connector), Object(React\\EventLoop\\StreamSelectLoop), Object(App\\Console\\Commands\\Pc), Object(App\\Classes\\Trading\\CandleMaker), Object(App\\Classes\\Trading\\Chart), 'XBTUSD', 1, NULL)
-#18 [internal function]: App\\Console\\Commands\\Pc->handle()
-#19 W:\\domains\\jse.kk\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\BoundMethod.php(32): call_user_func_array(Array, Array)
-#20 W:\\domains\\jse.kk\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\BoundMethod.php(90): Illuminate\\Container\\BoundMethod::Illuminate\\Container\\{closure}()
-#21 W:\\domains\\jse.kk\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\BoundMethod.php(34): Illuminate\\Container\\BoundMethod::callBoundMethod(Object(Illuminate\\Foundation\\Application), Array, Object(Closure))
-#22 W:\\domains\\jse.kk\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\Container.php(580): Illuminate\\Container\\BoundMethod::call(Object(Illuminate\\Foundation\\Application), Array, Array, NULL)
-#23 W:\\domains\\jse.kk\\vendor\\laravel\\framework\\src\\Illuminate\\Console\\Command.php(183): Illuminate\\Container\\Container->call(Array)
-#24 W:\\domains\\jse.kk\\vendor\\symfony\\console\\Command\\Command.php(255): Illuminate\\Console\\Command->execute(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Illuminate\\Console\\OutputStyle))
-#25 W:\\domains\\jse.kk\\vendor\\laravel\\framework\\src\\Illuminate\\Console\\Command.php(170): Symfony\\Component\\Console\\Command\\Command->run(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Illuminate\\Console\\OutputStyle))
-#26 W:\\domains\\jse.kk\\vendor\\symfony\\console\\Application.php(908): Illuminate\\Console\\Command->run(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
-#27 W:\\domains\\jse.kk\\vendor\\symfony\\console\\Application.php(269): Symfony\\Component\\Console\\Application->doRunCommand(Object(App\\Console\\Commands\\Pc), Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
-#28 W:\\domains\\jse.kk\\vendor\\symfony\\console\\Application.php(145): Symfony\\Component\\Console\\Application->doRun(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
-#29 W:\\domains\\jse.kk\\vendor\\laravel\\framework\\src\\Illuminate\\Console\\Application.php(90): Symfony\\Component\\Console\\Application->run(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
-#30 W:\\domains\\jse.kk\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Console\\Kernel.php(122): Illuminate\\Console\\Application->run(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
-#31 W:\\domains\\jse.kk\\artisan(37): Illuminate\\Foundation\\Console\\Kernel->handle(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
-#32 {main}
-"} 
-[2019-05-17 22:55:03] local.ERROR: Call to undefined method stdClass::update() {"exception":"[object] (Symfony\\Component\\Debug\\Exception\\FatalThrowableError(code: 0): Call to undefined method stdClass::update() at W:\\domains\\jse.kk\\app\\Classes\\Accounting\\Commission.php:22)
-[stacktrace]
-#0 W:\\domains\\jse.kk\\app\\Classes\\Trading\\Chart.php(163): App\\Classes\\Accounting\\Commission::accumulate(Array)
-#1 W:\\domains\\jse.kk\\app\\Classes\\Trading\\CandleMaker.php(135): App\\Classes\\Trading\\Chart->index('2019-05-17 22:5...', 1558133659000)
-#2 W:\\domains\\jse.kk\\app\\Classes\\WebSocket\\ConsoleWebSocket.php(32): App\\Classes\\Trading\\CandleMaker->index(7235, '2019-05-17T22:5...', 1, Object(App\\Classes\\Trading\\Chart), Object(App\\Console\\Commands\\Pc), 1, NULL)
-#3 W:\\domains\\jse.kk\\app\\Classes\\WebSocket\\BitmexWsListener.php(38): App\\Classes\\WebSocket\\ConsoleWebSocket::messageParse(Array, Object(App\\Console\\Commands\\Pc), Object(App\\Classes\\Trading\\CandleMaker), Object(App\\Classes\\Trading\\Chart), 1, NULL)
-#4 W:\\domains\\jse.kk\\vendor\\evenement\\evenement\\src\\Evenement\\EventEmitterTrait.php(123): App\\Classes\\WebSocket\\BitmexWsListener::App\\Classes\\WebSocket\\{closure}(Object(Ratchet\\RFC6455\\Messaging\\Message), Object(Ratchet\\Client\\WebSocket))
-#5 W:\\domains\\jse.kk\\vendor\atchet\\pawl\\src\\WebSocket.php(72): Ratchet\\Client\\WebSocket->emit('message', Array)
-#6 W:\\domains\\jse.kk\\vendor\atchet\fc6455\\src\\Messaging\\MessageBuffer.php(108): Ratchet\\Client\\WebSocket->Ratchet\\Client\\{closure}(Object(Ratchet\\RFC6455\\Messaging\\Message))
-#7 W:\\domains\\jse.kk\\vendor\atchet\fc6455\\src\\Messaging\\MessageBuffer.php(60): Ratchet\\RFC6455\\Messaging\\MessageBuffer->processData('\\x81~\\x00\\xB6{\"table\":\"i...')
-#8 W:\\domains\\jse.kk\\vendor\\evenement\\evenement\\src\\Evenement\\EventEmitterTrait.php(123): Ratchet\\RFC6455\\Messaging\\MessageBuffer->onData('\\x81~\\x00\\xB6{\"table\":\"i...')
-#9 W:\\domains\\jse.kk\\vendor\eact\\stream\\src\\Util.php(71): Evenement\\EventEmitter->emit('data', Array)
-#10 W:\\domains\\jse.kk\\vendor\\evenement\\evenement\\src\\Evenement\\EventEmitterTrait.php(123): React\\Stream\\Util::React\\Stream\\{closure}('\\x81~\\x00\\xB6{\"table\":\"i...')
-#11 W:\\domains\\jse.kk\\vendor\eact\\stream\\src\\DuplexResourceStream.php(193): Evenement\\EventEmitter->emit('data', Array)
-#12 W:\\domains\\jse.kk\\vendor\eact\\event-loop\\src\\StreamSelectLoop.php(244): React\\Stream\\DuplexResourceStream->handleData(Resource id #569)
-#13 W:\\domains\\jse.kk\\vendor\eact\\event-loop\\src\\StreamSelectLoop.php(211): React\\EventLoop\\StreamSelectLoop->waitForStreamActivity(NULL)
-#14 W:\\domains\\jse.kk\\app\\Classes\\WebSocket\\BitmexWsListener.php(66): React\\EventLoop\\StreamSelectLoop->run()
-#15 W:\\domains\\jse.kk\\app\\Console\\Commands\\Pc.php(93): App\\Classes\\WebSocket\\BitmexWsListener::subscribe(Object(Ratchet\\Client\\Connector), Object(React\\EventLoop\\StreamSelectLoop), Object(App\\Console\\Commands\\Pc), Object(App\\Classes\\Trading\\CandleMaker), Object(App\\Classes\\Trading\\Chart), 'XBTUSD', 1, NULL)
-#16 [internal function]: App\\Console\\Commands\\Pc->handle()
-#17 W:\\domains\\jse.kk\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\BoundMethod.php(32): call_user_func_array(Array, Array)
-#18 W:\\domains\\jse.kk\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\BoundMethod.php(90): Illuminate\\Container\\BoundMethod::Illuminate\\Container\\{closure}()
-#19 W:\\domains\\jse.kk\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\BoundMethod.php(34): Illuminate\\Container\\BoundMethod::callBoundMethod(Object(Illuminate\\Foundation\\Application), Array, Object(Closure))
-#20 W:\\domains\\jse.kk\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\Container.php(580): Illuminate\\Container\\BoundMethod::call(Object(Illuminate\\Foundation\\Application), Array, Array, NULL)
-#21 W:\\domains\\jse.kk\\vendor\\laravel\\framework\\src\\Illuminate\\Console\\Command.php(183): Illuminate\\Container\\Container->call(Array)
-#22 W:\\domains\\jse.kk\\vendor\\symfony\\console\\Command\\Command.php(255): Illuminate\\Console\\Command->execute(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Illuminate\\Console\\OutputStyle))
-#23 W:\\domains\\jse.kk\\vendor\\laravel\\framework\\src\\Illuminate\\Console\\Command.php(170): Symfony\\Component\\Console\\Command\\Command->run(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Illuminate\\Console\\OutputStyle))
-#24 W:\\domains\\jse.kk\\vendor\\symfony\\console\\Application.php(908): Illuminate\\Console\\Command->run(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
-#25 W:\\domains\\jse.kk\\vendor\\symfony\\console\\Application.php(269): Symfony\\Component\\Console\\Application->doRunCommand(Object(App\\Console\\Commands\\Pc), Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
-#26 W:\\domains\\jse.kk\\vendor\\symfony\\console\\Application.php(145): Symfony\\Component\\Console\\Application->doRun(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
-#27 W:\\domains\\jse.kk\\vendor\\laravel\\framework\\src\\Illuminate\\Console\\Application.php(90): Symfony\\Component\\Console\\Application->run(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
-#28 W:\\domains\\jse.kk\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Console\\Kernel.php(122): Illuminate\\Console\\Application->run(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
-#29 W:\\domains\\jse.kk\\artisan(37): Illuminate\\Foundation\\Console\\Kernel->handle(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
-#30 {main}
-"} 
-[2019-05-17 22:58:03] local.ERROR: Call to undefined method stdClass::value() {"exception":"[object] (Symfony\\Component\\Debug\\Exception\\FatalThrowableError(code: 0): Call to undefined method stdClass::value() at W:\\domains\\jse.kk\\app\\Classes\\Accounting\\Commission.php:15)
-[stacktrace]
-#0 W:\\domains\\jse.kk\\app\\Classes\\Trading\\Chart.php(204): App\\Classes\\Accounting\\Commission::accumulate(Array)
-#1 W:\\domains\\jse.kk\\app\\Classes\\Trading\\CandleMaker.php(135): App\\Classes\\Trading\\Chart->index('2019-05-17 22:5...', 1558133820000)
-#2 W:\\domains\\jse.kk\\app\\Classes\\WebSocket\\ConsoleWebSocket.php(32): App\\Classes\\Trading\\CandleMaker->index(7222.5, '2019-05-17T22:5...', 1, Object(App\\Classes\\Trading\\Chart), Object(App\\Console\\Commands\\Pc), 1, NULL)
-#3 W:\\domains\\jse.kk\\app\\Classes\\WebSocket\\BitmexWsListener.php(38): App\\Classes\\WebSocket\\ConsoleWebSocket::messageParse(Array, Object(App\\Console\\Commands\\Pc), Object(App\\Classes\\Trading\\CandleMaker), Object(App\\Classes\\Trading\\Chart), 1, NULL)
-#4 W:\\domains\\jse.kk\\vendor\\evenement\\evenement\\src\\Evenement\\EventEmitterTrait.php(123): App\\Classes\\WebSocket\\BitmexWsListener::App\\Classes\\WebSocket\\{closure}(Object(Ratchet\\RFC6455\\Messaging\\Message), Object(Ratchet\\Client\\WebSocket))
-#5 W:\\domains\\jse.kk\\vendor\atchet\\pawl\\src\\WebSocket.php(72): Ratchet\\Client\\WebSocket->emit('message', Array)
-#6 W:\\domains\\jse.kk\\vendor\atchet\fc6455\\src\\Messaging\\MessageBuffer.php(108): Ratchet\\Client\\WebSocket->Ratchet\\Client\\{closure}(Object(Ratchet\\RFC6455\\Messaging\\Message))
-#7 W:\\domains\\jse.kk\\vendor\atchet\fc6455\\src\\Messaging\\MessageBuffer.php(60): Ratchet\\RFC6455\\Messaging\\MessageBuffer->processData('\\x81~\\x00\\xB8{\"table\":\"i...')
-#8 W:\\domains\\jse.kk\\vendor\\evenement\\evenement\\src\\Evenement\\EventEmitterTrait.php(123): Ratchet\\RFC6455\\Messaging\\MessageBuffer->onData('\\x81~\\x00\\xB8{\"table\":\"i...')
-#9 W:\\domains\\jse.kk\\vendor\eact\\stream\\src\\Util.php(71): Evenement\\EventEmitter->emit('data', Array)
-#10 W:\\domains\\jse.kk\\vendor\\evenement\\evenement\\src\\Evenement\\EventEmitterTrait.php(123): React\\Stream\\Util::React\\Stream\\{closure}('\\x81~\\x00\\xB8{\"table\":\"i...')
-#11 W:\\domains\\jse.kk\\vendor\eact\\stream\\src\\DuplexResourceStream.php(193): Evenement\\EventEmitter->emit('data', Array)
-#12 W:\\domains\\jse.kk\\vendor\eact\\event-loop\\src\\StreamSelectLoop.php(244): React\\Stream\\DuplexResourceStream->handleData(Resource id #569)
-#13 W:\\domains\\jse.kk\\vendor\eact\\event-loop\\src\\StreamSelectLoop.php(211): React\\EventLoop\\StreamSelectLoop->waitForStreamActivity(NULL)
-#14 W:\\domains\\jse.kk\\app\\Classes\\WebSocket\\BitmexWsListener.php(66): React\\EventLoop\\StreamSelectLoop->run()
-#15 W:\\domains\\jse.kk\\app\\Console\\Commands\\Pc.php(93): App\\Classes\\WebSocket\\BitmexWsListener::subscribe(Object(Ratchet\\Client\\Connector), Object(React\\EventLoop\\StreamSelectLoop), Object(App\\Console\\Commands\\Pc), Object(App\\Classes\\Trading\\CandleMaker), Object(App\\Classes\\Trading\\Chart), 'XBTUSD', 1, NULL)
-#16 [internal function]: App\\Console\\Commands\\Pc->handle()
-#17 W:\\domains\\jse.kk\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\BoundMethod.php(32): call_user_func_array(Array, Array)
-#18 W:\\domains\\jse.kk\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\BoundMethod.php(90): Illuminate\\Container\\BoundMethod::Illuminate\\Container\\{closure}()
-#19 W:\\domains\\jse.kk\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\BoundMethod.php(34): Illuminate\\Container\\BoundMethod::callBoundMethod(Object(Illuminate\\Foundation\\Application), Array, Object(Closure))
-#20 W:\\domains\\jse.kk\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\Container.php(580): Illuminate\\Container\\BoundMethod::call(Object(Illuminate\\Foundation\\Application), Array, Array, NULL)
-#21 W:\\domains\\jse.kk\\vendor\\laravel\\framework\\src\\Illuminate\\Console\\Command.php(183): Illuminate\\Container\\Container->call(Array)
-#22 W:\\domains\\jse.kk\\vendor\\symfony\\console\\Command\\Command.php(255): Illuminate\\Console\\Command->execute(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Illuminate\\Console\\OutputStyle))
-#23 W:\\domains\\jse.kk\\vendor\\laravel\\framework\\src\\Illuminate\\Console\\Command.php(170): Symfony\\Component\\Console\\Command\\Command->run(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Illuminate\\Console\\OutputStyle))
-#24 W:\\domains\\jse.kk\\vendor\\symfony\\console\\Application.php(908): Illuminate\\Console\\Command->run(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
-#25 W:\\domains\\jse.kk\\vendor\\symfony\\console\\Application.php(269): Symfony\\Component\\Console\\Application->doRunCommand(Object(App\\Console\\Commands\\Pc), Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
-#26 W:\\domains\\jse.kk\\vendor\\symfony\\console\\Application.php(145): Symfony\\Component\\Console\\Application->doRun(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
-#27 W:\\domains\\jse.kk\\vendor\\laravel\\framework\\src\\Illuminate\\Console\\Application.php(90): Symfony\\Component\\Console\\Application->run(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
-#28 W:\\domains\\jse.kk\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Console\\Kernel.php(122): Illuminate\\Console\\Application->run(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
-#29 W:\\domains\\jse.kk\\artisan(37): Illuminate\\Foundation\\Console\\Kernel->handle(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
-#30 {main}
-"} 
-[2019-05-17 23:03:08] local.ERROR: Cannot use object of type stdClass as array {"exception":"[object] (Symfony\\Component\\Debug\\Exception\\FatalThrowableError(code: 0): Cannot use object of type stdClass as array at W:\\domains\\jse.kk\\app\\Classes\\Accounting\\Commission.php:15)
-[stacktrace]
-#0 W:\\domains\\jse.kk\\app\\Classes\\Trading\\Chart.php(204): App\\Classes\\Accounting\\Commission::accumulate(Array)
-#1 W:\\domains\\jse.kk\\app\\Classes\\Trading\\CandleMaker.php(135): App\\Classes\\Trading\\Chart->index('2019-05-17 23:0...', 1558134123000)
-#2 W:\\domains\\jse.kk\\app\\Classes\\WebSocket\\ConsoleWebSocket.php(32): App\\Classes\\Trading\\CandleMaker->index(7226.5, '2019-05-17T23:0...', 1, Object(App\\Classes\\Trading\\Chart), Object(App\\Console\\Commands\\Pc), 1, NULL)
-#3 W:\\domains\\jse.kk\\app\\Classes\\WebSocket\\BitmexWsListener.php(38): App\\Classes\\WebSocket\\ConsoleWebSocket::messageParse(Array, Object(App\\Console\\Commands\\Pc), Object(App\\Classes\\Trading\\CandleMaker), Object(App\\Classes\\Trading\\Chart), 1, NULL)
-#4 W:\\domains\\jse.kk\\vendor\\evenement\\evenement\\src\\Evenement\\EventEmitterTrait.php(123): App\\Classes\\WebSocket\\BitmexWsListener::App\\Classes\\WebSocket\\{closure}(Object(Ratchet\\RFC6455\\Messaging\\Message), Object(Ratchet\\Client\\WebSocket))
-#5 W:\\domains\\jse.kk\\vendor\atchet\\pawl\\src\\WebSocket.php(72): Ratchet\\Client\\WebSocket->emit('message', Array)
-#6 W:\\domains\\jse.kk\\vendor\atchet\fc6455\\src\\Messaging\\MessageBuffer.php(108): Ratchet\\Client\\WebSocket->Ratchet\\Client\\{closure}(Object(Ratchet\\RFC6455\\Messaging\\Message))
-#7 W:\\domains\\jse.kk\\vendor\atchet\fc6455\\src\\Messaging\\MessageBuffer.php(60): Ratchet\\RFC6455\\Messaging\\MessageBuffer->processData('\\x81~\\x00\\x9F{\"table\":\"i...')
-#8 W:\\domains\\jse.kk\\vendor\\evenement\\evenement\\src\\Evenement\\EventEmitterTrait.php(123): Ratchet\\RFC6455\\Messaging\\MessageBuffer->onData('\\x81~\\x00\\x9F{\"table\":\"i...')
-#9 W:\\domains\\jse.kk\\vendor\eact\\stream\\src\\Util.php(71): Evenement\\EventEmitter->emit('data', Array)
-#10 W:\\domains\\jse.kk\\vendor\\evenement\\evenement\\src\\Evenement\\EventEmitterTrait.php(123): React\\Stream\\Util::React\\Stream\\{closure}('\\x81~\\x00\\x9F{\"table\":\"i...')
-#11 W:\\domains\\jse.kk\\vendor\eact\\stream\\src\\DuplexResourceStream.php(193): Evenement\\EventEmitter->emit('data', Array)
-#12 W:\\domains\\jse.kk\\vendor\eact\\event-loop\\src\\StreamSelectLoop.php(244): React\\Stream\\DuplexResourceStream->handleData(Resource id #569)
-#13 W:\\domains\\jse.kk\\vendor\eact\\event-loop\\src\\StreamSelectLoop.php(211): React\\EventLoop\\StreamSelectLoop->waitForStreamActivity(NULL)
-#14 W:\\domains\\jse.kk\\app\\Classes\\WebSocket\\BitmexWsListener.php(66): React\\EventLoop\\StreamSelectLoop->run()
-#15 W:\\domains\\jse.kk\\app\\Console\\Commands\\Pc.php(93): App\\Classes\\WebSocket\\BitmexWsListener::subscribe(Object(Ratchet\\Client\\Connector), Object(React\\EventLoop\\StreamSelectLoop), Object(App\\Console\\Commands\\Pc), Object(App\\Classes\\Trading\\CandleMaker), Object(App\\Classes\\Trading\\Chart), 'XBTUSD', 1, NULL)
-#16 [internal function]: App\\Console\\Commands\\Pc->handle()
-#17 W:\\domains\\jse.kk\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\BoundMethod.php(32): call_user_func_array(Array, Array)
-#18 W:\\domains\\jse.kk\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\BoundMethod.php(90): Illuminate\\Container\\BoundMethod::Illuminate\\Container\\{closure}()
-#19 W:\\domains\\jse.kk\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\BoundMethod.php(34): Illuminate\\Container\\BoundMethod::callBoundMethod(Object(Illuminate\\Foundation\\Application), Array, Object(Closure))
-#20 W:\\domains\\jse.kk\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\Container.php(580): Illuminate\\Container\\BoundMethod::call(Object(Illuminate\\Foundation\\Application), Array, Array, NULL)
-#21 W:\\domains\\jse.kk\\vendor\\laravel\\framework\\src\\Illuminate\\Console\\Command.php(183): Illuminate\\Container\\Container->call(Array)
-#22 W:\\domains\\jse.kk\\vendor\\symfony\\console\\Command\\Command.php(255): Illuminate\\Console\\Command->execute(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Illuminate\\Console\\OutputStyle))
-#23 W:\\domains\\jse.kk\\vendor\\laravel\\framework\\src\\Illuminate\\Console\\Command.php(170): Symfony\\Component\\Console\\Command\\Command->run(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Illuminate\\Console\\OutputStyle))
-#24 W:\\domains\\jse.kk\\vendor\\symfony\\console\\Application.php(908): Illuminate\\Console\\Command->run(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
-#25 W:\\domains\\jse.kk\\vendor\\symfony\\console\\Application.php(269): Symfony\\Component\\Console\\Application->doRunCommand(Object(App\\Console\\Commands\\Pc), Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
-#26 W:\\domains\\jse.kk\\vendor\\symfony\\console\\Application.php(145): Symfony\\Component\\Console\\Application->doRun(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
-#27 W:\\domains\\jse.kk\\vendor\\laravel\\framework\\src\\Illuminate\\Console\\Application.php(90): Symfony\\Component\\Console\\Application->run(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
-#28 W:\\domains\\jse.kk\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Console\\Kernel.php(122): Illuminate\\Console\\Application->run(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
-#29 W:\\domains\\jse.kk\\artisan(37): Illuminate\\Foundation\\Console\\Kernel->handle(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
-#30 {main}
-"} 
-[2019-05-17 23:05:02] local.ERROR: Cannot use object of type stdClass as array {"exception":"[object] (Symfony\\Component\\Debug\\Exception\\FatalThrowableError(code: 0): Cannot use object of type stdClass as array at W:\\domains\\jse.kk\\app\\Classes\\Accounting\\Commission.php:15)
-[stacktrace]
-#0 W:\\domains\\jse.kk\\app\\Classes\\Trading\\Chart.php(163): App\\Classes\\Accounting\\Commission::accumulate(Array)
-#1 W:\\domains\\jse.kk\\app\\Classes\\Trading\\CandleMaker.php(135): App\\Classes\\Trading\\Chart->index('2019-05-17 23:0...', 1558134272000)
-#2 W:\\domains\\jse.kk\\app\\Classes\\WebSocket\\ConsoleWebSocket.php(32): App\\Classes\\Trading\\CandleMaker->index(7235, '2019-05-17T23:0...', 1, Object(App\\Classes\\Trading\\Chart), Object(App\\Console\\Commands\\Pc), 1, NULL)
-#3 W:\\domains\\jse.kk\\app\\Classes\\WebSocket\\BitmexWsListener.php(38): App\\Classes\\WebSocket\\ConsoleWebSocket::messageParse(Array, Object(App\\Console\\Commands\\Pc), Object(App\\Classes\\Trading\\CandleMaker), Object(App\\Classes\\Trading\\Chart), 1, NULL)
-#4 W:\\domains\\jse.kk\\vendor\\evenement\\evenement\\src\\Evenement\\EventEmitterTrait.php(123): App\\Classes\\WebSocket\\BitmexWsListener::App\\Classes\\WebSocket\\{closure}(Object(Ratchet\\RFC6455\\Messaging\\Message), Object(Ratchet\\Client\\WebSocket))
-#5 W:\\domains\\jse.kk\\vendor\atchet\\pawl\\src\\WebSocket.php(72): Ratchet\\Client\\WebSocket->emit('message', Array)
-#6 W:\\domains\\jse.kk\\vendor\atchet\fc6455\\src\\Messaging\\MessageBuffer.php(108): Ratchet\\Client\\WebSocket->Ratchet\\Client\\{closure}(Object(Ratchet\\RFC6455\\Messaging\\Message))
-#7 W:\\domains\\jse.kk\\vendor\atchet\fc6455\\src\\Messaging\\MessageBuffer.php(60): Ratchet\\RFC6455\\Messaging\\MessageBuffer->processData('\\x81~\\x00\\x96{\"table\":\"i...')
-#8 W:\\domains\\jse.kk\\vendor\\evenement\\evenement\\src\\Evenement\\EventEmitterTrait.php(123): Ratchet\\RFC6455\\Messaging\\MessageBuffer->onData('\\x81~\\x00\\x96{\"table\":\"i...')
-#9 W:\\domains\\jse.kk\\vendor\eact\\stream\\src\\Util.php(71): Evenement\\EventEmitter->emit('data', Array)
-#10 W:\\domains\\jse.kk\\vendor\\evenement\\evenement\\src\\Evenement\\EventEmitterTrait.php(123): React\\Stream\\Util::React\\Stream\\{closure}('\\x81~\\x00\\x96{\"table\":\"i...')
-#11 W:\\domains\\jse.kk\\vendor\eact\\stream\\src\\DuplexResourceStream.php(193): Evenement\\EventEmitter->emit('data', Array)
-#12 W:\\domains\\jse.kk\\vendor\eact\\event-loop\\src\\StreamSelectLoop.php(244): React\\Stream\\DuplexResourceStream->handleData(Resource id #569)
-#13 W:\\domains\\jse.kk\\vendor\eact\\event-loop\\src\\StreamSelectLoop.php(211): React\\EventLoop\\StreamSelectLoop->waitForStreamActivity(NULL)
-#14 W:\\domains\\jse.kk\\app\\Classes\\WebSocket\\BitmexWsListener.php(66): React\\EventLoop\\StreamSelectLoop->run()
-#15 W:\\domains\\jse.kk\\app\\Console\\Commands\\Pc.php(93): App\\Classes\\WebSocket\\BitmexWsListener::subscribe(Object(Ratchet\\Client\\Connector), Object(React\\EventLoop\\StreamSelectLoop), Object(App\\Console\\Commands\\Pc), Object(App\\Classes\\Trading\\CandleMaker), Object(App\\Classes\\Trading\\Chart), 'XBTUSD', 1, NULL)
-#16 [internal function]: App\\Console\\Commands\\Pc->handle()
-#17 W:\\domains\\jse.kk\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\BoundMethod.php(32): call_user_func_array(Array, Array)
-#18 W:\\domains\\jse.kk\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\BoundMethod.php(90): Illuminate\\Container\\BoundMethod::Illuminate\\Container\\{closure}()
-#19 W:\\domains\\jse.kk\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\BoundMethod.php(34): Illuminate\\Container\\BoundMethod::callBoundMethod(Object(Illuminate\\Foundation\\Application), Array, Object(Closure))
-#20 W:\\domains\\jse.kk\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\Container.php(580): Illuminate\\Container\\BoundMethod::call(Object(Illuminate\\Foundation\\Application), Array, Array, NULL)
-#21 W:\\domains\\jse.kk\\vendor\\laravel\\framework\\src\\Illuminate\\Console\\Command.php(183): Illuminate\\Container\\Container->call(Array)
-#22 W:\\domains\\jse.kk\\vendor\\symfony\\console\\Command\\Command.php(255): Illuminate\\Console\\Command->execute(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Illuminate\\Console\\OutputStyle))
-#23 W:\\domains\\jse.kk\\vendor\\laravel\\framework\\src\\Illuminate\\Console\\Command.php(170): Symfony\\Component\\Console\\Command\\Command->run(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Illuminate\\Console\\OutputStyle))
-#24 W:\\domains\\jse.kk\\vendor\\symfony\\console\\Application.php(908): Illuminate\\Console\\Command->run(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
-#25 W:\\domains\\jse.kk\\vendor\\symfony\\console\\Application.php(269): Symfony\\Component\\Console\\Application->doRunCommand(Object(App\\Console\\Commands\\Pc), Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
-#26 W:\\domains\\jse.kk\\vendor\\symfony\\console\\Application.php(145): Symfony\\Component\\Console\\Application->doRun(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
-#27 W:\\domains\\jse.kk\\vendor\\laravel\\framework\\src\\Illuminate\\Console\\Application.php(90): Symfony\\Component\\Console\\Application->run(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
-#28 W:\\domains\\jse.kk\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Console\\Kernel.php(122): Illuminate\\Console\\Application->run(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
-#29 W:\\domains\\jse.kk\\artisan(37): Illuminate\\Foundation\\Console\\Kernel->handle(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
-#30 {main}
-"} 

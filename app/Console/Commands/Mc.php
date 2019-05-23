@@ -14,23 +14,20 @@ use App\Classes\Trading\MacdTradesTrigger;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Cache;
 use Ratchet\Client\WebSocket;
+use Illuminate\Support\Facades\DB;
 
 /**
  *
  * Class Mc
  * @package App\Console\Commands
  *
- * php artisan mc XBTUSD BTC/USD 15 5 10 3
- *
+ * php artisan mc 3
  * MACD common setting: 12, 26, 9
  * @see https://stockcharts.com/school/doku.php?id=chart_school:technical_indicators:moving_average_convergence_divergence_macd
  *
- * 1. History symbol name
- * 2. Execution symbol name
- * 3. Order size (Contracts)
- * 4. Indicator period MACD 1. 1st EMA
- * 5. MACD 2. 2nd EMA
- * 6. MACD 3. SMA period for MACD signal line
+ * 1. Indicator period MACD 1. 1st EMA
+ * 2. MACD 2. 2nd EMA
+ * 3. MACD 3. SMA period for MACD signal line
  */
 
 class Mc extends Command
@@ -41,7 +38,7 @@ class Mc extends Command
      *
      * @var string
      */
-    protected $signature = 'mc {historySymbol}{orderSymbol}{orderVolume}{ema1}{ema2}{ema3}';
+    protected $signature = 'mc {botInstance}';
 
     /**
      * The console command description.
@@ -65,6 +62,12 @@ class Mc extends Command
      */
     public function handle()
     {
+        DB::table('jobs')->truncate();
+        $botSettings = config('bot.bots')[$this->argument('botInstance')];
+        $migration = new \App\Classes\DB\TradingTable($botSettings['botTitle']);
+        $migration->down();
+        $migration->up();
+
         /**
          * Ratchet/pawl websocket library
          * @see https://github.com/ratchetphp/Pawl
@@ -72,27 +75,36 @@ class Mc extends Command
         $loop = \React\EventLoop\Factory::create();
         $reactConnector = new \React\Socket\Connector($loop, ['dns' => '8.8.8.8', 'timeout' => 10]);
         $connector = new \Ratchet\Client\Connector($loop, $reactConnector);
-        \App\Classes\Trading\History::loadPeriod($this->argument('historySymbol'));
+
+        \App\Classes\Trading\History::loadPeriod($botSettings);
 
         // MacdSettings::set($macdSettings = ['ema1Period' => $this->argument('ema1'), 'ema2Period' => $this->argument('ema2'),'ema3Period' => $this->argument('ema3')]);
-        Macd::calculate($macdSettings = ['ema1Period' => $this->argument('ema1'), 'ema2Period' => $this->argument('ema2'),'ema3Period' => $this->argument('ema3')]);
-
-        // Reload chart
-        $pusherApiMessage = new \App\Classes\WebSocket\PusherApiMessage();
-        $pusherApiMessage->clientId = 12345;
-        $pusherApiMessage->messageType = 'reloadChartAfterHistoryLoaded';
-        event(new \App\Events\jseevent($pusherApiMessage->toArray()));
+        Macd::calculate($macdSettings = ['ema1Period' => $botSettings['strategyParams']['emaPeriod'], 'ema2Period' => $botSettings['strategyParams']['macdLinePeriod'], 'ema3Period' => $botSettings['strategyParams']['macdSignalLinePeriod']], $botSettings, true);
+        $this->reloadChart($botSettings);
 
         \App\Classes\WebSocket\BitmexWsListener::subscribe(
             $connector, // For web socket
             $loop, // For web socket
             $this, // For colored messages in console
-            $candleMaker = new CandleMaker('macd'),
-            // $chart = new Chart($this->argument('orderSymbol'), $this->argument('orderVolume')),
-            $chart = new MacdTradesTrigger($this->argument('orderSymbol'), $this->argument('orderVolume')),
-            $this->argument('historySymbol'),
+            $candleMaker = new CandleMaker('macd', $botSettings),
+            //@todo PASS $botSettings ONLY! Other params are redundant!
+            $chart = new MacdTradesTrigger($botSettings['executionSymbol'], $botSettings['volume'], $botSettings),
+            $botSettings['historySymbol'],
             null, // null,$this->argument('period') // Price channel period null
             $macdSettings
         );
+    }
+
+    private function reloadChart ($botSettings){
+        $pusherApiMessage = new \App\Classes\WebSocket\PusherApiMessage();
+        $pusherApiMessage->clientId = $botSettings['frontEndId'];
+        $pusherApiMessage->messageType = 'reloadChartAfterHistoryLoaded';
+        try{
+            event(new \App\Events\jseevent($pusherApiMessage->toArray()));
+        } catch (\Exception $e)
+        {
+            echo __FILE__ . " " . __LINE__ . "\n";
+            dump($e);
+        }
     }
 }

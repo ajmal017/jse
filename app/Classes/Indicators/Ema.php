@@ -13,7 +13,6 @@ class Ema
 {
     private static $emaValue;
     private static $multiplier;
-
     /**
      * $period
      * $closeColumn - price input values for calculation. Can be close or EMA (when MACD signal line needs to be calculated)
@@ -25,25 +24,41 @@ class Ema
      * @param $smaColumn
      * @param $emaColumn
      */
-    public static function calculate($close, $period, $smaColumn, $emaColumn){
+    public static function calculate($close, $period, $smaColumn, $emaColumn, $table, $isInitialCalculation){
         self::$multiplier = (2 / ($period + 1));
-        $bars = DB::table('asset_1')
+
+        /*$bars = DB::table($table)
             ->where($smaColumn,'!=', null)
             ->orderBy('time_stamp', 'asc') // desc, asc - order. Read the whole table from BD to $records
-            ->get();
+            ->get();*/
+
+        /* @var int $quantityOfBars The quantity of bars for which the price channel will be calculated */
+        if ($isInitialCalculation){
+            $bars = DB::table($table)
+                ->where($smaColumn,'!=', null)
+                ->orderBy('time_stamp', 'asc') // desc, asc - order. Read the whole table from BD to $records
+                ->get();
+        } else {
+            $bars = DB::table($table)
+                ->where($smaColumn,'!=', null)
+                ->orderBy('time_stamp', 'asc')
+                ->take($period)
+                ->get();
+        }
+
 
         $isFirstValue = true;
 
         foreach ($bars as $bar){
             if($isFirstValue){
-                self::$emaValue = DB::table('asset_1')->where('id', $bar->id)->value($smaColumn);
+                self::$emaValue = DB::table($table)->where('id', $bar->id)->value($smaColumn);
                 $isFirstValue = false;
             } else{
-                $ema1Penultimate = DB::table('asset_1')->where('id', $bar->id-1)->value($emaColumn);
+                $ema1Penultimate = DB::table($table)->where('id', $bar->id-1)->value($emaColumn);
                 self::$emaValue = self::$multiplier * ($bar->$close - $ema1Penultimate) + $ema1Penultimate;
             }
 
-            DB::table("asset_1")
+            DB::table($table)
                 ->where('time_stamp', $bar->time_stamp)
                 ->update([
                     $emaColumn => self::$emaValue,

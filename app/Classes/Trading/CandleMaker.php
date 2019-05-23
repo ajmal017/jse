@@ -25,7 +25,6 @@ use Illuminate\Support\Facades\DB;
  */
 class CandleMaker
 {
-    private $symbol;
     private $tt;
     private $barHigh = 0; // For high value calculation
     private $barLow = 9999999;
@@ -35,6 +34,7 @@ class CandleMaker
     private $tableName;
     private $isFirstTimeTickCheck;
     private $addedTickTime;
+    private $botSettings;
 
     public function __construct($indicator, $botSettings)
     {
@@ -224,7 +224,7 @@ class CandleMaker
             PriceChannel::calculate($priceChannelPeriod, $this->tableName, false);
             Sma::calculate('close', 2, 'sma1', $tableName, false); // Calculate SMA together with price channel. This sam used as a filter.
         }
-        if ($this->indicator == 'macd') Macd::calculate($macdSettings);
+        if ($this->indicator == 'macd') Macd::calculate($macdSettings, $this->botSettings, false);
     }
 }
 

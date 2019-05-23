@@ -75,7 +75,6 @@ class Pc extends Command
         $reactConnector = new \React\Socket\Connector($loop, ['dns' => '8.8.8.8', 'timeout' => 10]);
         $connector = new \Ratchet\Client\Connector($loop, $reactConnector);
 
-
         \App\Classes\Trading\History::loadPeriod($botSettings);
         dump('history loaded');
 

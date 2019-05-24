@@ -43,6 +43,7 @@ class Chart
     public $tradeProfit;
     private $executionSymbolName;
     private $botSettings;
+    private $lastRow;
 
     /**
      * @see Classes and backtest scheme https://drive.google.com/file/d/1IDBxR2dWDDsbFbradNapSo7QYxv36EQM/view?usp=sharing
@@ -55,13 +56,44 @@ class Chart
         $this->botSettings = $botSettings;
     }
 
-    public function index($barDate, $timeStamp)
+    public function index($mode = null, $backTestRowId = null)
     {
-        dump(__FILE__);
+        echo(__FILE__ . "\n");
         // Realtime mode. No ID of the record is sent. Get the quantity of all records.
         /** In this case we do the same request, take the last record from the DB */
-        $lastRow = DB::table($this->botSettings['botTitle'])->orderBy('id', 'desc')->take(1)->get();
+
+        // delete
+        //$lastRow = DB::table($this->botSettings['botTitle'])->orderBy('id', 'desc')->take(1)->get();
+
+        $id = $backTestRowId;
+
+        // DB has all bars in it.
+        // Backtesting.php runs through all of them and generates id
+        if ($mode == "backtest")
+        {
+            /**
+             * @var int $recordId id of the record in DB. Generated in Backtesting.php
+             * In backtest mode id is sent as a parameter. In realtime - pulled from DB.
+             */
+            //$recordId = $id; // In the real time mode there is no id sent. It is sent only in back test mode.
+            $this->lastRow = DB::table($this->botSettings['botTitle'])->where('id', $backTestRowId)->get();
+        }
+        else // Realtime
+        {
+            /* No record id is sent in real time mode. We get the last record from the DB. */
+            $this->lastRow = DB::table($this->botSettings['botTitle'])->orderBy('id', 'desc')->take(1)->get();
+            //$lastRow = DB::table($this->botSettings['botTitle'])->orderBy('id', 'desc')->take(1)->get();
+        }
+
+
+        // just for test
+        $lastRow = $this->lastRow;
+
+
         $penUltimanteRow = DB::table($this->botSettings['botTitle'])->where('id', $lastRow[0]->id - 1)->get()->first();
+
+
+        //echo "cloe: " . $lastRow[0]->close . "\n";
 
         /**
          * Do not calculate profit if there is no open position. If do not do this check - zeros in table occu
@@ -71,13 +103,13 @@ class Chart
          */
         if ($this->position != null && $this->trade_flag != "all"){
             /* Get the price of the last trade */
-            $lastTradePrice = // Last trade price
+            $lastTradePrice =
                 DB::table($this->botSettings['botTitle'])
                     ->whereNotNull('trade_price')
                     ->orderBy('id', 'desc') // Form biggest to smallest values
                     ->value('trade_price');
             $this->tradeProfit = (($this->position == "long" ? ($lastRow[0]->close - $lastTradePrice) * $this->volume : ($lastTradePrice - $lastRow[0]->close) * $this->volume));
-            TradeProfit::calculate($this->botSettings, $this->tradeProfit);
+            TradeProfit::calculate($this->botSettings, $this->tradeProfit, $backTestRowId);
         }
 
         /**
@@ -99,8 +131,10 @@ class Chart
             }
             // Trade flag. If this flag set to short -> don't enter this IF and wait for channel low crossing (IF below)
             $this->trade_flag = 'short'; $this->position = "long"; $this->add_bar_long = true;
-            \App\Classes\Accounting\TradeBar::update($this->botSettings, $timeStamp, "buy");
+            \App\Classes\Accounting\TradeBar::update($this->botSettings, "buy", $lastRow[0]->close, $backTestRowId);
             \App\Classes\Accounting\Commission::accumulate($this->botSettings);
+            //echo "cloe: " . $lastRow[0]->close . "\n";
+            //die();
         }
 
         if (($lastRow[0]->sma1 < $penUltimanteRow->price_channel_low_value) && ($this->trade_flag == "all"  || $this->trade_flag == "short")) {
@@ -117,8 +151,10 @@ class Chart
             }
             $this->trade_flag = 'long'; $this->position = "short"; $this->add_bar_short = true;
             /* Update the last bar/record in the DB */
-            \App\Classes\Accounting\TradeBar::update($this->botSettings, $timeStamp, "sell");
+            \App\Classes\Accounting\TradeBar::update($this->botSettings, "sell", $lastRow[0]->close, $backTestRowId);
             \App\Classes\Accounting\Commission::accumulate($this->botSettings);
+            //echo "cloe: " . $lastRow[0]->close . "\n";
+            //die();
         }
 
         /**
@@ -126,8 +162,8 @@ class Chart
          * If trade_flag is set to all, it means that no trades hav been executed yet.
          */
         if ($this->trade_flag != "all") {
-            AccumulatedProfit::calculate($this->botSettings, $lastRow[0]->id);
-            NetProfit::calculate($this->position, $this->botSettings, $lastRow[0]->id);
+            //AccumulatedProfit::calculate($this->botSettings, $lastRow[0]->id);
+            //NetProfit::calculate($this->position, $this->botSettings, $lastRow[0]->id);
         }
     }
 }

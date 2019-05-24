@@ -126,8 +126,9 @@ class CandleMaker
              */
             $this->indicatorsCalculate($priceChannelPeriod, $this->tableName,$macdSettings);
 
-            /* Call Chart.php and calculate profit */
-            $chart->index(gmdate("Y-m-d G:i:s", strtotime($tickDateFullTime)), $this->tickDate);
+            /* Generate trade signals and add trade info to DB */
+            //$chart->index(gmdate("Y-m-d G:i:s", strtotime($tickDateFullTime)), $this->tickDate);
+            $chart->index();
 
             /* Add bar to DB */
             $this->addBarToDb($this->tableName, $tickDateFullTime, $tickPrice, $tickVolume);

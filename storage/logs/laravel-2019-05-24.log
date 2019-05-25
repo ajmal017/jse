@@ -91,3 +91,52 @@
 #16 W:\\domains\\jse.kk\\artisan(37): Illuminate\\Foundation\\Console\\Kernel->handle(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
 #17 {main}
 "} 
+[2019-05-24 23:56:02] local.ERROR: Uncaught ErrorException: Object of class stdClass could not be converted to string in W:\domains\jse.kk\app\Classes\Trading\Chart.php:138
+Stack trace:
+#0 W:\domains\jse.kk\app\Classes\Trading\Chart.php(138): Illuminate\Foundation\Bootstrap\HandleExceptions->handleError(4096, 'Object of class...', 'W:\\domains\\jse....', 138, Array)
+#1 W:\domains\jse.kk\app\Classes\Trading\CandleMaker.php(131): App\Classes\Trading\Chart->index()
+#2 W:\domains\jse.kk\app\Classes\WebSocket\ConsoleWebSocket.php(32): App\Classes\Trading\CandleMaker->index(8002, '2019-05-24T23:5...', 1, Object(App\Classes\Trading\Chart), Object(App\Console\Commands\Pc), 1, NULL)
+#3 W:\domains\jse.kk\app\Classes\WebSocket\BitmexWsListener.php(38): App\Classes\WebSocket\ConsoleWebSocket::messageParse(Array, Object(App\Console\Commands\Pc), Object(App\Classes\Trading\CandleMaker), Object(App\Classes\Trading\Chart), 1, NULL)
+#4 W:\domains\jse.kk\vendor\evenement\evenement\src\Evenement\EventEmitterTrait.php(123): App\Classes\WebSocket\BitmexWsListener: {"exception":"[object] (Symfony\\Component\\Debug\\Exception\\FatalErrorException(code: 1): Uncaught ErrorException: Object of class stdClass could not be converted to string in W:\\domains\\jse.kk\\app\\Classes\\Trading\\Chart.php:138
+Stack trace:
+#0 W:\\domains\\jse.kk\\app\\Classes\\Trading\\Chart.php(138): Illuminate\\Foundation\\Bootstrap\\HandleExceptions->handleError(4096, 'Object of class...', 'W:\\\\domains\\\\jse....', 138, Array)
+#1 W:\\domains\\jse.kk\\app\\Classes\\Trading\\CandleMaker.php(131): App\\Classes\\Trading\\Chart->index()
+#2 W:\\domains\\jse.kk\\app\\Classes\\WebSocket\\ConsoleWebSocket.php(32): App\\Classes\\Trading\\CandleMaker->index(8002, '2019-05-24T23:5...', 1, Object(App\\Classes\\Trading\\Chart), Object(App\\Console\\Commands\\Pc), 1, NULL)
+#3 W:\\domains\\jse.kk\\app\\Classes\\WebSocket\\BitmexWsListener.php(38): App\\Classes\\WebSocket\\ConsoleWebSocket::messageParse(Array, Object(App\\Console\\Commands\\Pc), Object(App\\Classes\\Trading\\CandleMaker), Object(App\\Classes\\Trading\\Chart), 1, NULL)
+#4 W:\\domains\\jse.kk\\vendor\\evenement\\evenement\\src\\Evenement\\EventEmitterTrait.php(123): App\\Classes\\WebSocket\\BitmexWsListener: at W:\\domains\\jse.kk\\app\\Classes\\Trading\\Chart.php:138)
+[stacktrace]
+#0 W:\\domains\\jse.kk\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Bootstrap\\HandleExceptions.php(137): Symfony\\Component\\Debug\\Exception\\FatalErrorException->__construct()
+#1 W:\\domains\\jse.kk\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Bootstrap\\HandleExceptions.php(123): Illuminate\\Foundation\\Bootstrap\\HandleExceptions->fatalExceptionFromError()
+#2 W:\\domains\\jse.kk\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Bootstrap\\HandleExceptions.php(0): Illuminate\\Foundation\\Bootstrap\\HandleExceptions->handleShutdown()
+#3 W:\\domains\\jse.kk\\app\\Classes\\Trading\\CandleMaker.php(131): App\\Classes\\Trading\\Chart->index()
+#4 W:\\domains\\jse.kk\\app\\Classes\\WebSocket\\ConsoleWebSocket.php(32): App\\Classes\\Trading\\CandleMaker->index()
+#5 W:\\domains\\jse.kk\\app\\Classes\\WebSocket\\BitmexWsListener.php(38): App\\Classes\\WebSocket\\ConsoleWebSocket::messageParse()
+#6 W:\\domains\\jse.kk\\vendor\\evenement\\evenement\\src\\Evenement\\EventEmitterTrait.php(123): App\\Classes\\WebSocket\\BitmexWsListener::App\\Classes\\WebSocket\\{closure}()
+#7 W:\\domains\\jse.kk\\vendor\atchet\\pawl\\src\\WebSocket.php(72): Ratchet\\Client\\WebSocket->emit()
+#8 W:\\domains\\jse.kk\\vendor\atchet\fc6455\\src\\Messaging\\MessageBuffer.php(108): Ratchet\\Client\\WebSocket->Ratchet\\Client\\{closure}()
+#9 W:\\domains\\jse.kk\\vendor\atchet\fc6455\\src\\Messaging\\MessageBuffer.php(60): Ratchet\\RFC6455\\Messaging\\MessageBuffer->processData()
+#10 W:\\domains\\jse.kk\\vendor\\evenement\\evenement\\src\\Evenement\\EventEmitterTrait.php(123): Ratchet\\RFC6455\\Messaging\\MessageBuffer->onData()
+#11 W:\\domains\\jse.kk\\vendor\eact\\stream\\src\\Util.php(71): React\\Socket\\Connection->emit()
+#12 W:\\domains\\jse.kk\\vendor\\evenement\\evenement\\src\\Evenement\\EventEmitterTrait.php(123): React\\Stream\\Util::React\\Stream\\{closure}()
+#13 W:\\domains\\jse.kk\\vendor\eact\\stream\\src\\DuplexResourceStream.php(193): React\\Stream\\DuplexResourceStream->emit()
+#14 W:\\domains\\jse.kk\\vendor\eact\\event-loop\\src\\StreamSelectLoop.php(244): React\\Stream\\DuplexResourceStream->handleData()
+#15 W:\\domains\\jse.kk\\vendor\eact\\event-loop\\src\\StreamSelectLoop.php(211): React\\EventLoop\\StreamSelectLoop->waitForStreamActivity()
+#16 W:\\domains\\jse.kk\\app\\Classes\\WebSocket\\BitmexWsListener.php(66): React\\EventLoop\\StreamSelectLoop->run()
+#17 W:\\domains\\jse.kk\\app\\Console\\Commands\\Pc.php(98): App\\Classes\\WebSocket\\BitmexWsListener::subscribe()
+#18 W:\\domains\\jse.kk\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\BoundMethod.php(32): App\\Console\\Commands\\Pc->handle()
+#19 W:\\domains\\jse.kk\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\BoundMethod.php(32): call_user_func_array:{W:\\domains\\jse.kk\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\BoundMethod.php:32}()
+#20 W:\\domains\\jse.kk\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\BoundMethod.php(90): Illuminate\\Container\\BoundMethod::Illuminate\\Container\\{closure}()
+#21 W:\\domains\\jse.kk\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\BoundMethod.php(34): Illuminate\\Container\\BoundMethod::callBoundMethod()
+#22 W:\\domains\\jse.kk\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\Container.php(580): Illuminate\\Container\\BoundMethod::call()
+#23 W:\\domains\\jse.kk\\vendor\\laravel\\framework\\src\\Illuminate\\Console\\Command.php(183): Illuminate\\Foundation\\Application->call()
+#24 W:\\domains\\jse.kk\\vendor\\symfony\\console\\Command\\Command.php(255): App\\Console\\Commands\\Pc->execute()
+#25 W:\\domains\\jse.kk\\vendor\\laravel\\framework\\src\\Illuminate\\Console\\Command.php(170): App\\Console\\Commands\\Pc->run()
+#26 W:\\domains\\jse.kk\\vendor\\symfony\\console\\Application.php(908): App\\Console\\Commands\\Pc->run()
+#27 W:\\domains\\jse.kk\\vendor\\symfony\\console\\Application.php(269): Illuminate\\Console\\Application->doRunCommand()
+#28 W:\\domains\\jse.kk\\vendor\\symfony\\console\\Application.php(145): Illuminate\\Console\\Application->doRun()
+#29 W:\\domains\\jse.kk\\vendor\\laravel\\framework\\src\\Illuminate\\Console\\Application.php(90): Illuminate\\Console\\Application->run()
+#30 W:\\domains\\jse.kk\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Console\\Kernel.php(122): Illuminate\\Console\\Application->run()
+#31 W:\\domains\\jse.kk\\artisan(37): App\\Console\\Kernel->handle()
+#32 W:\\domains\\jse.kk\\artisan(0): {main}()
+#33 {main}
+"} 

@@ -6,6 +6,10 @@ class TradeBar
 {
     // public static function update($botSettings, $timeStamp, $direction){
     public static function update($botSettings, $direction, $tradePrice, $lastRowId){
+
+        echo "jopa: " . $lastRowId;
+        //die();
+
         $lastRow =
             DB::table($botSettings['botTitle'])
                 ->orderBy('id', 'desc')->take(1)
@@ -24,6 +28,6 @@ class TradeBar
                 'trade_commission' => round(($lastRow[0]->close * $botSettings['commission'] / 100) * $botSettings['volume'], 4),
             ]);
 
-        die($lastRowId);
+        //die();
     }
 }

@@ -90,6 +90,8 @@ class Chart
         $lastRow = $this->lastRow;
 
 
+
+
         $penUltimanteRow = DB::table($this->botSettings['botTitle'])->where('id', $lastRow[0]->id - 1)->get()->first();
 
 
@@ -131,10 +133,11 @@ class Chart
             }
             // Trade flag. If this flag set to short -> don't enter this IF and wait for channel low crossing (IF below)
             $this->trade_flag = 'short'; $this->position = "long"; $this->add_bar_long = true;
-            \App\Classes\Accounting\TradeBar::update($this->botSettings, "buy", $lastRow[0]->close, $backTestRowId);
+//            \App\Classes\Accounting\TradeBar::update($this->botSettings, "buy", $lastRow[0]->close, $backTestRowId);
+
+            dump($lastRow[0]->id);
+            \App\Classes\Accounting\TradeBar::update($this->botSettings, "buy", $lastRow[0]->close, $lastRow[0]->id);
             \App\Classes\Accounting\Commission::accumulate($this->botSettings);
-            //echo "cloe: " . $lastRow[0]->close . "\n";
-            //die();
         }
 
         if (($lastRow[0]->sma1 < $penUltimanteRow->price_channel_low_value) && ($this->trade_flag == "all"  || $this->trade_flag == "short")) {
@@ -151,10 +154,14 @@ class Chart
             }
             $this->trade_flag = 'long'; $this->position = "short"; $this->add_bar_short = true;
             /* Update the last bar/record in the DB */
-            \App\Classes\Accounting\TradeBar::update($this->botSettings, "sell", $lastRow[0]->close, $backTestRowId);
+
+            dump($lastRow[0]->id);
+
+
+            //\App\Classes\Accounting\TradeBar::update($this->botSettings, "sell", $lastRow[0]->close, $backTestRowId);
+            \App\Classes\Accounting\TradeBar::update($this->botSettings, "sell", $lastRow[0]->close, $lastRow[0]->id);
             \App\Classes\Accounting\Commission::accumulate($this->botSettings);
-            //echo "cloe: " . $lastRow[0]->close . "\n";
-            //die();
+
         }
 
         /**
@@ -162,8 +169,8 @@ class Chart
          * If trade_flag is set to all, it means that no trades hav been executed yet.
          */
         if ($this->trade_flag != "all") {
-            //AccumulatedProfit::calculate($this->botSettings, $lastRow[0]->id);
-            //NetProfit::calculate($this->position, $this->botSettings, $lastRow[0]->id);
+            AccumulatedProfit::calculate($this->botSettings, $lastRow[0]->id);
+            NetProfit::calculate($this->position, $this->botSettings, $lastRow[0]->id);
         }
     }
 }

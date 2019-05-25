@@ -38,8 +38,21 @@ class Backtest extends Command
      */
     public function handle()
     {
-        Backtesting::start(config('bot.bots')[$this->argument('botInstance')]);
+        $botSettings = config('bot.bots')[$this->argument('botInstance')];
+        Backtesting::start($botSettings);
         // reload chart goes here. exclude reload chart method from pc, mc to a separate class. located in trading. name: Chart::reload
         // Rename Chart.php to PcTradesTrigger
+
+        // Exclude to a separate class
+        $pusherApiMessage = new \App\Classes\WebSocket\PusherApiMessage();
+        $pusherApiMessage->clientId = $botSettings['frontEndId'];
+        $pusherApiMessage->messageType = 'reloadChartAfterHistoryLoaded';
+        try{
+            event(new \App\Events\jseevent($pusherApiMessage->toArray()));
+        } catch (\Exception $e)
+        {
+            echo __FILE__ . " " . __LINE__ . "\n";
+            dump($e);
+        }
     }
 }

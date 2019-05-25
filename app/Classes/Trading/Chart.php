@@ -60,16 +60,13 @@ class Chart extends Profit
     public function index($mode = null, $backTestRowId = null)
     {
         echo(__FILE__ . "\n");
-
-        // Inherited class call
-        // Profit calc
-        $lastRow = $this->calc($mode, $backTestRowId);
+        $this->calc($mode, $backTestRowId); // Inherited class call
 
         /**
          * $this->trade_flag == "all" is used only when the first trade occurs, then it turns to "long" or "short".
          * SMA filter is always on. SMA filter is a simple SMA with period = 2;
          */
-        if (($lastRow[0]->sma1 > $this->penUltimanteRow->price_channel_high_value) && ($this->trade_flag == "all" || $this->trade_flag == "long")){
+        if (($this->lastRow[0]->sma1 > $this->penUltimanteRow->price_channel_high_value) && ($this->trade_flag == "all" || $this->trade_flag == "long")){
             echo "####### HIGH TRADE!<br>\n";
             // Is it the first trade ever?
             if ($this->trade_flag == "all"){
@@ -78,19 +75,17 @@ class Chart extends Profit
             }
             else // Not the first trade. Close the current position and open opposite trade. vol = vol * 2
             {
-                // open order buy vol = vol * 2
                 echo "---------------------- NOT FIRST EVER TRADE. CLOSE + OPEN. VOL * 2\n";
                 PlaceOrder::dispatch('buy', $this->executionSymbolName, $this->volume * 2, $this->botSettings);
             }
             // Trade flag. If this flag set to short -> don't enter this IF and wait for channel low crossing (IF below)
             $this->trade_flag = 'short'; $this->position = "long"; $this->add_bar_long = true;
             /* Update the last bar/record in the DB */
-//            \App\Classes\Accounting\TradeBar::update($this->botSettings, "buy", $lastRow[0]->close, $backTestRowId);
-            \App\Classes\Accounting\TradeBar::update($this->botSettings, "buy", $lastRow[0]->close, $lastRow[0]->id);
+            \App\Classes\Accounting\TradeBar::update($this->botSettings, "buy", $this->lastRow[0]->close, $this->lastRow[0]->id);
             \App\Classes\Accounting\Commission::accumulate($this->botSettings);
         }
 
-        if (($lastRow[0]->sma1 < $this->penUltimanteRow->price_channel_low_value) && ($this->trade_flag == "all"  || $this->trade_flag == "short")) {
+        if (($this->lastRow[0]->sma1 < $this->penUltimanteRow->price_channel_low_value) && ($this->trade_flag == "all"  || $this->trade_flag == "short")) {
             echo "####### LOW TRADE!<br>\n";
             // Is the the first trade ever?
             if ($this->trade_flag == "all"){
@@ -103,18 +98,10 @@ class Chart extends Profit
                 PlaceOrder::dispatch('sell', $this->executionSymbolName, $this->volume * 2, $this->botSettings);
             }
             $this->trade_flag = 'long'; $this->position = "short"; $this->add_bar_short = true;
-            //\App\Classes\Accounting\TradeBar::update($this->botSettings, "sell", $lastRow[0]->close, $backTestRowId);
-            \App\Classes\Accounting\TradeBar::update($this->botSettings, "sell", $lastRow[0]->close, $lastRow[0]->id);
+            \App\Classes\Accounting\TradeBar::update($this->botSettings, "sell", $this->lastRow[0]->close, $this->lastRow[0]->id);
             \App\Classes\Accounting\Commission::accumulate($this->botSettings);
         }
 
-        /**
-         * Do not calculate profit if there are no trades.
-         * If trade_flag is set to all, it means that no trades hav been executed yet.
-         */
-        if ($this->trade_flag != "all") {
-            AccumulatedProfit::calculate($this->botSettings, $lastRow[0]->id);
-            NetProfit::calculate($this->position, $this->botSettings, $lastRow[0]->id);
-        }
+        $this->finish();
     }
 }

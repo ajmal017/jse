@@ -29,7 +29,7 @@ use Illuminate\Support\Facades\Cache;
  *
  * @see Classes and backtest scheme https://drive.google.com/file/d/1IDBxR2dWDDsbFbradNapSo7QYxv36EQM/view?usp=sharing
  */
-class MacdTradesTrigger
+class MacdTradesTrigger extends Profit
 {
     public $trade_flag; // The value is stored in DB. This flag indicates what trade should be opened next. When there is not trades, it is set to all. When long trade has been opened, the next (closing) one must be long and vise vera.
     public $add_bar_long = true; // Count closed position on the same be the signal occurred. The problem is when the position is closed the close price of this bar goes to the next position
@@ -52,13 +52,13 @@ class MacdTradesTrigger
     // Macd line > Macd signal line => go long
     // Macd line < Macd signal line => go short
 
-    public function index($barDate, $timeStamp)
+    //public function index($barDate, $timeStamp)
+    public function index($mode = null, $backTestRowId = null)
     {
         dump(__FILE__);
-        // Realtime mode. No ID of the record is sent. Get the quantity of all records.
-        /** In this case we do the same request, take the last record from the DB */
-        $lastRow = DB::table($this->botSettings['botTitle'])->orderBy('id', 'desc')->take(1)->get();
 
+        /*// Realtime mode. No ID of the record is sent. Get the quantity of all records.
+        $lastRow = DB::table($this->botSettings['botTitle'])->orderBy('id', 'desc')->take(1)->get();
 
         $recordId = $lastRow[0]->id;
 
@@ -74,12 +74,6 @@ class MacdTradesTrigger
                 ->get() // Get row as a collection. A collection can contain may elements in it
                 ->first(); // Get the first element from the collection. In this case there is only one
 
-        /**
-         * Do not calculate profit if there is no open position. If do not do this check - zeros in table occu
-         * $this->trade_flag != "all" if it is "all" - it means that it is a first or initial start
-         * We do not store position in DB thus we use "all" check to determine a position absence
-         * if "all" - no position has been opened yet
-         */
         if ($this->position != null && $this->trade_flag != "all"){
 
             // Get the price of the last trade
@@ -97,9 +91,11 @@ class MacdTradesTrigger
 
             TradeProfit::calculate($this->botSettings, $this->tradeProfit);
             echo "trade profit calculated. Chart.php line 165: " . $this->tradeProfit . "\n";
-        }
+        }*/
 
-        if (($lastRow[0]->macd_line > $lastRow[0]->macd_signal_line) && ($this->trade_flag == "all" || $this->trade_flag == "long")){
+        $this->calc($mode, $backTestRowId);
+
+        if (($this->lastRow[0]->macd_line > $this->lastRow[0]->macd_signal_line) && ($this->trade_flag == "all" || $this->trade_flag == "long")){
 
             echo "####### HIGH TRADE!<br>\n";
             // Is it the first trade ever?
@@ -121,11 +117,11 @@ class MacdTradesTrigger
             $this->position = "long";
             $this->add_bar_long = true;
 
-            \App\Classes\Accounting\TradeBar::update($this->botSettings, $timeStamp, "buy");
+            \App\Classes\Accounting\TradeBar::update($this->botSettings, "buy", $this->lastRow[0]->close, $this->lastRow[0]->id);
             \App\Classes\Accounting\Commission::accumulate($this->botSettings);
         } // BUY trade
 
-        if (($lastRow[0]->macd_line < $lastRow[0]->macd_signal_line) && ($this->trade_flag == "all"  || $this->trade_flag == "short")) {
+        if (($this->lastRow[0]->macd_line < $this->lastRow[0]->macd_signal_line) && ($this->trade_flag == "all"  || $this->trade_flag == "short")) {
             echo "####### LOW TRADE!<br>\n";
 
             // Is the the first trade ever?
@@ -144,7 +140,7 @@ class MacdTradesTrigger
             $this->add_bar_short = true;
 
             /* Update the last bar/record in the DB */
-            \App\Classes\Accounting\TradeBar::update($this->botSettings, $timeStamp, "sell");
+            \App\Classes\Accounting\TradeBar::update($this->botSettings, "sell", $this->lastRow[0]->close, $this->lastRow[0]->id);
             \App\Classes\Accounting\Commission::accumulate($this->botSettings);
         } // SELL trade
 
@@ -152,10 +148,12 @@ class MacdTradesTrigger
          * Do not calculate profit if there are no trades.
          * If trade_flag is set to all, it means that no trades hav been executed yet.
          */
-        if ($this->trade_flag != "all") {
+        /*if ($this->trade_flag != "all") {
 
-            AccumulatedProfit::calculate($this->botSettings, $lastRow[0]->id);
-            NetProfit::calculate($this->position, $this->botSettings, $lastRow[0]->id);
-        }
+            AccumulatedProfit::calculate($this->botSettings, $this->lastRow[0]->id);
+            NetProfit::calculate($this->position, $this->botSettings, $this->lastRow[0]->id);
+        }*/
+
+        $this->finish();
     }
 }

@@ -78,7 +78,7 @@ class CandleMaker
             $this->tickDate = strtotime($tickDateFullTime) * 1000;
             $x = date("Y-m-d H:i", $this->tickDate / 1000) . "\n"; // Take seconds off. Convert timestamp to date
             $this->tt = strtotime($x . $this->botSettings['timeFrame'] . "minute"); // // *** TIME FRAME IS HERE!! ***
-            //$this->tt = strtotime($x . "+30 seconds");
+            //$this->tt = strtotime($x . "+30seconds"); // Custom time frame
             $this->isFirstTickInBar = false;
 
             /**

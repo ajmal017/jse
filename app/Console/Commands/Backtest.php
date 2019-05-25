@@ -39,5 +39,7 @@ class Backtest extends Command
     public function handle()
     {
         Backtesting::start(config('bot.bots')[$this->argument('botInstance')]);
+        // reload chart goes here. exclude reload chart method from pc, mc to a separate class. located in trading. name: Chart::reload
+        // Rename Chart.php to PcTradesTrigger
     }
 }

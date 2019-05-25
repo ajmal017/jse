@@ -7,7 +7,7 @@ class TradeBar
     // public static function update($botSettings, $timeStamp, $direction){
     public static function update($botSettings, $direction, $tradePrice, $lastRowId){
 
-        echo "jopa: " . $lastRowId;
+        //echo "jopa: " . $lastRowId;
         //die();
 
         $lastRow =

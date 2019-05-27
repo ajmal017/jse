@@ -27,6 +27,18 @@ class Macd
         Ema::calculate('close', $macdSettings['ema1Period'], 'sma1', 'ema1', $botSettings['botTitle'], $isInitialCalculation); // EMA1
         Ema::calculate('close', $macdSettings['ema2Period'], 'sma2', 'ema2', $botSettings['botTitle'], $isInitialCalculation); // EMA2
 
+
+
+        /* @var int $quantityOfBars The quantity of bars for which the price channel will be calculated */
+        if ($isInitialCalculation){
+            $quantityOfBars = (DB::table($tableName)
+                    ->orderBy('id', 'desc')
+                    ->first())->id - $priceChannelPeriod - 1;
+        } else {
+            $quantityOfBars = $priceChannelPeriod;
+        }
+
+
         $bars = DB::table($botSettings['botTitle'])
             ->where('ema2','!=', null)
             ->orderBy('time_stamp', 'asc') // desc, asc - order. Read the whole table from BD to $records

@@ -12,9 +12,11 @@ use Illuminate\Support\Facades\DB;
 class Sma
 {
     /**
-     * @param string $close         Based on which part of a bar the SMA should be calculated. open, close, high, low.
-     * @param string $period        SMA period.
-     * @param sting $smaColumn      Output DB columnt for SMA calculated values.
+     * @param string $close                 Based on which part of a bar the SMA should be calculated. open, close, high, low.
+     * @param string $period                SMA period.
+     * @param sting $smaColumn              Output DB columnt for SMA calculated values.
+     * @param string $tableName             Table name
+     * @param bool $isInitialCalculation    Represents whether the indicator is calculated for the first time or on bar update.
      */
     public static function calculate($close, $period, $smaColumn, $tableName, $isInitialCalculation)
     {
@@ -37,24 +39,11 @@ class Sma
         Then we compare current value with 999999. It is, $priceChannelLowValue = current value*/
         //$priceChannelLowValue = 999999;
 
-        /**
-         * desc - from big values to small. asc - from small to big
-         * in this case: desc. [0] element is the last record in DB. and it's id - quantity of records
-         *
-         * @var json object $records Contains all DB data (records) in json format
-         * IT IS NOT A JSON! IT MOST LIKELY A LARAVEL OBJECT. BUTSCH SENT ME THE LINK.
-         * @todo FIX WHAT BUTSH SAYS
-         * https://laravel.com/docs/5.6/collections
-         */
         $records = DB::table($tableName)
             ->orderBy('time_stamp', 'desc')
             ->get(); // desc, asc - order. Read the whole table from BD to $records
 
         /** @var int $quantityOfBars The quantity of bars for which the price channel will be calculated */
-        /*$quantityOfBars = (DB::table($tableName)
-                ->orderBy('id', 'desc')
-                ->first())->id - $priceChannelPeriod - 1;*/
-
         if ($isInitialCalculation){
             $quantityOfBars = (DB::table($tableName)
                     ->orderBy('id', 'desc')
@@ -62,7 +51,6 @@ class Sma
         } else {
             $quantityOfBars = $period;
         }
-
 
         /**
          * Calculate price channel max, min.

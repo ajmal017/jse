@@ -19,19 +19,15 @@ class Ema
      * $smaColumn - values for calculation
      * $emaColumn - output column
      *
-     * @param $close
-     * @param $period
-     * @param $smaColumn
-     * @param $emaColumn
+     * @param float $close
+     * @param int $period
+     * @param string $smaColumn             To which column in DB the result will be written
+     * @param string $emaColumn                    ..
+     * @param string $table                 Table name
+     * @param bool $isInitialCalculation    Represents whether the indicator is calculated for the first time or on bar update.
      */
     public static function calculate($close, $period, $smaColumn, $emaColumn, $table, $isInitialCalculation){
         self::$multiplier = (2 / ($period + 1));
-
-        /*$bars = DB::table($table)
-            ->where($smaColumn,'!=', null)
-            ->orderBy('time_stamp', 'asc') // desc, asc - order. Read the whole table from BD to $records
-            ->get();*/
-
         /* @var int $quantityOfBars The quantity of bars for which the price channel will be calculated */
         if ($isInitialCalculation){
             $bars = DB::table($table)
@@ -45,7 +41,6 @@ class Ema
                 ->take($period)
                 ->get();
         }
-
 
         $isFirstValue = true;
 

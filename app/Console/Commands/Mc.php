@@ -78,8 +78,12 @@ class Mc extends Command
 
         \App\Classes\Trading\History::loadPeriod($botSettings);
 
-        // MacdSettings::set($macdSettings = ['ema1Period' => $this->argument('ema1'), 'ema2Period' => $this->argument('ema2'),'ema3Period' => $this->argument('ema3')]);
-        Macd::calculate($macdSettings = ['ema1Period' => $botSettings['strategyParams']['emaPeriod'], 'ema2Period' => $botSettings['strategyParams']['macdLinePeriod'], 'ema3Period' => $botSettings['strategyParams']['macdSignalLinePeriod']], $botSettings, true);
+        Macd::calculate($macdSettings = [
+            'ema1Period' => $botSettings['strategyParams']['emaPeriod'],
+            'ema2Period' => $botSettings['strategyParams']['macdLinePeriod'],
+            'ema3Period' => $botSettings['strategyParams']['macdSignalLinePeriod']],
+            $botSettings,
+            true);
         $this->reloadChart($botSettings);
 
         \App\Classes\WebSocket\BitmexWsListener::subscribe(

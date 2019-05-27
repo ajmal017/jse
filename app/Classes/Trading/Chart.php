@@ -101,7 +101,6 @@ class Chart extends Profit
             \App\Classes\Accounting\TradeBar::update($this->botSettings, "sell", $this->lastRow[0]->close, $this->lastRow[0]->id);
             \App\Classes\Accounting\Commission::accumulate($this->botSettings);
         }
-
         $this->finish();
     }
 }

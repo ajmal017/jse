@@ -53,7 +53,7 @@ class CandleMaker
      * @param date          $priceChannelPeriod
      */
     public function index($tickPrice, $tickDateFullTime, $tickVolume, $chart, $command, $priceChannelPeriod, $macdSettings){
-        echo "********************************************** CandleMaker.php<br>\n";
+        echo "********************************************** CandleMaker\n";
 
         /** First time ever application run check. Table is empty */
         /*if(!DB::table('asset_1')->first())
@@ -107,8 +107,9 @@ class CandleMaker
             ]);
 
         $command->error("current tick   : " . gmdate("Y-m-d G:i:s", strtotime($tickDateFullTime)) . " price: $tickPrice");
-        echo "time to compare: " . gmdate("Y-m-d G:i:s", ($this->tt)) . "\n";
+        echo "time to compare: " . gmdate("Y-m-d G:i:s", ($this->tt)) . " ";
         echo "time frame: " . $this->botSettings['timeFrame'] . "\n";
+        echo "Bot instance: " . $this->botSettings['botTitle'] . " Symbol: " . $this->botSettings['executionSymbol'] . "\n";
 
         /**
          * New bar is issued. This code is executed once per time frame.
@@ -225,7 +226,17 @@ class CandleMaker
             PriceChannel::calculate($priceChannelPeriod, $this->tableName, false);
             Sma::calculate('close', 2, 'sma1', $tableName, false); // Calculate SMA together with price channel. This sam used as a filter.
         }
-        if ($this->indicator == 'macd') Macd::calculate($macdSettings, $this->botSettings, false);
+        if ($this->indicator == 'macd') {
+            //Macd::calculate($macdSettings, $this->botSettings, false);
+
+            Macd::calculate($macdSettings = [
+                'ema1Period' => $this->botSettings['strategyParams']['emaPeriod'],
+                'ema2Period' => $this->botSettings['strategyParams']['macdLinePeriod'],
+                'ema3Period' => $this->botSettings['strategyParams']['macdSignalLinePeriod']],
+                $this->botSettings,
+                true);
+
+        }
     }
 }
 

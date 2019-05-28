@@ -2,10 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="0ab8c352-e91a-41d2-a602-98135f1f3232" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/Classes/Indicators/Ema.php" afterPath="$PROJECT_DIR$/app/Classes/Indicators/Ema.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/Classes/Indicators/Macd.php" afterPath="$PROJECT_DIR$/app/Classes/Indicators/Macd.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/Classes/Indicators/Sma.php" afterPath="$PROJECT_DIR$/app/Classes/Indicators/Sma.php" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/Classes/Trading/CandleMaker.php" afterPath="$PROJECT_DIR$/app/Classes/Trading/CandleMaker.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/Classes/Trading/Chart.php" afterPath="$PROJECT_DIR$/app/Classes/Trading/Chart.php" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/Classes/Trading/MacdTradesTrigger.php" afterPath="$PROJECT_DIR$/app/Classes/Trading/MacdTradesTrigger.php" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -29,27 +27,27 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="Pc.php" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/app/Console/Commands/Pc.php">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="238">
-              <caret line="82" column="27" lean-forward="true" selection-start-line="82" selection-start-column="27" selection-end-line="82" selection-end-column="27" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="CandleMaker.php" pinned="false" current-in-tab="true">
+      <file leaf-file-name="CandleMaker.php" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/app/Classes/Trading/CandleMaker.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="242">
-              <caret line="116" column="11" lean-forward="true" selection-start-line="116" selection-start-column="11" selection-end-line="116" selection-end-column="11" />
+            <state relative-caret-position="157">
+              <caret line="111" column="122" lean-forward="false" selection-start-line="111" selection-start-column="122" selection-end-line="111" selection-end-column="122" />
               <folding>
                 <element signature="e#123#155#0#PHP" expanded="true" />
                 <element signature="e#1955#2743#0#PHP" expanded="false" />
                 <element signature="e#6719#7339#0#PHP" expanded="false" />
                 <element signature="e#7679#8068#0#PHP" expanded="false" />
               </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="Backtesting.php" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/app/Classes/Backtesting/Backtesting.php">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="223">
+              <caret line="69" column="43" lean-forward="false" selection-start-line="69" selection-start-column="35" selection-end-line="69" selection-end-column="43" />
+              <folding />
             </state>
           </provider>
         </entry>
@@ -77,8 +75,8 @@
       <file leaf-file-name="MacdTradesTrigger.php" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/app/Classes/Trading/MacdTradesTrigger.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="306">
-              <caret line="48" column="134" lean-forward="false" selection-start-line="48" selection-start-column="134" selection-end-line="48" selection-end-column="134" />
+            <state relative-caret-position="476">
+              <caret line="145" column="40" lean-forward="false" selection-start-line="145" selection-start-column="40" selection-end-line="145" selection-end-column="40" />
               <folding>
                 <element signature="e#2507#4097#0#PHP" expanded="false" />
               </folding>
@@ -96,12 +94,14 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="Ema.php" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/app/Classes/Indicators/Ema.php">
+      <file leaf-file-name="Chart.php" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/app/Classes/Trading/Chart.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="781">
-              <caret line="53" column="13" lean-forward="false" selection-start-line="53" selection-start-column="13" selection-end-line="53" selection-end-column="13" />
-              <folding />
+            <state relative-caret-position="178">
+              <caret line="73" column="40" lean-forward="false" selection-start-line="73" selection-start-column="40" selection-end-line="73" selection-end-column="40" />
+              <folding>
+                <element signature="e#124#169#0#PHP" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -228,13 +228,13 @@
         <option value="$PROJECT_DIR$/app/Classes/Backtesting/Backtesting.php" />
         <option value="$PROJECT_DIR$/.gitignore" />
         <option value="$PROJECT_DIR$/app/Console/Commands/Mc.php" />
-        <option value="$PROJECT_DIR$/app/Classes/Trading/Chart.php" />
         <option value="$PROJECT_DIR$/app/Classes/Indicators/Ema.php" />
         <option value="$PROJECT_DIR$/app/Classes/Indicators/Macd.php" />
         <option value="$PROJECT_DIR$/app/Classes/Indicators/Sma.php" />
         <option value="$PROJECT_DIR$/config/bot.php" />
-        <option value="$PROJECT_DIR$/app/Classes/Trading/MacdTradesTrigger.php" />
         <option value="$PROJECT_DIR$/app/Classes/Trading/CandleMaker.php" />
+        <option value="$PROJECT_DIR$/app/Classes/Trading/MacdTradesTrigger.php" />
+        <option value="$PROJECT_DIR$/app/Classes/Trading/Chart.php" />
       </list>
     </option>
   </component>
@@ -476,12 +476,12 @@
       <workItem from="1558657916950" duration="40878000" />
       <workItem from="1558978850402" duration="464000" />
       <workItem from="1558979345210" duration="787000" />
-      <workItem from="1558983985640" duration="12055000" />
+      <workItem from="1558983985640" duration="13248000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="337506000" />
+    <option name="totallyTimeSpent" value="338699000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1382" height="744" extended-state="6" />
@@ -771,24 +771,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/Classes/Trading/Chart.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="410">
-          <caret line="103" column="18" lean-forward="false" selection-start-line="103" selection-start-column="18" selection-end-line="103" selection-end-column="18" />
-          <folding>
-            <element signature="e#124#169#0#PHP" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/Classes/Backtesting/Backtesting.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="274">
-          <caret line="31" column="42" lean-forward="false" selection-start-line="31" selection-start-column="42" selection-end-line="31" selection-end-column="42" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/app/Console/Commands/Pc.php">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="238">
@@ -857,16 +839,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/Classes/Trading/MacdTradesTrigger.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="306">
-          <caret line="48" column="134" lean-forward="false" selection-start-line="48" selection-start-column="134" selection-end-line="48" selection-end-column="134" />
-          <folding>
-            <element signature="e#2507#4097#0#PHP" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/config/bot.php">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="221">
@@ -877,13 +849,41 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/app/Classes/Trading/CandleMaker.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="242">
-          <caret line="116" column="11" lean-forward="true" selection-start-line="116" selection-start-column="11" selection-end-line="116" selection-end-column="11" />
+        <state relative-caret-position="157">
+          <caret line="111" column="122" lean-forward="false" selection-start-line="111" selection-start-column="122" selection-end-line="111" selection-end-column="122" />
           <folding>
             <element signature="e#123#155#0#PHP" expanded="true" />
             <element signature="e#1955#2743#0#PHP" expanded="false" />
             <element signature="e#6719#7339#0#PHP" expanded="false" />
             <element signature="e#7679#8068#0#PHP" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/Classes/Backtesting/Backtesting.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="223">
+          <caret line="69" column="43" lean-forward="false" selection-start-line="69" selection-start-column="35" selection-end-line="69" selection-end-column="43" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/Classes/Trading/MacdTradesTrigger.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="476">
+          <caret line="145" column="40" lean-forward="false" selection-start-line="145" selection-start-column="40" selection-end-line="145" selection-end-column="40" />
+          <folding>
+            <element signature="e#2507#4097#0#PHP" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/Classes/Trading/Chart.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="178">
+          <caret line="73" column="40" lean-forward="false" selection-start-line="73" selection-start-column="40" selection-end-line="73" selection-end-column="40" />
+          <folding>
+            <element signature="e#124#169#0#PHP" expanded="true" />
           </folding>
         </state>
       </provider>

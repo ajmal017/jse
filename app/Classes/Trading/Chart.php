@@ -71,12 +71,12 @@ class Chart extends Profit
             // Is it the first trade ever?
             if ($this->trade_flag == "all"){
                 echo "---------------------- FIRST EVER TRADE<br>\n";
-                PlaceOrder::dispatch('buy', $this->executionSymbolName, $this->volume, $this->botSettings);
+                if($mode != 'backtest') PlaceOrder::dispatch('buy', $this->executionSymbolName, $this->volume, $this->botSettings);
             }
             else // Not the first trade. Close the current position and open opposite trade. vol = vol * 2
             {
                 echo "---------------------- NOT FIRST EVER TRADE. CLOSE + OPEN. VOL * 2\n";
-                PlaceOrder::dispatch('buy', $this->executionSymbolName, $this->volume * 2, $this->botSettings);
+                if($mode != 'backtest') PlaceOrder::dispatch('buy', $this->executionSymbolName, $this->volume * 2, $this->botSettings);
             }
             // Trade flag. If this flag set to short -> don't enter this IF and wait for channel low crossing (IF below)
             $this->trade_flag = 'short'; $this->position = "long"; $this->add_bar_long = true;
@@ -90,12 +90,12 @@ class Chart extends Profit
             // Is the the first trade ever?
             if ($this->trade_flag == "all"){
                 echo "---------------------- FIRST EVER TRADE<br>\n";
-                PlaceOrder::dispatch('sell', $this->executionSymbolName, $this->volume, $this->botSettings);
+                if($mode != 'backtest') PlaceOrder::dispatch('sell', $this->executionSymbolName, $this->volume, $this->botSettings);
             }
             else // Not the first trade. Close the current position and open opposite trade. vol = vol * 2
             {
                 echo "---------------------- NOT FIRST EVER TRADE. CLOSE + OPEN. VOL * 2\n";
-                PlaceOrder::dispatch('sell', $this->executionSymbolName, $this->volume * 2, $this->botSettings);
+                if($mode != 'backtest') PlaceOrder::dispatch('sell', $this->executionSymbolName, $this->volume * 2, $this->botSettings);
             }
             $this->trade_flag = 'long'; $this->position = "short"; $this->add_bar_short = true;
             \App\Classes\Accounting\TradeBar::update($this->botSettings, "sell", $this->lastRow[0]->close, $this->lastRow[0]->id);

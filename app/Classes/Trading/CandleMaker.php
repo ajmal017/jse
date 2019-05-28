@@ -109,7 +109,7 @@ class CandleMaker
         $command->error("current tick   : " . gmdate("Y-m-d G:i:s", strtotime($tickDateFullTime)) . " price: $tickPrice");
         echo "time to compare: " . gmdate("Y-m-d G:i:s", ($this->tt)) . " ";
         echo "time frame: " . $this->botSettings['timeFrame'] . "\n";
-        echo "Bot instance: " . $this->botSettings['botTitle'] . " Symbol: " . $this->botSettings['executionSymbol'] . "\n";
+        echo "Bot instance: " . $this->botSettings['botTitle'] . " Symbol: " . $this->botSettings['executionSymbol'] . " Math(live/testnet): " . $this->botSettings['bitmex_api_path'] . "\n";
 
         /**
          * New bar is issued. This code is executed once per time frame.

@@ -20,24 +20,13 @@ class Sma
      */
     public static function calculate($close, $period, $smaColumn, $tableName, $isInitialCalculation)
     {
-        /* @var int $priceChannelPeriod */
-        //$priceChannelPeriod = $period;
-
         /* @var int $smaPeriod */
         $smaPeriod = $period;
-
         /**
          * @var int elementIndex Loop index. If the price channel period is 5 the loop will go from 0 to 4.
          * The loop is started on each candle while running through all candles in the array.
          */
         $elementIndex = 0;
-
-        /** @var int $priceChannelHighValue Base value for high value search*/
-        //$priceChannelHighValue = 0;
-
-        /** @var int $priceChannelLowValue Base value for low value search. Really big value is needed at the beginning.
-        Then we compare current value with 999999. It is, $priceChannelLowValue = current value*/
-        //$priceChannelLowValue = 999999;
 
         $records = DB::table($tableName)
             ->orderBy('time_stamp', 'desc')

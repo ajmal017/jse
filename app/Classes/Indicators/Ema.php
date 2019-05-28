@@ -52,7 +52,6 @@ class Ema
                 $ema1Penultimate = DB::table($table)->where('id', $bar->id-1)->value($emaColumn);
                 self::$emaValue = self::$multiplier * ($bar->$close - $ema1Penultimate) + $ema1Penultimate;
             }
-
             DB::table($table)
                 ->where('time_stamp', $bar->time_stamp)
                 ->update([

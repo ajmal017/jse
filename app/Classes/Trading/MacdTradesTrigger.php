@@ -40,12 +40,13 @@ class MacdTradesTrigger extends Profit
     public $firstEverTradeFlag; // True - when the bot is started and the first trade is executed. Then flag turns to false and trade volume is doubled for closing current position and opening the opposite
     public $tradeProfit;
     private $executionSymbolName;
+    private $macdCrossedFirstTime = true;
 
     public function __construct($executionSymbolName, $orderVolume, $botSettings)
     {
         $this->volume = $orderVolume;
         $this->executionSymbolName = $executionSymbolName;
-        $this->trade_flag = 'all';
+        $this->trade_flag = 'trades_disabled'; // Need to wait until MACD cross, then open a trade. Otherwise we get a trade at start.
         $this->botSettings = $botSettings;
     }
 
@@ -55,7 +56,7 @@ class MacdTradesTrigger extends Profit
     //public function index($barDate, $timeStamp)
     public function index($mode = null, $backTestRowId = null)
     {
-        dump(__FILE__);
+        echo __FILE__ . "\n" ;
 
         /*// Realtime mode. No ID of the record is sent. Get the quantity of all records.
         $lastRow = DB::table($this->botSettings['botTitle'])->orderBy('id', 'desc')->take(1)->get();
@@ -95,6 +96,15 @@ class MacdTradesTrigger extends Profit
 
         $this->calc($mode, $backTestRowId);
 
+        /* Wait until MACD generates a signal */
+        if (($this->lastRow[0]->macd_line > $this->lastRow[0]->macd_signal_line) || ($this->lastRow[0]->macd_line < $this->lastRow[0]->macd_signal_line)){
+            if ($this->macdCrossedFirstTime){
+                $this->macdCrossedFirstTime = false;
+                $this->trade_flag = "all";
+            }
+        }
+
+
         if (($this->lastRow[0]->macd_line > $this->lastRow[0]->macd_signal_line) && ($this->trade_flag == "all" || $this->trade_flag == "long")){
 
             echo "####### HIGH TRADE!<br>\n";
@@ -103,7 +113,6 @@ class MacdTradesTrigger extends Profit
                 // open order buy vol = vol
                 echo "---------------------- FIRST EVER TRADE<br>\n";
                 PlaceOrder::dispatch('buy', $this->executionSymbolName, $this->volume, $this->botSettings);
-
             }
             else // Not the first trade. Close the current position and open opposite trade. vol = vol * 2
             {
@@ -119,7 +128,9 @@ class MacdTradesTrigger extends Profit
 
             \App\Classes\Accounting\TradeBar::update($this->botSettings, "buy", $this->lastRow[0]->close, $this->lastRow[0]->id);
             \App\Classes\Accounting\Commission::accumulate($this->botSettings);
-        } // BUY trade
+        }// BUY trade
+
+        //{}
 
         if (($this->lastRow[0]->macd_line < $this->lastRow[0]->macd_signal_line) && ($this->trade_flag == "all"  || $this->trade_flag == "short")) {
             echo "####### LOW TRADE!<br>\n";
@@ -154,6 +165,6 @@ class MacdTradesTrigger extends Profit
             NetProfit::calculate($this->position, $this->botSettings, $this->lastRow[0]->id);
         }*/
 
-        $this->finish();
+        if ($this->trade_flag == 'long' || $this->trade_flag == 'short') $this->finish();
     }
 }

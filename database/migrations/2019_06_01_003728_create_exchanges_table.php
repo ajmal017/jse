@@ -14,18 +14,18 @@ class CreateExchangesTable extends Migration
 
     public function up()
     {
-        Schema::create('symbols', function (Blueprint $table) {
+        Schema::create('exchanges', function (Blueprint $table) {
             $table->increments('id');
             $table->timestamps();
-            $table->string('execution_name')->nullable();
-            $table->string('leverage_name')->nullable();
-            $table->decimal('quote_value', 16, 8)->nullable();
-            $table->string('min_exec_quantity')->nullable();
-            $table->string('formula')->nullable();
-            $table->text('info')->nullable();
+            $table->string('name')->nullable();
+            $table->string('url')->nullable();
+            $table->string('live_api_path')->nullable();
+            $table->string('testnet_api_path')->nullable();
+            $table->string('status')->nullable();
+            $table->text('memo')->nullable();
         });
     }
-    
+
     /**
      * Reverse the migrations.
      *

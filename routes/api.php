@@ -27,3 +27,5 @@ Route::group(['prefix' => 'auth'], function ($router) {
 Route::group(['prefix' => 'trading'], function ($router) {
     Route::get('history/{id}', 'Exchange\HistoryBars@load');
 });
+
+Route::apiResources(['exchange' => 'ExchangeController']); // http://jse.kk/api/exchange

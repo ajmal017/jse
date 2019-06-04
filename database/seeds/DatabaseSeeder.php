@@ -15,6 +15,13 @@ class DatabaseSeeder extends Seeder
     {
         // $this->call(UsersTableSeeder::class);
 
+        /* Seed users */
+        DB::table('users')->insert([
+            'name' => 'slinger',
+            'email' => 'nextbb@yandex.ru',
+            'password' => bcrypt('659111')
+        ]);
+
         /* Seed bots */
         DB::table('bots')->insert([
             'created_at' => now(),
@@ -125,6 +132,5 @@ class DatabaseSeeder extends Seeder
             'is_active' => false,
             'memo' => 'a futures'
         ]);
-
     }
 }

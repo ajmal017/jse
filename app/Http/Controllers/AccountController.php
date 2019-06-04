@@ -3,9 +3,10 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Account;
 use App\Exchange;
 
-class ExchangeController extends Controller
+class AccountController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -14,7 +15,7 @@ class ExchangeController extends Controller
      */
     public function index()
     {
-        return Exchange::paginate();
+        return Account::paginate();
     }
 
     /**
@@ -35,12 +36,13 @@ class ExchangeController extends Controller
      */
     public function store(Request $request)
     {
-        Exchange::create([
-            'name' => $request['name'],
-            'url' => 'http://www.google.com',
-            'live_api_path' => 'http://www.google.com',
-            'testnet_api_path' => 'http://www.google.com',
-            'status' => 'online'
+        $name = Exchange::where('id', $request['id'])->value('name');
+        Account::create([
+            'exchange_id' => $request['id'],
+            'name' => $name,
+            'api' => $request['api'],
+            'api_secret' => $request['api_secret'],
+            'memo' => $request['memo'],
         ]);
     }
 
@@ -52,7 +54,7 @@ class ExchangeController extends Controller
      */
     public function show($id)
     {
-        return \ccxt\Exchange::$exchanges;
+        //
     }
 
     /**
@@ -75,17 +77,7 @@ class ExchangeController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $exchange = Exchange::findOrFail($id);
-        $this->validate($request,[
-            'name' => 'required|string|max:20',
-            'url' => 'url|required',
-            'live_api_path' => 'url|required',
-            'testnet_api_path' => 'url|required',
-            'memo' => 'string|max:50'
-        ]);
-
-        $exchange->update($request->all());
-        return ['message' => 'Updated exchange info'];
+        //
     }
 
     /**
@@ -96,8 +88,8 @@ class ExchangeController extends Controller
      */
     public function destroy($id)
     {
-        $exchange = Exchange::findOrFail($id);
-        $exchange->delete();
-        return ['message' => 'Exchnage deleted'];
+        $account = Account::findOrFail($id);
+        $account->delete();
+        return ['message' => 'Account deleted'];
     }
 }

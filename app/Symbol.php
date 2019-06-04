@@ -2,10 +2,10 @@
 
 namespace App;
 
-use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Notifications\Notifiable;
 
-class Exchange extends Model
+class Symbol extends Model
 {
     use Notifiable;
 
@@ -15,10 +15,11 @@ class Exchange extends Model
      * @var array
      */
     protected $fillable = [
-        'name',
-        'url',
-        'live_api_path',
-        'testnet_api_path',
-        'memo'
+        'exchange_id',
+        'execution_symbol_name',
+        'history_symbol_name',
+        'commission',
+        'memo',
+        'is_active'
     ];
 }

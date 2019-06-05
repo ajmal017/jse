@@ -17,6 +17,7 @@ class Bot extends Model
     protected $fillable = [
         'name',
         'account_id',
+        'symbol_id',
         'time_frame',
         'bars_to_load',
         'volume',

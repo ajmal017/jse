@@ -3,9 +3,9 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Symbol;
+use App\Bot;
 
-class SymbolController extends Controller
+class BotController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -14,7 +14,7 @@ class SymbolController extends Controller
      */
     public function index()
     {
-        return Symbol::paginate();
+        return Bot::paginate();
     }
 
     /**
@@ -22,7 +22,7 @@ class SymbolController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function create(Request $request)
     {
         //
     }
@@ -35,15 +35,7 @@ class SymbolController extends Controller
      */
     public function store(Request $request)
     {
-        //$name = Exchange::where('id', $request['id'])->value('name');
-        Symbol::create([
-            'exchange_id' => $request['exchange_id'],
-            'execution_symbol_name' => $request['execution_symbol_name'],
-            'history_symbol_name' => $request['history_symbol_name'],
-            'commission' => $request['commission'],
-            'is_active' => $request['is_active'],
-            'memo' => $request['memo']
-        ]);
+        //
     }
 
     /**
@@ -77,7 +69,8 @@ class SymbolController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $bot = Bot::findOrFail($id);
+        $bot->update($request->all());
     }
 
     /**
@@ -88,7 +81,6 @@ class SymbolController extends Controller
      */
     public function destroy($id)
     {
-        Symbol::findOrFail($id)->delete();
-        return ['message' => 'Symbol deleted'];
+        //
     }
 }

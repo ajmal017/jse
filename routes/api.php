@@ -31,3 +31,4 @@ Route::group(['prefix' => 'trading'], function ($router) {
 Route::apiResources(['exchange' => 'ExchangeController']); // http://jse.kk/api/exchange
 Route::apiResources(['account' => 'AccountController']); // http://jse.kk/api/account
 Route::apiResources(['symbol' => 'SymbolController']); // http://jse.kk/api/symbol
+Route::apiResources(['bot' => 'BotController']); // http://jse.kk/api/bot

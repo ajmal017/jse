@@ -28,10 +28,17 @@ class DatabaseSeeder extends Seeder
             'password' => bcrypt('$1Raven1$')
         ]);
 
+        DB::table('users')->insert([
+            'name' => 'nastya',
+            'email' => 'art@nastya.com',
+            'password' => bcrypt('nastya')
+        ]);
+
         /* Seed bots */
         DB::table('bots')->insert([
             'created_at' => now(),
             'name' => 'Bot_01',
+            'db_table_name' => 'bot_1',
             'account_id' => 1,
             'symbol_id' => 1,
             'time_frame' => 1,
@@ -46,6 +53,7 @@ class DatabaseSeeder extends Seeder
         DB::table('bots')->insert([
             'created_at' => now(),
             'name' => 'Bot_02',
+            'db_table_name' => 'bot_2',
             'account_id' => 2,
             'symbol_id' => 2,
             'time_frame' => 5,
@@ -60,6 +68,7 @@ class DatabaseSeeder extends Seeder
         DB::table('bots')->insert([
             'created_at' => now(),
             'name' => 'Bot_slow',
+            'db_table_name' => 'bot_3',
             'account_id' => 1,
             'symbol_id' => 1,
             'time_frame' => 5,
@@ -74,6 +83,7 @@ class DatabaseSeeder extends Seeder
         DB::table('bots')->insert([
             'created_at' => now(),
             'name' => 'Bot_fast',
+            'db_table_name' => 'bot_4',
             'account_id' => 2,
             'symbol_id' => 2,
             'time_frame' => 5,
@@ -155,8 +165,8 @@ class DatabaseSeeder extends Seeder
         DB::table('symbols')->insert([
             'created_at' => now(),
             'exchange_id' => 1,
-            'execution_symbol_name' => 'XBT/USD',
-            'history_symbol_name' => 'BTC/USD',
+            'execution_symbol_name' => 'BTC/USD',
+            'history_symbol_name' => 'XBTUSD',
             'commission' => 0.0075,
             'is_active' => true,
             'memo' => 'Execution and history symbol names are different'
@@ -166,7 +176,7 @@ class DatabaseSeeder extends Seeder
             'created_at' => now(),
             'exchange_id' => 1,
             'execution_symbol_name' => 'ETH/USD',
-            'history_symbol_name' => 'ETH/USD',
+            'history_symbol_name' => 'ETHUSD',
             'commission' => 0.0075,
             'is_active' => true,
             'memo' => 'Name is the same'
@@ -175,8 +185,8 @@ class DatabaseSeeder extends Seeder
         DB::table('symbols')->insert([
             'created_at' => now(),
             'exchange_id' => 2,
-            'execution_symbol_name' => 'ADA19',
-            'history_symbol_name' => 'ADA19',
+            'execution_symbol_name' => 'ADAM19',
+            'history_symbol_name' => 'ADAM19',
             'commission' => 0.025,
             'is_active' => false,
             'memo' => 'a futures'

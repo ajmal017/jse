@@ -23,6 +23,7 @@ class CreateBotsTable extends Migration
             $table->timestamps();
 
             $table->string('name')->nullable();
+            $table->string('db_table_name')->nullable();
             $table->integer('account_id')->nullable();
             $table->integer('symbol_id')->nullable();
 

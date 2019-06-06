@@ -79,12 +79,11 @@ class Pc extends Command
         dump('history loaded');
 
         /* Initial indicators calculation and chart reload*/
-        dump($this->mt());
+        dump($this->mt()); // Time measurement. How long the execution takes?
         PriceChannel::calculate($botSettings['strategyParams']['priceChannelPeriod'], $botSettings['botTitle'], true);
         Sma::calculate('close', 2, 'sma1', $botSettings['botTitle'], true);
         dump($this->mt());
         $this->reloadChart($botSettings);
-
 
         \App\Classes\WebSocket\BitmexWsListener::subscribe(
             $connector,

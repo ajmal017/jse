@@ -18,7 +18,8 @@ class HistoryBars extends \App\Http\Controllers\Controller
         $macdSignalLine = array();
         $shortTradeMarkers = array();
 
-        $allDbValues = DB::table(config('bot.bots')[$botId]['botTitle'])->get();
+        //$allDbValues = DB::table(config('bot.bots')[$botId]['botTitle'])->get();
+        $allDbValues = DB::table('bot_' . $botId)->get();
 
         foreach ($allDbValues as $rowValue) { // Go through all DB records
             $candles[] = [

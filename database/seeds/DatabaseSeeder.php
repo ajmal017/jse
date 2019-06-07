@@ -80,7 +80,7 @@ class DatabaseSeeder extends Seeder
             'memo' => "Obama's bot"
         ]);
 
-        /*DB::table('bots')->insert([
+        DB::table('bots')->insert([
             'created_at' => now(),
             'name' => 'Bot_fast',
             'db_table_name' => 'bot_4',
@@ -93,7 +93,7 @@ class DatabaseSeeder extends Seeder
             'rate_limit' => 7,
             'status' => 'idle',
             'memo' => "Putin's bot"
-        ]);*/
+        ]);
 
         /* Seed exchanges */
         DB::table('exchanges')->insert([

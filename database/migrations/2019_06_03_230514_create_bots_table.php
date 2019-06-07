@@ -45,7 +45,7 @@ class CreateBotsTable extends Migration
             $table->unsignedInteger('bot_id')->nullable();
             $table->foreign('bot_id')->references('id')->on('bots')->onDelete('restrict');
 
-            $table->integer('exchange_id')->nullable();
+            $table->unsignedInteger('exchange_id')->nullable(); //**************
             $table->string('name')->nullable();
             $table->string('api')->nullable();
             $table->string('api_secret')->nullable();
@@ -59,16 +59,23 @@ class CreateBotsTable extends Migration
             $table->timestamps();
 
             /* Accounts */
-            $table->unsignedInteger('account_id')->nullable();
-            $table->foreign('account_id')->references('id')->on('accounts')->onDelete('restrict');
+            //$table->unsignedInteger('account_id')->nullable();
+            //$table->foreign('account_id')->references('id')->on('accounts')->onDelete('restrict');
 
-            //$table->string('account_id')->nullable();
             $table->string('name')->nullable();
             $table->string('url')->nullable();
             $table->string('live_api_path')->nullable();
             $table->string('testnet_api_path')->nullable();
             $table->string('status')->nullable();
             $table->text('memo')->nullable();
+        });
+
+        // Set a foreign key for Accounts.exchnage_id -> Exchnages.is
+        // ANother foreign key for Exchnages table
+        // Schena TABLE is used! Instead of Schema::create!
+        Schema::table('accounts', function (Blueprint $table) {
+            /* Exchanges. One to many. One exchange - many accounts */
+            $table->foreign('exchange_id')->references('id')->on('exchanges')->onDelete('restrict');
         });
 
         Schema::create('symbols', function (Blueprint $table) {

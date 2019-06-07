@@ -36,14 +36,31 @@ class AccountController extends Controller
      */
     public function store(Request $request)
     {
-        $name = Exchange::where('id', $request['id'])->value('name');
         Account::create([
             'exchange_id' => $request['id'],
-            'name' => $name,
+            'name' => Exchange::where('id', $request['id'])->value('name'),
             'api' => $request['api'],
             'api_secret' => $request['api_secret'],
             'memo' => $request['memo'],
         ]);
+
+        // Account id in Exchnages
+        // use $accountId
+        //
+        // We added a new record to Account table using exchnageId
+        // How can i find it?
+        //
+        // Take the same exchnageId = $requesr['id'];
+        // And query Account table -> you will get the desired Account id -> which should be placed in Exchnage table
+        // account_id - is a primary key
+        /*$accountId =
+            Account::where('exchange_id', $request['id'])->value('id');
+
+        // Update link: Exchnage -> accoint_id in Exchnages table
+        Exchange::where('id', $request['id'])
+            ->update([
+            'account_id' => $accountId
+         ]);*/
     }
 
     /**

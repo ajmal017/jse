@@ -3,7 +3,6 @@
 namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
-use Illuminate\Support\Facades\DB;
 
 /**
  * For front end use.
@@ -20,7 +19,7 @@ class Front extends Command
      *
      * @var string
      */
-    protected $signature = 'front {botInstance}';
+    protected $signature = 'front {botId}';
 
     /**
      * The console command description.
@@ -47,6 +46,13 @@ class Front extends Command
     public function handle()
     {
         /**
+         * Set bot's instance status to idle (stop the bot)
+         * @tofo update Bots table once the status is set to idle
+         */
+        \App\Bot::where('id', $this->argument('botId'))->update(['status' => 'idle']);
+
+        /**
+         * Websocket connection
          * Ratchet/pawl websocket library
          * @see https://github.com/ratchetphp/Pawl
          */
@@ -54,6 +60,9 @@ class Front extends Command
         $reactConnector = new \React\Socket\Connector($loop, ['dns' => '8.8.8.8', 'timeout' => 10]);
         $connector = new \Ratchet\Client\Connector($loop, $reactConnector);
 
-        \App\Classes\WebSocket\BitmexWsListenerFront::subscribe($connector, $loop, $this, $this->argument('botInstance'));
+        /**
+         * Subscribe to quotes, calculate indicators, start trading, etc.
+         */
+        \App\Classes\WebSocket\BitmexWsListenerFront::subscribe($connector, $loop, $this, $this->argument('botId'));
     }
 }

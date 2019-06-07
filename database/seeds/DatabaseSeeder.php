@@ -69,7 +69,7 @@ class DatabaseSeeder extends Seeder
             'created_at' => now(),
             'name' => 'Bot_slow',
             'db_table_name' => 'bot_3',
-            'account_id' => 1,
+            'account_id' => 3,
             'symbol_id' => 1,
             'time_frame' => 5,
             'bars_to_load' => 11,
@@ -80,11 +80,11 @@ class DatabaseSeeder extends Seeder
             'memo' => "Obama's bot"
         ]);
 
-        DB::table('bots')->insert([
+        /*DB::table('bots')->insert([
             'created_at' => now(),
             'name' => 'Bot_fast',
             'db_table_name' => 'bot_4',
-            'account_id' => 2,
+            'account_id' => 4,
             'symbol_id' => 2,
             'time_frame' => 5,
             'bars_to_load' => 400,
@@ -93,7 +93,7 @@ class DatabaseSeeder extends Seeder
             'rate_limit' => 7,
             'status' => 'idle',
             'memo' => "Putin's bot"
-        ]);
+        ]);*/
 
         /* Seed exchanges */
         DB::table('exchanges')->insert([
@@ -130,7 +130,8 @@ class DatabaseSeeder extends Seeder
         /* Seed accounts */
         DB::table('accounts')->insert([
             'created_at' => now(),
-            'name' => 'Bitmex new',
+            'name' => 'Boris',
+            'exchange_id' => 1,
             'bot_id' => 1,
             'api' => 'AdpGKvlnElQmowv-SgKu9kiF',
             'api_secret' => 'KrcRtZ8SfAx_4xOSEm1DHon1gPF2wcSHPVZkyJ7SmOmCX0j1',
@@ -142,6 +143,7 @@ class DatabaseSeeder extends Seeder
         DB::table('accounts')->insert([
             'created_at' => now(),
             'name' => 'No money',
+            'exchange_id' => 1,
             'bot_id' => 2,
             'api' => 'AdpGKvlnElQmowv-SgKu9kiF',
             'api_secret' => 'KrcRtZ8SfAx_4xOSEm1DHon1gPF2wcSHPVZkyJ7SmOmCX0j1',
@@ -152,8 +154,21 @@ class DatabaseSeeder extends Seeder
 
         DB::table('accounts')->insert([
             'created_at' => now(),
-            'name' => 'Derebit',
-            'bot_id' => 1,
+            'name' => 'Putin',
+            'exchange_id' => 1,
+            'bot_id' => 3,
+            'api' => '123',
+            'api_secret' => '456',
+            'status' => 'ok',
+            'is_testnet' => true,
+            'memo' => 'Good is good'
+        ]);
+
+        DB::table('accounts')->insert([
+            'created_at' => now(),
+            'name' => 'Obama',
+            'exchange_id' => 2,
+            'bot_id' => 4,
             'api' => '123',
             'api_secret' => '456',
             'status' => 'ok',

@@ -133,8 +133,8 @@ class DatabaseSeeder extends Seeder
             'name' => 'Boris',
             'exchange_id' => 1,
             'bot_id' => 1,
-            'api' => 'AdpGKvlnElQmowv-SgKu9kiF',
-            'api_secret' => 'KrcRtZ8SfAx_4xOSEm1DHon1gPF2wcSHPVZkyJ7SmOmCX0j1',
+            'api' => 'fsHeHLvLj7qTei5ElFp67uwF',
+            'api_secret' => 'EB0_S72OqsPwKUar2rdaiwBjycj08QQsyfwGbeZ9IoXXQsIa',
             'status' => 'ok',
             'is_testnet' => true,
             'memo' => 'live account'

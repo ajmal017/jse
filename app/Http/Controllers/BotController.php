@@ -35,7 +35,10 @@ class BotController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        // Unlink goes here
+        Bot::where('id', $request['botId'])->update([
+            $request['unlinkField'] => null
+        ]);
     }
 
     /**

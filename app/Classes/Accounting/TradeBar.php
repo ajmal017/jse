@@ -7,9 +7,6 @@ class TradeBar
     // public static function update($botSettings, $timeStamp, $direction){
     public static function update($botSettings, $direction, $tradePrice, $lastRowId){
 
-        //echo "jopa: " . $lastRowId;
-        //die();
-
         $lastRow =
             DB::table($botSettings['botTitle'])
                 ->orderBy('id', 'desc')->take(1)

@@ -206,5 +206,135 @@ class DatabaseSeeder extends Seeder
             'is_active' => false,
             'memo' => 'a futures'
         ]);
+
+        /* Seed strategy types */
+        DB::table('strategy_types')->insert([
+            'created_at' => now(),
+            'name' => 'Price channel',
+            'memo' => 'This is a price channel strategy'
+        ]);
+
+        DB::table('strategy_types')->insert([
+            'created_at' => now(),
+            'name' => 'MACD',
+            'memo' => 'MACD strategy'
+        ]);
+
+        /* Seed pricechannel settings */
+        DB::table('pricechannel_settings')->insert([
+            'created_at' => now(),
+            'time_frame' => 1,
+            'sma_filter_period' => 1,
+            'memo' => 'Price channel settings memo goes here'
+        ]);
+
+        DB::table('pricechannel_settings')->insert([
+            'created_at' => now(),
+            'time_frame' => 1,
+            'sma_filter_period' => 2,
+            'memo' => 'Price channel settings memo goes here'
+        ]);
+
+        /* Seed MACD settings */
+        DB::table('macd_settings')->insert([
+            'created_at' => now(),
+            'ema_period' => 2,
+            'macd_line_period' => 2,
+            'macd_signalline_period' => 5,
+            'memo' => 'Macd settings memo goes here'
+        ]);
+
+        DB::table('macd_settings')->insert([
+            'created_at' => now(),
+            'ema_period' => 3,
+            'macd_line_period' => 3,
+            'macd_signalline_period' => 10,
+            'memo' => 'In macd we trust!'
+        ]);
+
+        DB::table('macd_settings')->insert([
+            'created_at' => now(),
+            'ema_period' => 5,
+            'macd_line_period' => 4,
+            'macd_signalline_period' => 23,
+            'memo' => 'What do you think about macd?'
+        ]);
+
+
+        /* Seed strategies */
+        DB::table('strategies')->insert([
+            'created_at' => now(),
+            'name' => 'PC strategy long',
+            'strategy_type_id' => 1, // 1 - price channel, 2 - macd
+            'is_active' => true,
+            'pricechannel_settings_id' => 1,
+            'macd_settings_id' => null,
+            'memo' => 'Memo about PC strategy #1',
+        ]);
+
+        DB::table('strategies')->insert([
+            'created_at' => now(),
+            'name' => 'PC very long ',
+            'strategy_type_id' => 1,
+            'is_active' => true,
+            'pricechannel_settings_id' => 2,
+            'macd_settings_id' => null,
+            'memo' => 'Memo about PC strategy #2',
+        ]);
+
+        DB::table('strategies')->insert([
+            'created_at' => now(),
+            'name' => 'MACD id=1',
+            'strategy_type_id' => 2,
+            'is_active' => true,
+            'pricechannel_settings_id' => null,
+            'macd_settings_id' => 1,
+            'memo' => 'Memo about MACD strategy #1',
+        ]);
+
+        DB::table('strategies')->insert([
+            'created_at' => now(),
+            'name' => 'Good old MACD',
+            'strategy_type_id' => 2,
+            'is_active' => true,
+            'pricechannel_settings_id' => null,
+            'macd_settings_id' => 2,
+            'memo' => 'Memo about MACD strategy #2',
+        ]);
+
+        DB::table('strategies')->insert([
+            'created_at' => now(),
+            'name' => 'In MACD we trust',
+            'strategy_type_id' => 2,
+            'is_active' => true,
+            'pricechannel_settings_id' => null,
+            'macd_settings_id' => 3,
+            'memo' => 'Macd memo #3',
+        ]);
+
+        /* Update strategy_id in Bots */
+        DB::table('bots')
+            ->where('id', 1)
+            ->update([
+            'strategy_id' => 1
+        ]);
+
+        DB::table('bots')
+            ->where('id', 2)
+            ->update([
+                'strategy_id' => 2
+            ]);
+
+        DB::table('bots')
+            ->where('id', 3)
+            ->update([
+                'strategy_id' => 3
+            ]);
+
+        DB::table('bots')
+            ->where('id', 4)
+            ->update([
+                'strategy_id' => 4
+            ]);
     }
 }

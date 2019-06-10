@@ -42,7 +42,7 @@ class CreateBotsTable extends Migration
 
             /* Bot foreign key column */
             $table->unsignedInteger('bot_id')->nullable();
-            $table->foreign('bot_id')->references('id')->on('bots')->onDelete('restrict');
+            //$table->foreign('bot_id')->references('id')->on('bots')->onDelete('restrict');
 
             $table->unsignedInteger('exchange_id')->nullable();
             $table->string('name')->nullable();
@@ -141,9 +141,9 @@ class CreateBotsTable extends Migration
         /**
          * Set a foreign key for Bots.strategy_id  Strategies.id
          */
-        Schema::table('bots', function (Blueprint $table) {
+        /*Schema::table('bots', function (Blueprint $table) {
             $table->foreign('strategy_id')->references('id')->on('strategies')->onDelete('restrict');
-        });
+        });*/
     }
 
     /**

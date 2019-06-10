@@ -10,9 +10,12 @@ namespace App\Classes\WebSocket;
 use App\Bot;
 use App\Classes\Trading\CandleMaker;
 use App\Classes\Trading\Chart;
+use App\Strategy;
 use App\Symbol;
 use App\Account;
 use App\Exchange;
+use App\PricechannelSettings;
+use App\MacdSettings;
 
 class BitmexWsListenerFront
 {
@@ -20,7 +23,10 @@ class BitmexWsListenerFront
     public static $candleMaker;
     public static $chart;
     private static $symbol;
+
     private static $priceChannelPeriod;
+    private static $smaFilterPeriod;
+
     private static $macdSettings;
 
     private static $connection;
@@ -28,96 +34,116 @@ class BitmexWsListenerFront
     private static $isUnsubscribed = false;
     private static $botId;
     private static $execution_symbol_name;
-    private static $live_api_path;
-    private static $testnet_api_path;
+    private static $apiPath;
     private static $api;
-    private static $api_secret;
+    private static $apiSecret;
+
+    private static $isCreateCLasses = true;
 
     // $candleMaker, $chart, $symbol, $priceChannelPeriod, $macdSettings
     public static function subscribe($connector, $loop, $console, $botId){
 
-        // FOR TESTING ONLY:
-        //$botId = 1;
+        // get strategy_id from bots
+        $strategyId = Bot::where('id', $botId)->value('strategy_id');
+
+        // get strategy type from strategies using strategy_id
+        $strategyTypeId = Strategy::where('id', $strategyId)->value('strategy_type_id');
+
+        // if strategy_tyme == 1 price channel
+        if ($strategyTypeId == '1'){
+            // get pricechannel_settings_id from strategies
+            $pricechannelSettingsId = Strategy::where('id', $strategyId)->value('pricechannel_settings_id');
+            // get settings row from price_channel_settings
+            $pricechannelSettingsRow = PricechannelSettings::where('id', $pricechannelSettingsId)->get();
+            self::$priceChannelPeriod = $pricechannelSettingsRow[0]->time_frame;
+            self::$smaFilterPeriod = $pricechannelSettingsRow[0]->sma_filter_period;
+        }
+
+        // if strategy_type == 2 macd
+        if ($strategyTypeId == '2'){
+            $macdSettingsId = Strategy::where('id', $strategyId)->value('macd_settings_id');
+            $macdSettingsRow = MacdSettings::where('id', $macdSettingsId)->get();
+        }
+
 
         self::$console = $console;
         //self::$symbol = $symbol;
-        self::$priceChannelPeriod = 1;
+        //self::$priceChannelPeriod = 1;
         //self::$macdSettings = $macdSettings;
         self::$botId = $botId;
 
         $self = get_called_class(); // For static methods call inside an anonymous function
 
 
-
-
-        self::$candleMaker = new \App\Classes\Trading\CandleMaker(
-            'priceChannel',
-            [
-                'botTitle' => Bot::where('id', self::$botId)->value('db_table_name'),
-                'bitmex_api_path' => 'test',
-                'frontEndId' => Bot::where('id', self::$botId)->value('front_end_id'),
-                'rateLimit' => Bot::where('id', self::$botId)->value('rate_limit'),
-                'executionSymbol' => self::$execution_symbol_name,
-                'timeFrame' => Bot::where('id', self::$botId)->value('time_frame')
-            ]);
-
-        self::$chart = new \App\Classes\Trading\Chart(
-            self::$execution_symbol_name,
-            Bot::where('id', self::$botId)->value('volume'),
-            [
-                'botTitle' => Bot::where('id', self::$botId)->value('db_table_name'),
-                'volume' => Bot::where('id', self::$botId)->value('volume'),
-                'commission' => 0.0750,
-                'bitmex_api_path' => 'test',
-                'bitmex_api_key' => self::$api,
-                'api_api_secret' => self::$api_secret
-            ]);
-
-
-
-
         $loop->addPeriodicTimer(1, function() use($loop, $botId, $self) {
 
-            /*// Get account_id from Bot
-            $account_id = Bot::where('id', $botId)->value('account_id');
-            // Get exchnage_id from Account
-            $exchange_id = Account::where('id', $account_id)->value('exchange_id');
-            self::$api = Account::where('id', $account_id)->value('api');
-            self::$api_secret = Account::where('id', $account_id)->value('api_secret');
-            // Get live api path from Exchnage
-            self::$live_api_path = Exchange::where('id', $exchange_id)->value('live_api_path');
-            self::$testnet_api_path = Exchange::where('id', $exchange_id)->value('testnet_api_path');
-            // Get execution_symbol_name
-            // Get history_symbol_name
-            self::$execution_symbol_name = Symbol::where('exchange_id', $exchange_id)->value('execution_symbol_name');
-            $history_symbol_name = Symbol::where('exchange_id', $exchange_id)->value('history_symbol_name');*/
-
             // Get account_id from Bot
-            $account_id = $botId;
-            // Get exchnage_id from Account
-            $exchange_id = $botId;
+            $account_id = Bot::where('id', $botId)->value('account_id');
+            // Get exchange_id from Account
+            $exchange_id = Account::where('id', $account_id)->value('exchange_id');
+
             self::$api = Account::where('id', $account_id)->value('api');
-            self::$api_secret = Account::where('id', $account_id)->value('api_secret');
-            // Get live api path from Exchnage
-            self::$live_api_path = Exchange::where('id', $exchange_id)->value('live_api_path');
-            self::$testnet_api_path = Exchange::where('id', $exchange_id)->value('testnet_api_path');
+            self::$apiSecret = Account::where('id', $account_id)->value('api_secret');
+
+            // Get is_testnet
+            $isTestnet = Account::where('id', $account_id)->value('is_testnet');
+
+            if ($isTestnet == '1'){
+                /* Testnet account type */
+                // Get live api path from Exchnage
+                self::$apiPath = Exchange::where('id', $exchange_id)->value('testnet_api_path');
+            } else {
+                self::$apiPath = Exchange::where('id', $exchange_id)->value('live_api_path');
+            }
+
+            // Get symbol_id from Bots
+            $symbolId = Bot::where('id', $botId)->value('symbol_id');
             // Get execution_symbol_name
             // Get history_symbol_name
-            self::$execution_symbol_name = Symbol::where('id', $exchange_id)->value('execution_symbol_name');
-            $history_symbol_name = Symbol::where('id', $exchange_id)->value('history_symbol_name');
+            self::$execution_symbol_name = Symbol::where('id', $symbolId)->value('execution_symbol_name');
+            $history_symbol_name = Symbol::where('id', $symbolId)->value('history_symbol_name');
 
-            /*dump($botId);
-            dump($account_id);
-            dump(self::$live_api_path);
-            dump(self::$testnet_api_path);
+            dump($botId);
+            //dump($account_id);
+            dump(self::$apiPath);
             dump(self::$execution_symbol_name);
-            dump($history_symbol_name);*/
+            dump($history_symbol_name);
+
+
+            // Create Chart and Candle maker classes here. ONCE!
+            // Create again after STOP!
+            if (self::$isCreateCLasses) {
+                self::$candleMaker = new \App\Classes\Trading\CandleMaker(
+                    'priceChannel',
+                    [
+                        'botTitle' => Bot::where('id', self::$botId)->value('db_table_name'),
+                        'bitmex_api_path' => 'test',
+                        'frontEndId' => Bot::where('id', self::$botId)->value('front_end_id'),
+                        'rateLimit' => Bot::where('id', self::$botId)->value('rate_limit'),
+                        'executionSymbol' => self::$execution_symbol_name,
+                        'timeFrame' => Bot::where('id', self::$botId)->value('time_frame')
+                    ]);
+
+                self::$chart = new \App\Classes\Trading\Chart(
+                    self::$execution_symbol_name,
+                    Bot::where('id', self::$botId)->value('volume'),
+                    [
+                        'botTitle' => Bot::where('id', self::$botId)->value('db_table_name'),
+                        'volume' => Bot::where('id', self::$botId)->value('volume'),
+                        'commission' => 0.0750,
+                        'bitmex_api_path' => 'test',
+                        'bitmex_api_key' => self::$api,
+                        'api_api_secret' => self::$apiSecret
+                    ]);
+
+                self::$isCreateCLasses = false;
+            }
+
+
+
+
 
             echo (Bot::where('id', $botId)->value('status') == 'running' ? 'running' : 'idle') . "\n";
-
-
-
-
 
 
             // If status == running -> get history and subscribe to symbol
@@ -131,7 +157,6 @@ class BitmexWsListenerFront
                         'historySymbol' => $history_symbol_name
                     ]);
                     dump('history loaded');
-                    dump($history_symbol_name);
 
 
 
@@ -178,6 +203,7 @@ class BitmexWsListenerFront
                     // Wait for the next bot start
 
                     self::$isUnsubscribed = false;
+                    self::$isCreateCLasses; // Chart and CandleMaker will be freshly created
                 }
             }
 

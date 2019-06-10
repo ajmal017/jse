@@ -59,6 +59,7 @@ class Chart extends Profit
 
     public function index($mode = null, $backTestRowId = null)
     {
+
         echo(__FILE__ . "\n");
         $this->calc($mode, $backTestRowId); // Inherited class call
 

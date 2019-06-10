@@ -48,7 +48,8 @@ class StrategyController extends Controller
             'pricechannel_settings_id' => 'numeric|nullable',
             'macd_settings_id' => 'numeric|nullable',
             // Price channel
-            'time_frame' => ['nullable', Rule::in(['1', '5'])],
+            /*'time_frame' => ['nullable', Rule::in(['1', '5'])],*/
+            'time_frame' => 'nullable|numeric|max:50',
             'sma_filter_period' => 'numeric|nullable',
             // Macd
             'ema_period' => 'numeric|nullable',
@@ -62,8 +63,8 @@ class StrategyController extends Controller
         if ($request['strategy_type_id'] == '1') {
             // Insert settings to pricechanel_settings table
             PricechannelSettings::create([
-                'time_frame' => 2,
-                'sma_filter_period' => 3
+                'time_frame' => $request['time_frame'],
+                'sma_filter_period' => $request['sma_filter_period']
             ]);
             // Get the added id
             self::$PricechannelSettingsAddedId = PricechannelSettings::orderby('id', 'desc')->take(1)->value('id');
@@ -136,7 +137,8 @@ class StrategyController extends Controller
             'pricechannel_settings_id' => 'numeric|nullable',
             'macd_settings_id' => 'numeric|nullable',
             // Price channel
-            'time_frame' => ['nullable', Rule::in(['1', '5'])],
+            //'time_frame' => ['nullable', Rule::in(['1', '5'])],
+            'time_frame' => 'nullable|numeric|max:50',
             'sma_filter_period' => 'numeric|nullable',
             // Macd
             'ema_period' => 'numeric|nullable',

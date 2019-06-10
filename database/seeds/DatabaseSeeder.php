@@ -136,14 +136,14 @@ class DatabaseSeeder extends Seeder
         /* Seed accounts */
         DB::table('accounts')->insert([
             'created_at' => now(),
-            'name' => 'Boris',
+            'name' => 'Boris-working-testnet-account',
             'exchange_id' => 1,
             'bot_id' => 1,
-            'api' => 'fsHeHLvLj7qTei5ElFp67uwF',
-            'api_secret' => 'EB0_S72OqsPwKUar2rdaiwBjycj08QQsyfwGbeZ9IoXXQsIa',
+            'api' => 'AdpGKvlnElQmowv-SgKu9kiF',
+            'api_secret' => 'KrcRtZ8SfAx_4xOSEm1DHon1gPF2wcSHPVZkyJ7SmOmCX0j1',
             'status' => 'ok',
             'is_testnet' => true,
-            'memo' => 'live account'
+            'memo' => 'Testnet working account!'
         ]);
 
         DB::table('accounts')->insert([

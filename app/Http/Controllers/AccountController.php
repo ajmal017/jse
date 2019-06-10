@@ -36,11 +36,20 @@ class AccountController extends Controller
      */
     public function store(Request $request)
     {
+        $this->validate($request, [
+            'id' => 'required',
+            'name' => 'required',
+            'api' => 'required',
+            'api_secret' => 'required'
+        ]);
+
         Account::create([
             'exchange_id' => $request['id'],
-            'name' => Exchange::where('id', $request['id'])->value('name'),
+            'is_testnet' => $request['is_testnet'],
+            'name' => $request['name'],
             'api' => $request['api'],
             'api_secret' => $request['api_secret'],
+            'status' => 'ok',
             'memo' => $request['memo'],
         ]);
 
@@ -107,6 +116,5 @@ class AccountController extends Controller
     {
         $account = Account::findOrFail($id);
         $account->delete();
-        return ['message' => 'Account deleted'];
     }
 }

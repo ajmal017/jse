@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 use App\Bot;
 
 class BotController extends Controller
@@ -73,6 +74,9 @@ class BotController extends Controller
     public function update(Request $request, $id)
     {
         $bot = Bot::findOrFail($id);
+        $this->validate($request, [
+            'time_frame' => ['required', Rule::in(['1', '5'])],
+        ]);
         $bot->update($request->all());
     }
 

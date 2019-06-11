@@ -103,7 +103,15 @@ class AccountController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $account = Account::findOrFail($id);
+        $this->validate($request, [
+            'id' => 'required',
+            'name' => 'required',
+            'api' => 'required',
+            'api_secret' => 'required'
+        ]);
+
+        $account->update($request->all());
     }
 
     /**

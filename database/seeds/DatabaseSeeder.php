@@ -49,7 +49,7 @@ class DatabaseSeeder extends Seeder
             'symbol_id' => 1,
             'time_frame' => 1,
             'bars_to_load' => 50,
-            'volume' => 100,
+            'volume' => 1,
             'front_end_id' => '12345',
             'rate_limit' => 4,
             'status' => 'idle',

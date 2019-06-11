@@ -85,7 +85,6 @@ class ExchangeController extends Controller
         ]);
 
         $exchange->update($request->all());
-        return ['message' => 'Updated exchange info'];
     }
 
     /**

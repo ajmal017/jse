@@ -37,6 +37,8 @@ class BitmexWsListenerFront
     private static $apiPath;
     private static $api;
     private static $apiSecret;
+    private static $commission;
+    private static $isTestnet;
 
     private static $isCreateCLasses = true;
 
@@ -67,9 +69,6 @@ class BitmexWsListenerFront
 
 
         self::$console = $console;
-        //self::$symbol = $symbol;
-        //self::$priceChannelPeriod = 1;
-        //self::$macdSettings = $macdSettings;
         self::$botId = $botId;
 
         $self = get_called_class(); // For static methods call inside an anonymous function
@@ -86,25 +85,27 @@ class BitmexWsListenerFront
             self::$apiSecret = Account::where('id', $account_id)->value('api_secret');
 
             // Get is_testnet
-            $isTestnet = Account::where('id', $account_id)->value('is_testnet');
+            self::$isTestnet = Account::where('id', $account_id)->value('is_testnet');
 
-            if ($isTestnet == '1'){
-                /* Testnet account type */
+            /*if ($isTestnet == '1'){
                 // Get live api path from Exchnage
                 self::$apiPath = Exchange::where('id', $exchange_id)->value('testnet_api_path');
             } else {
                 self::$apiPath = Exchange::where('id', $exchange_id)->value('live_api_path');
-            }
+            }*/
 
             // Get symbol_id from Bots
             $symbolId = Bot::where('id', $botId)->value('symbol_id');
             // Get execution_symbol_name
             // Get history_symbol_name
             self::$execution_symbol_name = Symbol::where('id', $symbolId)->value('execution_symbol_name');
+            self::$commission = Symbol::where('id', $symbolId)->value('commission');
             $history_symbol_name = Symbol::where('id', $symbolId)->value('history_symbol_name');
 
             dump($botId);
-            dump(self::$apiPath);
+            echo "isTestnet: " . self::$isTestnet . "\n";
+            dump(self::$api);
+            dump(self::$apiSecret);
             dump(self::$execution_symbol_name);
             dump($history_symbol_name);
 
@@ -116,7 +117,7 @@ class BitmexWsListenerFront
                     'priceChannel',
                     [
                         'botTitle' => Bot::where('id', self::$botId)->value('db_table_name'),
-                        'bitmex_api_path' => 'test',
+                        'bitmex_api_path' => self::$apiPath,
                         'frontEndId' => Bot::where('id', self::$botId)->value('front_end_id'),
                         'rateLimit' => Bot::where('id', self::$botId)->value('rate_limit'),
                         'executionSymbol' => self::$execution_symbol_name,
@@ -129,10 +130,10 @@ class BitmexWsListenerFront
                     [
                         'botTitle' => Bot::where('id', self::$botId)->value('db_table_name'),
                         'volume' => Bot::where('id', self::$botId)->value('volume'),
-                        'commission' => -0.0025,
-                        'bitmex_api_path' => 'test',
-                        'bitmex_api_key' => self::$api,
-                        'api_api_secret' => self::$apiSecret
+                        'commission' => self::$commission,
+                        'api_path' => self::$isTestnet,
+                        'api_key' => self::$api,
+                        'secret' => self::$apiSecret
                     ]);
 
                 self::$isCreateCLasses = false;
@@ -182,9 +183,20 @@ class BitmexWsListenerFront
 
             // If status == idle -> stop the loop
             if (Bot::where('id', $botId)->value('status') == 'idle'){
-                dump('the bot is idle/STOPPED');
 
+                /* @todo 12.06.19 Move to a separate method. This code and the first usage  */
                 self::$chart->trade_flag = 'all'; // JSE-117. Trade flag doesn't reset on stop
+                self::$chart->executionSymbolName = self::$execution_symbol_name;
+                self::$chart->volume = Bot::where('id', self::$botId)->value('volume');
+                self::$chart->botSettings =
+                    [
+                        'botTitle' => Bot::where('id', self::$botId)->value('db_table_name'),
+                        'volume' => Bot::where('id', self::$botId)->value('volume'),
+                        'commission' => self::$commission,
+                        'api_path' => self::$isTestnet,
+                        'api_key' => self::$api,
+                        'secret' => self::$apiSecret
+                    ];
 
                 // reset history flag
                 self::$isHistoryLoaded = true;

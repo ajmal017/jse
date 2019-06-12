@@ -14,12 +14,37 @@ class Exchange
 {
     private static $response;
     public static function placeMarketBuyOrder($symbol, $volume, $botSettings){
+
+        dump(__FILE__);
+        dump(__LINE__);
+
         $exchange = new bitmex();
-        $exchange->urls['api'] = $exchange->urls[$botSettings['bitmex_api_path']]; // Testnet or live
-        $exchange->apiKey = ($botSettings['bitmex_api_path'] == 'api' ? $botSettings['bitmex_api_key'] : config('bot.testNetSettings')['bitmex_testnet_api_key']);
-        $exchange->secret = ($botSettings['bitmex_api_path'] == 'api' ? $botSettings['bitmex_api_secret'] : config('bot.testNetSettings')['bitmex_testnet_api_secret']);
+
+        //dump($exchange->urls['api']);
+        //die('dzzzxxxccc');
+
+        //$exchange->urls['api'] = $exchange->urls[$botSettings['bitmex_api_path']]; // Testnet or live
+        //$exchange->apiKey = ($botSettings['bitmex_api_path'] == 'api' ? $botSettings['bitmex_api_key'] : config('bot.testNetSettings')['bitmex_testnet_api_key']);
+        //$exchange->secret = ($botSettings['bitmex_api_path'] == 'api' ? $botSettings['bitmex_api_secret'] : config('bot.testNetSettings')['bitmex_testnet_api_secret']);
+
+        //$exchange->urls['api'] = $botSettings['api_path'];
+        //$exchange->apiKey = $botSettings['api_key'];
+        //$exchange->secret = $botSettings['secret'];
+
+        if($botSettings['api_path'] == 1){
+            $exchange->urls['api'] = $exchange->urls['test']; // Testnet or live. test or api
+        } else {
+            $exchange->urls['api'] = $exchange->urls['api']; // Testnet or live. test or api
+        }
+
+        $exchange->apiKey = $botSettings['api_key'];
+        $exchange->secret = $botSettings['secret'];
+
+
         try{
+            echo "pai path. test or api:" . $exchange->urls['api'] . "\n";
             self::$response = $exchange->createMarketBuyOrder($symbol, $volume, []); // BTC/USD ETH/USD
+            dump(self::$response);
         }
         catch (\Exception $e)
         {
@@ -31,12 +56,36 @@ class Exchange
     }
 
     public static function placeMarketSellOrder($symbol, $volume, $botSettings){
+
+        dump(__FILE__);
+        dump(__LINE__);
+
         $exchange = new bitmex();
-        $exchange->urls['api'] = $exchange->urls[$botSettings['bitmex_api_path']];
-        $exchange->apiKey = ($botSettings['bitmex_api_path'] == 'api' ? $botSettings['bitmex_api_key'] : config('bot.testNetSettings')['bitmex_testnet_api_key']);
-        $exchange->secret = ($botSettings['bitmex_api_path'] == 'api' ? $botSettings['bitmex_api_secret'] : config('bot.testNetSettings')['bitmex_testnet_api_secret']);
+
+        //dump($exchange->urls['api']);
+        //die('dzzzxxxccc');
+
+        //$exchange->urls['api'] = $exchange->urls[$botSettings['bitmex_api_path']];
+        //$exchange->apiKey = ($botSettings['bitmex_api_path'] == 'api' ? $botSettings['bitmex_api_key'] : config('bot.testNetSettings')['bitmex_testnet_api_key']);
+        //$exchange->secret = ($botSettings['bitmex_api_path'] == 'api' ? $botSettings['bitmex_api_secret'] : config('bot.testNetSettings')['bitmex_testnet_api_secret']);
+
+        //$exchange->urls['api'] = $botSettings['api_path'];
+        //$exchange->apiKey = $botSettings['api_key'];
+        //$exchange->secret = $botSettings['secret'];
+
+        if($botSettings['api_path'] == 1){
+            $exchange->urls['api'] = $exchange->urls['test']; // Testnet or live. test or api
+        } else {
+            $exchange->urls['api'] = $exchange->urls['api'];
+        }
+
+        $exchange->apiKey = $botSettings['api_key'];
+        $exchange->secret = $botSettings['secret'];
+
         try{
+            echo "pai path. test or api:" . $exchange->urls['api'] . "\n";
             self::$response = $exchange->createMarketSellOrder($symbol, $volume, []); // BTC/USD ETH/USD
+            dump(self::$response);
         }
         catch (\Exception $e)
         {

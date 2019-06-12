@@ -39,12 +39,10 @@ class PlaceOrder implements ShouldQueue
      */
     public function handle()
     {
-
         dump($this->symbol);
         dump($this->direction);
         dump($this->volume);
         dump($this->botSettings);
-
 
         if($this->direction == 'buy'){
             Exchange::placeMarketBuyOrder($this->symbol, $this->volume, $this->botSettings);

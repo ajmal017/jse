@@ -37,6 +37,16 @@ class test extends Command
      */
     public function handle()
     {
-        dump(\ccxt\Exchange::$exchanges);
+        //dump(\ccxt\Exchange::$exchanges);
+
+        $exchange = new \ccxt\bitmex();
+        $exchange->urls['api'] = $exchange->urls['api'];
+        dump($exchange->urls);
+        $exchange->apiKey = 'AdpGKvlnElQmowv-SgKu9kiF'; // testnet
+        $exchange->secret = 'KrcRtZ8SfAx_4xOSEm1DHon1gPF2wcSHPVZkyJ7SmOmCX0j1'; //testnet
+        $response = $exchange->createMarketBuyOrder('BTC/USD', 1, []);
+        dump($response);
+
+
     }
 }

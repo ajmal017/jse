@@ -41,8 +41,8 @@ class Chart extends Profit
     public $firstPositionEver = true; // Skip the first trade record. When it occurs we ignore calculations and make accumulated_profit = 0. On the next step (next bar) there will be the link to this value
     public $firstEverTradeFlag; // True - when the bot is started and the first trade is executed. Then flag turns to false and trade volume is doubled for closing current position and opening the opposite
     public $tradeProfit;
-    private $executionSymbolName;
-    protected $botSettings;
+    public $executionSymbolName;
+    public $botSettings;
     protected $lastRow;
     protected $penUltimanteRow;
 
@@ -59,7 +59,6 @@ class Chart extends Profit
 
     public function index($mode = null, $backTestRowId = null)
     {
-
         echo(__FILE__ . "\n");
         $this->calc($mode, $backTestRowId); // Inherited class call
 

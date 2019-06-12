@@ -4,9 +4,7 @@ use Illuminate\Support\Facades\DB;
 
 class TradeBar
 {
-    // public static function update($botSettings, $timeStamp, $direction){
     public static function update($botSettings, $direction, $tradePrice, $lastRowId){
-
         $lastRow =
             DB::table($botSettings['botTitle'])
                 ->orderBy('id', 'desc')->take(1)
@@ -24,7 +22,5 @@ class TradeBar
                 'trade_volume' => $botSettings['volume'],
                 'trade_commission' => round(($lastRow[0]->close * $botSettings['commission'] / 100) * $botSettings['volume'], 4),
             ]);
-
-        //die();
     }
 }

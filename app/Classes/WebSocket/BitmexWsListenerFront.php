@@ -104,7 +104,6 @@ class BitmexWsListenerFront
             $history_symbol_name = Symbol::where('id', $symbolId)->value('history_symbol_name');
 
             dump($botId);
-            //dump($account_id);
             dump(self::$apiPath);
             dump(self::$execution_symbol_name);
             dump($history_symbol_name);
@@ -130,7 +129,7 @@ class BitmexWsListenerFront
                     [
                         'botTitle' => Bot::where('id', self::$botId)->value('db_table_name'),
                         'volume' => Bot::where('id', self::$botId)->value('volume'),
-                        'commission' => 0.0750,
+                        'commission' => -0.0025,
                         'bitmex_api_path' => 'test',
                         'bitmex_api_key' => self::$api,
                         'api_api_secret' => self::$apiSecret
@@ -138,8 +137,6 @@ class BitmexWsListenerFront
 
                 self::$isCreateCLasses = false;
             }
-
-
 
 
 
@@ -186,6 +183,9 @@ class BitmexWsListenerFront
             // If status == idle -> stop the loop
             if (Bot::where('id', $botId)->value('status') == 'idle'){
                 dump('the bot is idle/STOPPED');
+
+                self::$chart->trade_flag = 'all'; // JSE-117. Trade flag doesn't reset on stop
+
                 // reset history flag
                 self::$isHistoryLoaded = true;
 

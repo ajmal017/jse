@@ -1,8 +1,6 @@
 <?php
 
 use Illuminate\Database\Seeder;
-use Illuminate\Support\Str;
-
 
 class DatabaseSeeder extends Seeder
 {
@@ -342,5 +340,10 @@ class DatabaseSeeder extends Seeder
             ->update([
                 'strategy_id' => 4
             ]);
+
+        /* Seed historical bars */
+        $this->call([
+            HistoryBarsSeeder::class
+        ]);
     }
 }

@@ -48,7 +48,6 @@ abstract class Profit
          * We do not store position in DB thus we use "all" check to determine a position absence
          * if "all" - no position has been opened yet
          */
-        //if ($position != null && $this->trade_flag != "all"){
         if ($this->position != null && $this->trade_flag != "all"){
             /* Get the price of the last trade */
             $lastTradePrice =
@@ -64,7 +63,7 @@ abstract class Profit
     public function finish(){
         /**
          * Do not calculate profit if there are no trades.
-         * If trade_flag is set to all, it means that no trades hav been executed yet.
+         * If trade_flag is set to all, it means that no trades have been executed yet.
          */
         if ($this->trade_flag != "all") {
             \App\Classes\Accounting\AccumulatedProfit::calculate($this->botSettings, $this->lastRow[0]->id);

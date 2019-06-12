@@ -33,7 +33,7 @@ use Illuminate\Support\Facades\Cache;
  */
 class Chart extends Profit
 {
-    public $trade_flag; // The value is stored in DB. This flag indicates what trade should be opened next. When there is no trades, it is set to all. When long trade has been opened, the next (closing) one must be long and vise vera.
+    public $trade_flag; // This flag indicates what trade should be opened next. When there is no trades, it is set to all. When long trade has been opened, the next (closing) one must be long and vise vera.
     public $add_bar_long = true; // Count closed position on the same be the signal occurred. The problem is when the position is closed the close price of this bar goes to the next position
     public $add_bar_short = true;
     public $position; // Current position
@@ -51,10 +51,10 @@ class Chart extends Profit
      */
     public function __construct($executionSymbolName, $orderVolume, $botSettings)
     {
-        $this->volume = $orderVolume;
         $this->executionSymbolName = $executionSymbolName;
-        $this->trade_flag = 'all';
+        $this->volume = $orderVolume;
         $this->botSettings = $botSettings;
+        $this->trade_flag = 'all';
     }
 
     public function index($mode = null, $backTestRowId = null)

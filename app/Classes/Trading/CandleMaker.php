@@ -235,7 +235,6 @@ class CandleMaker
                 'ema3Period' => $this->botSettings['strategyParams']['macdSignalLinePeriod']],
                 $this->botSettings,
                 true);
-
         }
     }
 }

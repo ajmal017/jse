@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers\Exchange;
 
-use App\Console\Commands\Pc;
-use Illuminate\Http\Request;
+//use App\Console\Commands\Pc;
+//use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
 class HistoryBars extends \App\Http\Controllers\Controller
@@ -18,7 +18,6 @@ class HistoryBars extends \App\Http\Controllers\Controller
         $macdSignalLine = array();
         $shortTradeMarkers = array();
 
-        //$allDbValues = DB::table(config('bot.bots')[$botId]['botTitle'])->get();
         $allDbValues = DB::table('bot_' . $botId)->get();
 
         foreach ($allDbValues as $rowValue) { // Go through all DB records
@@ -84,7 +83,7 @@ class HistoryBars extends \App\Http\Controllers\Controller
             ];
 
             // Add Symbol name
-            $symbol = "sampleSymbol_History_Bars.php";
+            //$symbol = "sampleSymbol_History_Bars.php";
 
         }
 
@@ -99,7 +98,8 @@ class HistoryBars extends \App\Http\Controllers\Controller
             "netProfit" => $netProfit,
             "macdLine" => $macdLine,
             "macdSignalLine" => $macdSignalLine,
-            "symbol" => $allDbValues[0]->symbol
+            "symbol" => $allDbValues[0]->symbol,
+            "rawTable" => $allDbValues
         );
 
         return json_encode($seriesData);

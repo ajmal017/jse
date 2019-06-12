@@ -187,7 +187,7 @@ class HistoryBarsSeeder extends Seeder
 
         $bars = json_decode($bot_1, true);
         foreach ($bars as $bar){
-            DB::table('Bot_1')->insert([
+            DB::table('bot_1')->insert([
                 'symbol' => $bar['symbol'],
                 'date' => $bar['date'],
                 'time_stamp' => $bar['time_stamp'],

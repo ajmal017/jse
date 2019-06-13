@@ -13,7 +13,8 @@ class BotTables extends Migration
      */
     public function up()
     {
-        for($i = 1; $i < 5; $i++) {
+        /* 4 tables for trading, 1 for back testing */
+        for($i = 1; $i < 6; $i++) {
             Schema::create('bot_' . $i, function (Blueprint $table) {
                 $table->increments('id');
                 $table->string('symbol')->nullable(); // Use nullable if this field can be blank

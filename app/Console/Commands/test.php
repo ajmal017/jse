@@ -37,6 +37,10 @@ class test extends Command
      */
     public function handle()
     {
+        //phpinfo();
+        dump('dd');
+        //die();
+
         //dump(\ccxt\Exchange::$exchanges);
 
         $exchange = new \ccxt\bitmex();

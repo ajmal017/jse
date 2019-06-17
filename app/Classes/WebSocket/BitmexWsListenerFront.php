@@ -75,29 +75,12 @@ class BitmexWsListenerFront
 
 
         $loop->addPeriodicTimer(1, function() use($loop, $botId, $self) {
-
-            // Get account_id from Bot
             $account_id = Bot::where('id', $botId)->value('account_id');
-            // Get exchange_id from Account
-            $exchange_id = Account::where('id', $account_id)->value('exchange_id');
-
+            //$exchange_id = Account::where('id', $account_id)->value('exchange_id');
             self::$api = Account::where('id', $account_id)->value('api');
             self::$apiSecret = Account::where('id', $account_id)->value('api_secret');
-
-            // Get is_testnet
             self::$isTestnet = Account::where('id', $account_id)->value('is_testnet');
-
-            /*if ($isTestnet == '1'){
-                // Get live api path from Exchnage
-                self::$apiPath = Exchange::where('id', $exchange_id)->value('testnet_api_path');
-            } else {
-                self::$apiPath = Exchange::where('id', $exchange_id)->value('live_api_path');
-            }*/
-
-            // Get symbol_id from Bots
             $symbolId = Bot::where('id', $botId)->value('symbol_id');
-            // Get execution_symbol_name
-            // Get history_symbol_name
             self::$execution_symbol_name = Symbol::where('id', $symbolId)->value('execution_symbol_name');
             self::$commission = Symbol::where('id', $symbolId)->value('commission');
             $history_symbol_name = Symbol::where('id', $symbolId)->value('history_symbol_name');
@@ -108,7 +91,6 @@ class BitmexWsListenerFront
             dump(self::$apiSecret);
             dump(self::$execution_symbol_name);
             dump($history_symbol_name);
-
 
             // Create Chart and Candle maker classes here. ONCE!
             // Create again after STOP!
@@ -135,14 +117,10 @@ class BitmexWsListenerFront
                         'api_key' => self::$api,
                         'secret' => self::$apiSecret
                     ]);
-
                 self::$isCreateCLasses = false;
             }
 
-
-
             echo (Bot::where('id', $botId)->value('status') == 'running' ? 'running' : 'idle') . "\n";
-
 
             // If status == running -> get history and subscribe to symbol
             if (Bot::where('id', $botId)->value('status') == 'running'){
@@ -156,8 +134,6 @@ class BitmexWsListenerFront
                     ]);
                     dump('history loaded');
 
-
-
                     /* Initial indicators calculation and chart reload*/
                     \App\Classes\Indicators\PriceChannel::calculate(self::$priceChannelPeriod, Bot::where('id', $botId)->value('db_table_name'), true);
                     \App\Classes\Indicators\Sma::calculate('close', 2, 'sma1', Bot::where('id', $botId)->value('db_table_name'), true);
@@ -165,20 +141,17 @@ class BitmexWsListenerFront
                     /* Reload chart */
                     $self::reloadChart(['frontEndId' => Bot::where('id', $botId)->value('front_end_id')]);
 
-
                     // SUBSCRIPTION GOES HERE
-                    /* Manual SUbscription object */
+                    /* Manual subscription object */
                     // @todo exclude this object to a separte method
                     $requestObject = json_encode([
                         "op" => "subscribe",
                         "args" => "instrument:" . $history_symbol_name
                     ]);
                     self::$connection->send($requestObject);
-
                     self::$isHistoryLoaded = false;
                     self::$isUnsubscribed = true;
                 }
-
             }
 
             // If status == idle -> stop the loop
@@ -201,7 +174,6 @@ class BitmexWsListenerFront
                 // reset history flag
                 self::$isHistoryLoaded = true;
 
-
                 if(self::$isUnsubscribed){
                     /* Manual UNsubscription object */
                     // @todo exclude this object to a separte method
@@ -213,7 +185,6 @@ class BitmexWsListenerFront
 
                     // Unsubscribed. Then do nothing.
                     // Wait for the next bot start
-
                     self::$isUnsubscribed = false;
                     self::$isCreateCLasses; // Chart and CandleMaker will be freshly created
                 }
@@ -231,7 +202,6 @@ class BitmexWsListenerFront
 
                     if (array_key_exists('data', $jsonMessage)){
                         if (array_key_exists('lastPrice', $jsonMessage['data'][0])){
-                            //dump($jsonMessage);
                             \App\Classes\WebSocket\ConsoleWebSocket::messageParse(
                                 $jsonMessage,
                                 self::$console,
@@ -250,14 +220,6 @@ class BitmexWsListenerFront
                     sleep(5); // Wait 5 seconds before next connection try will attempt
                     self::$console->handle(); // Call the main method of this class
                 });
-
-                /* Manual subscription object */
-                // Subscription will be moved to start function
-                $requestObject = json_encode([
-                    "op" => "subscribe",
-                    "args" => ["instrument:XBTUSD"] // ["instrument:XBTUSD", "instrument:ETHUSD"]
-                ]);
-                //$conn->send($requestObject);
 
             }, function(\Exception $e) use ($loop) {
                 $errorString = "RatchetPawlSocket.php Could not connect. Reconnect in 5 sec. \n Reason: {$e->getMessage()} \n";

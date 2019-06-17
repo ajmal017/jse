@@ -40,7 +40,6 @@ class Exchange
         $exchange->apiKey = $botSettings['api_key'];
         $exchange->secret = $botSettings['secret'];
 
-
         try{
             echo "pai path. test or api:" . $exchange->urls['api'] . "\n";
             self::$response = $exchange->createMarketBuyOrder($symbol, $volume, []); // BTC/USD ETH/USD

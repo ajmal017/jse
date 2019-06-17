@@ -161,9 +161,6 @@ class StrategyController extends Controller
         return ['message' => 'Updated  strategy'];
     }
 
-
-
-
     /**
      * Remove the specified resource from storage.
      *

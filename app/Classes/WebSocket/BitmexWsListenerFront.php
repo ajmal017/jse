@@ -23,12 +23,9 @@ class BitmexWsListenerFront
     public static $candleMaker;
     public static $chart;
     private static $symbol;
-
     private static $priceChannelPeriod;
     private static $smaFilterPeriod;
-
     private static $macdSettings;
-
     private static $connection;
     private static $isHistoryLoaded = true;
     private static $isUnsubscribed = false;
@@ -42,7 +39,6 @@ class BitmexWsListenerFront
 
     private static $isCreateCLasses = true;
 
-    // $candleMaker, $chart, $symbol, $priceChannelPeriod, $macdSettings
     public static function subscribe($connector, $loop, $console, $botId){
 
         // get strategy_id from bots
@@ -85,12 +81,13 @@ class BitmexWsListenerFront
             self::$commission = Symbol::where('id', $symbolId)->value('commission');
             $history_symbol_name = Symbol::where('id', $symbolId)->value('history_symbol_name');
 
-            dump($botId);
+            echo "Bot id: " . $botId . " Time: " . now() . "\n";
             echo "isTestnet: " . self::$isTestnet . "\n";
             dump(self::$api);
             dump(self::$apiSecret);
             dump(self::$execution_symbol_name);
             dump($history_symbol_name);
+            echo "Price channel settings. TimeFrame/Sma filter period: " . self::$priceChannelPeriod . " / " . self::$smaFilterPeriod . "\n";
 
             // Create Chart and Candle maker classes here. ONCE!
             // Create again after STOP!

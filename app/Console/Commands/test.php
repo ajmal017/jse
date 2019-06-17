@@ -37,9 +37,20 @@ class test extends Command
      */
     public function handle()
     {
-        //phpinfo();
-        dump('dd');
-        //die();
+
+        $botSettings =
+        [
+            'botTitle' => 'bot_1',
+            'executionSymbol' => 'BTC/USD',
+            'historySymbol' => 'XBTUSD',
+            'timeFrame' => 1, // 1 or 5 minutes. https://www.bitmex.com/api/explorer/#!/Trade/Trade_getBucketed
+            'barsToLoad' => 40,
+        ];
+
+
+        \App\Classes\Trading\History::loadPeriod($botSettings);
+        die();
+
 
         //dump(\ccxt\Exchange::$exchanges);
 

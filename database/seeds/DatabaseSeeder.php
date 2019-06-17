@@ -134,14 +134,14 @@ class DatabaseSeeder extends Seeder
         /* Seed accounts */
         DB::table('accounts')->insert([
             'created_at' => now(),
-            'name' => 'Boris-working-testnet-account',
+            'name' => 'Alexkir-working-testnet-account',
             'exchange_id' => 1,
             'bot_id' => 1,
-            'api' => 'AdpGKvlnElQmowv-SgKu9kiF',
-            'api_secret' => 'KrcRtZ8SfAx_4xOSEm1DHon1gPF2wcSHPVZkyJ7SmOmCX0j1',
+            'api' => 'wb89vufuY6R2zBHGYkduz_bi',
+            'api_secret' => 'ZJ3B5lK0hhya0fM-YqR2pa7CfqPGeib-9ZKN_MynoJfaCn3R',
             'status' => 'ok',
             'is_testnet' => true,
-            'memo' => 'Testnet working account!'
+            'memo' => 'Alexkir testnet acc. cool.kaku2012@yandex.ru / asldueDkd87'
         ]);
 
         DB::table('accounts')->insert([
@@ -178,6 +178,18 @@ class DatabaseSeeder extends Seeder
             'status' => 'ok',
             'is_testnet' => true,
             'memo' => 'Good is good'
+        ]);
+
+        DB::table('accounts')->insert([
+            'created_at' => now(),
+            'name' => 'JSE super test demo acc',
+            'exchange_id' => 1,
+            'bot_id' => 1,
+            'api' => 'ikeCK-6ZRWtItOkqvqo8F6wO',
+            'api_secret' => 'JfmMTXx3YruSP3OSBKQvULTg4sgQJKZkFI2Zy7TZXniOUbeK',
+            'status' => 'ok',
+            'is_testnet' => true,
+            'memo' => 'This is a test net. This name can be pretty long. What are we gonna do with such length?'
         ]);
 
         /* Seed symbols */

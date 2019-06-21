@@ -198,7 +198,7 @@ class DatabaseSeeder extends Seeder
             'exchange_id' => 1,
             'execution_symbol_name' => 'BTC/USD',
             'history_symbol_name' => 'XBTUSD',
-            'commission' => 0.0075,
+            'commission' => -0.0075,
             'is_active' => true,
             'memo' => 'Execution and history symbol names are different'
         ]);
@@ -208,7 +208,7 @@ class DatabaseSeeder extends Seeder
             'exchange_id' => 1,
             'execution_symbol_name' => 'ETH/USD',
             'history_symbol_name' => 'ETHUSD',
-            'commission' => 0.0075,
+            'commission' => -0.0075,
             'is_active' => true,
             'memo' => 'Name is the same'
         ]);

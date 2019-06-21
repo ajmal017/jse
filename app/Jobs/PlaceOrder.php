@@ -20,6 +20,22 @@ class PlaceOrder implements ShouldQueue
     private $botSettings;
 
     /**
+     * The list of all possible variables to set.
+     * @see: https://laravel.com/api/5.8/Illuminate/Bus/Queueable.html#method_onConnection
+     * @see: https://laravel.com/docs/5.8/queues
+     */
+    public $retryAfter = 5;
+
+
+    /**
+     * Connection can be also hardcoded.
+     *
+     * @var string
+     * public $connection = '';
+     */
+
+
+    /**
      * Create a new job instance.
      *
      * @return void
@@ -39,9 +55,10 @@ class PlaceOrder implements ShouldQueue
      */
     public function handle()
     {
-        dump($this->symbol);
-        dump($this->direction);
-        dump($this->volume);
+        echo "symbol: " . $this->symbol . "\n";
+        echo "direction: " . $this->direction . "\n";
+        echo "volume: " . $this->volume . "\n";
+        echo "bot settings: \n";
         dump($this->botSettings);
 
         if($this->direction == 'buy'){

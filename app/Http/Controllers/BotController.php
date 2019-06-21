@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 use App\Bot;
+use App\Job;
 
 class BotController extends Controller
 {
@@ -76,8 +77,15 @@ class BotController extends Controller
         $bot = Bot::findOrFail($id);
         $this->validate($request, [
             'time_frame' => ['required', Rule::in(['1', '5'])],
+            //
         ]);
-        $bot->update($request->all());
+
+        if (Job::all()->count() != 0){
+            return response('Jobs table is not empty!<br>' . __FILE__, 422)
+                ->header('Content-Type', 'text/plain');
+        } else {
+            $bot->update($request->all());
+        }
     }
 
     /**

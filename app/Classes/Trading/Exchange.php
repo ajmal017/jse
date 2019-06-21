@@ -9,27 +9,16 @@
 namespace App\Classes\Trading;
 use ccxt\bitmex;
 use Mockery\Exception;
+use Illuminate\Support\Facades\Log;
 
 class Exchange
 {
     private static $response;
     public static function placeMarketBuyOrder($symbol, $volume, $botSettings){
 
-        dump(__FILE__);
-        dump(__LINE__);
+        echo __FILE__ . " line: " . __LINE__ . "\n";
 
         $exchange = new bitmex();
-
-        //dump($exchange->urls['api']);
-        //die('dzzzxxxccc');
-
-        //$exchange->urls['api'] = $exchange->urls[$botSettings['bitmex_api_path']]; // Testnet or live
-        //$exchange->apiKey = ($botSettings['bitmex_api_path'] == 'api' ? $botSettings['bitmex_api_key'] : config('bot.testNetSettings')['bitmex_testnet_api_key']);
-        //$exchange->secret = ($botSettings['bitmex_api_path'] == 'api' ? $botSettings['bitmex_api_secret'] : config('bot.testNetSettings')['bitmex_testnet_api_secret']);
-
-        //$exchange->urls['api'] = $botSettings['api_path'];
-        //$exchange->apiKey = $botSettings['api_key'];
-        //$exchange->secret = $botSettings['secret'];
 
         if($botSettings['api_path'] == 1){
             $exchange->urls['api'] = $exchange->urls['test']; // Testnet or live. test or api
@@ -41,36 +30,25 @@ class Exchange
         $exchange->secret = $botSettings['secret'];
 
         try{
-            echo "pai path. test or api:" . $exchange->urls['api'] . "\n";
+            echo "API path. test or api: " . $exchange->urls['api'] . "\n";
+            echo "Symbol: " . $symbol . " in Exchnage.php \n";
             self::$response = $exchange->createMarketBuyOrder($symbol, $volume, []); // BTC/USD ETH/USD
+            echo "Execution response: \n";
             dump(self::$response);
         }
         catch (\Exception $e)
         {
+            dump('--------- in exception line 40');
             // Error
             self::$response = $e->getMessage();
-            dump(self::$response);
+            //dump(self::$response);
         }
         self::checkResponse();
     }
 
     public static function placeMarketSellOrder($symbol, $volume, $botSettings){
-
-        dump(__FILE__);
-        dump(__LINE__);
-
+        echo __FILE__ . " line: " . __LINE__ . "\n";
         $exchange = new bitmex();
-
-        //dump($exchange->urls['api']);
-        //die('dzzzxxxccc');
-
-        //$exchange->urls['api'] = $exchange->urls[$botSettings['bitmex_api_path']];
-        //$exchange->apiKey = ($botSettings['bitmex_api_path'] == 'api' ? $botSettings['bitmex_api_key'] : config('bot.testNetSettings')['bitmex_testnet_api_key']);
-        //$exchange->secret = ($botSettings['bitmex_api_path'] == 'api' ? $botSettings['bitmex_api_secret'] : config('bot.testNetSettings')['bitmex_testnet_api_secret']);
-
-        //$exchange->urls['api'] = $botSettings['api_path'];
-        //$exchange->apiKey = $botSettings['api_key'];
-        //$exchange->secret = $botSettings['secret'];
 
         if($botSettings['api_path'] == 1){
             $exchange->urls['api'] = $exchange->urls['test']; // Testnet or live. test or api
@@ -82,8 +60,9 @@ class Exchange
         $exchange->secret = $botSettings['secret'];
 
         try{
-            echo "pai path. test or api:" . $exchange->urls['api'] . "\n";
+            echo "API path. test or api:" . $exchange->urls['api'] . "\n";
             self::$response = $exchange->createMarketSellOrder($symbol, $volume, []); // BTC/USD ETH/USD
+            echo "Execution response: \n";
             dump(self::$response);
         }
         catch (\Exception $e)
@@ -94,19 +73,28 @@ class Exchange
     }
 
     private static function checkResponse(){
+
         if (gettype(self::$response) == 'array'){
             dump(self::$response);
         }
 
         if (gettype(self::$response) == 'string'){
-            throw new Exception();
-            // Exchange overload
-            /**
-             * @todo move all text possible errors to a dictionary. Allow user to change these values.
-             */
-            if (self::$response == "bitmex {\"error\":{\"message\":\"The system is currently overloaded. Please try again later.\",\"name\":\"HTTPError\"}}\""){
-                dump('EXCHANGE OVERLOADED! RESTART JOB! IN place order');
-                //throw new Exception();
+            echo "Error string line 82: " . self::$response . "\n";
+            switch(false){
+                case !strpos(self::$response, 'Account has insufficient');
+                    $error = 'Account has insufficient funds. Die.';
+                    Log::notice($error);
+                    die(__FILE__ . ' ' . __LINE__);
+
+                case !strpos(self::$response, 'does not have market symbol'); // bitmex does not have market symbol
+                    $error = 'Bitmex does not have market symbol. Execution is not possible';
+                    throw new \Exception($error);
+                    break;
+                /* @see: https://www.bitmex.com/app/restAPI#Overload */
+                case !strpos(self::$response, 'overloaded');
+                    // The system is currently overloaded. Please try again later
+                    throw new \Exception('Exchange overloaded');
+                    break;
             }
         }
     }

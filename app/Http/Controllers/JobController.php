@@ -81,6 +81,6 @@ class JobController extends Controller
      */
     public function destroy($id)
     {
-        DB::table('Jobs')->truncate();
+        DB::table('jobs')->truncate();
     }
 }

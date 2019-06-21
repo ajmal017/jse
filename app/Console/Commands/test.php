@@ -4,6 +4,7 @@ namespace App\Console\Commands;
 
 use App\Job;
 use Illuminate\Console\Command;
+use Illuminate\Support\Facades\DB;
 
 class test extends Command
 {
@@ -38,6 +39,10 @@ class test extends Command
      */
     public function handle()
     {
+
+        $allDbValues = DB::table('bot_1')->get();
+        dump($allDbValues->count());
+        die();
 
         $botSettings =
         [

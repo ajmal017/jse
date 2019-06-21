@@ -47,7 +47,7 @@ class Front extends Command
     {
         /**
          * Set bot's instance status to idle (stop the bot)
-         * @tofo update Bots table once the status is set to idle
+         * @todo update Bots table once the status is set to idle
          */
         \App\Bot::where('id', $this->argument('botId'))->update(['status' => 'idle']);
 

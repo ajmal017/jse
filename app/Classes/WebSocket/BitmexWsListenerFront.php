@@ -36,40 +36,33 @@ class BitmexWsListenerFront
     private static $apiSecret;
     private static $commission;
     private static $isTestnet;
-
     private static $isCreateCLasses = true;
 
     public static function subscribe($connector, $loop, $console, $botId){
 
-        // get strategy_id from bots
+        self::$console = $console;
+        self::$botId = $botId;
+
+        /* get strategy_id from bots */
         $strategyId = Bot::where('id', $botId)->value('strategy_id');
-
-        // get strategy type from strategies using strategy_id
+        /* get strategy type from strategies using strategy_id */
         $strategyTypeId = Strategy::where('id', $strategyId)->value('strategy_type_id');
-
-        // if strategy_tyme == 1 price channel
+        /* 1 - Price channel, 2 - Macd */
         if ($strategyTypeId == '1'){
-            // get pricechannel_settings_id from strategies
+            /* get pricechannel_settings_id from strategies */
             $pricechannelSettingsId = Strategy::where('id', $strategyId)->value('pricechannel_settings_id');
-            // get settings row from price_channel_settings
+            /* get settings row from price_channel_settings */
             $pricechannelSettingsRow = PricechannelSettings::where('id', $pricechannelSettingsId)->get();
             self::$priceChannelPeriod = $pricechannelSettingsRow[0]->time_frame;
             self::$smaFilterPeriod = $pricechannelSettingsRow[0]->sma_filter_period;
         }
-
-        // if strategy_type == 2 macd
+        /* Macd */
         if ($strategyTypeId == '2'){
             $macdSettingsId = Strategy::where('id', $strategyId)->value('macd_settings_id');
             $macdSettingsRow = MacdSettings::where('id', $macdSettingsId)->get();
         }
 
-
-        self::$console = $console;
-        self::$botId = $botId;
-
         $self = get_called_class(); // For static methods call inside an anonymous function
-
-
         $loop->addPeriodicTimer(1, function() use($loop, $botId, $self) {
             $account_id = Bot::where('id', $botId)->value('account_id');
             //$exchange_id = Account::where('id', $account_id)->value('exchange_id');

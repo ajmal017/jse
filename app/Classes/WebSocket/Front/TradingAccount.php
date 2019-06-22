@@ -16,15 +16,6 @@ class TradingAccount
 {
     public static function getSettings($botId){
 
-        /*$accountId = Bot::where('id', $botId)->value('accountId');
-        self::$api = Account::where('id', $accountId)->value('api');
-        self::$apiSecret = Account::where('id', $accountId)->value('api_secret');
-        self::$isTestnet = Account::where('id', $accountId)->value('is_testnet');
-        $symbolId = Bot::where('id', $botId)->value('symbol_id');
-        self::$execution_symbol_name = Symbol::where('id', $symbolId)->value('execution_symbol_name');
-        self::$commission = Symbol::where('id', $symbolId)->value('commission');
-        $history_symbol_name = Symbol::where('id', $symbolId)->value('history_symbol_name');*/
-
         $accountId = Bot::where('id', $botId)->value('account_id');
         $symbolId = Bot::where('id', $botId)->value('symbol_id');
         
@@ -42,7 +33,6 @@ class TradingAccount
             'volume' => Bot::where('id', $botId)->value('volume'),
             'rateLimit' => Bot::where('id', $botId)->value('rate_limit')
         );
-
         return $accountSettingsObject;
     }
 }

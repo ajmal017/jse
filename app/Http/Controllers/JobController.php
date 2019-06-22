@@ -15,6 +15,10 @@ class JobController extends Controller
      */
     public function index()
     {
+        /**
+         * Job unserialization.
+         * Some fields are not json encoded but serialized.
+         */
         $jobsObject = array();
         $records = DB::table('jobs')->get();
         $payload = null;
@@ -23,8 +27,18 @@ class JobController extends Controller
             $payload = json_decode($record->payload);
             $finishArray = $serializer->toArray($payload);
             $command = unserialize($payload->data->command);
+
+            $finishArray['id'] = $record->id;
+            $finishArray['queue'] = $record->queue;
+            $finishArray['attempts'] = $record->attempts;
+            $finishArray['reserved_at'] = $record->reserved_at;
+            $finishArray['available_at'] = $record->available_at;
+            $finishArray['created_at'] = $record->created_at;
+
+
             $finishArray['data'] = $serializer->toArray($command);
             $finishArray['data']['chained'] = null;
+
             array_push($jobsObject, $finishArray);
         }
         return $jobsObject;

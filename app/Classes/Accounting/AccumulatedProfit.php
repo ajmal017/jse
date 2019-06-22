@@ -30,7 +30,6 @@ class AccumulatedProfit
                 ->update([
                     // -1 take a previous record
                     'accumulated_profit' => $temp[count($temp) - 1]->accumulated_profit + $lastRecord[0]->trade_profit
-
                 ]);
         }
     }

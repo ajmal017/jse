@@ -22,35 +22,22 @@ class BitmexWsListenerFront
     public static $console;
     public static $candleMaker;
     public static $chart;
-    private static $symbol;
-    private static $priceChannelPeriod;
-    private static $smaFilterPeriod;
-    private static $macdSettings;
     private static $connection;
     private static $isHistoryLoaded = true;
     private static $isUnsubscribed = false;
     private static $botId;
-    private static $execution_symbol_name;
-    private static $apiPath;
-    private static $api;
-    private static $apiSecret;
-    private static $commission;
-    private static $isTestnet;
     private static $isCreateClasses = true;
-
     private static $strategiesSettingsObject;
     private static $accountSettingsObject;
 
     public static function subscribe($connector, $loop, $console, $botId){
-
         self::$console = $console;
         self::$botId = $botId;
-
-
 
         /* For static methods call inside an anonymous function */
         $self = get_called_class();
 
+        /* Endless loop. ExecExecutes once a second */
         $loop->addPeriodicTimer(1, function() use($loop, $botId, $self) {
 
             echo (Bot::where('id', $botId)->value('status') == 'running' ? 'running' : 'idle') . "\n";
@@ -71,18 +58,14 @@ class BitmexWsListenerFront
 
             /* Start the bot */
             if (Bot::where('id', $botId)->value('status') == 'running'){
-                // if strategy == price channel
-                self::startPriceChannelBot($botId);
-                // if == macd
-                // start macd
+                array_key_exists('priceChannel', self::startPriceChannelBot($botId));
+                array_key_exists('macd', self::startMacdBot());
             }
 
             /* Stop the bot */
             if (Bot::where('id', $botId)->value('status') == 'idle'){
-                // if price channel
-                self::stopPriceChannelBot();
-                // if macd
-                // stop macd
+                array_key_exists('priceChannel', self::stopPriceChannelBot());
+                array_key_exists('priceChannel', self::stopMacdBot());
             }
         });
 
@@ -196,6 +179,34 @@ class BitmexWsListenerFront
         }
     }
 
+    private static function startMacdBot(){
+        \App\Classes\Trading\History::loadPeriod(self::$accountSettingsObject);
+        dump('History loaded(macd)');
+
+        Macd::calculate($macdSettings = [
+            'ema1Period' => self::$strategiesSettingsObject['macd']['emaPeriod'],
+            'ema2Period' => self::$strategiesSettingsObject['macd']['macdLinePeriod'],
+            'ema3Period' => self::$strategiesSettingsObject['macd']['macdSignalLinePeriod'],
+            self::$strategiesSettingsObject,
+            true);
+
+        self::reloadChart(self::$strategiesSettingsObject);
+
+        /* Manual subscription object */
+        $requestObject = json_encode([
+            "op" => "subscribe",
+            "args" => "instrument:" . self::$accountSettingsObject['historySymbolName']
+        ]);
+        self::$connection->send($requestObject);
+        self::$isHistoryLoaded = false;
+        self::$isUnsubscribed = true;
+
+    }
+
+    private static function stopMacdBot(){
+        //
+    }
+
     /**
      * Accordingly to the active strategy we pass different parameters.
      * @todo 22.06.19 Pass the whole strategies object and strategy index.
@@ -203,7 +214,7 @@ class BitmexWsListenerFront
      * @param $jsonMessage
      * @return void
      */
-    private static  function messageParse($jsonMessage){
+    private static function messageParse($jsonMessage){
         \App\Classes\WebSocket\ConsoleWebSocket::messageParse(
             $jsonMessage,
             self::$console,

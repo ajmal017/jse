@@ -12,7 +12,6 @@ use App\Classes\Trading\Chart;
 use Illuminate\Console\Command;
 
 /**
- * Unused class
  * Dates can be handled here. Meaning that it is possible to send dates in the same format to messageParse
  * and get rid of dates formatting in that class.
  *
@@ -21,14 +20,14 @@ use Illuminate\Console\Command;
  */
 class ConsoleWebSocket
 {
-    public static function messageParse(array $message, Command $command, CandleMaker $candleMaker, $chart, $priceChannelPeriod, $macdSettings){
+    public static function messageParse(array $message, Command $command, CandleMaker $candleMaker, $chart, $priceChannelSettings, $macdSettings){
         $candleMaker->index(
             $message['data'][0]['lastPrice'], // Tick price
             $message['data'][0]['timestamp'], // Tick timestamp
             1, // Trade volume. Not used
             $chart, // Classes\Chart $chart Chart class instance
             $command, // Console instance
-            $priceChannelPeriod,
+            $priceChannelSettings['priceChannelPeriod'],
             $macdSettings
         );
     }

@@ -11,28 +11,34 @@ use ccxt\bitmex;
 use Mockery\Exception;
 use Illuminate\Support\Facades\Log;
 
+/**
+ * Market order execution.
+ * Volume is sent as a separate parameter.
+ * When a position is flipped - the volume is doubled. This is set in Chart.php
+ *
+ * Class Exchange
+ * @package App\Classes\Trading
+ */
 class Exchange
 {
     private static $response;
-    public static function placeMarketBuyOrder($symbol, $volume, $botSettings){
-
+    public static function placeMarketBuyOrder($botSettings, $volume){
         echo __FILE__ . " line: " . __LINE__ . "\n";
-
         $exchange = new bitmex();
 
-        if($botSettings['api_path'] == 1){
+        if($botSettings['isTestnet'] == 1){
             $exchange->urls['api'] = $exchange->urls['test']; // Testnet or live. test or api
         } else {
             $exchange->urls['api'] = $exchange->urls['api']; // Testnet or live. test or api
         }
 
-        $exchange->apiKey = $botSettings['api_key'];
-        $exchange->secret = $botSettings['secret'];
+        $exchange->apiKey = $botSettings['api'];
+        $exchange->secret = $botSettings['apiSecret'];
 
         try{
             echo "API path. test or api: " . $exchange->urls['api'] . "\n";
-            echo "Symbol: " . $symbol . " in Exchnage.php \n";
-            self::$response = $exchange->createMarketBuyOrder($symbol, $volume, []); // BTC/USD ETH/USD
+            echo "Symbol: " . $botSettings['executionSymbolName'] . " in Exchnage.php \n";
+            self::$response = $exchange->createMarketBuyOrder($botSettings['executionSymbolName'], $volume, []); // BTC/USD ETH/USD
             echo "Execution response: \n";
             dump(self::$response);
         }
@@ -46,22 +52,22 @@ class Exchange
         self::checkResponse();
     }
 
-    public static function placeMarketSellOrder($symbol, $volume, $botSettings){
+    public static function placeMarketSellOrder($botSettings, $volume){
         echo __FILE__ . " line: " . __LINE__ . "\n";
         $exchange = new bitmex();
 
-        if($botSettings['api_path'] == 1){
+        if($botSettings['isTestnet'] == 1){
             $exchange->urls['api'] = $exchange->urls['test']; // Testnet or live. test or api
         } else {
             $exchange->urls['api'] = $exchange->urls['api'];
         }
 
-        $exchange->apiKey = $botSettings['api_key'];
-        $exchange->secret = $botSettings['secret'];
+        $exchange->apiKey = $botSettings['api'];
+        $exchange->secret = $botSettings['apiSecret'];
 
         try{
             echo "API path. test or api:" . $exchange->urls['api'] . "\n";
-            self::$response = $exchange->createMarketSellOrder($symbol, $volume, []); // BTC/USD ETH/USD
+            self::$response = $exchange->createMarketSellOrder($botSettings['executionSymbolName'], $volume, []); // BTC/USD ETH/USD
             echo "Execution response: \n";
             dump(self::$response);
         }

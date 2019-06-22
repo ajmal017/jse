@@ -40,11 +40,11 @@ class PlaceOrder implements ShouldQueue
      *
      * @return void
      */
-    public function __construct($direction, $symbol, $volume, $botSettings)
+    public function __construct($direction, $volume, $botSettings)
     {
-        $this->symbol = $symbol;
+        //$this->symbol = $botSettings['executionSymbolName'];
         $this->direction = $direction;
-        $this->volume = $volume;
+        $this->volume = $botSettings['volume'];
         $this->botSettings = $botSettings;
     }
 
@@ -55,16 +55,11 @@ class PlaceOrder implements ShouldQueue
      */
     public function handle()
     {
-        echo "symbol: " . $this->symbol . "\n";
-        echo "direction: " . $this->direction . "\n";
-        echo "volume: " . $this->volume . "\n";
-        echo "bot settings: \n";
         dump($this->botSettings);
-
         if($this->direction == 'buy'){
-            Exchange::placeMarketBuyOrder($this->symbol, $this->volume, $this->botSettings);
+            Exchange::placeMarketBuyOrder($this->botSettings, $this->volume);
         } else {
-            Exchange::placeMarketSellOrder($this->symbol, $this->volume, $this->botSettings);
+            Exchange::placeMarketSellOrder($this->botSettings, $this->volume);
         }
     }
 }

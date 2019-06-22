@@ -56,21 +56,6 @@ class CandleMaker
         echo "********************************************** CandleMaker\n";
 
         /** First time ever application run check. Table is empty */
-        /*if(!DB::table('asset_1')->first())
-        {
-            echo "CandleMaker.php Application first ever run. Add first record to the table where OLHC = tick price\n";
-            //History::load(); // After the history is loaded - get price channel calculated
-            //PriceChannel::calculate(); // Calculate price channel
-            DB::table($this->tableName)->insert(array( // Record to DB
-                'date' => gmdate("Y-m-d G:i:s", ($tickDate / 1000)), // Date in regular format. Converted from unix timestamp
-                'time_stamp' => $tickDate,
-                'open' => $tickPrice,
-                'close' => $tickPrice,
-                'high' => $tickPrice,
-                'low' => $tickPrice,
-                'volume' => $tickVolume,
-            ));
-        }*/
         $lastRecordId = DB::table($this->tableName)->orderBy('time_stamp', 'desc')->first()->id;
 
         /* Take seconds off and add 1 min. Do it only once per interval (for example 1min) */
@@ -109,7 +94,7 @@ class CandleMaker
         $command->error("current tick   : " . gmdate("Y-m-d G:i:s", strtotime($tickDateFullTime)) . " price: $tickPrice");
         echo "time to compare: " . gmdate("Y-m-d G:i:s", ($this->tt)) . " ";
         echo "time frame: " . $this->botSettings['timeFrame'] . "\n";
-        echo "Bot instance: " . $this->botSettings['botTitle'] . " Symbol: " . $this->botSettings['executionSymbol'] . " Path(live/testnet): " . $this->botSettings['bitmex_api_path'] . "\n";
+        echo "Bot instance: " . $this->botSettings['botTitle'] . " Symbol: " . $this->botSettings['executionSymbol'] . "\n";
 
         /**
          * New bar is issued. This code is executed once per time frame.
@@ -145,7 +130,6 @@ class CandleMaker
              * This price channel calculation is applied when a new bar is added to the chart. Right after it was added
              * we calculate price channel and inform front end that the chart mast be reloaded
              */
-
 
             // Actually this code is called once per time frame
             // We can only call priceChannel::calculate for last bars only from here

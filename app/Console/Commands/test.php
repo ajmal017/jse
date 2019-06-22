@@ -40,8 +40,7 @@ class test extends Command
     public function handle()
     {
 
-        $allDbValues = DB::table('bot_1')->get();
-        dump($allDbValues->count());
+        dump(\App\Classes\WebSocket\Front\Strategies::getSettings(4)['macd']);
         die();
 
         $botSettings =

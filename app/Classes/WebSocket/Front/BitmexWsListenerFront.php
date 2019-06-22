@@ -46,26 +46,28 @@ class BitmexWsListenerFront
         self::$console = $console;
         self::$botId = $botId;
 
-        /* Get strategies settings object*/
-        self::$strategiesSettingsObject = \App\Classes\WebSocket\Front\Strategies::getSettings($botId);
+
 
         /* For static methods call inside an anonymous function */
         $self = get_called_class();
 
         $loop->addPeriodicTimer(1, function() use($loop, $botId, $self) {
+
+            echo (Bot::where('id', $botId)->value('status') == 'running' ? 'running' : 'idle') . "\n";
+
+            /* Get strategies settings object*/
+            self::$strategiesSettingsObject = \App\Classes\WebSocket\Front\Strategies::getSettings($botId);
+            /* Get account settings object */
             self::$accountSettingsObject = \App\Classes\WebSocket\Front\TradingAccount::getSettings($botId);
             self::trace();
 
             /* Create Chart and Candle maker classes here. ONCE! Create again after STOP! */
             if (self::$isCreateClasses) {
-                self::$candleMaker = new \App\Classes\Trading\CandleMaker(
-               'priceChannel',
-                self::$accountSettingsObject);
+                self::$candleMaker = new \App\Classes\Trading\CandleMaker('priceChannel', self::$accountSettingsObject);
+
                 self::$chart = new \App\Classes\Trading\Chart(self::$accountSettingsObject);
                 self::$isCreateClasses = false;
             }
-
-            echo (Bot::where('id', $botId)->value('status') == 'running' ? 'running' : 'idle') . "\n";
 
             /* Start the bot */
             if (Bot::where('id', $botId)->value('status') == 'running'){
@@ -95,14 +97,7 @@ class BitmexWsListenerFront
                     $jsonMessage = json_decode($socketMessage->getPayload(), true);
                     if (array_key_exists('data', $jsonMessage)){
                         if (array_key_exists('lastPrice', $jsonMessage['data'][0])){
-                            \App\Classes\WebSocket\ConsoleWebSocket::messageParse(
-                                $jsonMessage,
-                                self::$console,
-                                self::$candleMaker,
-                                self::$chart,
-                                self::$strategiesSettingsObject['priceChannel'], // if price channel. if macd = null
-                                self::$strategiesSettingsObject['macd'] // if macd. if price channel = null
-                            );
+                            self::messageParse($jsonMessage);
                         }
                     }
                 });
@@ -199,5 +194,25 @@ class BitmexWsListenerFront
             self::$isUnsubscribed = false;
             self::$isCreateClasses; // Chart and CandleMaker will be freshly created
         }
+    }
+
+    /**
+     * Accordingly to the active strategy we pass different parameters.
+     * @todo 22.06.19 Pass the whole strategies object and strategy index.
+     *
+     * @param $jsonMessage
+     * @return void
+     */
+    private static  function messageParse($jsonMessage){
+        \App\Classes\WebSocket\ConsoleWebSocket::messageParse(
+            $jsonMessage,
+            self::$console,
+            self::$candleMaker,
+            self::$chart,
+            (array_key_exists('priceChannel', self::$strategiesSettingsObject) ? self::$strategiesSettingsObject['priceChannel'] : null),
+            (array_key_exists('macd', self::$strategiesSettingsObject) ? self::$strategiesSettingsObject['macd'] : null)
+            //self::$strategiesSettingsObject['priceChannel'], // if price channel. if macd = null
+            //self::$strategiesSettingsObject['macd'] // if macd. if price channel = null
+        );
     }
 }

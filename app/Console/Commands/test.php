@@ -40,7 +40,15 @@ class test extends Command
     public function handle()
     {
 
-        dump(\App\Classes\WebSocket\Front\Strategies::getSettings(4)['macd']);
+        $serializer = new \App\Classes\System\SerializeExtention();
+        $payload = json_decode(Job::where('id', 1)->value('payload'));
+        $finishArray = $serializer->toArray($payload);
+
+        $command = unserialize($payload->data->command);
+        $finishArray['data'] = $serializer->toArray($command);
+        $finishArray['data']['chained'] = null;
+
+        dump(json_encode($finishArray));
         die();
 
         $botSettings =
@@ -76,8 +84,7 @@ class test extends Command
 
         //$response = $exchange->createMarketSellOrder('BTC/USD', 1, []);
         //dump($response);
-
-
-
     }
+
+
 }

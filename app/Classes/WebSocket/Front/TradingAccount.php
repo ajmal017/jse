@@ -39,7 +39,8 @@ class TradingAccount
             'historySymbolName' => Symbol::where('id', $symbolId)->value('history_symbol_name'),
             'commission' => Symbol::where('id', $symbolId)->value('commission'),
             'frontEndId' => Bot::where('id', $botId)->value('front_end_id'),
-            'volume' => Bot::where('id', $botId)->value('volume')
+            'volume' => Bot::where('id', $botId)->value('volume'),
+            'rateLimit' => Bot::where('id', $botId)->value('rate_limit')
         );
 
         return $accountSettingsObject;

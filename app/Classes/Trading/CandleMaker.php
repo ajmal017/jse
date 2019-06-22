@@ -53,6 +53,10 @@ class CandleMaker
      * @param date          $priceChannelPeriod
      */
     public function index($tickPrice, $tickDateFullTime, $tickVolume, $chart, $command, $priceChannelPeriod, $macdSettings){
+
+        //dump($this->botSettings);
+        //die();
+
         echo "********************************************** CandleMaker\n";
 
         /** First time ever application run check. Table is empty */
@@ -94,7 +98,7 @@ class CandleMaker
         $command->error("current tick   : " . gmdate("Y-m-d G:i:s", strtotime($tickDateFullTime)) . " price: $tickPrice");
         echo "time to compare: " . gmdate("Y-m-d G:i:s", ($this->tt)) . " ";
         echo "time frame: " . $this->botSettings['timeFrame'] . "\n";
-        echo "Bot instance: " . $this->botSettings['botTitle'] . " Symbol: " . $this->botSettings['executionSymbol'] . "\n";
+        echo "Bot instance: " . $this->botSettings['botTitle'] . " Symbol: " . $this->botSettings['executionSymbolName'] . "\n";
 
         /**
          * New bar is issued. This code is executed once per time frame.
@@ -110,7 +114,7 @@ class CandleMaker
              * PriceChannel::calculate() may result as two different SMA values - one on the chart and one in DB.
              * This makes the code haed to debug.
              */
-            $this->indicatorsCalculate($priceChannelPeriod, $this->tableName,$macdSettings);
+            $this->indicatorsCalculate($priceChannelPeriod, $this->tableName, $macdSettings);
 
             /* Generate trade signals and add trade info to DB */
             //$chart->index(gmdate("Y-m-d G:i:s", strtotime($tickDateFullTime)), $this->tickDate);

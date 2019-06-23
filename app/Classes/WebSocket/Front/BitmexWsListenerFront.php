@@ -50,22 +50,31 @@ class BitmexWsListenerFront
 
             /* Create Chart and Candle maker classes here. ONCE! Create again after STOP! */
             if (self::$isCreateClasses) {
-                self::$candleMaker = new \App\Classes\Trading\CandleMaker('priceChannel', self::$accountSettingsObject);
 
-                self::$chart = new \App\Classes\Trading\Chart(self::$accountSettingsObject);
+                self::$candleMaker = new \App\Classes\Trading\CandleMaker(
+                    (array_key_exists('priceChannel', self::$strategiesSettingsObject) ? 'priceChannel' : 'macd'),
+                    self::$accountSettingsObject);
+
+                (array_key_exists('priceChannel', self::$strategiesSettingsObject) ?
+                    self::$chart = new \App\Classes\Trading\Chart(self::$accountSettingsObject) :
+                    self::$chart = new \App\Classes\Trading\MacdTradesTrigger(
+                        self::$accountSettingsObject['executionSymbolName'],
+                        self::$accountSettingsObject
+                    ));
+
                 self::$isCreateClasses = false;
             }
 
             /* Start the bot */
             if (Bot::where('id', $botId)->value('status') == 'running'){
-                array_key_exists('priceChannel', self::startPriceChannelBot($botId));
-                array_key_exists('macd', self::startMacdBot());
+                if(array_key_exists('priceChannel', self::$strategiesSettingsObject)) self::startPriceChannelBot($botId);
+                if(array_key_exists('macd', self::$strategiesSettingsObject)) self::startMacdBot($botId);
             }
 
             /* Stop the bot */
             if (Bot::where('id', $botId)->value('status') == 'idle'){
-                array_key_exists('priceChannel', self::stopPriceChannelBot());
-                array_key_exists('priceChannel', self::stopMacdBot());
+                if(array_key_exists('priceChannel', self::$strategiesSettingsObject)) self::stopPriceChannelBot($botId);
+                if(array_key_exists('macd', self::$strategiesSettingsObject)) self::stopMacdBot($botId);
             }
         });
 
@@ -162,10 +171,8 @@ class BitmexWsListenerFront
          * JSE-117. Trade flag doesn't reset on stop
          */
         self::$chart->botSettings = self::$accountSettingsObject;
-
         /* reset history flag */
         self::$isHistoryLoaded = true;
-
         if(self::$isUnsubscribed){
             /* Manual UNsubscription object */
             $requestObject = json_encode([
@@ -180,31 +187,47 @@ class BitmexWsListenerFront
     }
 
     private static function startMacdBot(){
-        \App\Classes\Trading\History::loadPeriod(self::$accountSettingsObject);
-        dump('History loaded(macd)');
+        if (self::$isHistoryLoaded){
+            \App\Classes\Trading\History::loadPeriod(self::$accountSettingsObject);
+            dump('History loaded(macd)');
 
-        Macd::calculate($macdSettings = [
-            'ema1Period' => self::$strategiesSettingsObject['macd']['emaPeriod'],
-            'ema2Period' => self::$strategiesSettingsObject['macd']['macdLinePeriod'],
-            'ema3Period' => self::$strategiesSettingsObject['macd']['macdSignalLinePeriod'],
-            self::$strategiesSettingsObject,
-            true);
+            \App\Classes\Indicators\Macd::calculate($macdSettings = [
+                'ema1Period' => self::$strategiesSettingsObject['macd']['emaPeriod'],
+                'ema2Period' => self::$strategiesSettingsObject['macd']['macdLinePeriod'],
+                'ema3Period' => self::$strategiesSettingsObject['macd']['macdSignalLinePeriod']],
+                self::$strategiesSettingsObject,
+                true);
 
-        self::reloadChart(self::$strategiesSettingsObject);
+            /* Reload chart */
+            self::reloadChart(['frontEndId' => self::$accountSettingsObject['frontEndId']]);
 
-        /* Manual subscription object */
-        $requestObject = json_encode([
-            "op" => "subscribe",
-            "args" => "instrument:" . self::$accountSettingsObject['historySymbolName']
-        ]);
-        self::$connection->send($requestObject);
-        self::$isHistoryLoaded = false;
-        self::$isUnsubscribed = true;
-
+            /* Manual subscription object */
+            $requestObject = json_encode([
+                "op" => "subscribe",
+                "args" => "instrument:" . self::$accountSettingsObject['historySymbolName']
+            ]);
+            self::$connection->send($requestObject);
+            self::$isHistoryLoaded = false;
+            self::$isUnsubscribed = true;
+        }
     }
 
     private static function stopMacdBot(){
-        //
+        self::$chart->botSettings = self::$accountSettingsObject;
+        /* reset history flag */
+        self::$isHistoryLoaded = true;
+
+        if(self::$isUnsubscribed){
+            /* Manual UNsubscription object */
+            $requestObject = json_encode([
+                "op" => "unsubscribe",
+                "args" => "instrument:" . self::$accountSettingsObject['historySymbolName']
+            ]);
+            self::$connection->send($requestObject);
+            /* Unsubscribed. Then do nothing. Wait for the next bot start */
+            self::$isUnsubscribed = false;
+            self::$isCreateClasses; // Chart and CandleMaker will be freshly created
+        }
     }
 
     /**

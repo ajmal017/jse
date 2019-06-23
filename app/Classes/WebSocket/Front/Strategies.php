@@ -52,12 +52,12 @@ class Strategies
                 'macd' => [
                     'emaPeriod' => $macdSettingsRow[0]->ema_period,
                     'macdLinePeriod' => $macdSettingsRow[0]->macd_line_period,
-                    'macdSignallinePeriod' => $macdSettingsRow[0]->macd_signalline_period
+                    'macdSignalLinePeriod' => $macdSettingsRow[0]->macd_signalline_period
                 ]
             );
-
         }
 
+        self::$strategiesSettingsObject['botTitle'] = Bot::where('id', $botId)->value('db_table_name');
         return self::$strategiesSettingsObject;
     }
 }

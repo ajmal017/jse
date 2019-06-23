@@ -54,9 +54,6 @@ class CandleMaker
      */
     public function index($tickPrice, $tickDateFullTime, $tickVolume, $chart, $command, $priceChannelPeriod, $macdSettings){
 
-        //dump($this->botSettings);
-        //die();
-
         echo "********************************************** CandleMaker\n";
 
         /** First time ever application run check. Table is empty */
@@ -117,7 +114,6 @@ class CandleMaker
             $this->indicatorsCalculate($priceChannelPeriod, $this->tableName, $macdSettings);
 
             /* Generate trade signals and add trade info to DB */
-            //$chart->index(gmdate("Y-m-d G:i:s", strtotime($tickDateFullTime)), $this->tickDate);
             $chart->index();
 
             /* Add bar to DB */
@@ -215,12 +211,10 @@ class CandleMaker
             Sma::calculate('close', 2, 'sma1', $tableName, false); // Calculate SMA together with price channel. This sam used as a filter.
         }
         if ($this->indicator == 'macd') {
-            //Macd::calculate($macdSettings, $this->botSettings, false);
-
             Macd::calculate($macdSettings = [
-                'ema1Period' => $this->botSettings['strategyParams']['emaPeriod'],
-                'ema2Period' => $this->botSettings['strategyParams']['macdLinePeriod'],
-                'ema3Period' => $this->botSettings['strategyParams']['macdSignalLinePeriod']],
+                'ema1Period' => $macdSettings['emaPeriod'],
+                'ema2Period' => $macdSettings['macdLinePeriod'],
+                'ema3Period' => $macdSettings['macdSignalLinePeriod']],
                 $this->botSettings,
                 true);
         }

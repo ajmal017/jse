@@ -44,7 +44,8 @@ class PlaceOrder implements ShouldQueue
     {
         //$this->symbol = $botSettings['executionSymbolName'];
         $this->direction = $direction;
-        $this->volume = $botSettings['volume'];
+        //$this->volume = $botSettings['volume'];
+        $this->volume = $volume;
         $this->botSettings = $botSettings;
     }
 

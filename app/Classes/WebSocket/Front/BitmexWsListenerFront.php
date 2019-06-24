@@ -55,6 +55,10 @@ class BitmexWsListenerFront
                     (array_key_exists('priceChannel', self::$strategiesSettingsObject) ? 'priceChannel' : 'macd'),
                     self::$accountSettingsObject);
 
+
+                dump (__FILE__);
+                dump((array_key_exists('priceChannel', self::$strategiesSettingsObject) ? "!!!!!!! PC" : "!!!!!!!!!! MACD"));
+
                 (array_key_exists('priceChannel', self::$strategiesSettingsObject) ?
                     self::$chart = new \App\Classes\Trading\Chart(self::$accountSettingsObject) :
                     self::$chart = new \App\Classes\Trading\MacdTradesTrigger(
@@ -128,21 +132,19 @@ class BitmexWsListenerFront
 
     private static function trace(){
         /* Trace: */
-        dump(self::$accountSettingsObject);
+        // dump(self::$accountSettingsObject);
         dump(self::$strategiesSettingsObject);
     }
 
     private static function startPriceChannelBot($botId){
         if (self::$isHistoryLoaded){
             \App\Classes\Trading\History::loadPeriod(self::$accountSettingsObject);
-            dump('History loaded');
-
-            /* Initial indicators calculation and chart reload*/
+            dump('History loaded (Price Channel)');
+            /* Initial indicators calculation */
             \App\Classes\Indicators\PriceChannel::calculate(
                 self::$strategiesSettingsObject['priceChannel']['priceChannelPeriod'],
                 Bot::where('id', $botId)->value('db_table_name'),
                 true);
-
             \App\Classes\Indicators\Sma::calculate(
                 'close',
                 self::$strategiesSettingsObject['priceChannel']['smaFilterPeriod'],
@@ -170,10 +172,13 @@ class BitmexWsListenerFront
          * New settings are loaded on stop. On play they picked up again
          * JSE-117. Trade flag doesn't reset on stop
          */
+        self::$chart->trade_flag = 'all';
+        /* JSE-165 */
+        self::$candleMaker->indicator = 'priceChannel';
         self::$chart->botSettings = self::$accountSettingsObject;
-
         /* reset history flag */
         self::$isHistoryLoaded = true;
+        self::$isCreateClasses = true; // Chart and CandleMaker will be freshly created
 
         if(self::$isUnsubscribed){
             /* Manual UNsubscription object */
@@ -184,14 +189,13 @@ class BitmexWsListenerFront
             self::$connection->send($requestObject);
             /* Unsubscribed. Then do nothing. Wait for the next bot start */
             self::$isUnsubscribed = false;
-            self::$isCreateClasses; // Chart and CandleMaker will be freshly created
         }
     }
 
     private static function startMacdBot(){
         if (self::$isHistoryLoaded){
             \App\Classes\Trading\History::loadPeriod(self::$accountSettingsObject);
-            dump('History loaded(macd)');
+            dump('History loaded (MACD)');
 
             \App\Classes\Indicators\Macd::calculate($macdSettings = [
                 'ema1Period' => self::$strategiesSettingsObject['macd']['emaPeriod'],
@@ -217,10 +221,12 @@ class BitmexWsListenerFront
     private static function stopMacdBot(){
         
         self::$chart->botSettings = self::$accountSettingsObject;
-
+        self::$chart->trade_flag = 'all';
+        self::$candleMaker->indicator = 'macd';
 
         /* reset history flag */
         self::$isHistoryLoaded = true;
+        self::$isCreateClasses = true; // Chart and CandleMaker will be freshly created
 
         if(self::$isUnsubscribed){
             /* Manual UNsubscription object */
@@ -231,7 +237,6 @@ class BitmexWsListenerFront
             self::$connection->send($requestObject);
             /* Unsubscribed. Then do nothing. Wait for the next bot start */
             self::$isUnsubscribed = false;
-            self::$isCreateClasses; // Chart and CandleMaker will be freshly created
         }
     }
 

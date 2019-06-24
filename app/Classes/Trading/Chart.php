@@ -56,14 +56,19 @@ class Chart extends Profit
     {
         $this->executionSymbolName = $botSettings['executionSymbolName'];
         $this->volume = $botSettings['volume'];
-        $this->botSettings = $botSettings;
         $this->trade_flag = 'all';
+        $this->botSettings = $botSettings;
     }
 
     public function index($mode = null, $backTestRowId = null)
     {
         echo(__FILE__ . "\n");
-        $this->calc($mode, $backTestRowId); // Inherited class call
+
+        /**
+         * Profit calculation inherited class.
+         * This class is attached to all strategies.
+         */
+        $this->calc($mode, $backTestRowId);
 
         /**
          * $this->trade_flag == "all" is used only when the first trade occurs, then it turns to "long" or "short".

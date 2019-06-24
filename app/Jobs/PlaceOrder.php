@@ -14,7 +14,6 @@ class PlaceOrder implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
-    private $symbol;
     private $direction;
     private $volume;
     private $botSettings;
@@ -26,14 +25,12 @@ class PlaceOrder implements ShouldQueue
      */
     public $retryAfter = 5;
 
-
     /**
      * Connection can be also hardcoded.
      *
      * @var string
      * public $connection = '';
      */
-
 
     /**
      * Create a new job instance.
@@ -56,7 +53,6 @@ class PlaceOrder implements ShouldQueue
      */
     public function handle()
     {
-        dump($this->botSettings);
         if($this->direction == 'buy'){
             Exchange::placeMarketBuyOrder($this->botSettings, $this->volume);
         } else {

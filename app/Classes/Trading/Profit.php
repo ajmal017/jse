@@ -19,7 +19,6 @@ abstract class Profit
          *
          * Realtime mode:
          * Bars are created in CandleMaker.php, index($mode = null, $backTestRowId = null) is called once per time frame.
-         *
          */
         if ($mode == "backtest")
         {
@@ -55,7 +54,15 @@ abstract class Profit
                     ->whereNotNull('trade_price')
                     ->orderBy('id', 'desc') // Form biggest to smallest values
                     ->value('trade_price');
-            $this->tradeProfit = (($this->position == "long" ? ($this->lastRow[0]->close - $lastTradePrice) * $this->volume : ($lastTradePrice - $this->lastRow[0]->close) * $this->volume));
+
+            //dump("--------------------------------------------------------profit.php 64 TRADE_PROFIT: " . $this->volume);
+
+            $this->tradeProfit =
+                (($this->position == "long" ? ($this->lastRow[0]->close - $lastTradePrice) * $this->volume : ($lastTradePrice - $this->lastRow[0]->close) * $this->volume));
+
+
+
+
             \App\Classes\Accounting\TradeProfit::calculate($this->botSettings, $this->tradeProfit, $backTestRowId);
         }
     }

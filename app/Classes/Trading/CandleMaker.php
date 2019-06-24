@@ -30,7 +30,7 @@ class CandleMaker
     private $barLow = 9999999;
     private $isFirstTickInBar;
     private $tickDate;
-    private $indicator;
+    public $indicator;
     private $tableName;
     private $isFirstTimeTickCheck;
     private $addedTickTime;
@@ -66,7 +66,6 @@ class CandleMaker
             $this->tt = strtotime($x . $this->botSettings['timeFrame'] . "minute"); // // *** TIME FRAME IS HERE!! ***
             //$this->tt = strtotime($x . "+30seconds"); // Custom time frame
             $this->isFirstTickInBar = false;
-
             /**
              * The first tick after a bar is added can go up or down.
              * At this tick make barHigh and barLow = tickPrice
@@ -156,8 +155,8 @@ class CandleMaker
 
         $messageArray['priceChannelHighValue'] =
             (DB::table($this->tableName)
-            ->where('id', $lastRecordId - 1)
-            ->value('price_channel_high_value'));
+                ->where('id', $lastRecordId - 1)
+                ->value('price_channel_high_value'));
 
         $messageArray['priceChannelLowValue'] =
             (DB::table($this->tableName)
@@ -208,7 +207,12 @@ class CandleMaker
     private function indicatorsCalculate($priceChannelPeriod, $tableName, $macdSettings){
         if ($this->indicator == 'priceChannel'){
             PriceChannel::calculate($priceChannelPeriod, $this->tableName, false);
-            Sma::calculate('close', 2, 'sma1', $tableName, false); // Calculate SMA together with price channel. This sam used as a filter.
+            Sma::calculate(
+                'close',
+                2,
+                'sma1',
+                $tableName,
+                false); // Calculate SMA together with price channel. This sam used as a filter.
         }
         if ($this->indicator == 'macd') {
             Macd::calculate($macdSettings = [

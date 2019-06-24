@@ -45,9 +45,8 @@ class Exchange
         catch (\Exception $e)
         {
             dump('--------- in exception line 40');
-            // Error
             self::$response = $e->getMessage();
-            //dump(self::$response);
+
         }
         self::checkResponse();
     }
@@ -85,7 +84,7 @@ class Exchange
         }
 
         if (gettype(self::$response) == 'string'){
-            echo "Error string line 82: " . self::$response . "\n";
+            echo "Error string line 87: " . self::$response . "\n";
             switch(false){
                 case !strpos(self::$response, 'Account has insufficient');
                     $error = 'Account has insufficient funds. Die.';

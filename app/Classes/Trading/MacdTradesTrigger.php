@@ -44,8 +44,8 @@ class MacdTradesTrigger extends Profit
 
     public function __construct($executionSymbolName, $botSettings)
     {
-        //$this->volume = $orderVolume;
         $this->executionSymbolName = $executionSymbolName;
+        $this->volume = $botSettings['volume'];
         $this->trade_flag = 'trades_disabled'; // Need to wait until MACD cross, then open a trade. Otherwise we get a trade at start.
         $this->botSettings = $botSettings;
     }
@@ -53,7 +53,6 @@ class MacdTradesTrigger extends Profit
     // Macd line > Macd signal line => go long
     // Macd line < Macd signal line => go short
 
-    //public function index($barDate, $timeStamp)
     public function index($mode = null, $backTestRowId = null)
     {
         echo __FILE__ . "\n" ;
@@ -66,6 +65,8 @@ class MacdTradesTrigger extends Profit
                 $this->trade_flag = "all";
             }
         }
+
+        echo "------------------------------------------------------MacdTradesTrigger.php 69. this->trade_flag: " . $this->trade_flag . "\n";
 
         if (($this->lastRow[0]->macd_line > $this->lastRow[0]->macd_signal_line) && ($this->trade_flag == "all" || $this->trade_flag == "long")){
 
@@ -119,7 +120,6 @@ class MacdTradesTrigger extends Profit
             \App\Classes\Accounting\Commission::accumulate($this->botSettings);
         }
 
-        //if ($this->trade_flag == 'long' || $this->trade_flag == 'short') $this->finish();
         $this->finish();
     }
 }

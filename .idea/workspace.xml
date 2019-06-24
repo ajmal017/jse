@@ -2,13 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="0ab8c352-e91a-41d2-a602-98135f1f3232" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/Classes/Trading/CandleMaker.php" afterPath="$PROJECT_DIR$/app/Classes/Trading/CandleMaker.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/Classes/Trading/Chart.php" afterPath="$PROJECT_DIR$/app/Classes/Trading/Chart.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/Classes/Trading/MacdTradesTrigger.php" afterPath="$PROJECT_DIR$/app/Classes/Trading/MacdTradesTrigger.php" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/Classes/WebSocket/Front/BitmexWsListenerFront.php" afterPath="$PROJECT_DIR$/app/Classes/WebSocket/Front/BitmexWsListenerFront.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/Classes/WebSocket/Front/Strategies.php" afterPath="$PROJECT_DIR$/app/Classes/WebSocket/Front/Strategies.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/Jobs/PlaceOrder.php" afterPath="$PROJECT_DIR$/app/Jobs/PlaceOrder.php" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -19,61 +13,21 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="BitmexWsListenerFront.php" pinned="false" current-in-tab="false">
+      <file leaf-file-name="BitmexWsListenerFront.php" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/app/Classes/WebSocket/Front/BitmexWsListenerFront.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="288">
-              <caret line="61" column="36" lean-forward="false" selection-start-line="61" selection-start-column="36" selection-end-line="61" selection-end-column="36" />
+            <state relative-caret-position="543">
+              <caret line="217" column="8" lean-forward="false" selection-start-line="217" selection-start-column="8" selection-end-line="217" selection-end-column="8" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="MacdTradesTrigger.php" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/app/Classes/Trading/MacdTradesTrigger.php">
+      <file leaf-file-name="AccumulatedProfit.php" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/app/Classes/Accounting/AccumulatedProfit.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="441">
-              <caret line="122" column="18" lean-forward="false" selection-start-line="122" selection-start-column="18" selection-end-line="122" selection-end-column="18" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="Profit.php" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/app/Classes/Trading/Profit.php">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="297">
-              <caret line="62" column="20" lean-forward="false" selection-start-line="62" selection-start-column="20" selection-end-line="62" selection-end-column="20" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="Chart.php" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/app/Classes/Trading/Chart.php">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="424">
-              <caret line="106" column="0" lean-forward="false" selection-start-line="106" selection-start-column="0" selection-end-line="106" selection-end-column="0" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="CandleMaker.php" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/app/Classes/Trading/CandleMaker.php">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="330">
-              <caret line="116" column="17" lean-forward="false" selection-start-line="116" selection-start-column="17" selection-end-line="116" selection-end-column="17" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="Strategies.php" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/app/Classes/WebSocket/Front/Strategies.php">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="441">
-              <caret line="59" column="103" lean-forward="false" selection-start-line="59" selection-start-column="103" selection-end-line="59" selection-end-column="103" />
+            <state relative-caret-position="442">
+              <caret line="31" column="118" lean-forward="false" selection-start-line="31" selection-start-column="118" selection-end-line="31" selection-end-column="118" />
               <folding />
             </state>
           </provider>
@@ -191,10 +145,10 @@
         <option value="$PROJECT_DIR$/app/Classes/Indicators/Macd.php" />
         <option value="$PROJECT_DIR$/app/Classes/WebSocket/Front/Strategies.php" />
         <option value="$PROJECT_DIR$/app/Classes/Trading/CandleMaker.php" />
-        <option value="$PROJECT_DIR$/app/Classes/WebSocket/Front/BitmexWsListenerFront.php" />
         <option value="$PROJECT_DIR$/app/Jobs/PlaceOrder.php" />
         <option value="$PROJECT_DIR$/app/Classes/Trading/Chart.php" />
         <option value="$PROJECT_DIR$/app/Classes/Trading/MacdTradesTrigger.php" />
+        <option value="$PROJECT_DIR$/app/Classes/WebSocket/Front/BitmexWsListenerFront.php" />
       </list>
     </option>
   </component>
@@ -480,12 +434,12 @@
       <workItem from="1560792199319" duration="13479000" />
       <workItem from="1561060306633" duration="18239000" />
       <workItem from="1561136504909" duration="23440000" />
-      <workItem from="1561217569195" duration="29686000" />
+      <workItem from="1561217569195" duration="30780000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="632434000" />
+    <option name="totallyTimeSpent" value="633528000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1382" height="744" extended-state="6" />
@@ -826,14 +780,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/Classes/Accounting/AccumulatedProfit.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="442">
-          <caret line="31" column="118" lean-forward="false" selection-start-line="31" selection-start-column="118" selection-end-line="31" selection-end-column="118" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/app/Http/Controllers/JobController.php">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="458">
@@ -908,10 +854,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/Classes/WebSocket/Front/BitmexWsListenerFront.php">
+    <entry file="file://$PROJECT_DIR$/app/Classes/Trading/Chart.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="288">
-          <caret line="61" column="36" lean-forward="false" selection-start-line="61" selection-start-column="36" selection-end-line="61" selection-end-column="36" />
+        <state relative-caret-position="424">
+          <caret line="106" column="0" lean-forward="false" selection-start-line="106" selection-start-column="0" selection-end-line="106" selection-end-column="0" />
           <folding />
         </state>
       </provider>
@@ -924,10 +870,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/Classes/Trading/Chart.php">
+    <entry file="file://$PROJECT_DIR$/app/Classes/Trading/Profit.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="424">
-          <caret line="106" column="0" lean-forward="false" selection-start-line="106" selection-start-column="0" selection-end-line="106" selection-end-column="0" />
+        <state relative-caret-position="297">
+          <caret line="62" column="20" lean-forward="false" selection-start-line="62" selection-start-column="20" selection-end-line="62" selection-end-column="20" />
           <folding />
         </state>
       </provider>
@@ -940,10 +886,18 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/Classes/Trading/Profit.php">
+    <entry file="file://$PROJECT_DIR$/app/Classes/Accounting/AccumulatedProfit.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="297">
-          <caret line="62" column="20" lean-forward="false" selection-start-line="62" selection-start-column="20" selection-end-line="62" selection-end-column="20" />
+        <state relative-caret-position="442">
+          <caret line="31" column="118" lean-forward="false" selection-start-line="31" selection-start-column="118" selection-end-line="31" selection-end-column="118" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/Classes/WebSocket/Front/BitmexWsListenerFront.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="543">
+          <caret line="217" column="8" lean-forward="false" selection-start-line="217" selection-start-column="8" selection-end-line="217" selection-end-column="8" />
           <folding />
         </state>
       </provider>

@@ -171,8 +171,10 @@ class BitmexWsListenerFront
          * JSE-117. Trade flag doesn't reset on stop
          */
         self::$chart->botSettings = self::$accountSettingsObject;
+
         /* reset history flag */
         self::$isHistoryLoaded = true;
+
         if(self::$isUnsubscribed){
             /* Manual UNsubscription object */
             $requestObject = json_encode([
@@ -213,7 +215,10 @@ class BitmexWsListenerFront
     }
 
     private static function stopMacdBot(){
+        
         self::$chart->botSettings = self::$accountSettingsObject;
+
+
         /* reset history flag */
         self::$isHistoryLoaded = true;
 

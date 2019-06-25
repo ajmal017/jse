@@ -16,4 +16,6 @@ npm-debug.log
 yarn-error.log
 /config/bot.php
 
+/.idea/workspace.xml
+
 

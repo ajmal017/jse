@@ -63,6 +63,6 @@ class Front extends Command
         /**
          * Subscribe to quotes, calculate indicators, start trading, etc.
          */
-        \App\Classes\WebSocket\BitmexWsListenerFront::subscribe($connector, $loop, $this, $this->argument('botId'));
+        \App\Classes\WebSocket\Front\BitmexWsListenerFront::subscribe($connector, $loop, $this, $this->argument('botId'));
     }
 }

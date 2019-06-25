@@ -30,7 +30,7 @@ class CandleMaker
     private $barLow = 9999999;
     private $isFirstTickInBar;
     private $tickDate;
-    private $indicator;
+    public $indicator;
     private $tableName;
     private $isFirstTimeTickCheck;
     private $addedTickTime;
@@ -53,24 +53,10 @@ class CandleMaker
      * @param date          $priceChannelPeriod
      */
     public function index($tickPrice, $tickDateFullTime, $tickVolume, $chart, $command, $priceChannelPeriod, $macdSettings){
+
         echo "********************************************** CandleMaker\n";
 
         /** First time ever application run check. Table is empty */
-        /*if(!DB::table('asset_1')->first())
-        {
-            echo "CandleMaker.php Application first ever run. Add first record to the table where OLHC = tick price\n";
-            //History::load(); // After the history is loaded - get price channel calculated
-            //PriceChannel::calculate(); // Calculate price channel
-            DB::table($this->tableName)->insert(array( // Record to DB
-                'date' => gmdate("Y-m-d G:i:s", ($tickDate / 1000)), // Date in regular format. Converted from unix timestamp
-                'time_stamp' => $tickDate,
-                'open' => $tickPrice,
-                'close' => $tickPrice,
-                'high' => $tickPrice,
-                'low' => $tickPrice,
-                'volume' => $tickVolume,
-            ));
-        }*/
         $lastRecordId = DB::table($this->tableName)->orderBy('time_stamp', 'desc')->first()->id;
 
         /* Take seconds off and add 1 min. Do it only once per interval (for example 1min) */
@@ -80,7 +66,6 @@ class CandleMaker
             $this->tt = strtotime($x . $this->botSettings['timeFrame'] . "minute"); // // *** TIME FRAME IS HERE!! ***
             //$this->tt = strtotime($x . "+30seconds"); // Custom time frame
             $this->isFirstTickInBar = false;
-
             /**
              * The first tick after a bar is added can go up or down.
              * At this tick make barHigh and barLow = tickPrice
@@ -109,7 +94,7 @@ class CandleMaker
         $command->error("current tick   : " . gmdate("Y-m-d G:i:s", strtotime($tickDateFullTime)) . " price: $tickPrice");
         echo "time to compare: " . gmdate("Y-m-d G:i:s", ($this->tt)) . " ";
         echo "time frame: " . $this->botSettings['timeFrame'] . "\n";
-        echo "Bot instance: " . $this->botSettings['botTitle'] . " Symbol: " . $this->botSettings['executionSymbol'] . " Path(live/testnet): " . $this->botSettings['bitmex_api_path'] . "\n";
+        echo "Bot instance: " . $this->botSettings['botTitle'] . " Symbol: " . $this->botSettings['executionSymbolName'] . "\n";
 
         /**
          * New bar is issued. This code is executed once per time frame.
@@ -125,10 +110,9 @@ class CandleMaker
              * PriceChannel::calculate() may result as two different SMA values - one on the chart and one in DB.
              * This makes the code haed to debug.
              */
-            $this->indicatorsCalculate($priceChannelPeriod, $this->tableName,$macdSettings);
+            $this->indicatorsCalculate($priceChannelPeriod, $this->tableName, $macdSettings);
 
             /* Generate trade signals and add trade info to DB */
-            //$chart->index(gmdate("Y-m-d G:i:s", strtotime($tickDateFullTime)), $this->tickDate);
             $chart->index();
 
             /* Add bar to DB */
@@ -145,7 +129,6 @@ class CandleMaker
              * This price channel calculation is applied when a new bar is added to the chart. Right after it was added
              * we calculate price channel and inform front end that the chart mast be reloaded
              */
-
 
             // Actually this code is called once per time frame
             // We can only call priceChannel::calculate for last bars only from here
@@ -172,8 +155,8 @@ class CandleMaker
 
         $messageArray['priceChannelHighValue'] =
             (DB::table($this->tableName)
-            ->where('id', $lastRecordId - 1)
-            ->value('price_channel_high_value'));
+                ->where('id', $lastRecordId - 1)
+                ->value('price_channel_high_value'));
 
         $messageArray['priceChannelLowValue'] =
             (DB::table($this->tableName)
@@ -224,15 +207,18 @@ class CandleMaker
     private function indicatorsCalculate($priceChannelPeriod, $tableName, $macdSettings){
         if ($this->indicator == 'priceChannel'){
             PriceChannel::calculate($priceChannelPeriod, $this->tableName, false);
-            Sma::calculate('close', 2, 'sma1', $tableName, false); // Calculate SMA together with price channel. This sam used as a filter.
+            Sma::calculate(
+                'close',
+                2,
+                'sma1',
+                $tableName,
+                false); // Calculate SMA together with price channel. This sam used as a filter.
         }
         if ($this->indicator == 'macd') {
-            //Macd::calculate($macdSettings, $this->botSettings, false);
-
             Macd::calculate($macdSettings = [
-                'ema1Period' => $this->botSettings['strategyParams']['emaPeriod'],
-                'ema2Period' => $this->botSettings['strategyParams']['macdLinePeriod'],
-                'ema3Period' => $this->botSettings['strategyParams']['macdSignalLinePeriod']],
+                'ema1Period' => $macdSettings['emaPeriod'],
+                'ema2Period' => $macdSettings['macdLinePeriod'],
+                'ema3Period' => $macdSettings['macdSignalLinePeriod']],
                 $this->botSettings,
                 true);
         }

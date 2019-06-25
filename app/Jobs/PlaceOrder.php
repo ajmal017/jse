@@ -14,7 +14,6 @@ class PlaceOrder implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
-    private $symbol;
     private $direction;
     private $volume;
     private $botSettings;
@@ -26,7 +25,6 @@ class PlaceOrder implements ShouldQueue
      */
     public $retryAfter = 5;
 
-
     /**
      * Connection can be also hardcoded.
      *
@@ -34,16 +32,16 @@ class PlaceOrder implements ShouldQueue
      * public $connection = '';
      */
 
-
     /**
      * Create a new job instance.
      *
      * @return void
      */
-    public function __construct($direction, $symbol, $volume, $botSettings)
+    public function __construct($direction, $volume, $botSettings)
     {
-        $this->symbol = $symbol;
+        //$this->symbol = $botSettings['executionSymbolName'];
         $this->direction = $direction;
+        //$this->volume = $botSettings['volume'];
         $this->volume = $volume;
         $this->botSettings = $botSettings;
     }
@@ -55,16 +53,10 @@ class PlaceOrder implements ShouldQueue
      */
     public function handle()
     {
-        echo "symbol: " . $this->symbol . "\n";
-        echo "direction: " . $this->direction . "\n";
-        echo "volume: " . $this->volume . "\n";
-        echo "bot settings: \n";
-        dump($this->botSettings);
-
         if($this->direction == 'buy'){
-            Exchange::placeMarketBuyOrder($this->symbol, $this->volume, $this->botSettings);
+            Exchange::placeMarketBuyOrder($this->botSettings, $this->volume);
         } else {
-            Exchange::placeMarketSellOrder($this->symbol, $this->volume, $this->botSettings);
+            Exchange::placeMarketSellOrder($this->botSettings, $this->volume);
         }
     }
 }

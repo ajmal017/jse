@@ -40,8 +40,15 @@ class test extends Command
     public function handle()
     {
 
-        $allDbValues = DB::table('bot_1')->get();
-        dump($allDbValues->count());
+        $serializer = new \App\Classes\System\SerializeExtention();
+        $payload = json_decode(Job::where('id', 1)->value('payload'));
+        $finishArray = $serializer->toArray($payload);
+
+        $command = unserialize($payload->data->command);
+        $finishArray['data'] = $serializer->toArray($command);
+        $finishArray['data']['chained'] = null;
+
+        dump(json_encode($finishArray));
         die();
 
         $botSettings =
@@ -77,8 +84,7 @@ class test extends Command
 
         //$response = $exchange->createMarketSellOrder('BTC/USD', 1, []);
         //dump($response);
-
-
-
     }
+
+
 }

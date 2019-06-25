@@ -23,7 +23,7 @@ class History
     public static function loadPeriod($botSettings){
         $barsToLoad = $botSettings['barsToLoad'];
         $timeFrame = $botSettings['timeFrame'] . 'm';
-        $symbol = $botSettings['historySymbol'];
+        $symbol = $botSettings['historySymbolName'];
 
         //die("https://www.bitmex.com/api/v1/trade/bucketed?binSize=$timeFrame&partial=false&symbol=$symbol&count=$barsToLoad&reverse=true");
 

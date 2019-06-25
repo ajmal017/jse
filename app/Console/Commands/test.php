@@ -3,6 +3,7 @@
 namespace App\Console\Commands;
 
 use App\Job;
+use App\Bot;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\DB;
 
@@ -39,6 +40,10 @@ class test extends Command
      */
     public function handle()
     {
+
+        $bot = Bot::where('id', 1)->exists();
+        dump($bot);
+        die();
 
         $serializer = new \App\Classes\System\SerializeExtention();
         $payload = json_decode(Job::where('id', 1)->value('payload'));

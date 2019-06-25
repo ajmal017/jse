@@ -7,6 +7,7 @@ use Illuminate\Validation\Rule;
 use App\Strategy;
 use App\MacdSettings;
 use App\PricechannelSettings;
+use App\Bot;
 
 
 class StrategyController extends Controller
@@ -44,7 +45,7 @@ class StrategyController extends Controller
     {
         $this->validate($request,[
             /* General settings */
-            'name' => 'required|string|max:10',
+            'name' => 'required|string|max:30',
             'strategy_type_id' => 'required|numeric',
             'memo' => 'max:50',
         ]);
@@ -133,15 +134,14 @@ class StrategyController extends Controller
     {
         $strategy = Strategy::findOrFail($id);
 
-        // use $id
-        // Get Bot with this $id
-        // Get it's status
-        // If == running -> return a error that this strategy can not be edited due to running status
-        // Do the same check for delete
+        if (Bot::where('strategy_id', $id)->exists())
+            if (Bot::where('strategy_id', $id)->get()[0]['status'] == 'running' )
+                throw new \Exception('Update fail. This strategy is running. Id: ' .
+                    Bot::where('strategy_id', $id)->get()[0]['id'] . ' Name: ' . Bot::where('strategy_id', $id)->get()[0]['name']);
 
         $this->validate($request,[
             /* General settings */
-            'name' => 'required|string|max:10',
+            'name' => 'required|string|max:30',
             'strategy_type_id' => 'required|numeric',
             'memo' => 'max:50',
         ]);
@@ -210,6 +210,11 @@ class StrategyController extends Controller
      */
     public function destroy($id)
     {
+        if (Bot::where('strategy_id', $id)->exists())
+            if (Bot::where('strategy_id', $id)->get()[0]['status'] == 'running' )
+                throw new \Exception('Update fail. This strategy is running. Id: ' .
+                    Bot::where('strategy_id', $id)->get()[0]['id'] . ' Name: ' . Bot::where('strategy_id', $id)->get()[0]['name']);
+
         Strategy::findOrFail($id)->delete();
     }
 }

@@ -77,9 +77,9 @@ class BotController extends Controller
         $bot = Bot::findOrFail($id);
         $this->validate($request, [
             'time_frame' => ['required', Rule::in(['1', '5'])],
-            //
         ]);
 
+        /* Check the que */
         if (Job::all()->count() != 0){
             return response('Jobs table is not empty!<br>' . __FILE__, 422)
                 ->header('Content-Type', 'text/plain');

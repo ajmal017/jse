@@ -43,25 +43,26 @@ class StrategyController extends Controller
     public function store(Request $request)
     {
         $this->validate($request,[
+            /* General settings */
             'name' => 'required|string|max:10',
             'strategy_type_id' => 'required|numeric',
-            'pricechannel_settings_id' => 'numeric|nullable',
-            'macd_settings_id' => 'numeric|nullable',
-            // Price channel
-            /*'time_frame' => ['nullable', Rule::in(['1', '5'])],*/
-            'time_frame' => 'nullable|numeric|max:50',
-            'sma_filter_period' => 'numeric|nullable',
-            // Macd
-            'ema_period' => 'numeric|nullable',
-            'macd_line_period' => 'numeric|nullable',
-            'macd_signalline_period' => 'numeric|nullable',
-            'memo' => 'max:50'
+            'memo' => 'max:50',
         ]);
 
-        // If strategy_type_ip = 1
-        // Price channel
+        /**
+         * If strategy_type_ip = 1
+         * Price channel
+         */
         if ($request['strategy_type_id'] == '1') {
-            // Insert settings to pricechanel_settings table
+            $this->validate($request,[
+                /* Strategy settings row */
+                'pricechannel_settings_id' => 'numeric|nullable',
+                /* Price channel */
+                /*'time_frame' => ['nullable', Rule::in(['1', '5'])],*/
+                'time_frame' => 'required|numeric|max:50',
+                'sma_filter_period' => 'required|numeric|max:5',
+            ]);
+            /* Insert settings to pricechanel_settings table */
             PricechannelSettings::create([
                 'time_frame' => $request['time_frame'],
                 'sma_filter_period' => $request['sma_filter_period']
@@ -70,18 +71,26 @@ class StrategyController extends Controller
             self::$PricechannelSettingsAddedId = PricechannelSettings::orderby('id', 'desc')->take(1)->value('id');
         }
 
-        // Macd
+        /**
+         * Macd
+         */
         if ($request['strategy_type_id'] == '2') {
+            $this->validate($request,[
+                /* Strategy settings row */
+                'macd_settings_id' => 'numeric|nullable',
+                /* Macd */
+                'ema_period' => 'numeric|required',
+                'macd_line_period' => 'numeric|required',
+                'macd_signalline_period' => 'numeric|required',
+            ]);
             MacdSettings::create([
-                'ema_period' => 2,
-                'macd_line_period' => 33,
-                'macd_signal_period' => 99
+                'ema_period' => $request['ema_period'],
+                'macd_line_period' => $request['macd_line_period'],
+                'macd_signalline_period' => $request['macd_signalline_period']
             ]);
             self::$MacdSettingsAddedId = MacdSettings::orderby('id', 'desc')->take(1)->value('id');
         }
 
-        // Via getting the lat id from the table
-        // Then: push this id to Strategy/pricechannel_settings_id
         Strategy::create([
             'name' => $request['name'],
             'strategy_type_id' => $request['strategy_type_id'],
@@ -124,14 +133,46 @@ class StrategyController extends Controller
     {
         $strategy = Strategy::findOrFail($id);
 
-        /* Only in pricechannel_settings_is is set - it means that a price channel strategy is being edited */
-        if ($request['pricechannel_settings_id'])
-            $pricechannelSettings = PricechannelSettings::findOrFail($request['pricechannel_settings_id']);
-
-        if ($request['macd_settings_id'])
-            $macdSettings = MacdSettings::findOrFail($request['macd_settings_id']);
+        // use $id
+        // Get Bot with this $id
+        // Get it's status
+        // If == running -> return a error that this strategy can not be edited due to running status
+        // Do the same check for delete
 
         $this->validate($request,[
+            /* General settings */
+            'name' => 'required|string|max:10',
+            'strategy_type_id' => 'required|numeric',
+            'memo' => 'max:50',
+        ]);
+
+        /* Only in pricechannel_settings_is is set - it means that a price channel strategy is being edited */
+        if ($request['pricechannel_settings_id']){
+            $this->validate($request,[
+                /* Strategy settings row */
+                'pricechannel_settings_id' => 'numeric|nullable',
+                /* Price channel */
+                /*'time_frame' => ['nullable', Rule::in(['1', '5'])],*/
+                'time_frame' => 'required|numeric|max:50',
+                'sma_filter_period' => 'required|numeric|max:5',
+            ]);
+            $pricechannelSettings = PricechannelSettings::findOrFail($request['pricechannel_settings_id']);
+        }
+
+        if ($request['macd_settings_id']){
+            $this->validate($request,[
+                /* Strategy settings row */
+                'macd_settings_id' => 'numeric|nullable',
+                /* Macd */
+                'ema_period' => 'numeric|required',
+                'macd_line_period' => 'numeric|required',
+                'macd_signalline_period' => 'numeric|required',
+            ]);
+            $macdSettings = MacdSettings::findOrFail($request['macd_settings_id']);
+        }
+
+
+        /*$this->validate($request,[
             'name' => 'required|string|max:20',
             'strategy_type_id' => 'required|numeric',
             'pricechannel_settings_id' => 'numeric|nullable',
@@ -145,7 +186,7 @@ class StrategyController extends Controller
             'macd_line_period' => 'numeric|nullable',
             'macd_signalline_period' => 'numeric|nullable',
             'memo' => 'max:50'
-        ]);
+        ]);*/
 
         /**
          * We send the same request to different models. It is ok.

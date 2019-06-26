@@ -8,14 +8,14 @@
 
 namespace App\Classes\WebSocket\Front;
 use App\Bot;
-use App\Classes\Trading\CandleMaker;
+/*use App\Classes\Trading\CandleMaker;
 use App\Classes\Trading\Chart;
 use App\Strategy;
 use App\Symbol;
 use App\Account;
 use App\Exchange;
 use App\PricechannelSettings;
-use App\MacdSettings;
+use App\MacdSettings;*/
 
 class BitmexWsListenerFront
 {

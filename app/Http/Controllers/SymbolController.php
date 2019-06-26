@@ -4,6 +4,9 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Symbol;
+use App\Exchange;
+use App\Bot;
+use App\Account;
 
 class SymbolController extends Controller
 {
@@ -35,7 +38,6 @@ class SymbolController extends Controller
      */
     public function store(Request $request)
     {
-        //$name = Exchange::where('id', $request['id'])->value('name');
         Symbol::create([
             'exchange_id' => $request['exchange_id'],
             'execution_symbol_name' => $request['execution_symbol_name'],
@@ -85,10 +87,16 @@ class SymbolController extends Controller
      *
      * @param  int  $id
      * @return \Illuminate\Http\Response
+     * @throws \Exception
      */
     public function destroy($id)
     {
+        $exchangeId = Symbol::where('id', $id)->get()[0]['exchange_id'];
+        if (Account::where('exchange_id', $exchangeId)->exists()){
+            $botId = Account::where('exchange_id', $exchangeId)->get()[0]['bot_id'];
+            if(Bot::where('id', $botId)->get()[0]['status'] == 'running')
+                throw new \Exception("Symbol is used in Bot: " . Bot::where('id', $botId)->get()[0]['name'] . ' and can not be deleted');
+        }
         Symbol::findOrFail($id)->delete();
-        return ['message' => 'Symbol deleted'];
     }
 }

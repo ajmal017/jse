@@ -25,15 +25,11 @@ class History
         $timeFrame = $botSettings['timeFrame'] . 'm';
         $symbol = $botSettings['historySymbolName'];
 
-        //die("https://www.bitmex.com/api/v1/trade/bucketed?binSize=$timeFrame&partial=false&symbol=$symbol&count=$barsToLoad&reverse=true");
-
         $ch = curl_init();
-
         curl_setopt($ch, CURLOPT_URL,
             "https://www.bitmex.com/api/v1/trade/bucketed?binSize=$timeFrame&partial=false&symbol=$symbol&count=$barsToLoad&reverse=true");
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
         curl_setopt($ch, CURLOPT_HEADER, FALSE);
-
         $bars = json_decode(curl_exec($ch));
 
         if (curl_errno($ch)) {
@@ -41,8 +37,6 @@ class History
         }
 
         curl_close($ch);
-
-
         if (!$bars) throw new \Exception('History is not loaded. Symbol may be wrong. Die');
 
         DB::table($botSettings['botTitle'])->truncate();

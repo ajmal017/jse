@@ -2,7 +2,7 @@
 
 use Illuminate\Database\Seeder;
 
-class HistoryBarsSeeder extends Seeder
+class HistoryBarsSeeder1 extends Seeder
 {
     /**
      * Run the database seeds.

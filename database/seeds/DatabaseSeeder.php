@@ -355,7 +355,19 @@ class DatabaseSeeder extends Seeder
 
         /* Seed historical bars */
         $this->call([
-            HistoryBarsSeeder::class
+            HistoryBarsSeeder1::class
+        ]);
+
+        $this->call([
+            HistoryBarsSeeder2::class
+        ]);
+
+        $this->call([
+            HistoryBarsSeeder3::class
+        ]);
+
+        $this->call([
+            HistoryBarsSeeder4::class
         ]);
     }
 }

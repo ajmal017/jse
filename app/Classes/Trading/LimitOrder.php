@@ -11,7 +11,7 @@ namespace App\Classes\Trading;
 
 class LimitOrder
 {
-    public function start(){
+    public function start($console){
         /**
          * Websocket connection
          * Ratchet/pawl websocket library
@@ -25,6 +25,6 @@ class LimitOrder
          * Subscribe ws and start working with limit orders
          */
         //\App\Classes\WebSocket\Front\BitmexWsListenerFront::subscribe($connector, $loop, $this, $this->argument('botId'));
-        \App\Classes\WebSocket\Front\LimitOrderWs::listen($connector, $loop, $this);
+        \App\Classes\WebSocket\Front\LimitOrderWs::listen($connector, $loop, $console);
     }
 }

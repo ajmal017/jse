@@ -41,9 +41,20 @@ class test extends Command
     public function handle()
     {
 
-        $bot = Bot::where('id', 1)->exists();
-        dump($bot);
+
+        $bitGit = new \App\Classes\Temp\BitmexGit('ikeCK-6ZRWtItOkqvqo8F6wO', 'JfmMTXx3YruSP3OSBKQvULTg4sgQJKZkFI2Zy7TZXniOUbeK');
+        //dump($bitGit);
+        dump($bitGit->createOrder("Limit","Sell",50000,1000));
+
         die();
+        //$signature = hash_hmac('sha256', $verb . $path . $expires, $secret);
+        $signature = hash_hmac('sha256', 'GET/api/v1/instrument1518064236', $secret); // Works good. No dectohex needed
+        echo ($signature) . "\n";
+        dump($expires);
+        die();
+
+
+
 
         $serializer = new \App\Classes\System\SerializeExtention();
         $payload = json_decode(Job::where('id', 1)->value('payload'));

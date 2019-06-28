@@ -25,15 +25,9 @@ class LimitOrderWs
             ->then(function(\Ratchet\Client\WebSocket $conn) use ($loop) {
                 $conn->on('message', function(\Ratchet\RFC6455\Messaging\MessageInterface $socketMessage) use ($conn, $loop) {
                     $jsonMessage = json_decode($socketMessage->getPayload(), true);
-                    // Event fire. Sent to Chart.vue
+                    //dump($jsonMessage);
+                    \App\Classes\WebSocket\Front\LimitOrderMessage::parse($jsonMessage);
 
-                    dump($jsonMessage);
-
-                    /*if (array_key_exists('data', $jsonMessage)){
-                        if (array_key_exists('lastPrice', $jsonMessage['data'][0])){
-                            //\App\Classes\WebSocket\ConsoleWebSocket::messageParse($jsonMessage, self::$console, self::$candleMaker, self::$chart, self::$priceChannelPeriod, self::$macdSettings);
-                        }
-                    }*/
                 });
 
                 $conn->on('close', function($code = null, $reason = null) use ($loop) {
@@ -76,15 +70,25 @@ class LimitOrderWs
                         "args" => [$api, $expires, $signature]
                     ]
                 );
+                // Works good
                 $requestObject3 = json_encode(
                     [
                         "op" => "subscribe",
                         "args" => ["order"]
                     ]
                 );
+
+                /* Subscribe to order book */
+                $requestObject4 = json_encode(
+                    [
+                        "op" => "subscribe",
+                        "args" => ["orderBook10:XBTUSD"]
+                    ]
+                );
                 //$conn->send($requestObject);
                 $conn->send($requestObject2);
                 $conn->send($requestObject3);
+                $conn->send($requestObject4);
 
             }, function(\Exception $e) use ($loop) {
                 $errorString = "RatchetPawlSocket.php Could not connect. Reconnect in 5 sec. \n Reason: {$e->getMessage()} \n";

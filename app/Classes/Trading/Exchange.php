@@ -77,14 +77,50 @@ class Exchange
         self::checkResponse();
     }
 
-    private static function checkResponse(){
+    public static function placeLimitSellOrder($botSettings, $price, $volume){
 
+        echo __FILE__ . " line: " . __LINE__ . "\n";
+        $exchange = new bitmex();
+
+        if($botSettings['isTestnet'] == 1){
+            $exchange->urls['api'] = $exchange->urls['test']; // Testnet or live. test or api
+        } else {
+            $exchange->urls['api'] = $exchange->urls['api']; // Testnet or live. test or api
+        }
+
+        $exchange->apiKey = $botSettings['api'];
+        $exchange->secret = $botSettings['apiSecret'];
+
+        try{
+            echo "API path. test or api: " . $exchange->urls['api'] . "\n";
+            echo "Symbol: " . $botSettings['executionSymbolName'] . " in Exchnage.php \n";
+            //self::$response = $exchange->createMarketBuyOrder($botSettings['executionSymbolName'], $volume, []); // BTC/USD ETH/USD
+
+            self::$response = $exchange->createLimitSellOrder($botSettings['executionSymbolName'], $volume, $price, []); // BTC/USD ETH/USD
+            echo "Limit order placement response: \n";
+            dump(self::$response);
+        }
+        catch (\Exception $e)
+        {
+            dump('--------- in exception line 102');
+            self::$response = $e->getMessage();
+        }
+        self::checkResponse();
+
+        // 1. Order placed successfully
+        // 2. Order placement error
+
+        // if (self::checkResponse()) -> get order id
+    }
+
+    private static function checkResponse(){
         if (gettype(self::$response) == 'array'){
             dump(self::$response);
+            // Return true here?
         }
 
         if (gettype(self::$response) == 'string'){
-            echo "Error string line 87: " . self::$response . "\n";
+            echo "Error string line 120: " . self::$response . "\n";
             switch(false){
                 case !strpos(self::$response, 'Account has insufficient');
                     $error = 'Account has insufficient funds. Die.';

@@ -42,16 +42,24 @@ class test extends Command
     {
 
 
-        $bitGit = new \App\Classes\Temp\BitmexGit('ikeCK-6ZRWtItOkqvqo8F6wO', 'JfmMTXx3YruSP3OSBKQvULTg4sgQJKZkFI2Zy7TZXniOUbeK');
+        $exchange = new \ccxt\bitmex();
+        $exchange->urls['api'] = $exchange->urls['test'];
+        $exchange->apiKey = 'ikeCK-6ZRWtItOkqvqo8F6wO'; // testnet
+        $exchange->secret = 'JfmMTXx3YruSP3OSBKQvULTg4sgQJKZkFI2Zy7TZXniOUbeK'; //testnet jesse
+        $response = $exchange->createLimitBuyOrder('BTC/USD', 1, 8000, array('clOrdID' => 'abc-123'));
+        dump($response);
+        die();
+
+
+        /*$bitGit = new \App\Classes\Temp\BitmexGit('ikeCK-6ZRWtItOkqvqo8F6wO', 'JfmMTXx3YruSP3OSBKQvULTg4sgQJKZkFI2Zy7TZXniOUbeK');
         //dump($bitGit);
         dump($bitGit->createOrder("Limit","Sell",50000,1000));
-
         die();
         //$signature = hash_hmac('sha256', $verb . $path . $expires, $secret);
         $signature = hash_hmac('sha256', 'GET/api/v1/instrument1518064236', $secret); // Works good. No dectohex needed
         echo ($signature) . "\n";
         dump($expires);
-        die();
+        die();*/
 
 
 

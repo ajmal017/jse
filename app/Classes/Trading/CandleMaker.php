@@ -179,9 +179,10 @@ class CandleMaker
     }
 
     private function rateLimitCheck($tickDateFullTime, $pusherApiMessage){
+        /* Allow ticks not more than twice a second */
         if ($this->isFirstTimeTickCheck || strtotime($tickDateFullTime) >= $this->addedTickTime) {
             $this->isFirstTimeTickCheck = false;
-            $this->addedTickTime = strtotime($tickDateFullTime) + $this->botSettings['rateLimit']; // Allow ticks not more than twice a second
+            $this->addedTickTime = strtotime($tickDateFullTime) + $this->botSettings['rateLimit'];
 
             try{
                 event(new \App\Events\jseevent($pusherApiMessage->toArray()));

@@ -2,7 +2,6 @@
 
 namespace App\Jobs;
 
-use App\Classes\LogToFile;
 use App\Classes\Trading\Exchange;
 use Illuminate\Bus\Queueable;
 use Illuminate\Queue\SerializesModels;
@@ -10,12 +9,18 @@ use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 
-class PlaceOrder implements ShouldQueue
+/**
+ * Amend limit buy/sell order.
+ *
+ * Class AmendOrder
+ * @package App\Jobs
+ */
+class AmendOrder implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
-    private $direction;
-    private $volume;
+    private $newPrice;
+    private $orderID;
     private $botSettings;
 
     /**
@@ -26,21 +31,14 @@ class PlaceOrder implements ShouldQueue
     public $retryAfter = 5;
 
     /**
-     * Connection can be also hardcoded.
-     *
-     * @var string
-     * public $connection = '';
-     */
-
-    /**
      * Create a new job instance.
      *
      * @return void
      */
-    public function __construct($direction, $volume, $botSettings)
+    public function __construct($newPrice, $orderID, $botSettings)
     {
-        $this->direction = $direction;
-        $this->volume = $volume;
+        $this->newPrice = $newPrice;
+        $this->orderID = $orderID;
         $this->botSettings = $botSettings;
     }
 
@@ -51,10 +49,6 @@ class PlaceOrder implements ShouldQueue
      */
     public function handle()
     {
-        if($this->direction == 'buy'){
-            Exchange::placeMarketBuyOrder($this->botSettings, $this->volume);
-        } else {
-            Exchange::placeMarketSellOrder($this->botSettings, $this->volume);
-        }
+        Exchange::amendOrder($this->newPrice, $this->orderID, $this->botSettings);
     }
 }

@@ -10,6 +10,7 @@ namespace App\Classes\Trading;
 use ccxt\bitmex;
 use Mockery\Exception;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Cache;
 
 /**
  * Market order execution.
@@ -77,7 +78,7 @@ class Exchange
         self::checkResponse();
     }
 
-    public static function placeLimitSellOrder($botSettings, $price, $volume){
+    public static function placeLimitSellOrder($botSettings, $price, $volume, $limitOrderObj){
 
         echo __FILE__ . " line: " . __LINE__ . "\n";
         $exchange = new bitmex();
@@ -94,9 +95,10 @@ class Exchange
         try{
             echo "API path. test or api: " . $exchange->urls['api'] . "\n";
             echo "Symbol: " . $botSettings['executionSymbolName'] . " in Exchnage.php \n";
-            //self::$response = $exchange->createMarketBuyOrder($botSettings['executionSymbolName'], $volume, []); // BTC/USD ETH/USD
 
-            self::$response = $exchange->createLimitSellOrder($botSettings['executionSymbolName'], $volume, $price, []); // BTC/USD ETH/USD
+            self::$response = $exchange->createLimitSellOrder($botSettings['executionSymbolName'], $volume, $price, array('clOrdID' => $limitOrderObj['clOrdID'])
+            );
+
             echo "Limit order placement response: \n";
             dump(self::$response);
         }
@@ -105,18 +107,52 @@ class Exchange
             dump('--------- in exception line 102');
             self::$response = $e->getMessage();
         }
-        self::checkResponse();
 
-        // 1. Order placed successfully
-        // 2. Order placement error
-
-        // if (self::checkResponse()) -> get order id
+        self::checkResponse($limitOrderObj);
     }
 
-    private static function checkResponse(){
-        if (gettype(self::$response) == 'array'){
+    public static function amendOrder($newPrice, $orderID, $botSettings){
+        dump('****   AMEND ORDER ****');
+        echo __FILE__ . " line: " . __LINE__ . "\n";
+        $exchange = new bitmex();
+
+        if($botSettings['isTestnet'] == 1){
+            $exchange->urls['api'] = $exchange->urls['test']; // Testnet or live. test or api
+        } else {
+            $exchange->urls['api'] = $exchange->urls['api']; // Testnet or live. test or api
+        }
+
+        $exchange->apiKey = $botSettings['api'];
+        $exchange->secret = $botSettings['apiSecret'];
+
+        try{
+            // self::$response = $exchange->createLimitSellOrder($botSettings['executionSymbolName'], $volume, $price, array('clOrdID' => $limitOrderObj['clOrdID'])
+            self::$response = $exchange->privatePutOrder(array('orderID' => $orderID, 'price' => $newPrice));
+            echo "Amend order placement response: \n";
             dump(self::$response);
-            // Return true here?
+        }
+        catch (\Exception $e)
+        {
+            dump('--------- in exception line (Exchange.php): ' . __LINE__);
+            self::$response = $e->getMessage();
+        }
+
+        //dump(self::$response);
+        self::checkResponse();
+    }
+
+    private static function checkResponse($limitOrderObj = null){
+        if (gettype(self::$response) == 'array'){
+
+            /**
+             * Be careful!
+             * Do not execute this code for market orders!
+             * Market order have orderId as well and this will mess everything up!
+             */
+            $limitOrderObj['limitOrderTimestamp'] = 12345;
+            $limitOrderObj['orderID'] = self::$response['info']['orderID'];
+            Cache::put('bot_1', $limitOrderObj, now()->addMinute(30));
+            dump(self::$response);
         }
 
         if (gettype(self::$response) == 'string'){
@@ -136,6 +172,12 @@ class Exchange
                     // The system is currently overloaded. Please try again later
                     throw new \Exception('Exchange overloaded');
                     break;
+                /* Full error text: bitmex {"error":{"message":"Invalid ordStatus","name":"HTTPError"}} */
+                case !strpos(self::$response, 'ordStatus');
+                    Log::notice('Invalid ordStatus. Usually it happens when trying to amend and order which is already filled');
+                    dump('Die on order amend');
+                    die(__FILE__ . ' ' . __LINE__);
+
             }
         }
     }

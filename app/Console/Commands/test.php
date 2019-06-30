@@ -6,6 +6,7 @@ use App\Job;
 use App\Bot;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Cache;
 
 class test extends Command
 {
@@ -41,12 +42,14 @@ class test extends Command
     public function handle()
     {
 
-
         $exchange = new \ccxt\bitmex();
         $exchange->urls['api'] = $exchange->urls['test'];
         $exchange->apiKey = 'ikeCK-6ZRWtItOkqvqo8F6wO'; // testnet
         $exchange->secret = 'JfmMTXx3YruSP3OSBKQvULTg4sgQJKZkFI2Zy7TZXniOUbeK'; //testnet jesse
-        $response = $exchange->createLimitBuyOrder('BTC/USD', 1, 8000, array('clOrdID' => 'abc-123'));
+        //$response = $exchange->createLimitBuyOrder('BTC/USD', 1, 8000, array('clOrdID' => 'abc-123'));
+        //$response = $exchange->fetchTicker('BTC/USD');
+        //dump($response['info']['tickSize']); // Tick size. Works good
+        $response = $exchange->privatePutOrder(array('orderID' => Cache::get('bot_1')['orderID'], 'price' => 15000));
         dump($response);
         die();
 

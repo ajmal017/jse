@@ -7,6 +7,7 @@ use App\Job;
 use App\Bot;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Cache;
 
 class Limit extends Command
 {
@@ -41,25 +42,32 @@ class Limit extends Command
      */
     public function handle()
     {
+        $limitOrderObj = [
+          'orderID' => null,
+          'clOrdID' => 'abc-123-' . now(),
+          'direction' => 'sell',
+          'volume' => 287,
+          'isLimitOrderPlaced' => false,
+          'limitOrderPrice' => null,
+          'limitOrderTimestamp' => null,
+          'step' => 0 // Limit order position placement. Used for testing purpuses. If set - order will be locate deeper in the book.
+        ];
 
         /**
-         * Call LimitOrder.php and start limit orders
+         * Set cache object. It will be accesses from other classes and que workers.
+         *
+         *  * Contains settings and flags of a limit order.
+         * These settings are read by other classes and que workers: market order que, amend order que, etc.
+         * Once a flag is set, other classes can read it.
+         * For example if an order is executed - we need to stop bid/ask order book subscription immediately.
+         */
+        Cache::put('bot_1', $limitOrderObj, now()->addMinute(30));
+
+        /**
+         * Call LimitOrder.php and start limit orders.
+         * Send $this - it will allow to output colored console messages.
          */
         $limitOrder = new LimitOrder();
         $limitOrder->start($this);
-
-
-        /*$exchange = new \ccxt\bitmex();
-        $exchange->urls['api'] = $exchange->urls['test']; // api or test
-        dump($exchange->urls);
-        $exchange->apiKey = 'ikeCK-6ZRWtItOkqvqo8F6wO'; // testnet
-        $exchange->secret = 'JfmMTXx3YruSP3OSBKQvULTg4sgQJKZkFI2Zy7TZXniOUbeK'; //testnet
-        $response = $exchange->createMarketBuyOrder('BTC/USD', 1, []);
-        dump($response);*/
-
-        /*$exchange = new \ccxt\bitmex();
-        $exchange->urls['api'] = $exchange->urls['test'];
-        $exchange->apiKey = 'ikeCK-6ZRWtItOkqvqo8F6wO'; // testnet
-        $exchange->secret = 'JfmMTXx3YruSP3OSBKQvULTg4sgQJKZkFI2Zy7TZXniOUbeK'; //testnet jesse*/
     }
 }

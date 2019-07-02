@@ -18,7 +18,7 @@ class LimitOrderWs
     public static function listen($connector, $loop, $console){
 
         self::$console = $console;
-        self::$symbol = 'XBTUSD';
+        self::$symbol = 'XBTUSD'; // XBTUSD ADAU19
 
         /** Pick up the right websocket endpoint accordingly to the exchange */
         $exchangeWebSocketEndPoint = "wss://testnet.bitmex.com/realtime";
@@ -26,8 +26,6 @@ class LimitOrderWs
             ->then(function(\Ratchet\Client\WebSocket $conn) use ($loop) {
                 $conn->on('message', function(\Ratchet\RFC6455\Messaging\MessageInterface $socketMessage) use ($conn, $loop) {
                     $jsonMessage = json_decode($socketMessage->getPayload(), true);
-                    //dump($jsonMessage);
-
                     /**
                      * Parse all websocket messages.
                      */
@@ -43,10 +41,20 @@ class LimitOrderWs
                     self::$console->handle(); // Call the main method of this class
                 });
 
+                /**
+                 * Auth signature. It is the same for all requests.
+                 * You just auth the whole WS connection.
+                 */
                 $api = "ikeCK-6ZRWtItOkqvqo8F6wO";
                 $secret = "JfmMTXx3YruSP3OSBKQvULTg4sgQJKZkFI2Zy7TZXniOUbeK";
                 $expires = (time() + 86400); // 10 digits
                 $signature = hash_hmac('sha256', 'GET/realtime'. $expires, $secret);
+
+                /**
+                 * Prepare WS request subscription objects.
+                 * @link https://www.bitmex.com/app/wsAPI
+                 * @todo 01.07.19 Make and array and foreach it
+                 */
                 $requestObject2 = json_encode(
                     [
                         "op" => "authKeyExpires",
@@ -60,17 +68,25 @@ class LimitOrderWs
                     ]
                 );
 
-                /* Subscribe to order book */
                 $requestObject4 = json_encode(
                     [
                         "op" => "subscribe",
-                        "args" => ["orderBook10:XBTUSD"]
+                        "args" => ["execution"]
+                    ]
+                );
+
+                /* Subscribe to order book */
+                $requestObject5 = json_encode(
+                    [
+                        "op" => "subscribe",
+                        "args" => ["orderBook10:" . self::$symbol]
                     ]
                 );
 
                 $conn->send($requestObject2); /* Connection authenticate  */
                 $conn->send($requestObject3); /* Subscribe to order channel */
-                $conn->send($requestObject4); /* Subscribe to order book with a specific symbol */
+                $conn->send($requestObject4); /* Subscribe to order executions */
+                $conn->send($requestObject5); /* Subscribe to order book with a specific symbol */
 
             }, function(\Exception $e) use ($loop) {
                 $errorString = "RatchetPawlSocket.php Could not connect. Reconnect in 5 sec. \n Reason: {$e->getMessage()} \n";

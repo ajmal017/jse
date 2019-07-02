@@ -8,9 +8,11 @@
 
 namespace App\Classes\Trading;
 use ccxt\bitmex;
+use Illuminate\Cache\Events\CacheHit;
 use Mockery\Exception;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\DB;
 
 /**
  * Market order execution.
@@ -108,6 +110,18 @@ class Exchange
             self::$response = $e->getMessage();
         }
 
+        /**
+         * Set values if array is returned - success.
+         * If string - error. It will be catch in checkResponse
+         */
+        if (gettype(self::$response) == 'array'){
+            $limitOrderObj['limitOrderTimestamp'] = 12345;
+            $limitOrderObj['orderID'] = self::$response['info']['orderID'];
+            Cache::put('bot_1', $limitOrderObj, now()->addMinute(30));
+        }
+
+        //dump(Cache::get('bot_!'));
+
         self::checkResponse($limitOrderObj);
     }
 
@@ -126,10 +140,9 @@ class Exchange
         $exchange->secret = $botSettings['apiSecret'];
 
         try{
-            // self::$response = $exchange->createLimitSellOrder($botSettings['executionSymbolName'], $volume, $price, array('clOrdID' => $limitOrderObj['clOrdID'])
             self::$response = $exchange->privatePutOrder(array('orderID' => $orderID, 'price' => $newPrice));
             echo "Amend order placement response: \n";
-            dump(self::$response);
+            //dump(self::$response);
         }
         catch (\Exception $e)
         {
@@ -137,21 +150,11 @@ class Exchange
             self::$response = $e->getMessage();
         }
 
-        //dump(self::$response);
         self::checkResponse();
     }
 
-    private static function checkResponse($limitOrderObj = null){
+    private static function checkResponse(){
         if (gettype(self::$response) == 'array'){
-
-            /**
-             * Be careful!
-             * Do not execute this code for market orders!
-             * Market order have orderId as well and this will mess everything up!
-             */
-            $limitOrderObj['limitOrderTimestamp'] = 12345;
-            $limitOrderObj['orderID'] = self::$response['info']['orderID'];
-            Cache::put('bot_1', $limitOrderObj, now()->addMinute(30));
             dump(self::$response);
         }
 
@@ -159,7 +162,7 @@ class Exchange
             echo "Error string line 120: " . self::$response . "\n";
             switch(false){
                 case !strpos(self::$response, 'Account has insufficient');
-                    $error = 'Account has insufficient funds. Die.';
+                    $error = 'Account has insufficient funds. Die.' . __FILE__ . ' '. __LINE__;
                     Log::notice($error);
                     die(__FILE__ . ' ' . __LINE__);
 
@@ -174,11 +177,24 @@ class Exchange
                     break;
                 /* Full error text: bitmex {"error":{"message":"Invalid ordStatus","name":"HTTPError"}} */
                 case !strpos(self::$response, 'ordStatus');
-                    Log::notice('Invalid ordStatus. Usually it happens when trying to amend and order which is already filled');
-                    dump('Die on order amend');
-                    die(__FILE__ . ' ' . __LINE__);
-
+                    Log::notice('Invalid ordStatus. Usually it happens when trying to amend and order which is already filled' . __FILE__ . ' '. __LINE__);
+                    dump('Order amend. It usually happens when the order was fully filled');
+                /**
+                 * https://github.com/BitMEX/api-connectors/issues/202
+                 * {"error":{"message":"This request has expired - `expires` is in the past. Current time: 1561918674","name":"HTTPError"}} */
+                case !strpos(self::$response, 'expires');
+                    Log::notice('This request has expired - `expires` is in the past. Current time: .. Check request signature. ' . __FILE__ . ' '. __LINE__);
+                    dump('This request has expired - `expires` is in the past. Current time: .. Check request signature');
             }
         }
+    }
+
+    // Cam use it for market order record insertion
+    public static function insertRecordToSignalTable($botSettings, $response){
+        DB::table($botSettings['signalTable'])->insert([
+            'order_type' => 'limit',
+            'volume' => 999, // execution_volume
+            // self::$response['info']['orderID'];
+        ]);
     }
 }

@@ -369,5 +369,9 @@ class DatabaseSeeder extends Seeder
         $this->call([
             HistoryBarsSeeder4::class
         ]);
+
+        $this->call([
+            SignalsSeeder::class
+        ]);
     }
 }

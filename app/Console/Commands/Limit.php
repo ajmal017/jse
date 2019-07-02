@@ -44,9 +44,9 @@ class Limit extends Command
     {
         $limitOrderObj = [
           'orderID' => null,
-          'clOrdID' => 'abc-123-' . now(),
+          'clOrdID' => 'abc-123-' . now(), // Don't need it
           'direction' => 'sell',
-          'volume' => 287,
+          'volume' => 902,
           'isLimitOrderPlaced' => false,
           'limitOrderPrice' => null,
           'limitOrderTimestamp' => null,

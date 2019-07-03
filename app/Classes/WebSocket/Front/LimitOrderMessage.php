@@ -68,9 +68,9 @@ class LimitOrderMessage
 
     private static function orderBookTick($ask, $bid){
         $botSettings = [
-            'api' => 'ikeCK-6ZRWtItOkqvqo8F6wO',
-            'apiSecret' => 'JfmMTXx3YruSP3OSBKQvULTg4sgQJKZkFI2Zy7TZXniOUbeK',
-            'isTestnet' => 0,
+            'api' => 'wb89vufuY6R2zBHGYkduz_bi',
+            'apiSecret' => 'ZJ3B5lK0hhya0fM-YqR2pa7CfqPGeib-9ZKN_MynoJfaCn3R',
+            'isTestnet' => 1,
             'executionSymbolName' => 'BTC/USD', // BTC/USD ADAU19
             'signalTable' => 'signal_1'
         ];

@@ -8,6 +8,7 @@
 
 namespace App\Classes\WebSocket\Front;
 use App\Bot;
+use Illuminate\Support\Facades\DB;
 /*use App\Classes\Trading\CandleMaker;
 use App\Classes\Trading\Chart;
 use App\Strategy;
@@ -54,7 +55,6 @@ class BitmexWsListenerFront
                 self::$candleMaker = new \App\Classes\Trading\CandleMaker(
                     (array_key_exists('priceChannel', self::$strategiesSettingsObject) ? 'priceChannel' : 'macd'),
                     self::$accountSettingsObject);
-
 
                 dump (__FILE__);
                 dump((array_key_exists('priceChannel', self::$strategiesSettingsObject) ? "!!!!!!! PC" : "!!!!!!!!!! MACD"));
@@ -138,6 +138,11 @@ class BitmexWsListenerFront
 
     private static function startPriceChannelBot($botId){
         if (self::$isHistoryLoaded){
+
+            /* DELETE IT FROM HERE! TESTING ONLY! */
+            DB::table('signal_1')->truncate();
+
+
             \App\Classes\Trading\History::loadPeriod(self::$accountSettingsObject);
             dump('History loaded (Price Channel)');
             /* Initial indicators calculation */
@@ -194,6 +199,10 @@ class BitmexWsListenerFront
 
     private static function startMacdBot(){
         if (self::$isHistoryLoaded){
+
+            /* DELETE IT FROM HERE! TESTING ONLY! */
+            DB::table('signal_1')->truncate();
+
             \App\Classes\Trading\History::loadPeriod(self::$accountSettingsObject);
             dump('History loaded (MACD)');
 

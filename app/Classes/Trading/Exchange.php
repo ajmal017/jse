@@ -81,7 +81,6 @@ class Exchange
     }
 
     public static function placeLimitSellOrder($botSettings, $price, $volume, $limitOrderObj){
-
         echo __FILE__ . " line: " . __LINE__ . "\n";
         $exchange = new bitmex();
 
@@ -120,7 +119,47 @@ class Exchange
             Cache::put('bot_1', $limitOrderObj, now()->addMinute(30));
         }
 
-        //dump(Cache::get('bot_!'));
+        self::checkResponse($limitOrderObj);
+    }
+
+    public static function placeLimitBuyOrder($botSettings, $price, $volume, $limitOrderObj){
+        echo __FILE__ . " line: " . __LINE__ . "\n";
+        $exchange = new bitmex();
+
+        if($botSettings['isTestnet'] == 1){
+            $exchange->urls['api'] = $exchange->urls['test']; // Testnet or live. test or api
+        } else {
+            $exchange->urls['api'] = $exchange->urls['api']; // Testnet or live. test or api
+        }
+
+        $exchange->apiKey = $botSettings['api'];
+        $exchange->secret = $botSettings['apiSecret'];
+
+        try{
+            echo "API path. test or api: " . $exchange->urls['api'] . "\n";
+            echo "Symbol: " . $botSettings['executionSymbolName'] . " in Exchnage.php \n";
+
+            self::$response = $exchange->createLimitBuyOrder($botSettings['executionSymbolName'], $volume, $price, array('clOrdID' => $limitOrderObj['clOrdID'])
+            );
+
+            echo "Limit order placement response: \n";
+            dump(self::$response);
+        }
+        catch (\Exception $e)
+        {
+            dump('--------- in exception line 150');
+            self::$response = $e->getMessage();
+        }
+
+        /**
+         * Set values in array is returned - success.
+         * If string - error. It will be catch in checkResponse
+         */
+        if (gettype(self::$response) == 'array'){
+            $limitOrderObj['limitOrderTimestamp'] = 12345;
+            $limitOrderObj['orderID'] = self::$response['info']['orderID'];
+            Cache::put('bot_1', $limitOrderObj, now()->addMinute(30));
+        }
 
         self::checkResponse($limitOrderObj);
     }

@@ -79,12 +79,28 @@ class Chart extends Profit
             // Is it the first trade ever?
             if ($this->trade_flag == "all"){
                 echo "---------------------- FIRST EVER TRADE<br>\n";
-                if($mode != 'backtest') PlaceOrder::dispatch('buy', $this->botSettings['volume'], $this->botSettings);
+                if($mode != 'backtest')
+                    // PlaceOrder::dispatch('buy', $this->botSettings['volume'], $this->botSettings);
+                    DB::table('signal_1')
+                        ->insert([
+                            'type' => 'signal',
+                            'status' => 'new',
+                            'direction' => 'sell',
+                            'signal_volume' => $this->botSettings['volume']
+                        ]);
             }
             else // Not the first trade. Close the current position and open opposite trade. vol = vol * 2
             {
                 echo "---------------------- NOT FIRST EVER TRADE. CLOSE + OPEN. VOL * 2\n";
-                if($mode != 'backtest') PlaceOrder::dispatch('buy', $this->botSettings['volume'] * 2, $this->botSettings);
+                if($mode != 'backtest')
+                    // PlaceOrder::dispatch('buy', $this->botSettings['volume'] * 2, $this->botSettings);
+                    DB::table('signal_1')
+                        ->insert([
+                            'type' => 'signal',
+                            'status' => 'new',
+                            'direction' => 'sell',
+                            'signal_volume' => $this->botSettings['volume'] * 2
+                        ]);
             }
             // Trade flag. If this flag set to short -> don't enter this IF and wait for channel low crossing (IF below)
             $this->trade_flag = 'short'; $this->position = "long"; $this->add_bar_long = true;
@@ -98,12 +114,28 @@ class Chart extends Profit
             // Is the the first trade ever?
             if ($this->trade_flag == "all"){
                 echo "---------------------- FIRST EVER TRADE<br>\n";
-                if($mode != 'backtest') PlaceOrder::dispatch('sell', $this->botSettings['volume'], $this->botSettings);
+                if($mode != 'backtest')
+                    // PlaceOrder::dispatch('sell', $this->botSettings['volume'], $this->botSettings);
+                    DB::table('signal_1')
+                        ->insert([
+                            'type' => 'signal',
+                            'status' => 'new',
+                            'direction' => 'sell',
+                            'signal_volume' => $this->botSettings['volume']
+                        ]);
             }
             else // Not the first trade. Close the current position and open opposite trade. vol = vol * 2
             {
                 echo "---------------------- NOT FIRST EVER TRADE. CLOSE + OPEN. VOL * 2\n";
-                if($mode != 'backtest') PlaceOrder::dispatch('sell', $this->botSettings['volume'] * 2, $this->botSettings);
+                if($mode != 'backtest')
+                    // PlaceOrder::dispatch('sell', $this->botSettings['volume'] * 2, $this->botSettings);
+                    DB::table('signal_1')
+                        ->insert([
+                            'type' => 'signal',
+                            'status' => 'new',
+                            'direction' => 'sell',
+                            'signal_volume' => $this->botSettings['volume'] * 2
+                        ]);
             }
             $this->trade_flag = 'long'; $this->position = "short"; $this->add_bar_short = true;
             \App\Classes\Accounting\TradeBar::update($this->botSettings, "sell", $this->lastRow[0]->close, $this->lastRow[0]->id);

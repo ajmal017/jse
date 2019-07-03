@@ -33,16 +33,21 @@ class SignalTable
     }
 
     /**
-     * Once a limit order is fully filled change its status from pending to closed
-     *
+     * Once a limit order is fully filled change its status from pending to closed.
+     * There can be a case when there is no pending status assigned - change to close as well.
+     * This happens when an order gets filled immediately.
      * @param $orderEecutionResponse
      */
     public static function updateSignalStatus(){
         DB::table('signal_1')
             ->where('type', 'signal')
             ->where('status', 'pending')
+            ->orwhere('status', 'new')
             ->update([
                 'status' => 'closed'
             ]);
+
+
+
     }
 }

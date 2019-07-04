@@ -208,7 +208,7 @@ class Exchange
 
         try{
             $orderID = $limitOrderObj['orderID'];
-            self::$response = $exchange->privateGetExecutionTradeHistory(array('count' => 5, 'filter' => ['orderID' => $orderID])); // Works GOOD!
+            self::$response = $exchange->privateGetExecutionTradeHistory(array('count' => 20, 'filter' => ['orderID' => $orderID])); // Works GOOD!
             echo "GET TRADES FOR PLACED ORDER (Exchnage.php): \n";
             //dump(self::$response);
         }

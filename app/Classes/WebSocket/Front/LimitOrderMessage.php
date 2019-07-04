@@ -60,27 +60,33 @@ class LimitOrderMessage
                 //self::executionParse($message);
 
             } else {
-                dump('No new signals. LimitOrderMessage.php ' . now());
+                //dump('No new signals. LimitOrderMessage.php ' . now());
             }
         } else {
-            dump('No new or pending signals in signals table. LimitOrderMessage.php ' . now());
+            //dump('No new or pending signals in signals table. LimitOrderMessage.php ' . now());
         }
 
     }
 
     private static function orderBookTick($ask, $bid){
         $botSettings = [
-            'api' => 'ct5AF7LcE3bsfz4gR5yTfvBq', // ct5AF7LcE3bsfz4gR5yTfvBq ikeCK-6ZRWtItOkqvqo8F6wO
-            'apiSecret' => 'Zy9UDdTGojC_T6RE2JjOY0N2F4EhQXqBxo92DSxU1_f0pXLg', //  JfmMTXx3YruSP3OSBKQvULTg4sgQJKZkFI2Zy7TZXniOUbeK
+            'api' => 'ct5AF7LcE3bsfz4gR5yTfvBq',
+            'apiSecret' => 'Zy9UDdTGojC_T6RE2JjOY0N2F4EhQXqBxo92DSxU1_f0pXLg',
             'isTestnet' => 0,
             'executionSymbolName' => 'BTC/USD', // BTC/USD ADAU19
             'signalTable' => 'signal_1'
         ];
 
-        /**
-         * DEBUG! DELETE THIS!
-         */
-        //echo "CHECK isLimitOrderPlaced flag. it must not be NULL! : " . self::$limitOrderObj['isLimitOrderPlaced'] . " " . "LimitOrderMessage.php ccvvbb\n";
+        // testnet
+        /*$botSettings = [
+            'api' => 'ikeCK-6ZRWtItOkqvqo8F6wO',
+            'apiSecret' => 'JfmMTXx3YruSP3OSBKQvULTg4sgQJKZkFI2Zy7TZXniOUbeK',
+            'isTestnet' => 1,
+            'executionSymbolName' => 'BTC/USD', // BTC/USD ADAU19
+            'signalTable' => 'signal_1'
+        ];*/
+
+        echo 'BID: ' . $bid . ' ----------- ASK: ' . $ask . '\n';
 
         if (self::$signalRow[0]->direction == "sell")
             self::handleSellLimitOrder($ask, $botSettings);
@@ -200,7 +206,7 @@ class LimitOrderMessage
                                     /* Data object can contain multiple executions! https://dacoders.myjetbrains.com/youtrack/issue/JSE-195 */
                                     if (count($message) > 0){
                                         dump('Execution DATA object contains more than 1 record. foreach it!!! LimitOrderMessage');
-                                        dump($message);
+                                        //dump($message);
                                         foreach ($message as $execution){
                                             /* Check if fully filled. leavesQty - volume reminder */
                                             if(($execution['leavesQty']) == 0){
@@ -353,9 +359,11 @@ class LimitOrderMessage
              * We can calculate 50 seconds here.
              * Once expired: send ask - 10% from the price - it will execute the limit order as market.
              */
-            if(!self::limitOrderExecutionTimeCheck()){
-                self::amendSellLimitOrder($ask, $botSettings);
-            } else {
+            //dump('&&&&&&&&&&&&&&&------------FORCE flag sell rrffv: ' . (self::limitOrderExecutionTimeCheck() ? 'true' : 'false'));
+
+            self::amendSellLimitOrder($ask, $botSettings);
+
+            if(self::limitOrderExecutionTimeCheck()){
                 dump('------------------------------------------------------------------ FORCE TIME SELL LIMIT CLOSE! ---------');
                 self::amendSellLimitOrder($ask - 1000, $botSettings);
             }
@@ -378,9 +386,11 @@ class LimitOrderMessage
                 die();
             }
         } else {
-            if(!self::limitOrderExecutionTimeCheck()){
-                self::amendBuyLimitOrder($bid, $botSettings);
-            } else {
+            //dump('&&&&&&&&&&&&&&&------------FORCE flag buy ooiiuu: ' . (self::limitOrderExecutionTimeCheck() ? 'true' : 'false'));
+
+            self::amendBuyLimitOrder($bid, $botSettings);
+
+            if(self::limitOrderExecutionTimeCheck()){
                 dump('------------------------------------------------------------------ FORCE TIME BUY LIMIT CLOSE! ---------');
                 self::amendBuyLimitOrder($bid + 1000, $botSettings);
             }

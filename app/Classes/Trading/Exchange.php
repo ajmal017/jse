@@ -192,6 +192,37 @@ class Exchange
         self::checkResponse();
     }
 
+    public static function getOrders($botSettings, $limitOrderObj){
+        dump('****   GET TRADES FOR PLACED ORDER (Exchange.php) ****');
+        echo __FILE__ . " line: " . __LINE__ . "\n";
+        $exchange = new bitmex();
+
+        if($botSettings['isTestnet'] == 1){
+            $exchange->urls['api'] = $exchange->urls['test']; // Testnet or live. test or api
+        } else {
+            $exchange->urls['api'] = $exchange->urls['api']; // Testnet or live. test or api
+        }
+
+        $exchange->apiKey = $botSettings['api'];
+        $exchange->secret = $botSettings['apiSecret'];
+
+        try{
+            $orderID = $limitOrderObj['orderID'];
+            self::$response = $exchange->privateGetExecutionTradeHistory(array('count' => 5, 'filter' => ['orderID' => $orderID])); // Works GOOD!
+            echo "GET TRADES FOR PLACED ORDER (Exchnage.php): \n";
+            //dump(self::$response);
+        }
+        catch (\Exception $e)
+        {
+            dump('--------- exception ddffgg Exchange.php: ' . __LINE__);
+            self::$response = $e->getMessage();
+        }
+
+        self::checkResponse();
+        if(gettype(self::$response) == 'array') // If not array - error!
+            \App\Classes\WebSocket\Front\LimitOrderMessage::executionParse2(self::$response);
+    }
+
     private static function checkResponse(){
         if (gettype(self::$response) == 'array'){
             dump(self::$response);

@@ -9,14 +9,6 @@
 namespace App\Classes\WebSocket\Front;
 use App\Bot;
 use Illuminate\Support\Facades\DB;
-/*use App\Classes\Trading\CandleMaker;
-use App\Classes\Trading\Chart;
-use App\Strategy;
-use App\Symbol;
-use App\Account;
-use App\Exchange;
-use App\PricechannelSettings;
-use App\MacdSettings;*/
 
 class BitmexWsListenerFront
 {
@@ -38,7 +30,7 @@ class BitmexWsListenerFront
         /* For static methods call inside an anonymous function */
         $self = get_called_class();
 
-        /* Endless loop. ExecExecutes once a second */
+        /* Endless loop. Executes once per second */
         $loop->addPeriodicTimer(1, function() use($loop, $botId, $self) {
 
             echo (Bot::where('id', $botId)->value('status') == 'running' ? 'running' : 'idle') . "\n";

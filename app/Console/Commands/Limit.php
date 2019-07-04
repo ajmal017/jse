@@ -46,17 +46,17 @@ class Limit extends Command
           'orderID' => null,
           'clOrdID' => 'abc-123-' . now(),
           'direction' => 'sell',
-          'volume' => 502,
+          //'volume' => 502,
           'isLimitOrderPlaced' => false,
           'limitOrderPrice' => null,
           'limitOrderTimestamp' => null,
-          'step' => 0 // Limit order position placement. Used for testing purpuses. If set - order will be locate deeper in the book.
+          'step' => 2 // Limit order position placement. Used for testing purpuses. If set - order will be locate deeper in the book.
         ];
 
         /**
          * Set cache object. It will be accesses from other classes and que workers.
          *
-         *  * Contains settings and flags of a limit order.
+         * Contains settings and flags of a limit order.
          * These settings are read by other classes and que workers: market order que, amend order que, etc.
          * Once a flag is set, other classes can read it.
          * For example if an order is executed - we need to stop bid/ask order book subscription immediately.

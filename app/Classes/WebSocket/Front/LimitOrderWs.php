@@ -21,7 +21,8 @@ class LimitOrderWs
         self::$symbol = 'XBTUSD'; // XBTUSD ADAU19
 
         /** Pick up the right websocket endpoint accordingly to the exchange */
-        $exchangeWebSocketEndPoint = "wss://testnet.bitmex.com/realtime";
+        //$exchangeWebSocketEndPoint = "wss://testnet.bitmex.com/realtime";
+        $exchangeWebSocketEndPoint = "wss://www.bitmex.com/realtime";
         $connector($exchangeWebSocketEndPoint, [], ['Origin' => 'http://localhost'])
             ->then(function(\Ratchet\Client\WebSocket $conn) use ($loop) {
                 $conn->on('message', function(\Ratchet\RFC6455\Messaging\MessageInterface $socketMessage) use ($conn, $loop) {
@@ -45,8 +46,13 @@ class LimitOrderWs
                  * Auth signature. It is the same for all requests.
                  * You just auth the whole WS connection.
                  */
-                $api = "ikeCK-6ZRWtItOkqvqo8F6wO";
-                $secret = "JfmMTXx3YruSP3OSBKQvULTg4sgQJKZkFI2Zy7TZXniOUbeK";
+
+                /*$api = "ikeCK-6ZRWtItOkqvqo8F6wO"; // testnet
+                $secret = "JfmMTXx3YruSP3OSBKQvULTg4sgQJKZkFI2Zy7TZXniOUbeK";*/
+
+                $api = "ct5AF7LcE3bsfz4gR5yTfvBq";
+                $secret = "Zy9UDdTGojC_T6RE2JjOY0N2F4EhQXqBxo92DSxU1_f0pXLg";
+
                 $expires = (time() + 86400); // 10 digits
                 $signature = hash_hmac('sha256', 'GET/realtime'. $expires, $secret);
 

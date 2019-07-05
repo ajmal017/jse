@@ -28,7 +28,7 @@ class LimitOrderMessage
         /**
          * Trace bid ask
          */
-        self::bidAskTrace($message);
+        //self::bidAskTrace($message);
 
         /**
          * Check DB for new signals

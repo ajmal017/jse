@@ -238,12 +238,12 @@ class Exchange
 
                 case !strpos(self::$response, 'does not have market symbol'); // bitmex does not have market symbol
                     $error = 'Bitmex does not have market symbol. Execution is not possible';
-                    throw new \Exception($error);
+                    throw new Exception($error);
                     break;
                 /* @see: https://www.bitmex.com/app/restAPI#Overload */
                 case !strpos(self::$response, 'overloaded');
                     // The system is currently overloaded. Please try again later
-                    throw new \Exception('Exchange overloaded');
+                    throw new Exception('Exchange overloaded');
                     break;
                 /* Full error text: bitmex {"error":{"message":"Invalid ordStatus","name":"HTTPError"}} */
                 case !strpos(self::$response, 'ordStatus');

@@ -247,7 +247,8 @@ class Exchange
                 /* @see: https://www.bitmex.com/app/restAPI#Overload */
                 case !strpos(self::$response, 'overloaded');
                     // The system is currently overloaded. Please try again later
-                    throw new Exception('Exchange overloaded');
+                    //throw new Exception('Exchange overloaded');
+                    Log::notice('Exchange overloaded! Exchnage.php zzxxcc');
                     break;
                 /* Full error text: bitmex {"error":{"message":"Invalid ordStatus","name":"HTTPError"}} */
                 case !strpos(self::$response, 'ordStatus');

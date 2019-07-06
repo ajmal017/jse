@@ -92,12 +92,12 @@ class LimitOrderWs
                     if(array_key_exists('info', $jsonMessage))
                         dump($jsonMessage['docs']);
 
-                    /*if(array_key_exists('table', $jsonMessage))
+                    if(array_key_exists('table', $jsonMessage))
                         if($jsonMessage['table'] == 'orderBook10')
                             if($jsonMessage['data'][0]['symbol'] == self::$symbol)
-                                //\App\Classes\WebSocket\Front\LimitOrderMessage::parse($jsonMessage, self::$botId);
-                                //echo now() . " " . $jsonMessage['data'][0]['symbol'] . "\n";
-                                echo '';*/
+                                \App\Classes\WebSocket\Front\LimitOrderMessage::parse($jsonMessage, self::$botId);
+                                echo now() . " " . $jsonMessage['data'][0]['symbol'] . "\n";
+                                //echo '';
 
                 });
 

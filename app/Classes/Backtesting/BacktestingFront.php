@@ -25,7 +25,7 @@ class BacktestingFront
         if ($botSettings['strategy'] == 'pc'){
             \App\Classes\Indicators\PriceChannel::calculate($botSettings['strategyParams']['priceChannelPeriod'], $botSettings['botTitle'], true);
             \App\Classes\Indicators\Sma::calculate('close', 2, 'sma1', $botSettings['botTitle'], true);
-            $chart = new \App\Classes\Trading\Chart($botSettings['executionSymbol'], $botSettings['volume'], $botSettings);
+            $chart = new \App\Classes\Trading\Chart($botSettings);
 
         }
 

@@ -54,7 +54,8 @@ class Chart extends Profit
      */
     public function __construct($botSettings)
     {
-        $this->executionSymbolName = $botSettings['executionSymbolName'];
+        $this->executionSymbolName = $botSettings['executionSymbol'];
+
         $this->volume = $botSettings['volume'];
         $this->trade_flag = 'all';
         $this->botSettings = $botSettings;

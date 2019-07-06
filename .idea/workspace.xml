@@ -2,9 +2,9 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="0ab8c352-e91a-41d2-a602-98135f1f3232" name="Default" comment="">
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/Classes/Backtesting/BacktestingFront.php" afterPath="$PROJECT_DIR$/app/Classes/Backtesting/BacktestingFront.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/Classes/Trading/History.php" afterPath="$PROJECT_DIR$/app/Classes/Trading/History.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/Http/Controllers/BacktestController.php" afterPath="$PROJECT_DIR$/app/Http/Controllers/BacktestController.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/Classes/Trading/Chart.php" afterPath="$PROJECT_DIR$/app/Classes/Trading/Chart.php" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -75,11 +75,21 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="BacktestController.php" pinned="false" current-in-tab="true">
+      <file leaf-file-name="BacktestController.php" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/app/Http/Controllers/BacktestController.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="85">
-              <caret line="40" column="28" lean-forward="true" selection-start-line="40" selection-start-column="28" selection-end-line="40" selection-end-column="28" />
+            <state relative-caret-position="374">
+              <caret line="59" column="57" lean-forward="false" selection-start-line="59" selection-start-column="57" selection-end-line="59" selection-end-column="57" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name=".env" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/.env">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="-301">
+              <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
               <folding />
             </state>
           </provider>
@@ -89,7 +99,7 @@
         <entry file="file://$PROJECT_DIR$/app/Classes/Backtesting/BacktestingFront.php">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="189">
-              <caret line="27" column="14" lean-forward="false" selection-start-line="27" selection-start-column="14" selection-end-line="27" selection-end-column="14" />
+              <caret line="27" column="52" lean-forward="false" selection-start-line="27" selection-start-column="52" selection-end-line="27" selection-end-column="52" />
               <folding />
             </state>
           </provider>
@@ -98,8 +108,8 @@
       <file leaf-file-name="Chart.php" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/app/Classes/Trading/Chart.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="228">
-              <caret line="56" column="70" lean-forward="false" selection-start-line="56" selection-start-column="51" selection-end-line="56" selection-end-column="70" />
+            <state relative-caret-position="381">
+              <caret line="57" column="0" lean-forward="false" selection-start-line="57" selection-start-column="0" selection-end-line="57" selection-end-column="0" />
               <folding />
             </state>
           </provider>
@@ -220,7 +230,6 @@
         <option value="$PROJECT_DIR$/database/migrations/2019_07_01_013518_signal_tables.php" />
         <option value="$PROJECT_DIR$/app/Jobs/PlaceLimitOrder.php" />
         <option value="$PROJECT_DIR$/app/Classes/Trading/MacdTradesTrigger.php" />
-        <option value="$PROJECT_DIR$/app/Classes/Trading/Chart.php" />
         <option value="$PROJECT_DIR$/app/Console/Commands/test.php" />
         <option value="$PROJECT_DIR$/app/Console/Commands/Front.php" />
         <option value="$PROJECT_DIR$/app/Classes/Trading/LimitOrder.php" />
@@ -233,6 +242,7 @@
         <option value="$PROJECT_DIR$/app/Classes/Trading/Exchange.php" />
         <option value="$PROJECT_DIR$/app/Classes/Trading/History.php" />
         <option value="$PROJECT_DIR$/app/Http/Controllers/BacktestController.php" />
+        <option value="$PROJECT_DIR$/app/Classes/Trading/Chart.php" />
         <option value="$PROJECT_DIR$/app/Classes/Backtesting/BacktestingFront.php" />
       </list>
     </option>
@@ -525,12 +535,12 @@
       <workItem from="1562001963644" duration="43983000" />
       <workItem from="1562172333938" duration="40568000" />
       <workItem from="1562366314437" duration="15221000" />
-      <workItem from="1562428245936" duration="4531000" />
+      <workItem from="1562428245936" duration="6258000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="853615000" />
+    <option name="totallyTimeSpent" value="855342000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1382" height="744" extended-state="6" />
@@ -589,13 +599,6 @@
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/app/Classes/Trading/Profit.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="347">
-          <caret line="57" column="14" lean-forward="false" selection-start-line="57" selection-start-column="14" selection-end-line="57" selection-end-column="14" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/.gitignore">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="357">
@@ -869,7 +872,7 @@
         <state relative-caret-position="356">
           <caret line="50" column="26" lean-forward="false" selection-start-line="50" selection-start-column="26" selection-end-line="50" selection-end-column="26" />
           <folding>
-            <element signature="e#28#61#0#PHP" expanded="true" />
+            <element signature="e#28#61#0#PHP" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -932,16 +935,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/Classes/Trading/Exchange.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="194">
-          <caret line="242" column="92" lean-forward="true" selection-start-line="242" selection-start-column="92" selection-end-line="242" selection-end-column="92" />
-          <folding>
-            <element signature="e#123#139#0#PHP" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/routes/api.php">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="390">
@@ -958,26 +951,44 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/Classes/Backtesting/BacktestingFront.php">
+    <entry file="file://$PROJECT_DIR$/app/Classes/Trading/Chart.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="189">
-          <caret line="27" column="14" lean-forward="false" selection-start-line="27" selection-start-column="14" selection-end-line="27" selection-end-column="14" />
+        <state relative-caret-position="381">
+          <caret line="57" column="0" lean-forward="false" selection-start-line="57" selection-start-column="0" selection-end-line="57" selection-end-column="0" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/Classes/Trading/Chart.php">
+    <entry file="file://$PROJECT_DIR$/app/Classes/Backtesting/BacktestingFront.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="228">
-          <caret line="56" column="70" lean-forward="false" selection-start-line="56" selection-start-column="51" selection-end-line="56" selection-end-column="70" />
+        <state relative-caret-position="189">
+          <caret line="27" column="52" lean-forward="false" selection-start-line="27" selection-start-column="52" selection-end-line="27" selection-end-column="52" />
           <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/Classes/Trading/Exchange.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="194">
+          <caret line="242" column="92" lean-forward="true" selection-start-line="242" selection-start-column="92" selection-end-line="242" selection-end-column="92" />
+          <folding>
+            <element signature="e#123#139#0#PHP" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/app/Http/Controllers/BacktestController.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="85">
-          <caret line="40" column="28" lean-forward="true" selection-start-line="40" selection-start-column="28" selection-end-line="40" selection-end-column="28" />
+        <state relative-caret-position="374">
+          <caret line="59" column="57" lean-forward="false" selection-start-line="59" selection-start-column="57" selection-end-line="59" selection-end-column="57" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/.env">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-301">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding />
         </state>
       </provider>

@@ -17,6 +17,8 @@ class LimitOrderWs
 
     public static function listen($connector, $loop, $console){
 
+        
+
         self::$console = $console;
         self::$symbol = 'XBTUSD'; // XBTUSD ADAU19
 

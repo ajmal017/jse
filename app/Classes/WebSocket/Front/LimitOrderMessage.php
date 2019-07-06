@@ -22,14 +22,7 @@ class LimitOrderMessage
     private static $signalRow;
 
     public static function parse(array $message){
-
         self::$limitOrderObj = Cache::get('bot_1');
-
-        /**
-         * Trace bid ask
-         */
-        //self::bidAskTrace($message);
-
         /**
          * Check DB for new signals
          */
@@ -145,18 +138,6 @@ class LimitOrderMessage
                              * Otherwise we get to many amends and it gets flooded.
                              */
                             self::orderBookTick($message['data'][0]['asks'][0][0], $message['data'][0]['bids'][0][0]);
-
-                            echo "BID: " . $message['data'][0]['bids'][0][0] . " ASK: " . $message['data'][0]['asks'][0][0] . "\n";
-                        }
-    }
-
-    private static function bidAskTrace(array $message){
-        if(array_key_exists('table', $message))
-            if($message['table'] == 'orderBook10')
-                if(array_key_exists('action', $message))
-                    if($message['action'] == 'update')
-                        if(array_key_exists('data', $message)){
-                            echo now() . " BID: " . $message['data'][0]['bids'][0][0] . " ASK: " . $message['data'][0]['asks'][0][0] . "\n";
                         }
     }
 

@@ -46,7 +46,6 @@ class Limit extends Command
           'orderID' => null,
           'clOrdID' => 'abc-123-' . now(),
           'direction' => 'sell',
-          //'volume' => 502,
           'isLimitOrderPlaced' => false,
           'limitOrderPrice' => null,
           'limitOrderTimestamp' => null,

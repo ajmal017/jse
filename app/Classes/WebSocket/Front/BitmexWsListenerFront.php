@@ -77,7 +77,11 @@ class BitmexWsListenerFront
         /**
          * Pick up the right websocket endpoint accordingly to the exchange
          */
+
+        // HERE IT IS!
         $exchangeWebSocketEndPoint = "wss://www.bitmex.com/realtime";
+
+
         $connector($exchangeWebSocketEndPoint, [], ['Origin' => 'http://localhost'])
             ->then(function(\Ratchet\Client\WebSocket $conn) use ($loop) {
                 self::$connection = $conn;
@@ -101,7 +105,7 @@ class BitmexWsListenerFront
             }, function(\Exception $e) use ($loop) {
                 $errorString = "RatchetPawlSocket.php Could not connect. Reconnect in 5 sec. \n Reason: {$e->getMessage()} \n";
                 echo $errorString;
-                sleep(5); // Wait 5 seconds before next connection try will attempt
+                sleep(5); // Wait 5 seconds before next connection attempt
                 //$this->handle(); // Call the main method of this class
                 self::subscribe();
                 //$loop->stop();

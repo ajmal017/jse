@@ -16,7 +16,7 @@ class Limit extends Command
      *
      * @var string
      */
-    protected $signature = 'limit';
+    protected $signature = 'limit {botId}';
 
     /**
      * The console command description.
@@ -52,6 +52,9 @@ class Limit extends Command
           'step' => 0 // Limit order position placement. Used for testing purpuses. If set - order will be locate deeper in the book.
         ];
 
+        /* For firing subscription from demo to live. In LimitOrderWs.php */
+        Cache::put('status_bot_1', true, now()->addMinute(30));
+
         /**
          * Set cache object. It will be accesses from other classes and que workers.
          *
@@ -67,6 +70,6 @@ class Limit extends Command
          * Send $this - it will allow to output colored console messages.
          */
         $limitOrder = new LimitOrder();
-        $limitOrder->start($this);
+        $limitOrder->start($this, $this->argument('botId'));
     }
 }

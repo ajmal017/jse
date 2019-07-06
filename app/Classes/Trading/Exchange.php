@@ -81,6 +81,10 @@ class Exchange
     }
 
     public static function placeLimitSellOrder($botSettings, $price, $volume, $limitOrderObj){
+
+        dump('dump from Exchnage.php line 85');
+        dump($botSettings);
+
         echo __FILE__ . " line: " . __LINE__ . "\n";
         $exchange = new bitmex();
 

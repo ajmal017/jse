@@ -8,31 +8,89 @@
 
 namespace App\Classes\WebSocket\Front;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\DB;
+use App\Bot;
 
 
 class LimitOrderWs
 {
     public static $console;
     public static $symbol;
+    private static $accountSettingsObject;
+    private static $isBotRunning;
+    private static $botId;
+    private static $connection;
 
-    public static function listen($connector, $loop, $console){
+    public static function listen($connector, $loop, $console, $botId){
 
-        
+        self::$botId = $botId;
+        /*$loop->addPeriodicTimer(1, function() use($connector, $loop, $console, $botId) {
+
+            // Get settings object
+            // Get strategies settings object
+            self::$accountSettingsObject = \App\Classes\WebSocket\Front\TradingAccount::getSettings($botId);
+            self::$isBotRunning =  Cache::get('status_bot_' . $botId);
+
+            if (Bot::where('id', $botId)->value('status') == 'running' && !self::$isBotRunning){
+                dump('FIREEEEEEEEEEED');
+                Cache::put('status_bot_' . $botId, true, now()->addMinute(30));
+                self::listen($connector, $loop, $console, $botId);
+            }
+
+            if (Bot::where('id', $botId)->value('status') == 'idle' && self::$isBotRunning){
+                dump('---------- got into idle');
+                self::$isBotRunning = false;
+                Cache::put('status_bot_' . $botId, false, now()->addMinute(30));
+            }
+        });*/
+
+        $loop->addPeriodicTimer(1, function() use($connector, $loop, $console, $botId) {
+
+            // Get settings object
+            // Get strategies settings object
+            self::$accountSettingsObject = \App\Classes\WebSocket\Front\TradingAccount::getSettings($botId);
+            self::$isBotRunning =  Cache::get('status_bot_' . $botId);
+            self::$symbol = self::$accountSettingsObject['historySymbolName'];
+
+            if (Bot::where('id', $botId)->value('status') == 'running' && !self::$isBotRunning){
+                dump('FIREEEEEEEEEEED ' . self::$accountSettingsObject['historySymbolName']);
+                Cache::put('status_bot_' . $botId, true, now()->addMinute(30));
+            }
+
+            if (Bot::where('id', $botId)->value('status') == 'idle' && self::$isBotRunning){
+                dump('---------- got into idle');
+                self::$isBotRunning = false;
+                Cache::put('status_bot_' . $botId, false, now()->addMinute(30));
+            }
+        });
+
+
 
         self::$console = $console;
-        self::$symbol = 'XBTUSD'; // XBTUSD ADAU19
+        //self::$symbol = 'XBTUSD'; // XBTUSD ADAU19
 
         /** Pick up the right websocket endpoint accordingly to the exchange */
-        //$exchangeWebSocketEndPoint = "wss://testnet.bitmex.com/realtime";
+        /*if(self::$accountSettingsObject['isTestnet']){
+            $exchangeWebSocketEndPoint = "wss://testnet.bitmex.com/realtime";
+        } else {
+            $exchangeWebSocketEndPoint = "wss://www.bitmex.com/realtime";
+        }*/
+
         $exchangeWebSocketEndPoint = "wss://www.bitmex.com/realtime";
+
         $connector($exchangeWebSocketEndPoint, [], ['Origin' => 'http://localhost'])
             ->then(function(\Ratchet\Client\WebSocket $conn) use ($loop) {
+                self::$connection = $conn;
                 $conn->on('message', function(\Ratchet\RFC6455\Messaging\MessageInterface $socketMessage) use ($conn, $loop) {
                     $jsonMessage = json_decode($socketMessage->getPayload(), true);
                     /**
                      * Parse all websocket messages.
                      */
-                    \App\Classes\WebSocket\Front\LimitOrderMessage::parse($jsonMessage);
+                    if(array_key_exists('table', $jsonMessage))
+                        if($jsonMessage['table'] == 'orderBook10')
+                            if($jsonMessage['data'][0]['symbol'] == self::$symbol)
+                                \App\Classes\WebSocket\Front\LimitOrderMessage::parse($jsonMessage, self::$botId);
+                                //echo now() . " " . $jsonMessage['data'][0]['symbol'] . "\n";
 
                 });
 
@@ -87,13 +145,13 @@ class LimitOrderWs
                 $requestObject5 = json_encode(
                     [
                         "op" => "subscribe",
-                        "args" => ["orderBook10:" . self::$symbol]
+                        "args" => ["orderBook10:XBTUSD","orderBook10:ETHUSD"]
                     ]
                 );
 
-                $conn->send($requestObject2); /* Connection authenticate  */
-                $conn->send($requestObject3); /* Subscribe to order channel */
-                $conn->send($requestObject4); /* Subscribe to order executions */
+                //$conn->send($requestObject2); /* Connection authenticate  */
+                //$conn->send($requestObject3); /* Subscribe to order channel */
+                //$conn->send($requestObject4); /* Subscribe to order executions */
                 $conn->send($requestObject5); /* Subscribe to order book with a specific symbol */
 
             }, function(\Exception $e) use ($loop) {

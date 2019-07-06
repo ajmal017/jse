@@ -31,6 +31,7 @@ class BitmexWsListenerFront
         $self = get_called_class();
 
         /* Endless loop. Executes once per second */
+        /* @todo Do we need $loop in hre? */
         $loop->addPeriodicTimer(1, function() use($loop, $botId, $self) {
 
             echo (Bot::where('id', $botId)->value('status') == 'running' ? 'running' : 'idle') . "\n";

@@ -18,8 +18,8 @@ class SignalTable
      *
      * @param $orderEecutionResponse
      */
-    public static function insertRecord($orderEecutionResponse){
-        DB::table('signal_1')->insert([
+    public static function insertRecord($orderEecutionResponse, $botId){
+        DB::table('signal_' . $botId)->insert([
             'order_type' => $orderEecutionResponse['ordType'],
             'direction' => $orderEecutionResponse['side'],
             'volume' => $orderEecutionResponse['lastQty'],
@@ -38,16 +38,13 @@ class SignalTable
      * This happens when an order gets filled immediately.
      * @param $orderEecutionResponse
      */
-    public static function updateSignalStatus(){
-        DB::table('signal_1')
+    public static function updateSignalStatus($botId){
+        DB::table('signal_' . $botId)
             ->where('type', 'signal')
             ->where('status', 'pending')
             ->orwhere('status', 'new')
             ->update([
                 'status' => 'closed'
             ]);
-
-
-
     }
 }

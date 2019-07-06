@@ -31,7 +31,8 @@ class TradingAccount
             'commission' => Symbol::where('id', $symbolId)->value('commission'),
             'frontEndId' => Bot::where('id', $botId)->value('front_end_id'),
             'volume' => Bot::where('id', $botId)->value('volume'),
-            'rateLimit' => Bot::where('id', $botId)->value('rate_limit')
+            'rateLimit' => Bot::where('id', $botId)->value('rate_limit'),
+            'signalTable' => 'signal_' . $botId
         );
         return $accountSettingsObject;
     }

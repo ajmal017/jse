@@ -15,16 +15,18 @@ use Illuminate\Support\Facades\DB;
 class BacktestingFront
 {
     static public function start($botSettings){
-        /* Empty history bars table */
+        /* Empty backtesting bars table */
         DB::table('bot_5')->truncate();
 
         \App\Classes\Trading\History::loadPeriod($botSettings);
 
-        // IF goes here
+
+
         if ($botSettings['strategy'] == 'pc'){
             \App\Classes\Indicators\PriceChannel::calculate($botSettings['strategyParams']['priceChannelPeriod'], $botSettings['botTitle'], true);
             \App\Classes\Indicators\Sma::calculate('close', 2, 'sma1', $botSettings['botTitle'], true);
             $chart = new \App\Classes\Trading\Chart($botSettings['executionSymbol'], $botSettings['volume'], $botSettings);
+
         }
 
         if ($botSettings['strategy'] == 'mc'){
@@ -32,7 +34,6 @@ class BacktestingFront
             // @todo 25.05.19 SEND ONE OBJECT! NOT 3 PARAMS!
             $macd = new \App\Classes\Trading\MacdTradesTrigger($botSettings['executionSymbol'], $botSettings['volume'], $botSettings);
         }
-
 
         /** Empty calculated data like position, profit, accumulated profit, etc */
         DB::table($botSettings['botTitle'])

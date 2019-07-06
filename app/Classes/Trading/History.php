@@ -23,7 +23,8 @@ class History
     public static function loadPeriod($botSettings){
         $barsToLoad = $botSettings['barsToLoad'];
         $timeFrame = $botSettings['timeFrame'] . 'm';
-        $symbol = $botSettings['historySymbolName'];
+        //$symbol = $botSettings['historySymbolName'];
+        $symbol = 'ETHUSD';
 
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_URL,

@@ -55,7 +55,7 @@ class BacktestController extends Controller
         // reload chart goes here. exclude reload chart method from pc, mc to a separate class. located in trading. name: Chart::reload
         // Rename Chart.php to PcTradesTrigger
 
-        // Exclude to a separate class
+        // @todo Exclude to a separate class
         $pusherApiMessage = new \App\Classes\WebSocket\PusherApiMessage();
         $pusherApiMessage->clientId = $botSettings['frontEndId'];
         $pusherApiMessage->messageType = 'reloadChartAfterHistoryLoaded';

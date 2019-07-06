@@ -55,6 +55,7 @@ class LimitOrderWs
             if (Bot::where('id', $botId)->value('status') == 'running' && !self::$isBotRunning){
                 dump('FIREEEEEEEEEEED ' . self::$accountSettingsObject['historySymbolName']);
                 Cache::put('status_bot_' . $botId, true, now()->addMinute(30));
+                self::listen($connector, $loop, $console, $botId);
             }
 
             if (Bot::where('id', $botId)->value('status') == 'idle' && self::$isBotRunning){
@@ -70,13 +71,13 @@ class LimitOrderWs
         //self::$symbol = 'XBTUSD'; // XBTUSD ADAU19
 
         /** Pick up the right websocket endpoint accordingly to the exchange */
-        /*if(self::$accountSettingsObject['isTestnet']){
+        if(self::$accountSettingsObject['isTestnet']){
             $exchangeWebSocketEndPoint = "wss://testnet.bitmex.com/realtime";
         } else {
             $exchangeWebSocketEndPoint = "wss://www.bitmex.com/realtime";
-        }*/
+        }
 
-        $exchangeWebSocketEndPoint = "wss://www.bitmex.com/realtime";
+        //$exchangeWebSocketEndPoint = "wss://www.bitmex.com/realtime";
 
         $connector($exchangeWebSocketEndPoint, [], ['Origin' => 'http://localhost'])
             ->then(function(\Ratchet\Client\WebSocket $conn) use ($loop) {
@@ -86,11 +87,17 @@ class LimitOrderWs
                     /**
                      * Parse all websocket messages.
                      */
-                    if(array_key_exists('table', $jsonMessage))
+
+
+                    if(array_key_exists('info', $jsonMessage))
+                        dump($jsonMessage['docs']);
+
+                    /*if(array_key_exists('table', $jsonMessage))
                         if($jsonMessage['table'] == 'orderBook10')
                             if($jsonMessage['data'][0]['symbol'] == self::$symbol)
-                                \App\Classes\WebSocket\Front\LimitOrderMessage::parse($jsonMessage, self::$botId);
+                                //\App\Classes\WebSocket\Front\LimitOrderMessage::parse($jsonMessage, self::$botId);
                                 //echo now() . " " . $jsonMessage['data'][0]['symbol'] . "\n";
+                                echo '';*/
 
                 });
 

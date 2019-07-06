@@ -2,8 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="0ab8c352-e91a-41d2-a602-98135f1f3232" name="Default" comment="">
-      <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/Classes/WebSocket/Front/LimitOrderWs.php" afterPath="$PROJECT_DIR$/app/Classes/WebSocket/Front/LimitOrderWs.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/Console/Commands/Limit.php" afterPath="$PROJECT_DIR$/app/Console/Commands/Limit.php" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -24,11 +23,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="Limit.php" pinned="false" current-in-tab="false">
+      <file leaf-file-name="Limit.php" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/app/Console/Commands/Limit.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="765">
-              <caret line="50" column="40" lean-forward="false" selection-start-line="50" selection-start-column="40" selection-end-line="50" selection-end-column="40" />
+            <state relative-caret-position="340">
+              <caret line="68" column="67" lean-forward="false" selection-start-line="68" selection-start-column="67" selection-end-line="68" selection-end-column="67" />
               <folding>
                 <element signature="e#40#75#0#PHP" expanded="true" />
               </folding>
@@ -36,10 +35,10 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="LimitOrderWs.php" pinned="false" current-in-tab="true">
+      <file leaf-file-name="LimitOrderWs.php" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/app/Classes/WebSocket/Front/LimitOrderWs.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="271">
+            <state relative-caret-position="883">
               <caret line="98" column="34" lean-forward="false" selection-start-line="98" selection-start-column="34" selection-end-line="98" selection-end-column="34" />
               <folding>
                 <element signature="e#132#169#0#PHP" expanded="true" />
@@ -189,10 +188,10 @@
         <option value="$PROJECT_DIR$/app/Classes/WebSocket/Front/BitmexWsListenerFront.php" />
         <option value="$PROJECT_DIR$/app/Classes/WebSocket/Front/TradingAccount.php" />
         <option value="$PROJECT_DIR$/app/Classes/DB/SignalTable.php" />
-        <option value="$PROJECT_DIR$/app/Console/Commands/Limit.php" />
         <option value="$PROJECT_DIR$/app/Classes/WebSocket/Front/LimitOrderMessage.php" />
         <option value="$PROJECT_DIR$/app/Classes/Trading/Exchange.php" />
         <option value="$PROJECT_DIR$/app/Classes/WebSocket/Front/LimitOrderWs.php" />
+        <option value="$PROJECT_DIR$/app/Console/Commands/Limit.php" />
       </list>
     </option>
   </component>
@@ -490,12 +489,12 @@
       <workItem from="1562001963644" duration="43983000" />
       <workItem from="1562172333938" duration="40568000" />
       <workItem from="1562366314437" duration="15221000" />
-      <workItem from="1562428245936" duration="2190000" />
+      <workItem from="1562428245936" duration="2384000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="851274000" />
+    <option name="totallyTimeSpent" value="851468000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1382" height="744" extended-state="6" />
@@ -878,16 +877,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/Console/Commands/Limit.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="765">
-          <caret line="50" column="40" lean-forward="false" selection-start-line="50" selection-start-column="40" selection-end-line="50" selection-end-column="40" />
-          <folding>
-            <element signature="e#40#75#0#PHP" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/app/Classes/WebSocket/Front/LimitOrderMessage.php">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="6545">
@@ -930,10 +919,20 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/app/Classes/WebSocket/Front/LimitOrderWs.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="271">
+        <state relative-caret-position="883">
           <caret line="98" column="34" lean-forward="false" selection-start-line="98" selection-start-column="34" selection-end-line="98" selection-end-column="34" />
           <folding>
             <element signature="e#132#169#0#PHP" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/Console/Commands/Limit.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="340">
+          <caret line="68" column="67" lean-forward="false" selection-start-line="68" selection-start-column="67" selection-end-line="68" selection-end-column="67" />
+          <folding>
+            <element signature="e#40#75#0#PHP" expanded="true" />
           </folding>
         </state>
       </provider>

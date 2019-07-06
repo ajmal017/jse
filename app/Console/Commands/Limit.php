@@ -65,6 +65,9 @@ class Limit extends Command
          */
         Cache::put('bot_1', $limitOrderObj, now()->addMinute(30));
 
+        // Truncate signal tables
+        DB::table('signal_' . $this->argument('botId'))->truncate();
+
         /**
          * Call LimitOrder.php and start limit orders.
          * Send $this - it will allow to output colored console messages.

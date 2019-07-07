@@ -27,9 +27,11 @@
       <file leaf-file-name="BitmexWsListenerFront.php" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/app/Classes/WebSocket/Front/BitmexWsListenerFront.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="424">
-              <caret line="56" column="106" lean-forward="false" selection-start-line="56" selection-start-column="106" selection-end-line="56" selection-end-column="106" />
-              <folding />
+            <state relative-caret-position="-1088">
+              <caret line="9" column="4" lean-forward="true" selection-start-line="9" selection-start-column="4" selection-end-line="9" selection-end-column="4" />
+              <folding>
+                <element signature="e#131#143#0#PHP" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -57,11 +59,11 @@
       <file leaf-file-name="LimitOrderMessage.php" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/app/Classes/WebSocket/Front/LimitOrderMessage.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="206">
-              <caret line="496" column="29" lean-forward="true" selection-start-line="496" selection-start-column="29" selection-end-line="496" selection-end-column="29" />
+            <state relative-caret-position="126">
+              <caret line="37" column="8" lean-forward="false" selection-start-line="37" selection-start-column="8" selection-end-line="37" selection-end-column="8" />
               <folding>
-                <element signature="e#5344#7281#0#PHP" expanded="false" />
-                <element signature="e#11606#18052#0#PHP" expanded="false" />
+                <element signature="e#5445#7382#0#PHP" expanded="false" />
+                <element signature="e#11707#18153#0#PHP" expanded="false" />
               </folding>
             </state>
           </provider>
@@ -80,8 +82,8 @@
       <file leaf-file-name="Exchange.php" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/app/Classes/Trading/Exchange.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-610">
-              <caret line="162" column="53" lean-forward="true" selection-start-line="162" selection-start-column="53" selection-end-line="162" selection-end-column="53" />
+            <state relative-caret-position="308">
+              <caret line="252" column="32" lean-forward="false" selection-start-line="252" selection-start-column="20" selection-end-line="252" selection-end-column="32" />
               <folding>
                 <element signature="e#123#139#0#PHP" expanded="true" />
               </folding>
@@ -93,7 +95,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>ccvv</find>
       <find>['info']</find>
       <find>qqwwee</find>
       <find>force tim</find>
@@ -123,6 +124,7 @@
       <find>penultim</find>
       <find>penu</find>
       <find>trade_flag</find>
+      <find>There are more than onw record</find>
     </findStrings>
     <replaceStrings>
       <replace>$ema1Value</replace>
@@ -519,18 +521,18 @@
       <workItem from="1562001963644" duration="43983000" />
       <workItem from="1562172333938" duration="40568000" />
       <workItem from="1562366314437" duration="15221000" />
-      <workItem from="1562428245936" duration="18330000" />
+      <workItem from="1562428245936" duration="19553000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="867414000" />
+    <option name="totallyTimeSpent" value="868637000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1382" height="744" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.22087745" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.1785174" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
@@ -955,31 +957,33 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/app/Classes/WebSocket/Front/BitmexWsListenerFront.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-1088">
+          <caret line="9" column="4" lean-forward="true" selection-start-line="9" selection-start-column="4" selection-end-line="9" selection-end-column="4" />
+          <folding>
+            <element signature="e#131#143#0#PHP" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/app/Classes/Trading/Exchange.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-610">
-          <caret line="162" column="53" lean-forward="true" selection-start-line="162" selection-start-column="53" selection-end-line="162" selection-end-column="53" />
+        <state relative-caret-position="308">
+          <caret line="252" column="32" lean-forward="false" selection-start-line="252" selection-start-column="20" selection-end-line="252" selection-end-column="32" />
           <folding>
             <element signature="e#123#139#0#PHP" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/Classes/WebSocket/Front/BitmexWsListenerFront.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="424">
-          <caret line="56" column="106" lean-forward="false" selection-start-line="56" selection-start-column="106" selection-end-line="56" selection-end-column="106" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/app/Classes/WebSocket/Front/LimitOrderMessage.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="206">
-          <caret line="496" column="29" lean-forward="true" selection-start-line="496" selection-start-column="29" selection-end-line="496" selection-end-column="29" />
+        <state relative-caret-position="126">
+          <caret line="37" column="8" lean-forward="false" selection-start-line="37" selection-start-column="8" selection-end-line="37" selection-end-column="8" />
           <folding>
-            <element signature="e#5344#7281#0#PHP" expanded="false" />
-            <element signature="e#11606#18052#0#PHP" expanded="false" />
+            <element signature="e#5445#7382#0#PHP" expanded="false" />
+            <element signature="e#11707#18153#0#PHP" expanded="false" />
           </folding>
         </state>
       </provider>

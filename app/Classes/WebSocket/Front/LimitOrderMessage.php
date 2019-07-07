@@ -35,10 +35,12 @@ class LimitOrderMessage
                 ->where('status', 'new')
                 ->orwhere('status', 'pending')
                 ->get();
-
-
-
-        if (count(self::$signalRow) > 1) die ('There are more than onw record with New status in signals. Die from LimitOrderMessage.php');
+        
+        if (count(self::$signalRow) > 1) {
+            $message = 'There are more than onw record with New status in signals. Die from LimitOrderMessage.php';
+            Log::emergency($message);
+            die ($message);
+        }
 
         if (count(self::$signalRow) == 1){
             if (self::$signalRow[0]->status != 'closed' ){

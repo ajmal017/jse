@@ -55,13 +55,8 @@ abstract class Profit
                     ->orderBy('id', 'desc') // Form biggest to smallest values
                     ->value('trade_price');
 
-            //dump("--------------------------------------------------------profit.php 64 TRADE_PROFIT: " . $this->volume);
-
             $this->tradeProfit =
                 (($this->position == "long" ? ($this->lastRow[0]->close - $lastTradePrice) * $this->volume : ($lastTradePrice - $this->lastRow[0]->close) * $this->volume));
-
-
-
 
             \App\Classes\Accounting\TradeProfit::calculate($this->botSettings, $this->tradeProfit, $backTestRowId);
         }

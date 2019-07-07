@@ -8,7 +8,7 @@
 
 namespace App\Classes\Trading;
 use ccxt\bitmex;
-use Illuminate\Cache\Events\CacheHit;
+//use Illuminate\Cache\Events\CacheHit;
 use Mockery\Exception;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Cache;

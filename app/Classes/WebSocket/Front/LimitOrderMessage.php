@@ -11,6 +11,7 @@ use App\Jobs\AmendOrder;
 use App\Jobs\PlaceLimitOrder;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 class LimitOrderMessage
 {
@@ -35,7 +36,7 @@ class LimitOrderMessage
                 ->where('status', 'new')
                 ->orwhere('status', 'pending')
                 ->get();
-        
+
         if (count(self::$signalRow) > 1) {
             $message = 'There are more than onw record with New status in signals. Die from LimitOrderMessage.php';
             Log::emergency($message);

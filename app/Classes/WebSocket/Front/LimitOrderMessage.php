@@ -493,7 +493,9 @@ class LimitOrderMessage
         } else {
             echo ('PRICE HAS CHANGED! PREPARE TO AMEND SELL ORDER! if the order really placed? Limit price: ' . self::$limitOrderObj['limitOrderPrice']) . "\n";
 
-            if(self::$limitOrderObj['limitOrderTimestamp'] != null){
+            //if(self::$limitOrderObj['limitOrderTimestamp'] != null){
+            /* https://dacoders.myjetbrains.com/youtrack/issue/JSE-222 */
+            if(array_key_exists('limitOrderTimestamp', self::$limitOrderObj)){
                 dump('---------------NOW CAN AMEND SELL ORDER');
                 $response = \App\Classes\Trading\Exchange::amendOrder(
                     //$ask + self::$limitOrderObj['step'],

@@ -151,13 +151,13 @@ class Exchange
         }
         catch (\Exception $e)
         {
-            dump('--------- in exception line 150');
+            dump('--------- in exception line 154 code: vvffrr');
             self::$response = $e->getMessage();
         }
 
         /**
          * Set values in array is returned - success.
-         * If string - error. It will be catch in checkResponse
+         * If string - error. It will be proceeded in checkResponse
          */
         if (gettype(self::$response) == 'array'){
             $limitOrderObj['limitOrderTimestamp'] = 12345;
@@ -185,7 +185,6 @@ class Exchange
         try{
             self::$response = $exchange->privatePutOrder(array('orderID' => $orderID, 'price' => $newPrice));
             echo "Amend order placement response: \n";
-            //dump(self::$response);
         }
         catch (\Exception $e)
         {
@@ -233,13 +232,12 @@ class Exchange
         }
 
         if (gettype(self::$response) == 'string'){
-            echo "Error string line 120: " . self::$response . "\n";
+            echo "Error. Line: ". __LINE__ . " Text: " . self::$response . "\n";
             switch(false){
                 case !strpos(self::$response, 'Account has insufficient');
                     $error = 'Account has insufficient funds. Die.' . __FILE__ . ' '. __LINE__;
                     Log::notice($error);
                     die(__FILE__ . ' ' . __LINE__);
-
                 case !strpos(self::$response, 'does not have market symbol'); // bitmex does not have market symbol
                     $error = 'Bitmex does not have market symbol. Execution is not possible';
                     throw new Exception($error);
@@ -247,8 +245,8 @@ class Exchange
                 /* @see: https://www.bitmex.com/app/restAPI#Overload */
                 case !strpos(self::$response, 'overloaded');
                     // The system is currently overloaded. Please try again later
-                    //throw new Exception('Exchange overloaded');
-                    Log::notice('Exchange overloaded! Exchnage.php zzxxcc');
+                    throw new Exception('Exchange overloaded');
+                    Log::warning('Exchange overloaded! Exchnage.php' . __FILE__ . ' '. __LINE__);
                     break;
                 /* Full error text: bitmex {"error":{"message":"Invalid ordStatus","name":"HTTPError"}} */
                 case !strpos(self::$response, 'ordStatus');
@@ -256,10 +254,12 @@ class Exchange
                     dump('Order amend. It usually happens when the order was fully filled');
                 /**
                  * https://github.com/BitMEX/api-connectors/issues/202
-                 * {"error":{"message":"This request has expired - `expires` is in the past. Current time: 1561918674","name":"HTTPError"}} */
+                 * {"error":{"message":"This request has expired - `expires` is in the past. Current time: 1561918674","name":"HTTPError"}}
+                 * Have no idea what does this error do. It seems like nothing happens.
+                 */
                 case !strpos(self::$response, 'expires');
                     Log::notice('This request has expired - `expires` is in the past. Current time: .. Check request signature. ' . __FILE__ . ' '. __LINE__);
-                    dump('This request has expired - `expires` is in the past. Current time: .. Check request signature');
+                    //dump('This request has expired - `expires` is in the past. Current time: .. Check request signature');
             }
         }
     }

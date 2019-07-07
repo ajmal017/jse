@@ -54,10 +54,7 @@ class BitmexWsListenerFront
 
                 (array_key_exists('priceChannel', self::$strategiesSettingsObject) ?
                     self::$chart = new \App\Classes\Trading\Chart(self::$accountSettingsObject) :
-                    self::$chart = new \App\Classes\Trading\MacdTradesTrigger(
-                        self::$accountSettingsObject['executionSymbolName'],
-                        self::$accountSettingsObject
-                    ));
+                    self::$chart = new \App\Classes\Trading\MacdTradesTrigger(self::$accountSettingsObject));
 
                 self::$isCreateClasses = false;
             }

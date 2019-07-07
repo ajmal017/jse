@@ -24,7 +24,7 @@ use Illuminate\Support\Facades\Cache;
 /**
  * Trigger trades based on MACD
  *
- * Class PrTradesTrigger
+ * Class MacdTradesTrigger
  * @package App\Classes\Trading
  *
  * @see Classes and backtest scheme https://drive.google.com/file/d/1IDBxR2dWDDsbFbradNapSo7QYxv36EQM/view?usp=sharing

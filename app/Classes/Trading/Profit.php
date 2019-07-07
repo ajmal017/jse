@@ -7,6 +7,7 @@
  */
 
 namespace App\Classes\Trading;
+use App\Classes\LogToFile;
 use Illuminate\Support\Facades\DB;
 
 abstract class Profit
@@ -55,13 +56,8 @@ abstract class Profit
                     ->orderBy('id', 'desc') // Form biggest to smallest values
                     ->value('trade_price');
 
-            //dump("--------------------------------------------------------profit.php 64 TRADE_PROFIT: " . $this->volume);
-
             $this->tradeProfit =
                 (($this->position == "long" ? ($this->lastRow[0]->close - $lastTradePrice) * $this->volume : ($lastTradePrice - $this->lastRow[0]->close) * $this->volume));
-
-
-
 
             \App\Classes\Accounting\TradeProfit::calculate($this->botSettings, $this->tradeProfit, $backTestRowId);
         }
@@ -74,7 +70,7 @@ abstract class Profit
          */
         if ($this->trade_flag != "all") {
             \App\Classes\Accounting\AccumulatedProfit::calculate($this->botSettings, $this->lastRow[0]->id);
-            \App\Classes\Accounting\NetProfit::calculate($this->position, $this->botSettings, $this->lastRow[0]->id);
+            //\App\Classes\Accounting\NetProfit::calculate($this->position, $this->botSettings, $this->lastRow[0]->id);
         }
     }
 }

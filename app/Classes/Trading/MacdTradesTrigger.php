@@ -42,11 +42,16 @@ class MacdTradesTrigger extends Profit
     private $executionSymbolName;
     private $macdCrossedFirstTime = true;
 
-    public function __construct($executionSymbolName, $botSettings)
+    public $botSettings;
+    protected $lastRow;
+    protected $penUltimanteRow; // Do wee need this var? It exists in Chart.php
+
+    public function __construct($botSettings)
     {
-        $this->executionSymbolName = $executionSymbolName;
+        $this->executionSymbolName = $botSettings['executionSymbol'];
         $this->volume = $botSettings['volume'];
-        $this->trade_flag = 'trades_disabled'; // Need to wait until MACD cross, then open a trade. Otherwise we get a trade at start.
+        //$this->trade_flag = 'trades_disabled'; // Need to wait until MACD cross, then open a trade. Otherwise we get a trade at start.
+        $this->trade_flag = 'all'; // Need to wait until MACD cross, then open a trade. Otherwise we get a trade at start.
         $this->botSettings = $botSettings;
     }
 
@@ -56,6 +61,7 @@ class MacdTradesTrigger extends Profit
     public function index($mode = null, $backTestRowId = null)
     {
         echo __FILE__ . "\n" ;
+        /* Extended class method call */
         $this->calc($mode, $backTestRowId);
 
         /* Wait until MACD generates a signal */
@@ -66,7 +72,7 @@ class MacdTradesTrigger extends Profit
             }
         }
 
-        echo "------------------------------------------------------MacdTradesTrigger.php 69. this->trade_flag: " . $this->trade_flag . "\n";
+        //echo "------------------------------------------------------MacdTradesTrigger.php 69. this->trade_flag: " . $this->trade_flag . "\n";
 
         if (($this->lastRow[0]->macd_line > $this->lastRow[0]->macd_signal_line) && ($this->trade_flag == "all" || $this->trade_flag == "long")){
 
@@ -116,7 +122,6 @@ class MacdTradesTrigger extends Profit
             if ($this->trade_flag == "all"){
                 echo "---------------------- FIRST EVER TRADE<br>\n";
                 if($mode != 'backtest')
-                    //PlaceOrder::dispatch('sell', $this->botSettings['volume'], $this->botSettings);
                     DB::table('signal_1')
                         ->insert([
                             'type' => 'signal',
@@ -129,7 +134,6 @@ class MacdTradesTrigger extends Profit
             {
                 echo "---------------------- NOT FIRST EVER TRADE. CLOSE + OPEN. VOL * 2\n";
                 if($mode != 'backtest')
-                    //PlaceOrder::dispatch('sell', $this->botSettings['volume'] * 2, $this->botSettings);
                     DB::table('signal_1')
                         ->insert([
                             'type' => 'signal',

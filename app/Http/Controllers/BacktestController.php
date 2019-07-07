@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Classes\Backtesting\BacktestingFront;
+use App\Classes\LogToFile;
 use Illuminate\Http\Request;
 
 class BacktestController extends Controller
@@ -35,21 +36,46 @@ class BacktestController extends Controller
      */
     public function store(Request $request)
     {
-        /* @todo Remove all logic from here! */
-        $botSettings = [
-            'botTitle' => 'bot_5',
-            'executionSymbol' => $request['execution_symbol_name'], // ETH/USD
-            'historySymbol' => $request['history_symbol_name'], // ETHUSD
-            'volume' => 10,
-            'commission' => -0.0250, // Taker: 0.0750
-            'strategy' => 'pc',
-            'strategyParams' => [
-                'priceChannelPeriod' => $request['time_frame']
-            ],
-            'timeFrame' => $request['bar_time_frame'], // 1 or 5 minutes. https://www.bitmex.com/api/explorer/#!/Trade/Trade_getBucketed
-            'barsToLoad' => $request['bars_to_load'],
-            'frontEndId' => '12350',
-        ];
+
+        //LogToFile::add('BacktestController', json_encode($request));
+        //return($request);
+        //die();
+
+        $strategy = $request['strategy'];
+
+        if ($strategy == 'pc')
+            $botSettings = [
+                'botTitle' => 'bot_5',
+                'executionSymbol' => $request['execution_symbol_name'], // ETH/USD
+                'historySymbol' => $request['history_symbol_name'], // ETHUSD
+                'volume' => 10,
+                'commission' => -0.0250, // Taker: 0.0750
+                'strategy' => 'pc',
+                'strategyParams' => [
+                    'priceChannelPeriod' => $request['time_frame']
+                ],
+                'timeFrame' => $request['bar_time_frame'], // 1 or 5 minutes. https://www.bitmex.com/api/explorer/#!/Trade/Trade_getBucketed
+                'barsToLoad' => $request['bars_to_load'],
+                'frontEndId' => '12350',
+            ];
+
+        if ($strategy == 'macd')
+            $botSettings = [
+                'botTitle' => 'bot_5',
+                'executionSymbol' => $request['execution_symbol_name'], // ETH/USD
+                'historySymbol' => $request['history_symbol_name'], // ETHUSD
+                'volume' => 10,
+                'commission' => -0.0250, // Taker: 0.0750
+                'strategy' => 'macd',
+                'strategyParams' => [
+                    'emaPeriod' => 2,
+                    'macdLinePeriod' => 5,
+                    'macdSignalLinePeriod' => 5
+                ],
+                'timeFrame' => $request['bar_time_frame'], // 1 or 5 minutes. https://www.bitmex.com/api/explorer/#!/Trade/Trade_getBucketed
+                'barsToLoad' => $request['bars_to_load'],
+                'frontEndId' => '12350',
+            ];
 
         BacktestingFront::start($botSettings);
         // reload chart goes here. exclude reload chart method from pc, mc to a separate class. located in trading. name: Chart::reload

@@ -48,7 +48,7 @@ class MacdTradesTrigger extends Profit
 
     public function __construct($botSettings)
     {
-        $this->executionSymbolName = $botSettings['executionSymbol'];
+        $this->executionSymbolName = $botSettings['executionSymbolName'];
         $this->volume = $botSettings['volume'];
         //$this->trade_flag = 'trades_disabled'; // Need to wait until MACD cross, then open a trade. Otherwise we get a trade at start.
         $this->trade_flag = 'all'; // Need to wait until MACD cross, then open a trade. Otherwise we get a trade at start.

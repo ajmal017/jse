@@ -126,7 +126,7 @@ class Exchange
     }
 
     public static function placeLimitBuyOrder($botSettings, $price, $volume, $limitOrderObj){
-        echo __FILE__ . " line: " . __LINE__ . "\n";
+        echo "Exchnage.php line: " . __LINE__ . "\n";
         $exchange = new bitmex();
 
         if($botSettings['isTestnet'] == 1){
@@ -142,8 +142,7 @@ class Exchange
             echo "API path. test or api: " . $exchange->urls['api'] . "\n";
             echo "Symbol: " . $botSettings['executionSymbolName'] . " in Exchnage.php \n";
 
-            self::$response = $exchange->createLimitBuyOrder($botSettings['executionSymbolName'], $volume, $price, array('clOrdID' => $limitOrderObj['clOrdID'])
-            );
+            self::$response = $exchange->createLimitBuyOrder($botSettings['executionSymbolName'], $volume, $price, array('clOrdID' => $limitOrderObj['clOrdID']));
 
             //echo "Limit order placement response: \n";
             //dump(self::$response);
@@ -162,6 +161,7 @@ class Exchange
             $limitOrderObj['limitOrderTimestamp'] = 12345;
             $limitOrderObj['orderID'] = self::$response['info']['orderID'];
             Cache::put('bot_1', $limitOrderObj, now()->addMinute(30));
+            echo('Limit order placed (Exchnage.php). MUST NOT BE EMPTY! orderID: ' . self::$response['info']['orderID']);
         }
 
         self::checkResponse($limitOrderObj);
@@ -196,7 +196,8 @@ class Exchange
 
     public static function getOrders($botSettings, $limitOrderObj){
 
-        echo '****   GET TRADES FOR PLACED ORDER (Exchange.php) **** ' . __FILE__ . " line: " . __LINE__ . "\n";
+        echo '****   GET TRADES FOR PLACED ORDER (Exchange.php). orderID: ' . $limitOrderObj['orderID'] . " line: " . __LINE__ . "\n";
+
         $exchange = new bitmex();
 
         if($botSettings['isTestnet'] == 1){
@@ -211,7 +212,7 @@ class Exchange
         try{
             $orderID = $limitOrderObj['orderID'];
             self::$response = $exchange->privateGetExecutionTradeHistory(array('count' => 20, 'filter' => ['orderID' => $orderID])); // Works GOOD!
-            echo "GET TRADES FOR PLACED ORDER (Exchnage.php): \n";
+            //echo "GET TRADES FOR PLACED ORDER (Exchnage.php): \n";
             //dump(self::$response);
         }
         catch (\Exception $e)
@@ -251,7 +252,7 @@ class Exchange
                 /* @see: https://www.bitmex.com/app/restAPI#Overload */
                 case !strpos(self::$response, 'overloaded');
                     // The system is currently overloaded. Please try again later
-                    Log::warning('Exchange overloaded! Exchnage.php' . __FILE__ . ' '. __LINE__);
+                    // Log::warning('Exchange overloaded! Exchnage.php' . __FILE__ . ' '. __LINE__);
                     throw new Exception('Exchange overloaded');
                     break;
                 /* Full error text: bitmex {"error":{"message":"Invalid ordStatus","name":"HTTPError"}} */
@@ -270,7 +271,7 @@ class Exchange
         }
     }
 
-    // Cam use it for market order record insertion
+    // Can use it for market order record insertion
     public static function insertRecordToSignalTable($botSettings, $response){
         DB::table($botSettings['signalTable'])->insert([
             'order_type' => 'limit',

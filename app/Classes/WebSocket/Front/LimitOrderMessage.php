@@ -195,7 +195,7 @@ class LimitOrderMessage
     public static function executionParse2(array $message){
         foreach($message as $msg){
             if(array_key_exists('orderID', $msg)){
-                echo $msg['orderID'] . "   -   " . self::$limitOrderObj['orderID'] . "\n";
+                echo "Exchange execution ID: " . $msg['orderID'] . "   -   Placed order ID: " . self::$limitOrderObj['orderID'] . "\n";
 
                 if(array_key_exists('orderID', $msg))
                     If (($msg['orderID']  == self::$limitOrderObj['orderID'])){

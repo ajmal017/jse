@@ -8,14 +8,7 @@
 
 namespace App\Classes\WebSocket\Front;
 use App\Bot;
-/*use App\Classes\Trading\CandleMaker;
-use App\Classes\Trading\Chart;
-use App\Strategy;
-use App\Symbol;
-use App\Account;
-use App\Exchange;
-use App\PricechannelSettings;
-use App\MacdSettings;*/
+use Illuminate\Support\Facades\DB;
 
 class BitmexWsListenerFront
 {
@@ -37,7 +30,8 @@ class BitmexWsListenerFront
         /* For static methods call inside an anonymous function */
         $self = get_called_class();
 
-        /* Endless loop. ExecExecutes once a second */
+        /* Endless loop. Executes once per second */
+        /* @todo Do we need $loop in hre? */
         $loop->addPeriodicTimer(1, function() use($loop, $botId, $self) {
 
             echo (Bot::where('id', $botId)->value('status') == 'running' ? 'running' : 'idle') . "\n";
@@ -55,16 +49,12 @@ class BitmexWsListenerFront
                     (array_key_exists('priceChannel', self::$strategiesSettingsObject) ? 'priceChannel' : 'macd'),
                     self::$accountSettingsObject);
 
-
                 dump (__FILE__);
                 dump((array_key_exists('priceChannel', self::$strategiesSettingsObject) ? "!!!!!!! PC" : "!!!!!!!!!! MACD"));
 
                 (array_key_exists('priceChannel', self::$strategiesSettingsObject) ?
                     self::$chart = new \App\Classes\Trading\Chart(self::$accountSettingsObject) :
-                    self::$chart = new \App\Classes\Trading\MacdTradesTrigger(
-                        self::$accountSettingsObject['executionSymbolName'],
-                        self::$accountSettingsObject
-                    ));
+                    self::$chart = new \App\Classes\Trading\MacdTradesTrigger(self::$accountSettingsObject));
 
                 self::$isCreateClasses = false;
             }
@@ -85,7 +75,11 @@ class BitmexWsListenerFront
         /**
          * Pick up the right websocket endpoint accordingly to the exchange
          */
+
+        // HERE IT IS!
         $exchangeWebSocketEndPoint = "wss://www.bitmex.com/realtime";
+
+
         $connector($exchangeWebSocketEndPoint, [], ['Origin' => 'http://localhost'])
             ->then(function(\Ratchet\Client\WebSocket $conn) use ($loop) {
                 self::$connection = $conn;
@@ -109,7 +103,7 @@ class BitmexWsListenerFront
             }, function(\Exception $e) use ($loop) {
                 $errorString = "RatchetPawlSocket.php Could not connect. Reconnect in 5 sec. \n Reason: {$e->getMessage()} \n";
                 echo $errorString;
-                sleep(5); // Wait 5 seconds before next connection try will attempt
+                sleep(5); // Wait 5 seconds before next connection attempt
                 //$this->handle(); // Call the main method of this class
                 self::subscribe();
                 //$loop->stop();
@@ -138,6 +132,11 @@ class BitmexWsListenerFront
 
     private static function startPriceChannelBot($botId){
         if (self::$isHistoryLoaded){
+
+            /* DELETE IT FROM HERE! TESTING ONLY! */
+            DB::table('signal_1')->truncate();
+
+
             \App\Classes\Trading\History::loadPeriod(self::$accountSettingsObject);
             dump('History loaded (Price Channel)');
             /* Initial indicators calculation */
@@ -194,6 +193,10 @@ class BitmexWsListenerFront
 
     private static function startMacdBot(){
         if (self::$isHistoryLoaded){
+
+            /* DELETE IT FROM HERE! TESTING ONLY! */
+            DB::table('signal_1')->truncate();
+
             \App\Classes\Trading\History::loadPeriod(self::$accountSettingsObject);
             dump('History loaded (MACD)');
 

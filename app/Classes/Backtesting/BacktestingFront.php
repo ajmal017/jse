@@ -15,24 +15,34 @@ use Illuminate\Support\Facades\DB;
 class BacktestingFront
 {
     static public function start($botSettings){
-        /* Empty history bars table */
+        /* Empty backtesting bars table */
         DB::table('bot_5')->truncate();
 
         \App\Classes\Trading\History::loadPeriod($botSettings);
 
-        // IF goes here
+
         if ($botSettings['strategy'] == 'pc'){
             \App\Classes\Indicators\PriceChannel::calculate($botSettings['strategyParams']['priceChannelPeriod'], $botSettings['botTitle'], true);
             \App\Classes\Indicators\Sma::calculate('close', 2, 'sma1', $botSettings['botTitle'], true);
-            $chart = new \App\Classes\Trading\Chart($botSettings['executionSymbol'], $botSettings['volume'], $botSettings);
+            $chart = new \App\Classes\Trading\Chart($botSettings);
+            /*DB::table('bot_5')->update([
+                'macd_line' => null,
+                'macd_signal_line' => null,
+                'ema1' => null,
+                'ema2' => null,
+                'sma2' => null
+            ]);*/
         }
 
-        if ($botSettings['strategy'] == 'mc'){
+        if ($botSettings['strategy'] == 'macd'){
             \App\Classes\Indicators\Macd::calculate($macdSettings = ['ema1Period' => $botSettings['strategyParams']['emaPeriod'], 'ema2Period' => $botSettings['strategyParams']['macdLinePeriod'], 'ema3Period' => $botSettings['strategyParams']['macdSignalLinePeriod']], $botSettings, true);
             // @todo 25.05.19 SEND ONE OBJECT! NOT 3 PARAMS!
-            $macd = new \App\Classes\Trading\MacdTradesTrigger($botSettings['executionSymbol'], $botSettings['volume'], $botSettings);
+            $macd = new \App\Classes\Trading\MacdTradesTrigger($botSettings);
+            /*DB::table('bot_5')->update([
+                'price_channel_high_value' => null,
+                'price_channel_low_value' => null
+            ]);*/
         }
-
 
         /** Empty calculated data like position, profit, accumulated profit, etc */
         DB::table($botSettings['botTitle'])
@@ -70,7 +80,7 @@ class BacktestingFront
                 }
 
                 // IF MC
-                if ($botSettings['strategy'] == 'mc'){
+                if ($botSettings['strategy'] == 'macd'){
                     $macd->index("backtest", $rowValue->id);
                 }
             }

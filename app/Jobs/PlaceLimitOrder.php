@@ -48,7 +48,7 @@ class PlaceLimitOrder implements ShouldQueue
     public function handle()
     {
         if($this->direction == 'buy'){
-            //Exchange::placeMarketBuyOrder($this->botSettings, $this->volume);
+            Exchange::placeLimitBuyOrder($this->botSettings, $this->limitOrderPrice, $this->volume, $this->limitOrderObj);
         } else {
             Exchange::placeLimitSellOrder($this->botSettings, $this->limitOrderPrice, $this->volume, $this->limitOrderObj);
         }

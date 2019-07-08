@@ -20,18 +20,15 @@ class NetProfit
 {
     public static function calculate($position, $botSettings, $recordId){
         if ($position != null){
-
             $accumulatedProfit =
                 DB::table($botSettings['botTitle'])
                     ->where('id', $recordId)
                     ->value('accumulated_profit');
-
             $accumulatedCommission =
                 DB::table($botSettings['botTitle'])
                     ->whereNotNull('accumulated_commission')
                     ->orderBy('id', 'desc')
                     ->value('accumulated_commission');
-
             DB::table($botSettings['botTitle'])
                 ->where('id', $recordId)
                 ->update([

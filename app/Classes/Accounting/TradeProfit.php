@@ -12,10 +12,6 @@ use Illuminate\Support\Facades\DB;
 class TradeProfit
 {
     public static function calculate($botSettings, $tradeProfit, $lastRowId){
-
-        //echo 'jopa last row id: ' . $lastRowId . " trade_profit: " . $tradeProfit;
-        //die();
-
         $lastRow =
             DB::table($botSettings['botTitle'])
                 ->orderBy('id', 'desc')->take(1)
@@ -30,6 +26,5 @@ class TradeProfit
                 'trade_profit' => round($tradeProfit, 4),
             ]);
         echo __FILE__ . " " . __LINE__ . " Profit calculated:" . $tradeProfit . " lastRowId: " . $lastRowId . "\n";
-        //die();
     }
 }

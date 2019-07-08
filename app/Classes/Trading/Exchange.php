@@ -8,9 +8,11 @@
 
 namespace App\Classes\Trading;
 use ccxt\bitmex;
+//use Illuminate\Cache\Events\CacheHit;
 use Mockery\Exception;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\DB;
 
 /**
  * Market order execution.
@@ -80,6 +82,9 @@ class Exchange
 
     public static function placeLimitSellOrder($botSettings, $price, $volume, $limitOrderObj){
 
+        dump('dump from Exchnage.php line 85');
+        dump($botSettings);
+
         echo __FILE__ . " line: " . __LINE__ . "\n";
         $exchange = new bitmex();
 
@@ -108,6 +113,58 @@ class Exchange
             self::$response = $e->getMessage();
         }
 
+        /**
+         * Set values if array is returned - success.
+         * If string - error. It will be catch in checkResponse
+         */
+        if (gettype(self::$response) == 'array'){
+            $limitOrderObj['limitOrderTimestamp'] = 12345;
+            $limitOrderObj['orderID'] = self::$response['info']['orderID'];
+            Cache::put('bot_1', $limitOrderObj, now()->addMinute(30));
+        }
+
+        self::checkResponse($limitOrderObj);
+    }
+
+    public static function placeLimitBuyOrder($botSettings, $price, $volume, $limitOrderObj){
+        echo __FILE__ . " line: " . __LINE__ . "\n";
+        $exchange = new bitmex();
+
+        if($botSettings['isTestnet'] == 1){
+            $exchange->urls['api'] = $exchange->urls['test']; // Testnet or live. test or api
+        } else {
+            $exchange->urls['api'] = $exchange->urls['api']; // Testnet or live. test or api
+        }
+
+        $exchange->apiKey = $botSettings['api'];
+        $exchange->secret = $botSettings['apiSecret'];
+
+        try{
+            echo "API path. test or api: " . $exchange->urls['api'] . "\n";
+            echo "Symbol: " . $botSettings['executionSymbolName'] . " in Exchnage.php \n";
+
+            self::$response = $exchange->createLimitBuyOrder($botSettings['executionSymbolName'], $volume, $price, array('clOrdID' => $limitOrderObj['clOrdID'])
+            );
+
+            echo "Limit order placement response: \n";
+            dump(self::$response);
+        }
+        catch (\Exception $e)
+        {
+            dump('--------- in exception line 154 code: vvffrr');
+            self::$response = $e->getMessage();
+        }
+
+        /**
+         * Set values in array is returned - success.
+         * If string - error. It will be proceeded in checkResponse
+         */
+        if (gettype(self::$response) == 'array'){
+            $limitOrderObj['limitOrderTimestamp'] = 12345;
+            $limitOrderObj['orderID'] = self::$response['info']['orderID'];
+            Cache::put('bot_1', $limitOrderObj, now()->addMinute(30));
+        }
+
         self::checkResponse($limitOrderObj);
     }
 
@@ -126,10 +183,8 @@ class Exchange
         $exchange->secret = $botSettings['apiSecret'];
 
         try{
-            // self::$response = $exchange->createLimitSellOrder($botSettings['executionSymbolName'], $volume, $price, array('clOrdID' => $limitOrderObj['clOrdID'])
             self::$response = $exchange->privatePutOrder(array('orderID' => $orderID, 'price' => $newPrice));
             echo "Amend order placement response: \n";
-            dump(self::$response);
         }
         catch (\Exception $e)
         {
@@ -137,48 +192,84 @@ class Exchange
             self::$response = $e->getMessage();
         }
 
-        //dump(self::$response);
         self::checkResponse();
     }
 
-    private static function checkResponse($limitOrderObj = null){
-        if (gettype(self::$response) == 'array'){
+    public static function getOrders($botSettings, $limitOrderObj){
+        dump('****   GET TRADES FOR PLACED ORDER (Exchange.php) ****');
+        echo __FILE__ . " line: " . __LINE__ . "\n";
+        $exchange = new bitmex();
 
-            /**
-             * Be careful!
-             * Do not execute this code for market orders!
-             * Market order have orderId as well and this will mess everything up!
-             */
-            $limitOrderObj['limitOrderTimestamp'] = 12345;
-            $limitOrderObj['orderID'] = self::$response['info']['orderID'];
-            Cache::put('bot_1', $limitOrderObj, now()->addMinute(30));
+        if($botSettings['isTestnet'] == 1){
+            $exchange->urls['api'] = $exchange->urls['test']; // Testnet or live. test or api
+        } else {
+            $exchange->urls['api'] = $exchange->urls['api']; // Testnet or live. test or api
+        }
+
+        $exchange->apiKey = $botSettings['api'];
+        $exchange->secret = $botSettings['apiSecret'];
+
+        try{
+            $orderID = $limitOrderObj['orderID'];
+            self::$response = $exchange->privateGetExecutionTradeHistory(array('count' => 20, 'filter' => ['orderID' => $orderID])); // Works GOOD!
+            echo "GET TRADES FOR PLACED ORDER (Exchnage.php): \n";
+            //dump(self::$response);
+        }
+        catch (\Exception $e)
+        {
+            dump('--------- exception ddffgg Exchange.php: ' . __LINE__);
+            self::$response = $e->getMessage();
+        }
+
+        self::checkResponse();
+        if(gettype(self::$response) == 'array') // If not array - error!
+            \App\Classes\WebSocket\Front\LimitOrderMessage::executionParse2(self::$response);
+    }
+
+    private static function checkResponse(){
+        if (gettype(self::$response) == 'array'){
             dump(self::$response);
         }
 
         if (gettype(self::$response) == 'string'){
-            echo "Error string line 120: " . self::$response . "\n";
+            echo "Error. Line: ". __LINE__ . " Text: " . self::$response . "\n";
             switch(false){
                 case !strpos(self::$response, 'Account has insufficient');
-                    $error = 'Account has insufficient funds. Die.';
+                    $error = 'Account has insufficient funds. Die.' . __FILE__ . ' '. __LINE__;
                     Log::notice($error);
                     die(__FILE__ . ' ' . __LINE__);
-
                 case !strpos(self::$response, 'does not have market symbol'); // bitmex does not have market symbol
                     $error = 'Bitmex does not have market symbol. Execution is not possible';
-                    throw new \Exception($error);
+                    throw new Exception($error);
                     break;
                 /* @see: https://www.bitmex.com/app/restAPI#Overload */
                 case !strpos(self::$response, 'overloaded');
                     // The system is currently overloaded. Please try again later
-                    throw new \Exception('Exchange overloaded');
+                    Log::warning('Exchange overloaded! Exchnage.php' . __FILE__ . ' '. __LINE__);
+                    throw new Exception('Exchange overloaded');
                     break;
                 /* Full error text: bitmex {"error":{"message":"Invalid ordStatus","name":"HTTPError"}} */
                 case !strpos(self::$response, 'ordStatus');
-                    Log::notice('Invalid ordStatus. Usually it happens when trying to amend and order which is already filled');
-                    dump('Die on order amend');
-                    die(__FILE__ . ' ' . __LINE__);
-
+                    Log::notice('Invalid ordStatus. Usually it happens when trying to amend and order which is already filled' . __FILE__ . ' '. __LINE__);
+                    dump('Order amend. It usually happens when the order was fully filled');
+                /**
+                 * https://github.com/BitMEX/api-connectors/issues/202
+                 * {"error":{"message":"This request has expired - `expires` is in the past. Current time: 1561918674","name":"HTTPError"}}
+                 * Have no idea what does this error do. It seems like nothing happens.
+                 */
+                case !strpos(self::$response, 'expires');
+                    Log::notice('This request has expired - `expires` is in the past. Current time: .. Check request signature. ' . __FILE__ . ' '. __LINE__);
+                    //dump('This request has expired - `expires` is in the past. Current time: .. Check request signature');
             }
         }
+    }
+
+    // Cam use it for market order record insertion
+    public static function insertRecordToSignalTable($botSettings, $response){
+        DB::table($botSettings['signalTable'])->insert([
+            'order_type' => 'limit',
+            'volume' => 999, // execution_volume
+            // self::$response['info']['orderID'];
+        ]);
     }
 }

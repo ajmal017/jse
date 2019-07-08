@@ -16,7 +16,7 @@ class Limit extends Command
      *
      * @var string
      */
-    protected $signature = 'limit';
+    protected $signature = 'limit {botId}';
 
     /**
      * The console command description.
@@ -46,28 +46,33 @@ class Limit extends Command
           'orderID' => null,
           'clOrdID' => 'abc-123-' . now(),
           'direction' => 'sell',
-          'volume' => 287,
           'isLimitOrderPlaced' => false,
           'limitOrderPrice' => null,
           'limitOrderTimestamp' => null,
           'step' => 0 // Limit order position placement. Used for testing purpuses. If set - order will be locate deeper in the book.
         ];
 
+        /* For firing subscription from demo to live. In LimitOrderWs.php */
+        Cache::put('status_bot_1', true, now()->addMinute(30));
+
         /**
          * Set cache object. It will be accesses from other classes and que workers.
          *
-         *  * Contains settings and flags of a limit order.
+         * Contains settings and flags of a limit order.
          * These settings are read by other classes and que workers: market order que, amend order que, etc.
          * Once a flag is set, other classes can read it.
          * For example if an order is executed - we need to stop bid/ask order book subscription immediately.
          */
         Cache::put('bot_1', $limitOrderObj, now()->addMinute(30));
 
+        // Truncate signal tables
+        DB::table('signal_' . $this->argument('botId'))->truncate();
+
         /**
          * Call LimitOrder.php and start limit orders.
          * Send $this - it will allow to output colored console messages.
          */
         $limitOrder = new LimitOrder();
-        $limitOrder->start($this);
+        $limitOrder->start($this, $this->argument('botId'));
     }
 }

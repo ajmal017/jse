@@ -24,13 +24,6 @@ class AmendOrder implements ShouldQueue
     private $botSettings;
 
     /**
-     * The list of all possible variables to set.
-     * @see: https://laravel.com/api/5.8/Illuminate/Bus/Queueable.html#method_onConnection
-     * @see: https://laravel.com/docs/5.8/queues
-     */
-    public $retryAfter = 5;
-
-    /**
      * Create a new job instance.
      *
      * @return void
@@ -49,6 +42,7 @@ class AmendOrder implements ShouldQueue
      */
     public function handle()
     {
+        //if(!$this->botSettings) die('On que worker force stop. The case when the order filled immediately without amend');
         Exchange::amendOrder($this->newPrice, $this->orderID, $this->botSettings);
     }
 }

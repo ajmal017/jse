@@ -7,6 +7,7 @@
  */
 
 namespace App\Classes\Trading;
+use App\Classes\LogToFile;
 use Illuminate\Support\Facades\DB;
 
 abstract class Profit
@@ -69,7 +70,7 @@ abstract class Profit
          */
         if ($this->trade_flag != "all") {
             \App\Classes\Accounting\AccumulatedProfit::calculate($this->botSettings, $this->lastRow[0]->id);
-            \App\Classes\Accounting\NetProfit::calculate($this->position, $this->botSettings, $this->lastRow[0]->id);
+            //\App\Classes\Accounting\NetProfit::calculate($this->position, $this->botSettings, $this->lastRow[0]->id);
         }
     }
 }

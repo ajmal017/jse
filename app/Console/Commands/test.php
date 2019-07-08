@@ -49,7 +49,10 @@ class test extends Command
         //$response = $exchange->createLimitBuyOrder('BTC/USD', 1, 8000, array('clOrdID' => 'abc-123'));
         //$response = $exchange->fetchTicker('BTC/USD');
         //dump($response['info']['tickSize']); // Tick size. Works good
-        $response = $exchange->privatePutOrder(array('orderID' => Cache::get('bot_1')['orderID'], 'price' => 15000));
+        //$response = $exchange->privatePutOrder(array('orderID' => Cache::get('bot_1')['orderID'], 'price' => 15000)); // Works good
+        //$response = $exchange->fetchMyTrades('BTC/USD', $exchange->milliseconds()-86400000); // Works good
+        $response = $exchange->privateGetExecutionTradeHistory(array('reverse' => true, 'count' => 5)); // Works good!
+        $response = $exchange->privateGetExecutionTradeHistory(array('count' => 5, 'filter' => ['orderID' => 'e1524040-0678-c66a-a33c-744fe7a5cf12_'])); // Works GOOD!
         dump($response);
         die();
 

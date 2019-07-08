@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class BotTables extends Migration
+class SignalTables extends Migration
 {
     /**
      * Run the migrations.
@@ -13,28 +13,23 @@ class BotTables extends Migration
      */
     public function up()
     {
-        /* 4 tables for trading, 1 for back testing */
-        for($i = 1; $i < 6; $i++) {
-            Schema::create('bot_' . $i, function (Blueprint $table) {
+        /* 4 tables for signals */
+        for($i = 1; $i < 5; $i++) {
+            Schema::create('signal_' . $i, function (Blueprint $table) {
                 $table->increments('id');
-                $table->string('symbol')->nullable(); // Use nullable if this field can be blank
                 $table->dateTime('date')->nullable();
                 $table->bigInteger('time_stamp')->nullable();
-                $table->double('open')->nullable();
-                $table->double('close')->nullable();
-                $table->double('high')->nullable();
-                $table->double('low')->nullable();
-                $table->bigInteger('volume')->nullable();
-                $table->double('price_channel_high_value')->nullable();
-                $table->double('price_channel_low_value')->nullable();
-                /* SMA */
-                $table->double('sma1')->nullable(); // Used for price channel filter
-                $table->double('sma2')->nullable(); // Used for MACD
-                /* MACD */
-                $table->double('ema1')->nullable();
-                $table->double('ema2')->nullable();
-                $table->double('macd_line')->nullable();
-                $table->double('macd_signal_line')->nullable();
+                $table->string('type')->nullable();
+                $table->string('order_id')->nullable();
+                $table->string('status')->nullable();
+                $table->string('order_type')->nullable();
+                $table->string('direction')->nullable();
+                $table->double('signal_price')->nullable();
+                $table->bigInteger('signal_volume')->nullable();
+                $table->bigInteger('volume')->nullable(); // execution_volume
+                $table->bigInteger('volume_reminder')->nullable();
+                $table->bigInteger('accum_volume')->nullable();
+
                 /* Profit, etc */
                 $table->dateTime('trade_date')->nullable();
                 $table->double('trade_price')->nullable();

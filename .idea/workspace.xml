@@ -1,7 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="0ab8c352-e91a-41d2-a602-98135f1f3232" name="Default" comment="" />
+    <list default="true" id="0ab8c352-e91a-41d2-a602-98135f1f3232" name="Default" comment="">
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/Classes/Trading/Exchange.php" afterPath="$PROJECT_DIR$/app/Classes/Trading/Exchange.php" />
+    </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -14,7 +17,7 @@
       <file leaf-file-name="Front.php" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/app/Console/Commands/Front.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="430">
+            <state relative-caret-position="1105">
               <caret line="65" column="62" lean-forward="false" selection-start-line="65" selection-start-column="62" selection-end-line="65" selection-end-column="62" />
               <folding />
             </state>
@@ -24,24 +27,10 @@
       <file leaf-file-name="BitmexWsListenerFront.php" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/app/Classes/WebSocket/Front/BitmexWsListenerFront.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-1088">
+            <state relative-caret-position="68">
               <caret line="9" column="4" lean-forward="false" selection-start-line="9" selection-start-column="4" selection-end-line="9" selection-end-column="4" />
               <folding>
                 <element signature="e#131#143#0#PHP" expanded="true" />
-                <marker date="1562541909753" expanded="true" signature="8176:9228" ph="..." />
-                <marker date="1562541909753" expanded="true" signature="8176:9234" ph="..." />
-                <marker date="1562541909753" expanded="true" signature="8176:10983" ph="{...}" />
-                <marker date="1562541909753" expanded="true" signature="8357:8719" ph="..." />
-                <marker date="1562541909753" expanded="true" signature="8374:8647" ph="..." />
-                <marker date="1562541909753" expanded="true" signature="8934:9078" ph="..." />
-                <marker date="1562541909753" expanded="true" signature="8935:9077" ph="..." />
-                <marker date="1562541909753" expanded="true" signature="9279:10066" ph="..." />
-                <marker date="1562541909753" expanded="true" signature="9641:10060" ph="..." />
-                <marker date="1562541909753" expanded="true" signature="9730:9876" ph="..." />
-                <marker date="1562541909753" expanded="true" signature="9731:9875" ph="..." />
-                <marker date="1562541909753" expanded="true" signature="10076:10283" ph=" Accordingly to the active strategy we pass different parameters. ..." />
-                <marker date="1562541909753" expanded="true" signature="10341:10980" ph="..." />
-                <marker date="1562541909753" expanded="true" signature="10404:10973" ph="..." />
               </folding>
             </state>
           </provider>
@@ -52,11 +41,7 @@
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="119">
               <caret line="14" column="6" lean-forward="false" selection-start-line="14" selection-start-column="6" selection-end-line="14" selection-end-column="6" />
-              <folding>
-                <marker date="1562541909811" expanded="true" signature="199:1496" ph="{...}" />
-                <marker date="1562541909811" expanded="true" signature="249:1493" ph="..." />
-                <marker date="1562541909811" expanded="true" signature="433:1447" ph="..." />
-              </folding>
+              <folding />
             </state>
           </provider>
         </entry>
@@ -64,7 +49,7 @@
       <file leaf-file-name="History.php" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/app/Classes/Trading/History.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="206">
+            <state relative-caret-position="340">
               <caret line="25" column="52" lean-forward="false" selection-start-line="25" selection-start-column="52" selection-end-line="25" selection-end-column="52" />
               <folding />
             </state>
@@ -74,11 +59,10 @@
       <file leaf-file-name="LimitOrderMessage.php" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/app/Classes/WebSocket/Front/LimitOrderMessage.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1955">
+            <state relative-caret-position="2329">
               <caret line="146" column="9" lean-forward="false" selection-start-line="146" selection-start-column="9" selection-end-line="146" selection-end-column="9" />
               <folding>
                 <element signature="e#131#155#0#PHP" expanded="true" />
-                <marker date="1562541909761" expanded="true" signature="25763:25765" ph="{...}" />
               </folding>
             </state>
           </provider>
@@ -87,26 +71,18 @@
       <file leaf-file-name="BacktestController.php" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/app/Http/Controllers/BacktestController.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="696">
+            <state relative-caret-position="1309">
               <caret line="79" column="34" lean-forward="false" selection-start-line="79" selection-start-column="34" selection-end-line="79" selection-end-column="34" />
-              <folding>
-                <marker date="1562541909877" expanded="true" signature="2750:3213" ph="{...}" />
-                <marker date="1562541909877" expanded="true" signature="2750:4052" ph="{...}" />
-                <marker date="1562541909877" expanded="true" signature="3007:3091" ph="..." />
-                <marker date="1562541909877" expanded="true" signature="3114:3207" ph="{...}" />
-                <marker date="1562541909877" expanded="true" signature="3222:3339" ph=" Display the specified resource. ..." />
-                <marker date="1562541909877" expanded="true" signature="3371:3394" ph="{...}" />
-                <marker date="1562541909877" expanded="true" signature="3403:3538" ph=" Show the form for editing the specified resource. ..." />
-              </folding>
+              <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="Exchange.php" pinned="false" current-in-tab="false">
+      <file leaf-file-name="Exchange.php" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/app/Classes/Trading/Exchange.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="102">
-              <caret line="11" column="2" lean-forward="false" selection-start-line="11" selection-start-column="2" selection-end-line="11" selection-end-column="2" />
+            <state relative-caret-position="289">
+              <caret line="231" column="34" lean-forward="true" selection-start-line="231" selection-start-column="34" selection-end-line="231" selection-end-column="34" />
               <folding>
                 <element signature="e#123#139#0#PHP" expanded="true" />
               </folding>
@@ -114,11 +90,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="Chart.php" pinned="false" current-in-tab="true">
+      <file leaf-file-name="Chart.php" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/app/Classes/Trading/Chart.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="663">
-              <caret line="125" column="49" lean-forward="true" selection-start-line="125" selection-start-column="49" selection-end-line="125" selection-end-column="49" />
+            <state relative-caret-position="526">
+              <caret line="125" column="49" lean-forward="false" selection-start-line="125" selection-start-column="49" selection-end-line="125" selection-end-column="49" />
               <folding />
             </state>
           </provider>
@@ -241,8 +217,8 @@
         <option value="$PROJECT_DIR$/app/Classes/Trading/History.php" />
         <option value="$PROJECT_DIR$/app/Http/Controllers/BacktestController.php" />
         <option value="$PROJECT_DIR$/app/Classes/WebSocket/Front/LimitOrderMessage.php" />
-        <option value="$PROJECT_DIR$/app/Classes/Trading/Exchange.php" />
         <option value="$PROJECT_DIR$/app/Classes/Trading/Chart.php" />
+        <option value="$PROJECT_DIR$/app/Classes/Trading/Exchange.php" />
       </list>
     </option>
   </component>
@@ -457,8 +433,8 @@
           <select />
         </subPane>
       </pane>
-      <pane id="Scratches" />
       <pane id="Scope" />
+      <pane id="Scratches" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -555,45 +531,35 @@
       <workItem from="1562172333938" duration="40568000" />
       <workItem from="1562366314437" duration="15221000" />
       <workItem from="1562428245936" duration="20893000" />
+      <workItem from="1562549195943" duration="902000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="872344000" />
+    <option name="totallyTimeSpent" value="873246000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1382" height="744" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.1603631" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.16263238" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32894737" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="npm" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32894737" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.24962178" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
-      <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
-      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
-      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="npm" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32894737" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
-      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.1603631" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32894737" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.24962178" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
-      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
     </layout>
     <layout-to-restore>
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
@@ -648,9 +614,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="492">
           <caret line="44" column="10" lean-forward="false" selection-start-line="44" selection-start-column="10" selection-end-line="44" selection-end-column="10" />
-          <folding>
-            <element signature="e#28#61#0#PHP" expanded="false" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -788,7 +751,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="850">
           <caret line="54" column="167" lean-forward="false" selection-start-line="54" selection-start-column="8" selection-end-line="54" selection-end-column="167" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -804,7 +766,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="340">
           <caret line="25" column="93" lean-forward="false" selection-start-line="25" selection-start-column="93" selection-end-line="25" selection-end-column="93" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -819,9 +780,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="356">
           <caret line="50" column="26" lean-forward="false" selection-start-line="50" selection-start-column="26" selection-end-line="50" selection-end-column="26" />
-          <folding>
-            <element signature="e#28#61#0#PHP" expanded="false" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -829,9 +787,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="883">
           <caret line="98" column="34" lean-forward="false" selection-start-line="98" selection-start-column="34" selection-end-line="98" selection-end-column="34" />
-          <folding>
-            <element signature="e#132#169#0#PHP" expanded="false" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -839,9 +794,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="340">
           <caret line="68" column="67" lean-forward="false" selection-start-line="68" selection-start-column="67" selection-end-line="68" selection-end-column="67" />
-          <folding>
-            <element signature="e#40#75#0#PHP" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -906,7 +858,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/app/Console/Commands/Front.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="430">
+        <state relative-caret-position="1105">
           <caret line="65" column="62" lean-forward="false" selection-start-line="65" selection-start-column="62" selection-end-line="65" selection-end-column="62" />
           <folding />
         </state>
@@ -923,9 +875,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="364">
           <caret line="42" column="41" lean-forward="true" selection-start-line="42" selection-start-column="41" selection-end-line="42" selection-end-column="41" />
-          <folding>
-            <element signature="e#124#169#0#PHP" expanded="false" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -933,17 +882,13 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="119">
           <caret line="14" column="6" lean-forward="false" selection-start-line="14" selection-start-column="6" selection-end-line="14" selection-end-column="6" />
-          <folding>
-            <marker date="1562541909811" expanded="true" signature="199:1496" ph="{...}" />
-            <marker date="1562541909811" expanded="true" signature="249:1493" ph="..." />
-            <marker date="1562541909811" expanded="true" signature="433:1447" ph="..." />
-          </folding>
+          <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/app/Classes/Trading/History.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="206">
+        <state relative-caret-position="340">
           <caret line="25" column="52" lean-forward="false" selection-start-line="25" selection-start-column="52" selection-end-line="25" selection-end-column="52" />
           <folding />
         </state>
@@ -951,17 +896,9 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/app/Http/Controllers/BacktestController.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="696">
+        <state relative-caret-position="1309">
           <caret line="79" column="34" lean-forward="false" selection-start-line="79" selection-start-column="34" selection-end-line="79" selection-end-column="34" />
-          <folding>
-            <marker date="1562541909877" expanded="true" signature="2750:3213" ph="{...}" />
-            <marker date="1562541909877" expanded="true" signature="2750:4052" ph="{...}" />
-            <marker date="1562541909877" expanded="true" signature="3007:3091" ph="..." />
-            <marker date="1562541909877" expanded="true" signature="3114:3207" ph="{...}" />
-            <marker date="1562541909877" expanded="true" signature="3222:3339" ph=" Display the specified resource. ..." />
-            <marker date="1562541909877" expanded="true" signature="3371:3394" ph="{...}" />
-            <marker date="1562541909877" expanded="true" signature="3403:3538" ph=" Show the form for editing the specified resource. ..." />
-          </folding>
+          <folding />
         </state>
       </provider>
     </entry>
@@ -974,54 +911,39 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/app/Classes/WebSocket/Front/BitmexWsListenerFront.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-1088">
+        <state relative-caret-position="68">
           <caret line="9" column="4" lean-forward="false" selection-start-line="9" selection-start-column="4" selection-end-line="9" selection-end-column="4" />
           <folding>
             <element signature="e#131#143#0#PHP" expanded="true" />
-            <marker date="1562541909753" expanded="true" signature="8176:9228" ph="..." />
-            <marker date="1562541909753" expanded="true" signature="8176:9234" ph="..." />
-            <marker date="1562541909753" expanded="true" signature="8176:10983" ph="{...}" />
-            <marker date="1562541909753" expanded="true" signature="8357:8719" ph="..." />
-            <marker date="1562541909753" expanded="true" signature="8374:8647" ph="..." />
-            <marker date="1562541909753" expanded="true" signature="8934:9078" ph="..." />
-            <marker date="1562541909753" expanded="true" signature="8935:9077" ph="..." />
-            <marker date="1562541909753" expanded="true" signature="9279:10066" ph="..." />
-            <marker date="1562541909753" expanded="true" signature="9641:10060" ph="..." />
-            <marker date="1562541909753" expanded="true" signature="9730:9876" ph="..." />
-            <marker date="1562541909753" expanded="true" signature="9731:9875" ph="..." />
-            <marker date="1562541909753" expanded="true" signature="10076:10283" ph=" Accordingly to the active strategy we pass different parameters. ..." />
-            <marker date="1562541909753" expanded="true" signature="10341:10980" ph="..." />
-            <marker date="1562541909753" expanded="true" signature="10404:10973" ph="..." />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/app/Classes/WebSocket/Front/LimitOrderMessage.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1955">
+        <state relative-caret-position="2329">
           <caret line="146" column="9" lean-forward="false" selection-start-line="146" selection-start-column="9" selection-end-line="146" selection-end-column="9" />
           <folding>
             <element signature="e#131#155#0#PHP" expanded="true" />
-            <marker date="1562541909761" expanded="true" signature="25763:25765" ph="{...}" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/Classes/Trading/Exchange.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="102">
-          <caret line="11" column="2" lean-forward="false" selection-start-line="11" selection-start-column="2" selection-end-line="11" selection-end-column="2" />
-          <folding>
-            <element signature="e#123#139#0#PHP" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/app/Classes/Trading/Chart.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="663">
-          <caret line="125" column="49" lean-forward="true" selection-start-line="125" selection-start-column="49" selection-end-line="125" selection-end-column="49" />
+        <state relative-caret-position="526">
+          <caret line="125" column="49" lean-forward="false" selection-start-line="125" selection-start-column="49" selection-end-line="125" selection-end-column="49" />
           <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/Classes/Trading/Exchange.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="289">
+          <caret line="231" column="34" lean-forward="true" selection-start-line="231" selection-start-column="34" selection-end-line="231" selection-end-column="34" />
+          <folding>
+            <element signature="e#123#139#0#PHP" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>

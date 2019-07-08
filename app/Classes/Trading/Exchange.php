@@ -221,9 +221,16 @@ class Exchange
             self::$response = $e->getMessage();
         }
 
-        self::checkResponse();
-        if(gettype(self::$response) == 'array') // If not array - error!
+        /**
+         * If not array - error!
+         * Do not output the responce to console because it is to heavy and long.
+         * Output only in case when it is a error response.
+         */
+        if(gettype(self::$response) == 'array'){
             \App\Classes\WebSocket\Front\LimitOrderMessage::executionParse2(self::$response);
+        } else {
+            self::checkResponse();
+        }
     }
 
     private static function checkResponse(){

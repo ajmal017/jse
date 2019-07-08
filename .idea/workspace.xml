@@ -2,7 +2,6 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="0ab8c352-e91a-41d2-a602-98135f1f3232" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/Classes/Trading/Chart.php" afterPath="$PROJECT_DIR$/app/Classes/Trading/Chart.php" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -120,8 +119,8 @@
       <file leaf-file-name="Chart.php" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/app/Classes/Trading/Chart.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="459">
-              <caret line="103" column="47" lean-forward="false" selection-start-line="103" selection-start-column="47" selection-end-line="103" selection-end-column="47" />
+            <state relative-caret-position="663">
+              <caret line="125" column="49" lean-forward="true" selection-start-line="125" selection-start-column="49" selection-end-line="125" selection-end-column="49" />
               <folding />
             </state>
           </provider>
@@ -562,7 +561,7 @@
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="870504000" />
+    <option name="totallyTimeSpent" value="871719000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1382" height="744" extended-state="6" />
@@ -1022,8 +1021,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/app/Classes/Trading/Chart.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="459">
-          <caret line="103" column="47" lean-forward="false" selection-start-line="103" selection-start-column="47" selection-end-line="103" selection-end-column="47" />
+        <state relative-caret-position="663">
+          <caret line="125" column="49" lean-forward="true" selection-start-line="125" selection-start-column="49" selection-end-line="125" selection-end-column="49" />
           <folding />
         </state>
       </provider>

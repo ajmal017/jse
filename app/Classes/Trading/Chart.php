@@ -88,7 +88,7 @@ class Chart extends Profit
                         ->insert([
                             'type' => 'signal',
                             'status' => 'new',
-                            'direction' => 'sell',
+                            'direction' => 'buy',
                             'signal_volume' => $this->botSettings['volume']
                         ]);
             }

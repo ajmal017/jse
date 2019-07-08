@@ -83,7 +83,6 @@ class Exchange
     public static function placeLimitSellOrder($botSettings, $price, $volume, $limitOrderObj){
 
         dump('dump from Exchnage.php line 85');
-        dump($botSettings);
 
         echo __FILE__ . " line: " . __LINE__ . "\n";
         $exchange = new bitmex();
@@ -105,7 +104,7 @@ class Exchange
             );
 
             echo "Limit order placement response: \n";
-            dump(self::$response);
+            //dump(self::$response);
         }
         catch (\Exception $e)
         {
@@ -146,8 +145,8 @@ class Exchange
             self::$response = $exchange->createLimitBuyOrder($botSettings['executionSymbolName'], $volume, $price, array('clOrdID' => $limitOrderObj['clOrdID'])
             );
 
-            echo "Limit order placement response: \n";
-            dump(self::$response);
+            //echo "Limit order placement response: \n";
+            //dump(self::$response);
         }
         catch (\Exception $e)
         {
@@ -196,8 +195,8 @@ class Exchange
     }
 
     public static function getOrders($botSettings, $limitOrderObj){
-        dump('****   GET TRADES FOR PLACED ORDER (Exchange.php) ****');
-        echo __FILE__ . " line: " . __LINE__ . "\n";
+
+        echo '****   GET TRADES FOR PLACED ORDER (Exchange.php) **** ' . __FILE__ . " line: " . __LINE__ . "\n";
         $exchange = new bitmex();
 
         if($botSettings['isTestnet'] == 1){

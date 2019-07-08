@@ -183,7 +183,7 @@ class Exchange
 
         try{
             self::$response = $exchange->privatePutOrder(array('orderID' => $orderID, 'price' => $newPrice));
-            echo "Amend order placement response: \n";
+            echo "Amend order placement response(Exchange.php): \n";
         }
         catch (\Exception $e)
         {

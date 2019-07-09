@@ -2,8 +2,13 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="0ab8c352-e91a-41d2-a602-98135f1f3232" name="Default" comment="">
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/Classes/Trading/Exchange.php" afterPath="$PROJECT_DIR$/app/Classes/Trading/Exchange.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/Classes/Trading/LimitOrder.php" afterPath="$PROJECT_DIR$/app/Classes/Trading/LimitOrder.php" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/Classes/WebSocket/Front/LimitOrderMessage.php" afterPath="$PROJECT_DIR$/app/Classes/WebSocket/Front/LimitOrderMessage.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/Classes/WebSocket/Front/LimitOrderWs.php" afterPath="$PROJECT_DIR$/app/Classes/WebSocket/Front/LimitOrderWs.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/Console/Commands/Limit.php" afterPath="$PROJECT_DIR$/app/Console/Commands/Limit.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/Jobs/PlaceLimitOrder.php" afterPath="$PROJECT_DIR$/app/Jobs/PlaceLimitOrder.php" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -14,66 +19,44 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="Front.php" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/app/Console/Commands/Front.php">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="0">
-              <caret line="65" column="62" lean-forward="false" selection-start-line="65" selection-start-column="62" selection-end-line="65" selection-end-column="62" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="BitmexWsListenerFront.php" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/app/Classes/WebSocket/Front/BitmexWsListenerFront.php">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="68">
-              <caret line="9" column="4" lean-forward="false" selection-start-line="9" selection-start-column="4" selection-end-line="9" selection-end-column="4" />
-              <folding>
-                <element signature="e#131#143#0#PHP" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="TradingAccount.php" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/app/Classes/WebSocket/Front/TradingAccount.php">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="119">
-              <caret line="14" column="6" lean-forward="false" selection-start-line="14" selection-start-column="6" selection-end-line="14" selection-end-column="6" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="History.php" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/app/Classes/Trading/History.php">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="340">
-              <caret line="25" column="52" lean-forward="false" selection-start-line="25" selection-start-column="52" selection-end-line="25" selection-end-column="52" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="LimitOrderMessage.php" pinned="false" current-in-tab="false">
+      <file leaf-file-name="LimitOrderMessage.php" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/app/Classes/WebSocket/Front/LimitOrderMessage.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="177">
-              <caret line="194" column="27" lean-forward="false" selection-start-line="194" selection-start-column="27" selection-end-line="194" selection-end-column="27" />
+            <state relative-caret-position="157">
+              <caret line="228" column="121" lean-forward="false" selection-start-line="228" selection-start-column="121" selection-end-line="228" selection-end-column="121" />
               <folding>
                 <element signature="e#131#155#0#PHP" expanded="true" />
-                <element signature="e#5401#7338#0#PHP" expanded="false" />
+                <element signature="e#5655#7592#0#PHP" expanded="false" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="Exchange.php" pinned="false" current-in-tab="true">
+      <file leaf-file-name="Limit.php" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/app/Console/Commands/Limit.php">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="476">
+              <caret line="82" column="80" lean-forward="false" selection-start-line="82" selection-start-column="80" selection-end-line="82" selection-end-column="80" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="LimitOrder.php" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/app/Classes/Trading/LimitOrder.php">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="272">
+              <caret line="21" column="0" lean-forward="true" selection-start-line="21" selection-start-column="0" selection-end-line="21" selection-end-column="0" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="Exchange.php" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/app/Classes/Trading/Exchange.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="347">
-              <caret line="163" column="71" lean-forward="false" selection-start-line="163" selection-start-column="71" selection-end-line="163" selection-end-column="71" />
+            <state relative-caret-position="310">
+              <caret line="275" column="75" lean-forward="false" selection-start-line="275" selection-start-column="75" selection-end-line="275" selection-end-column="75" />
               <folding>
                 <element signature="e#123#139#0#PHP" expanded="true" />
               </folding>
@@ -84,7 +67,7 @@
       <file leaf-file-name="Chart.php" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/app/Classes/Trading/Chart.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="526">
+            <state relative-caret-position="1819">
               <caret line="125" column="49" lean-forward="false" selection-start-line="125" selection-start-column="49" selection-end-line="125" selection-end-column="49" />
               <folding />
             </state>
@@ -95,21 +78,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>ratelimit</find>
-      <find>ddffgg</find>
-      <find>place</find>
-      <find>rrffvv</find>
-      <find>placeBuyLimitOrder</find>
-      <find>handleBuyLimitOrder</find>
-      <find>foreach i</find>
-      <find>orderBookTick</find>
-      <find>orderBookParse</find>
-      <find>BID</find>
-      <find>history</find>
-      <find>cac</find>
-      <find>bot_1</find>
-      <find>limitOrderObj</find>
-      <find>botSettings</find>
       <find>signal_1</find>
       <find>get</find>
       <find>connection</find>
@@ -123,8 +91,23 @@
       <find>trade_flag</find>
       <find>There are more than onw record</find>
       <find>onw</find>
-      <find>limit order</find>
       <find>qqwwee</find>
+      <find>limit order</find>
+      <find>place c</find>
+      <find>place sell</find>
+      <find>place</find>
+      <find>place buy</find>
+      <find>amendBuyLimitOrder</find>
+      <find>amendSellLimitOrder</find>
+      <find>ffddss</find>
+      <find>sell limit ord</find>
+      <find>api p</find>
+      <find>sell limit</find>
+      <find>status_bot</find>
+      <find>rrffgg</find>
+      <find>placeBuyLimitOrder</find>
+      <find>handleBuyLimitOrder</find>
+      <find>updatesignalstatus</find>
     </findStrings>
     <replaceStrings>
       <replace>$ema1Value</replace>
@@ -190,14 +173,10 @@
         <option value="$PROJECT_DIR$/app/Classes/Accounting/TradeProfit.php" />
         <option value="$PROJECT_DIR$/database/seeds/SignalsSeeder.php" />
         <option value="$PROJECT_DIR$/database/migrations/2019_07_01_013518_signal_tables.php" />
-        <option value="$PROJECT_DIR$/app/Jobs/PlaceLimitOrder.php" />
         <option value="$PROJECT_DIR$/app/Console/Commands/test.php" />
         <option value="$PROJECT_DIR$/app/Console/Commands/Front.php" />
-        <option value="$PROJECT_DIR$/app/Classes/Trading/LimitOrder.php" />
         <option value="$PROJECT_DIR$/app/Classes/WebSocket/Front/TradingAccount.php" />
         <option value="$PROJECT_DIR$/app/Classes/DB/SignalTable.php" />
-        <option value="$PROJECT_DIR$/app/Classes/WebSocket/Front/LimitOrderWs.php" />
-        <option value="$PROJECT_DIR$/app/Console/Commands/Limit.php" />
         <option value="$PROJECT_DIR$/storage/logs/laravel-2019-07-06.log" />
         <option value="$PROJECT_DIR$/app/Classes/Backtesting/BacktestingFront.php" />
         <option value="$PROJECT_DIR$/storage/logs/debug.txt" />
@@ -208,8 +187,12 @@
         <option value="$PROJECT_DIR$/app/Classes/Trading/History.php" />
         <option value="$PROJECT_DIR$/app/Http/Controllers/BacktestController.php" />
         <option value="$PROJECT_DIR$/app/Classes/Trading/Chart.php" />
-        <option value="$PROJECT_DIR$/app/Classes/WebSocket/Front/LimitOrderMessage.php" />
+        <option value="$PROJECT_DIR$/app/Jobs/PlaceLimitOrder.php" />
+        <option value="$PROJECT_DIR$/app/Console/Commands/Limit.php" />
+        <option value="$PROJECT_DIR$/app/Classes/Trading/LimitOrder.php" />
+        <option value="$PROJECT_DIR$/app/Classes/WebSocket/Front/LimitOrderWs.php" />
         <option value="$PROJECT_DIR$/app/Classes/Trading/Exchange.php" />
+        <option value="$PROJECT_DIR$/app/Classes/WebSocket/Front/LimitOrderMessage.php" />
       </list>
     </option>
   </component>
@@ -522,18 +505,19 @@
       <workItem from="1562172333938" duration="40568000" />
       <workItem from="1562366314437" duration="15221000" />
       <workItem from="1562428245936" duration="20893000" />
-      <workItem from="1562549195943" duration="11398000" />
+      <workItem from="1562549195943" duration="19733000" />
+      <workItem from="1562621839670" duration="7317000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="883742000" />
+    <option name="totallyTimeSpent" value="899394000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1382" height="744" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.073373675" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.16717096" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
@@ -753,34 +737,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/Classes/Trading/LimitOrder.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="340">
-          <caret line="25" column="93" lean-forward="false" selection-start-line="25" selection-start-column="93" selection-end-line="25" selection-end-column="93" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/Jobs/PlaceLimitOrder.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="356">
-          <caret line="50" column="26" lean-forward="false" selection-start-line="50" selection-start-column="26" selection-end-line="50" selection-end-column="26" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/Classes/WebSocket/Front/LimitOrderWs.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="883">
-          <caret line="98" column="34" lean-forward="false" selection-start-line="98" selection-start-column="34" selection-end-line="98" selection-end-column="34" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/Console/Commands/Limit.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="340">
-          <caret line="68" column="67" lean-forward="false" selection-start-line="68" selection-start-column="67" selection-end-line="68" selection-end-column="67" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/.env">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-301">
@@ -829,7 +785,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="425">
           <caret line="71" column="12" lean-forward="false" selection-start-line="71" selection-start-column="12" selection-end-line="71" selection-end-column="12" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -837,14 +792,6 @@
       <provider selected="true" editor-type-id="LogFileEditorProvider">
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/Console/Commands/Front.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="65" column="62" lean-forward="false" selection-start-line="65" selection-start-column="62" selection-end-line="65" selection-end-column="62" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -893,19 +840,9 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/Classes/WebSocket/Front/BitmexWsListenerFront.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="68">
-          <caret line="9" column="4" lean-forward="false" selection-start-line="9" selection-start-column="4" selection-end-line="9" selection-end-column="4" />
-          <folding>
-            <element signature="e#131#143#0#PHP" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/app/Classes/Trading/Chart.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="526">
+        <state relative-caret-position="1819">
           <caret line="125" column="49" lean-forward="false" selection-start-line="125" selection-start-column="49" selection-end-line="125" selection-end-column="49" />
           <folding />
         </state>
@@ -919,23 +856,72 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/Classes/WebSocket/Front/LimitOrderMessage.php">
+    <entry file="file://$PROJECT_DIR$/app/Jobs/PlaceLimitOrder.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="204">
+          <caret line="43" column="0" lean-forward="true" selection-start-line="43" selection-start-column="0" selection-end-line="43" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/Classes/WebSocket/Front/BitmexWsListenerFront.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="17">
+          <caret line="9" column="4" lean-forward="false" selection-start-line="9" selection-start-column="4" selection-end-line="9" selection-end-column="4" />
+          <folding>
+            <element signature="e#131#143#0#PHP" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/Console/Commands/Front.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="407">
+          <caret line="65" column="62" lean-forward="false" selection-start-line="65" selection-start-column="62" selection-end-line="65" selection-end-column="62" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/Console/Commands/Limit.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="476">
+          <caret line="82" column="80" lean-forward="false" selection-start-line="82" selection-start-column="80" selection-end-line="82" selection-end-column="80" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/Classes/WebSocket/Front/LimitOrderWs.php">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="177">
-          <caret line="194" column="27" lean-forward="false" selection-start-line="194" selection-start-column="27" selection-end-line="194" selection-end-column="27" />
-          <folding>
-            <element signature="e#131#155#0#PHP" expanded="true" />
-            <element signature="e#5401#7338#0#PHP" expanded="false" />
-          </folding>
+          <caret line="97" column="26" lean-forward="false" selection-start-line="97" selection-start-column="26" selection-end-line="97" selection-end-column="26" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/Classes/Trading/LimitOrder.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="272">
+          <caret line="21" column="0" lean-forward="true" selection-start-line="21" selection-start-column="0" selection-end-line="21" selection-end-column="0" />
+          <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/app/Classes/Trading/Exchange.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="347">
-          <caret line="163" column="71" lean-forward="false" selection-start-line="163" selection-start-column="71" selection-end-line="163" selection-end-column="71" />
+        <state relative-caret-position="310">
+          <caret line="275" column="75" lean-forward="false" selection-start-line="275" selection-start-column="75" selection-end-line="275" selection-end-column="75" />
           <folding>
             <element signature="e#123#139#0#PHP" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/Classes/WebSocket/Front/LimitOrderMessage.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="157">
+          <caret line="228" column="121" lean-forward="false" selection-start-line="228" selection-start-column="121" selection-end-line="228" selection-end-column="121" />
+          <folding>
+            <element signature="e#131#155#0#PHP" expanded="true" />
+            <element signature="e#5655#7592#0#PHP" expanded="false" />
           </folding>
         </state>
       </provider>

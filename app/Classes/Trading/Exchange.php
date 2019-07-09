@@ -80,11 +80,10 @@ class Exchange
         self::checkResponse();
     }
 
-    public static function placeLimitSellOrder($botSettings, $price, $volume, $limitOrderObj){
-
-        dump('dump from Exchnage.php line 85');
-
+    public static function placeLimitSellOrder($botSettings, $price, $volume, $limitOrderObj, $botId){
+        dump('placeBuySellOrder. Exchange.php line: ' . __LINE__);
         echo __FILE__ . " line: " . __LINE__ . "\n";
+
         $exchange = new bitmex();
 
         if($botSettings['isTestnet'] == 1){
@@ -97,18 +96,16 @@ class Exchange
         $exchange->secret = $botSettings['apiSecret'];
 
         try{
-            echo "API path. test or api: " . $exchange->urls['api'] . "\n";
-            echo "Symbol: " . $botSettings['executionSymbolName'] . " in Exchnage.php \n";
+            //echo "API path. test or api: " . $exchange->urls['api'] . "\n";
+            //echo "Symbol: " . $botSettings['executionSymbolName'] . " in Exchnage.php \n";
 
-            self::$response = $exchange->createLimitSellOrder($botSettings['executionSymbolName'], $volume, $price, array('clOrdID' => $limitOrderObj['clOrdID'])
-            );
+            self::$response = $exchange->createLimitSellOrder($botSettings['executionSymbolName'], $volume, $price, array('clOrdID' => $limitOrderObj['clOrdID']));
 
             echo "Limit order placement response: \n";
-            //dump(self::$response);
         }
         catch (\Exception $e)
         {
-            dump('--------- in exception line 102');
+            dump('--------- in exception line(Exchnage.php):' . __LINE__);
             self::$response = $e->getMessage();
         }
 
@@ -120,13 +117,14 @@ class Exchange
             $limitOrderObj['limitOrderTimestamp'] = 12345;
             $limitOrderObj['orderID'] = self::$response['info']['orderID'];
             Cache::put('bot_1', $limitOrderObj, now()->addMinute(30));
+            echo('SELL Limit order placed (Exchnage.php). MUST NOT BE EMPTY! orderID: ' . self::$response['info']['orderID'] . "\n");
         }
 
         self::checkResponse($limitOrderObj);
     }
 
-    public static function placeLimitBuyOrder($botSettings, $price, $volume, $limitOrderObj){
-        echo "Exchnage.php line: " . __LINE__ . "\n";
+    public static function placeLimitBuyOrder($botSettings, $price, $volume, $limitOrderObj, $botId){
+        echo "placeLimitBuyOrder. Exchnage.php line: " . __LINE__ . "\n";
         $exchange = new bitmex();
 
         if($botSettings['isTestnet'] == 1){
@@ -139,8 +137,8 @@ class Exchange
         $exchange->secret = $botSettings['apiSecret'];
 
         try{
-            echo "API path. test or api: " . $exchange->urls['api'] . "\n";
-            echo "Symbol: " . $botSettings['executionSymbolName'] . " in Exchnage.php \n";
+            //echo "API path. test or api: " . $exchange->urls['api'] . "\n";
+            //echo "Symbol: " . $botSettings['executionSymbolName'] . " in Exchnage.php \n";
 
             self::$response = $exchange->createLimitBuyOrder($botSettings['executionSymbolName'], $volume, $price, array('clOrdID' => $limitOrderObj['clOrdID']));
 
@@ -149,7 +147,7 @@ class Exchange
         }
         catch (\Exception $e)
         {
-            dump('--------- in exception line 154 code: vvffrr');
+            dump('--------- in exception line(Exchnage.php):' . __LINE__);
             self::$response = $e->getMessage();
         }
 
@@ -161,15 +159,18 @@ class Exchange
             $limitOrderObj['limitOrderTimestamp'] = 12345;
             $limitOrderObj['orderID'] = self::$response['info']['orderID'];
             Cache::put('bot_1', $limitOrderObj, now()->addMinute(30));
-            echo('Limit order placed (Exchnage.php). MUST NOT BE EMPTY! orderID: ' . self::$response['info']['orderID']);
+            echo('BUY Limit order placed (Exchnage.php). MUST NOT BE EMPTY! orderID: ' . self::$response['info']['orderID'] . "\n");
         }
 
         self::checkResponse($limitOrderObj);
     }
 
-    public static function amendOrder($newPrice, $orderID, $botSettings){
-        dump('****   AMEND ORDER ****');
-        echo __FILE__ . " line: " . __LINE__ . "\n";
+    public static function amendOrder($newPrice, $orderID, $botSettings, $amendReason){
+        dump("****   AMEND ORDER. Reason: $amendReason ****");
+        echo  "Exchnage.php. line: " . __LINE__ . "\n";
+        Echo "orderID: " . $orderID . " MUST NOT BE NULL or EMPTY (Exchnage.php) code: ffddss\n";
+        if($orderID == null) die();
+
         $exchange = new bitmex();
 
         if($botSettings['isTestnet'] == 1){

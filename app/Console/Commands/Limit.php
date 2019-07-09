@@ -16,7 +16,7 @@ class Limit extends Command
      *
      * @var string
      */
-    protected $signature = 'limit {botId}';
+    protected $signature = 'limit {botId} {net}';
 
     /**
      * The console command description.
@@ -65,14 +65,21 @@ class Limit extends Command
          */
         Cache::put('bot_1', $limitOrderObj, now()->addMinute(30));
 
-        // Truncate signal tables
+        /* Truncate signal table */
         DB::table('signal_' . $this->argument('botId'))->truncate();
+
+        /* Stop chart worker */
+        DB::table('bots')
+            ->where('id', $this->argument('botId'))
+            ->update([
+                'status' => 'idle'
+            ]);
 
         /**
          * Call LimitOrder.php and start limit orders.
          * Send $this - it will allow to output colored console messages.
          */
         $limitOrder = new LimitOrder();
-        $limitOrder->start($this, $this->argument('botId'));
+        $limitOrder->start($this, $this->argument('botId'), $this->argument('net'));
     }
 }

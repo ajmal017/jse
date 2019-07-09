@@ -68,7 +68,7 @@ class Limit extends Command
         /* Truncate signal table */
         DB::table('signal_' . $this->argument('botId'))->truncate();
 
-        /* Stop chart worker */
+        /* Stop chart worker when console command is executed */
         DB::table('bots')
             ->where('id', $this->argument('botId'))
             ->update([

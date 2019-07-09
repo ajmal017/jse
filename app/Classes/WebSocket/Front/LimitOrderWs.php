@@ -14,16 +14,30 @@ use App\Bot;
 
 class LimitOrderWs
 {
-    public static $console;
-    public static $symbol;
     private static $accountSettingsObject;
     private static $isBotRunning;
+    public static $symbol;
+    private static $connection; // Not used
+
+    public static $connector;
+    public static $loop;
+    public static $console;
     private static $botId;
-    private static $connection;
+    private static $net;
+
 
     public static function listen($connector, $loop, $console, $botId, $net){
 
+        /**
+         * Vars for self-call listen method in case of recconection.
+         */
+        self::$connector = $connector;
+        self::$loop = $loop;
+        self::$console = $console;
         self::$botId = $botId;
+        self::$net = $net;
+
+
         /*$loop->addPeriodicTimer(1, function() use($connector, $loop, $console, $botId) {
 
             // Get settings object
@@ -45,16 +59,17 @@ class LimitOrderWs
         });*/
 
         $loop->addPeriodicTimer(1, function() use($connector, $loop, $console, $botId, $net) {
-
             // Get settings object
             // Get strategies settings object
+
             self::$accountSettingsObject = \App\Classes\WebSocket\Front\TradingAccount::getSettings($botId);
             self::$isBotRunning =  Cache::get('status_bot_' . $botId);
             self::$symbol = self::$accountSettingsObject['historySymbolName'];
 
-            //dump("status: " . Bot::where('id', $botId)->value('status'));
+            dump(now() . " status: " . Bot::where('id', $botId)->value('status'));
 
             if (Bot::where('id', $botId)->value('status') == 'running' && !self::$isBotRunning){
+
                 dump('FIREEEEEEEEEEED ' . self::$accountSettingsObject['historySymbolName']);
                 Cache::put('status_bot_' . $botId, true, now()->addMinute(30));
                 self::listen($connector, $loop, $console, $botId, $net);
@@ -66,11 +81,9 @@ class LimitOrderWs
                 self::$isBotRunning = false;
                 Cache::put('status_bot_' . $botId, false, now()->addMinute(30));
             }
-
         });
 
 
-        self::$console = $console;
         //self::$symbol = 'XBTUSD'; // XBTUSD ADAU19
 
         /** Pick up the right websocket endpoint accordingly to the exchange */
@@ -109,16 +122,20 @@ class LimitOrderWs
                 });
 
                 $conn->on('close', function($code = null, $reason = null) use ($loop) {
+
                     echo "Connection closed ({$code} - {$reason})\n";
                     self::$console->info("Connection closed. " . __LINE__);
                     self::$console->error("Reconnecting back!");
                     sleep(5); // Wait 5 seconds before next connection try will attempt
-                    self::$console->handle(); // Call the main method of this class
+
+                    //self::$console->handle(); // Call the main method of this class. It calls the first console command! Not this class!
+                    self::listen(self::$connector, self::$loop, self::$console, self::$botId, self::$net);
                 });
 
                 /**
                  * Auth signature. It is the same for all requests.
                  * You just auth the whole WS connection.
+                 * WS auth connection working example.
                  */
 
                 /*$api = "ikeCK-6ZRWtItOkqvqo8F6wO"; // testnet

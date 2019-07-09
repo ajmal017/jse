@@ -21,7 +21,7 @@ class LimitOrderWs
     private static $botId;
     private static $connection;
 
-    public static function listen($connector, $loop, $console, $botId){
+    public static function listen($connector, $loop, $console, $botId, $net){
 
         self::$botId = $botId;
         /*$loop->addPeriodicTimer(1, function() use($connector, $loop, $console, $botId) {
@@ -44,7 +44,7 @@ class LimitOrderWs
             }
         });*/
 
-        $loop->addPeriodicTimer(1, function() use($connector, $loop, $console, $botId) {
+        $loop->addPeriodicTimer(1, function() use($connector, $loop, $console, $botId, $net) {
 
             // Get settings object
             // Get strategies settings object
@@ -52,32 +52,39 @@ class LimitOrderWs
             self::$isBotRunning =  Cache::get('status_bot_' . $botId);
             self::$symbol = self::$accountSettingsObject['historySymbolName'];
 
+            //dump("status: " . Bot::where('id', $botId)->value('status'));
+
             if (Bot::where('id', $botId)->value('status') == 'running' && !self::$isBotRunning){
                 dump('FIREEEEEEEEEEED ' . self::$accountSettingsObject['historySymbolName']);
                 Cache::put('status_bot_' . $botId, true, now()->addMinute(30));
-                self::listen($connector, $loop, $console, $botId);
+                self::listen($connector, $loop, $console, $botId, $net);
             }
 
             if (Bot::where('id', $botId)->value('status') == 'idle' && self::$isBotRunning){
                 dump('---------- got into idle');
+
                 self::$isBotRunning = false;
                 Cache::put('status_bot_' . $botId, false, now()->addMinute(30));
             }
-        });
 
+        });
 
 
         self::$console = $console;
         //self::$symbol = 'XBTUSD'; // XBTUSD ADAU19
 
         /** Pick up the right websocket endpoint accordingly to the exchange */
-        if(self::$accountSettingsObject['isTestnet']){
+        /*if(self::$accountSettingsObject['isTestnet']){
+            $exchangeWebSocketEndPoint = "wss://testnet.bitmex.com/realtime";
+        } else {
+            $exchangeWebSocketEndPoint = "wss://www.bitmex.com/realtime";
+        }*/
+
+        if($net == 'testnet'){
             $exchangeWebSocketEndPoint = "wss://testnet.bitmex.com/realtime";
         } else {
             $exchangeWebSocketEndPoint = "wss://www.bitmex.com/realtime";
         }
-
-        //$exchangeWebSocketEndPoint = "wss://www.bitmex.com/realtime";
 
         $connector($exchangeWebSocketEndPoint, [], ['Origin' => 'http://localhost'])
             ->then(function(\Ratchet\Client\WebSocket $conn) use ($loop) {
@@ -88,9 +95,8 @@ class LimitOrderWs
                      * Parse all websocket messages.
                      */
 
-
                     if(array_key_exists('info', $jsonMessage))
-                        dump($jsonMessage['docs']);
+                        dump("Bitmex end point: " . $jsonMessage['docs']);
 
                     if(array_key_exists('table', $jsonMessage))
                         if($jsonMessage['table'] == 'orderBook10')
@@ -98,6 +104,7 @@ class LimitOrderWs
                                 \App\Classes\WebSocket\Front\LimitOrderMessage::parse($jsonMessage, self::$botId);
                                 //echo now() . " " . $jsonMessage['data'][0]['symbol'] . "\n";
                                 //echo '';
+                                //echo(now() . " " . $jsonMessage['data'][0]['asks'][0][0] . "\n");
 
                 });
 
@@ -149,7 +156,7 @@ class LimitOrderWs
                 );
 
                 /* Subscribe to order book */
-                $requestObject5 = json_encode(
+                $requestObject6 = json_encode(
                     [
                         "op" => "subscribe",
                         "args" => ["orderBook10:XBTUSD","orderBook10:ETHUSD"]
@@ -159,7 +166,7 @@ class LimitOrderWs
                 //$conn->send($requestObject2); /* Connection authenticate  */
                 //$conn->send($requestObject3); /* Subscribe to order channel */
                 //$conn->send($requestObject4); /* Subscribe to order executions */
-                $conn->send($requestObject5); /* Subscribe to order book with a specific symbol */
+                $conn->send($requestObject6); /* Subscribe to order book with a specific symbol */
 
             }, function(\Exception $e) use ($loop) {
                 $errorString = "RatchetPawlSocket.php Could not connect. Reconnect in 5 sec. \n Reason: {$e->getMessage()} \n";

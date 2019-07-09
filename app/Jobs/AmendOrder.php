@@ -22,17 +22,19 @@ class AmendOrder implements ShouldQueue
     private $newPrice;
     private $orderID;
     private $botSettings;
+    private $amendReason;
 
     /**
      * Create a new job instance.
      *
      * @return void
      */
-    public function __construct($newPrice, $orderID, $botSettings)
+    public function __construct($newPrice, $orderID, $botSettings, $amendReason)
     {
         $this->newPrice = $newPrice;
         $this->orderID = $orderID;
         $this->botSettings = $botSettings;
+        $this->amendReason = $amendReason;
     }
 
     /**
@@ -42,7 +44,6 @@ class AmendOrder implements ShouldQueue
      */
     public function handle()
     {
-        //if(!$this->botSettings) die('On que worker force stop. The case when the order filled immediately without amend');
-        Exchange::amendOrder($this->newPrice, $this->orderID, $this->botSettings);
+        Exchange::amendOrder($this->newPrice, $this->orderID, $this->botSettings, $this->amendReason);
     }
 }

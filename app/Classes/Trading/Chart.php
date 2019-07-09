@@ -84,7 +84,8 @@ class Chart extends Profit
                 echo "---------------------- FIRST EVER TRADE<br>\n";
                 if($mode != 'backtest')
                     // PlaceOrder::dispatch('buy', $this->botSettings['volume'], $this->botSettings);
-                    DB::table('signal_1')
+                    //DB::table('signal_1')
+                    DB::table($this->botSettings['signalTable'])
                         ->insert([
                             'type' => 'signal',
                             'status' => 'new',
@@ -97,7 +98,7 @@ class Chart extends Profit
                 echo "---------------------- NOT FIRST EVER TRADE. CLOSE + OPEN. VOL * 2\n";
                 if($mode != 'backtest')
                     // PlaceOrder::dispatch('buy', $this->botSettings['volume'] * 2, $this->botSettings);
-                    DB::table('signal_1')
+                    DB::table($this->botSettings['signalTable'])
                         ->insert([
                             'type' => 'signal',
                             'status' => 'new',
@@ -119,7 +120,7 @@ class Chart extends Profit
                 echo "---------------------- FIRST EVER TRADE<br>\n";
                 if($mode != 'backtest')
                     // PlaceOrder::dispatch('sell', $this->botSettings['volume'], $this->botSettings);
-                    DB::table('signal_1')
+                    DB::table($this->botSettings['signalTable'])
                         ->insert([
                             'type' => 'signal',
                             'status' => 'new',
@@ -132,7 +133,7 @@ class Chart extends Profit
                 echo "---------------------- NOT FIRST EVER TRADE. CLOSE + OPEN. VOL * 2\n";
                 if($mode != 'backtest')
                     // PlaceOrder::dispatch('sell', $this->botSettings['volume'] * 2, $this->botSettings);
-                    DB::table('signal_1')
+                    DB::table($this->botSettings['signalTable'])
                         ->insert([
                             'type' => 'signal',
                             'status' => 'new',

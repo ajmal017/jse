@@ -134,7 +134,7 @@ class BitmexWsListenerFront
         if (self::$isHistoryLoaded){
 
             /* DELETE IT FROM HERE! TESTING ONLY! */
-            DB::table('signal_1')->truncate();
+            self::truncateSignalsTable();
 
 
             \App\Classes\Trading\History::loadPeriod(self::$accountSettingsObject);
@@ -195,7 +195,7 @@ class BitmexWsListenerFront
         if (self::$isHistoryLoaded){
 
             /* DELETE IT FROM HERE! TESTING ONLY! */
-            DB::table('signal_1')->truncate();
+            self::truncateSignalsTable();
 
             \App\Classes\Trading\History::loadPeriod(self::$accountSettingsObject);
             dump('History loaded (MACD)');
@@ -261,5 +261,12 @@ class BitmexWsListenerFront
             //self::$strategiesSettingsObject['priceChannel'], // if price channel. if macd = null
             //self::$strategiesSettingsObject['macd'] // if macd. if price channel = null
         );
+    }
+
+    private static function truncateSignalsTable(){
+        DB::table('signal_1')->truncate();
+        DB::table('signal_2')->truncate();
+        DB::table('signal_3')->truncate();
+        DB::table('signal_4')->truncate();
     }
 }

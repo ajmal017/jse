@@ -177,7 +177,7 @@ class Exchange
         }
         catch (\Exception $e)
         {
-            dump('--------- in exception line (Exchange.php): ' . __LINE__);
+            dump('--------- in exception line (Exchange.php code: vvccxx): ' . __LINE__);
             self::$response = $e->getMessage();
         }
 
@@ -241,12 +241,14 @@ class Exchange
                 case !strpos(self::$response, 'overloaded');
                     // The system is currently overloaded. Please try again later
                     // Log::warning('Exchange overloaded! Exchnage.php' . __FILE__ . ' '. __LINE__);
-                    throw new Exception('Exchange overloaded');
+                    $error = 'Exchange overloaded';
+                    throw new Exception($error);
                     break;
                 /* Full error text: bitmex {"error":{"message":"Invalid ordStatus","name":"HTTPError"}} */
                 case !strpos(self::$response, 'ordStatus');
                     Log::notice('Invalid ordStatus. Usually it happens when trying to amend and order which is already filled' . __FILE__ . ' '. __LINE__);
                     dump('Order amend. It usually happens when the order was fully filled');
+                    break;
                 /**
                  * https://github.com/BitMEX/api-connectors/issues/202
                  * {"error":{"message":"This request has expired - `expires` is in the past. Current time: 1561918674","name":"HTTPError"}}
@@ -254,7 +256,7 @@ class Exchange
                  */
                 case !strpos(self::$response, 'expires');
                     Log::notice('This request has expired - `expires` is in the past. Current time: .. Check request signature. ' . __FILE__ . ' '. __LINE__);
-                    //dump('This request has expired - `expires` is in the past. Current time: .. Check request signature');
+                    break;
             }
         }
     }

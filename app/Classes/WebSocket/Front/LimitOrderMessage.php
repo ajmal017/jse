@@ -469,13 +469,19 @@ class LimitOrderMessage
             if(array_key_exists('limitOrderTimestamp', self::$limitOrderObj)){
                 dump('---------------NOW CAN AMEND BUY ORDER (LimitOrderMessage.php line)' . __LINE__);
                 //$response = \App\Classes\Trading\Exchange::amendOrder($bid - self::$limitOrderObj['step'], Cache::get('bot_' . self::$botId)['orderID'], $botSettings);
-                $response = \App\Classes\Trading\Exchange::amendOrder(
+                /*\App\Classes\Trading\Exchange::amendOrder(
                     $bid,
                     Cache::get('bot_' . self::$botId)['orderID'],
                     $botSettings,
                     $amendReason
-                    );
-                //dump($response);
+                    );*/
+
+                \App\Jobs\AmendOrder::dispatch(
+                    $bid,
+                    Cache::get('bot_' . self::$botId)['orderID'],
+                    $botSettings,
+                    $amendReason
+                );
 
                 // Put price to cache in order not to amend more than needed
                 //self::$limitOrderObj['limitOrderPrice'] = $bid - self::$limitOrderObj['step'];
@@ -498,14 +504,20 @@ class LimitOrderMessage
             /* https://dacoders.myjetbrains.com/youtrack/issue/JSE-222 */
             if(array_key_exists('limitOrderTimestamp', self::$limitOrderObj)){
                 dump('---------------NOW CAN AMEND SELL ORDER');
-                $response = \App\Classes\Trading\Exchange::amendOrder(
+                /*\App\Classes\Trading\Exchange::amendOrder(
                     //$ask + self::$limitOrderObj['step'],
                     $ask,
                     Cache::get('bot_' . self::$botId)['orderID'],
                     $botSettings,
                     $amendReason
-                    );
-                //dump($response);
+                    );*/
+
+                \App\Jobs\AmendOrder::dispatch(
+                    $ask,
+                    Cache::get('bot_' . self::$botId)['orderID'],
+                    $botSettings,
+                    $amendReason
+                );
 
                 // Put price to cache in order no to amend more than needed
                 //self::$limitOrderObj['limitOrderPrice'] = $ask + self::$limitOrderObj['step'];

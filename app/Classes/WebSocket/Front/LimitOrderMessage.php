@@ -430,14 +430,6 @@ class LimitOrderMessage
             self::$botId
         );
 
-        /* Set signal status to pending */
-        /*DB::table('signal_' . self::$botId)
-            ->where('type', 'signal')
-            ->where('status', 'new')
-            ->update([
-                'status' => 'pending'
-            ]);*/
-
         self::updateSignalStatus();
     }
 

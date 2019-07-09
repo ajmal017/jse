@@ -8,7 +8,6 @@
 
 namespace App\Classes\Trading;
 use ccxt\bitmex;
-//use Illuminate\Cache\Events\CacheHit;
 use Mockery\Exception;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Cache;
@@ -96,11 +95,7 @@ class Exchange
         $exchange->secret = $botSettings['apiSecret'];
 
         try{
-            //echo "API path. test or api: " . $exchange->urls['api'] . "\n";
-            //echo "Symbol: " . $botSettings['executionSymbolName'] . " in Exchnage.php \n";
-
             self::$response = $exchange->createLimitSellOrder($botSettings['executionSymbolName'], $volume, $price, array('clOrdID' => $limitOrderObj['clOrdID']));
-
             echo "Limit order placement response: \n";
         }
         catch (\Exception $e)
@@ -116,7 +111,7 @@ class Exchange
         if (gettype(self::$response) == 'array'){
             $limitOrderObj['limitOrderTimestamp'] = 12345;
             $limitOrderObj['orderID'] = self::$response['info']['orderID'];
-            Cache::put('bot_1', $limitOrderObj, now()->addMinute(30));
+            Cache::put('bot_' . $botId, $limitOrderObj, now()->addMinute(30));
             echo('SELL Limit order placed (Exchnage.php). MUST NOT BE EMPTY! orderID: ' . self::$response['info']['orderID'] . "\n");
         }
 
@@ -137,13 +132,7 @@ class Exchange
         $exchange->secret = $botSettings['apiSecret'];
 
         try{
-            //echo "API path. test or api: " . $exchange->urls['api'] . "\n";
-            //echo "Symbol: " . $botSettings['executionSymbolName'] . " in Exchnage.php \n";
-
             self::$response = $exchange->createLimitBuyOrder($botSettings['executionSymbolName'], $volume, $price, array('clOrdID' => $limitOrderObj['clOrdID']));
-
-            //echo "Limit order placement response: \n";
-            //dump(self::$response);
         }
         catch (\Exception $e)
         {
@@ -158,7 +147,7 @@ class Exchange
         if (gettype(self::$response) == 'array'){
             $limitOrderObj['limitOrderTimestamp'] = 12345;
             $limitOrderObj['orderID'] = self::$response['info']['orderID'];
-            Cache::put('bot_1', $limitOrderObj, now()->addMinute(30));
+            Cache::put('bot_' . $botId, $limitOrderObj, now()->addMinute(30));
             echo('BUY Limit order placed (Exchnage.php). MUST NOT BE EMPTY! orderID: ' . self::$response['info']['orderID'] . "\n");
         }
 
@@ -213,8 +202,6 @@ class Exchange
         try{
             $orderID = $limitOrderObj['orderID'];
             self::$response = $exchange->privateGetExecutionTradeHistory(array('count' => 20, 'filter' => ['orderID' => $orderID])); // Works GOOD!
-            //echo "GET TRADES FOR PLACED ORDER (Exchnage.php): \n";
-            //dump(self::$response);
         }
         catch (\Exception $e)
         {
@@ -273,11 +260,11 @@ class Exchange
     }
 
     // Can use it for market order record insertion
-    public static function insertRecordToSignalTable($botSettings, $response){
+    /*public static function insertRecordToSignalTable($botSettings, $response){
         DB::table($botSettings['signalTable'])->insert([
             'order_type' => 'limit',
             'volume' => 999, // execution_volume
             // self::$response['info']['orderID'];
         ]);
-    }
+    }*/
 }

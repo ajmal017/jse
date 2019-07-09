@@ -72,8 +72,6 @@ class MacdTradesTrigger extends Profit
             }
         }
 
-        //echo "------------------------------------------------------MacdTradesTrigger.php 69. this->trade_flag: " . $this->trade_flag . "\n";
-
         if (($this->lastRow[0]->macd_line > $this->lastRow[0]->macd_signal_line) && ($this->trade_flag == "all" || $this->trade_flag == "long")){
 
             echo "####### HIGH TRADE!<br>\n";
@@ -83,7 +81,7 @@ class MacdTradesTrigger extends Profit
                 echo "---------------------- FIRST EVER TRADE<br>\n";
                 if($mode != 'backtest')
                     //PlaceOrder::dispatch('buy', $this->botSettings['volume'], $this->botSettings);
-                    DB::table('signal_1')
+                    DB::table($this->botSettings['signalTable'])
                         ->insert([
                             'type' => 'signal',
                             'status' => 'new',
@@ -97,7 +95,7 @@ class MacdTradesTrigger extends Profit
                 echo "---------------------- NOT FIRST EVER TRADE. CLOSE + OPEN. VOL * 2\n";
                 if($mode != 'backtest')
                     //PlaceOrder::dispatch('buy', $this->botSettings['volume'] * 2, $this->botSettings);
-                    DB::table('signal_1')
+                    DB::table($this->botSettings['signalTable'])
                         ->insert([
                             'type' => 'signal',
                             'status' => 'new',
@@ -122,7 +120,7 @@ class MacdTradesTrigger extends Profit
             if ($this->trade_flag == "all"){
                 echo "---------------------- FIRST EVER TRADE<br>\n";
                 if($mode != 'backtest')
-                    DB::table('signal_1')
+                    DB::table($this->botSettings['signalTable'])
                         ->insert([
                             'type' => 'signal',
                             'status' => 'new',
@@ -134,7 +132,7 @@ class MacdTradesTrigger extends Profit
             {
                 echo "---------------------- NOT FIRST EVER TRADE. CLOSE + OPEN. VOL * 2\n";
                 if($mode != 'backtest')
-                    DB::table('signal_1')
+                    DB::table($this->botSettings['signalTable'])
                         ->insert([
                             'type' => 'signal',
                             'status' => 'new',

@@ -46,7 +46,6 @@ class ProfitSignal
 
             //echo "Last row: " . $lastRow->id . " ";
             //echo " Penultimate row: " . $penultimateRow->id . " \n";
-
             $direction = $lastRow->direction;
 
             if($direction == "buy"){
@@ -54,32 +53,42 @@ class ProfitSignal
                 if($orderExecutionResponse['symbol'] == 'XBTUSD'){
                     dump('FORMULA: BTC. ProfitSignal.php');
                     // BTC: 1 / (exit Price - entry Price) * volume
-                    $profit = $penultimateRow->avg_fill_price - $lastRow->avg_fill_price;
+                    $profit = 1 / ($penultimateRow->avg_fill_price - $lastRow->avg_fill_price) * $lastRow->signal_volume;
                 }
                 if($orderExecutionResponse['symbol'] == 'ETHUSD'){
-                    
                     dump('FORMULA: ETH. ProfitSignal.php');
-                    $profit = $penultimateRow->avg_fill_price - $lastRow->avg_fill_price;
+                    $profit = ($penultimateRow->avg_fill_price - $lastRow->avg_fill_price) * 0.000001 * $lastRow->signal_volume;
                 }
             } else {
                 dump('sell');
                 if($orderExecutionResponse['symbol'] == 'XBTUSD'){
                     dump('FORMULA: BTC. ProfitSignal.php');
-                    $profit = $lastRow->avg_fill_price - $penultimateRow->avg_fill_price;
+                    $profit = 1 / ($lastRow->avg_fill_price - $penultimateRow->avg_fill_price) * $lastRow->signal_volume;
                 }
                 if($orderExecutionResponse['symbol'] == 'ETHUSD'){
                     dump('FORMULA: ETH. ProfitSignal.php');
-                    $profit = $lastRow->avg_fill_price - $penultimateRow->avg_fill_price;
+                    $profit = ($lastRow->avg_fill_price - $penultimateRow->avg_fill_price) * 0.000001 * $lastRow->signal_volume;
                 }
             }
 
+            dump($lastRow->signal_volume);
             dump($profit);
 
+            /* Trade profit */
             DB::table('signal_' . $botId)
                 ->where('id', $lastRow->id)
                 ->update([
                     'trade_profit' => $profit
                 ]);
+
+            /* Trade profit */
+            DB::table('signal_' . $botId)
+                ->where('id', $lastRow->id)
+                ->update([
+                    'accumulated_profit' => DB::table('signal_' . $botId)->sum('trade_profit')
+                ]);
+
+
         }
 
 

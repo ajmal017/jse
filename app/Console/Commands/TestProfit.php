@@ -212,7 +212,7 @@ class TestProfit extends Command
                 'type' => 'signal',
                 'status' => 'new',
                 'direction' => 'buy',
-                'signal_volume' => 10
+                'signal_volume' => 1000
             ]);
 
         DB::table('signal_1')
@@ -243,7 +243,7 @@ class TestProfit extends Command
                 'type' => 'signal',
                 'status' => 'new',
                 'direction' => 'sell',
-                'signal_volume' => 10
+                'signal_volume' => 1000
             ]);
 
         DB::table('signal_1')
@@ -274,7 +274,7 @@ class TestProfit extends Command
                 'type' => 'signal',
                 'status' => 'new',
                 'direction' => 'buy',
-                'signal_volume' => 10
+                'signal_volume' => 1000
             ]);
 
         DB::table('signal_1')

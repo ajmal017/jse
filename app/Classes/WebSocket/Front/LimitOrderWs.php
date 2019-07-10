@@ -66,7 +66,7 @@ class LimitOrderWs
             self::$isBotRunning =  Cache::get('status_bot_' . $botId);
             self::$symbol = self::$accountSettingsObject['historySymbolName'];
 
-            dump(now() . " status: " . Bot::where('id', $botId)->value('status'));
+            //dump(now() . " status: " . Bot::where('id', $botId)->value('status'));
 
             if (Bot::where('id', $botId)->value('status') == 'running' && !self::$isBotRunning){
 

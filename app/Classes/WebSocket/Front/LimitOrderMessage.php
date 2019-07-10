@@ -94,9 +94,11 @@ class LimitOrderMessage
 
         /* Get trades-executions for a placed limit order */
         if(self::rateLimitheck2())
-            if (self::$limitOrderObj['isLimitOrderPlaced'])
-                if (self::$limitOrderObj['orderID'])
-                    \App\Classes\Trading\Exchange::getOrders($botSettings, self::$limitOrderObj);
+            if (array_key_exists('isLimitOrderPlaced', self::$limitOrderObj))
+                if (self::$limitOrderObj['isLimitOrderPlaced'])
+                    if (array_key_exists('orderID', self::$limitOrderObj))
+                        if (self::$limitOrderObj['orderID'])
+                            \App\Classes\Trading\Exchange::getOrders($botSettings, self::$limitOrderObj);
     }
 
     /**
@@ -162,39 +164,7 @@ class LimitOrderMessage
      *
      * @param array $message
      */
-    private static function orderParse(array $message){
-        if(array_key_exists('table', $message))
-            if($message['table'] == 'order')
-                if(array_key_exists('action', $message)) // Action can be = 'insert' as well
-                    if($message['action'] == 'update')
 
-                        if(array_key_exists('data', $message)){
-                            if(array_key_exists(0, $message['data']))
-
-                                // Check orderID
-                                if(array_key_exists('orderID', $message['data'][0]))
-                                    // echo $message['data'][0]['orderID'] . "   -   " . self::$limitOrderObj['orderID'] . "\n";
-                            If (($message['data'][0]['orderID']  == self::$limitOrderObj['orderID'])){
-
-                                if(array_key_exists('leavesQty', $message['data'][0]))
-
-                                    if(($message['data'][0]['leavesQty']) == 0){
-                                        //dump($message['data'][0]);
-                                        //dump('Order Fully filled');
-                                        //\App\Classes\DB\SignalTable::insertRecord($message['data'][0]);
-                                        //die('die from LimitOrderMessage.php xxccvv'); // Works good
-                                    } else {
-                                        //dump($message['data'][0]);
-                                        //dump('Order NOT FULLY filled yet');
-                                        //\App\Classes\DB\SignalTable::insertRecord($message['data'][0]);
-                                        //die('die from LimitOrderMessage.php yyggff'); // Works good
-                                    }
-
-                            } else {
-                                //dump('Can not find order ID. LimitOrderMessage.php');
-                            }
-                        }
-    }
 
     // Second version.
     public static function executionParse2(array $message){
@@ -217,14 +187,15 @@ class LimitOrderMessage
 
                                     /* Data object can contain multiple executions! https://dacoders.myjetbrains.com/youtrack/issue/JSE-195 */
                                     if (count($message) > 0){
-                                        dump('Execution DATA object contains more than 1 record. foreach it!!! LimitOrderMessage');
+                                        //dump('Execution DATA object contains more than 1 record. foreach it!!! LimitOrderMessage');
+
                                         foreach ($message as $execution){
                                             /* Check if fully filled. leavesQty - volume reminder */
                                             if(($execution['leavesQty']) == 0){
                                                 dump('Order Fully filled');
                                                 \App\Classes\DB\SignalTable::insertRecord($execution, self::$botId);
                                                 // Set signal status to close
-                                                \App\Classes\DB\SignalTable::updateSignalStatus(self::$botId);
+                                                \App\Classes\DB\SignalTable::updateSignalStatusToClose(self::$botId, $execution);
                                             } else {
                                                 dump('Order NOT FULLY filled yet. Volume is written to DB: ' . $execution['lastQty']);
                                                 \App\Classes\DB\SignalTable::insertRecord($execution, self::$botId);
@@ -240,7 +211,7 @@ class LimitOrderMessage
                                         if(($execution['leavesQty']) == 0) {
                                             //self::$limitOrderObj = Cache::get('bot_1');
                                             self::$limitOrderObj['orderID'] = null;
-                                            self::$limitOrderObj['clOrdID'] = 'abc-123-' . now();
+                                            //self::$limitOrderObj['clOrdID'] = 'abc-123-' . now();
                                             self::$limitOrderObj['isLimitOrderPlaced'] = false;
                                             self::$limitOrderObj['limitOrderPrice'] = null;
                                             self::$limitOrderObj['limitOrderTimestamp'] = null;
@@ -258,77 +229,6 @@ class LimitOrderMessage
             else {
                 echo "CANT FIND orderID field. jjkkll\n";
             }
-        }
-    }
-
-    public static function executionParse(array $message){
-        foreach($message as $msg){
-            dump($msg['info']);
-            if(array_key_exists('orderID', $msg['info']))
-                echo $msg['info']['orderID'] . "   -   " . self::$limitOrderObj['orderID'] . "\n";
-
-            if(array_key_exists('orderID', $msg['info']))
-                If (($msg['info']['orderID']  == self::$limitOrderObj['orderID'])){
-
-                    /**
-                     * Check execType.
-                     * Can be:
-                     * Trade - when order gets filled. Can be partial or full
-                     * New - fresh order is placed
-                     * Replaced - order amend
-                     */
-                    if(array_key_exists('execType', $msg['info']))
-                        if (($msg['info']['execType']  == 'Trade'))
-
-                            /**
-                             * Check quantity in the trade.
-                             */
-                            if(array_key_exists('leavesQty', $msg['info']))
-
-                                /* Data object can contain multiple executions! https://dacoders.myjetbrains.com/youtrack/issue/JSE-195 */
-                                if (count($message['data']) > 0){
-                                    dump('Execution DATA object contains more thatn 1 record. foreach it!!! LimitOrderMessage');
-                                    // die('Execution DATA object contains more thatn 1 record. NOT HANDLED!!! LimitOrderMessage');
-                                    dump($message);
-                                    foreach ($message['data'] as $execution){
-                                        /* Check if fully filled. leavesQty - volume reminder */
-                                        //if(($msg['info']['leavesQty']) == 0){
-                                        if(($execution['leavesQty']) == 0){
-                                            dump('Order Fully filled');
-                                            \App\Classes\DB\SignalTable::insertRecord($execution);
-                                            // Set signal status to close
-                                            \App\Classes\DB\SignalTable::updateSignalStatus();
-                                            //die('die from LimitOrderMessage.php execution ddffgg');
-
-                                        } else {
-                                            dump('Order NOT FULLY filled yet');
-                                            \App\Classes\DB\SignalTable::insertRecord($execution);
-                                            //die('die from LimitOrderMessage.php execution jjhhgg');
-                                        }
-                                    }
-
-                                    // Additional check.
-                                    // Make sure that volume reminder == 0 after foreach is done. And only now we can refresh flags.
-                                    // There can be several groups and foreach can work more than once when flags must be reset
-                                    // exactly the whole order is fully filled.
-                                    // Refresh flags and clOrdID in order to place new limit order
-
-
-                                    if(($execution['leavesQty']) == 0) {
-                                        //self::$limitOrderObj = Cache::get('bot_1');
-                                        self::$limitOrderObj['orderID'] = null;
-                                        self::$limitOrderObj['clOrdID'] = 'abc-123-' . now();
-                                        self::$limitOrderObj['isLimitOrderPlaced'] = false;
-                                        self::$limitOrderObj['limitOrderPrice'] = null;
-                                        self::$limitOrderObj['limitOrderTimestamp'] = null;
-
-                                        Cache::put('bot_' . self::$botId, self::$limitOrderObj, now()->addMinute(30));
-                                    }
-                                }
-                } else {
-                    dump('Can not find order ID. LimitOrderMessage.php in execution qqwwee');
-                    die();
-                }
         }
     }
 
@@ -430,7 +330,7 @@ class LimitOrderMessage
             self::$botId
         );
 
-        self::updateSignalStatus();
+        \App\Classes\DB\SignalTable::updateSignalStatus(self::$botId);
     }
 
     private static function placeSellLimitOrder($ask, $botSettings){
@@ -454,7 +354,9 @@ class LimitOrderMessage
             self::$botId
         );
 
-        self::updateSignalStatus();
+        // Update to pending
+        //self::updateSignalStatus();
+        \App\Classes\DB\SignalTable::updateSignalStatus(self::$botId);
 
     }
 
@@ -469,13 +371,6 @@ class LimitOrderMessage
             if(array_key_exists('limitOrderTimestamp', self::$limitOrderObj)){
                 dump('---------------NOW CAN AMEND BUY ORDER (LimitOrderMessage.php line)' . __LINE__);
                 //$response = \App\Classes\Trading\Exchange::amendOrder($bid - self::$limitOrderObj['step'], Cache::get('bot_' . self::$botId)['orderID'], $botSettings);
-                /*\App\Classes\Trading\Exchange::amendOrder(
-                    $bid,
-                    Cache::get('bot_' . self::$botId)['orderID'],
-                    $botSettings,
-                    $amendReason
-                    );*/
-
                 \App\Jobs\AmendOrder::dispatch(
                     $bid,
                     Cache::get('bot_' . self::$botId)['orderID'],
@@ -504,14 +399,6 @@ class LimitOrderMessage
             /* https://dacoders.myjetbrains.com/youtrack/issue/JSE-222 */
             if(array_key_exists('limitOrderTimestamp', self::$limitOrderObj)){
                 dump('---------------NOW CAN AMEND SELL ORDER');
-                /*\App\Classes\Trading\Exchange::amendOrder(
-                    //$ask + self::$limitOrderObj['step'],
-                    $ask,
-                    Cache::get('bot_' . self::$botId)['orderID'],
-                    $botSettings,
-                    $amendReason
-                    );*/
-
                 \App\Jobs\AmendOrder::dispatch(
                     $ask,
                     Cache::get('bot_' . self::$botId)['orderID'],
@@ -529,15 +416,4 @@ class LimitOrderMessage
             }
         }
     }
-
-    private static function updateSignalStatus(){
-        /* Set signal status to pending */
-        DB::table('signal_' . self::$botId)
-            ->where('type', 'signal')
-            ->where('status', 'new')
-            ->update([
-                'status' => 'pending'
-            ]);
-    }
-
 }

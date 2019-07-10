@@ -25,10 +25,15 @@ class SignalTable
             'volume' => $orderEecutionResponse['lastQty'],
             'time_stamp' => strtotime($orderEecutionResponse['timestamp']) * 1000, // 13 digits
             'trade_date' => gmdate("Y-m-d G:i:s", strtotime($orderEecutionResponse['timestamp'])), // mysql date format
-            'trade_price' => $orderEecutionResponse['price'],
-            'trade_commission' => $orderEecutionResponse['commission'],
+
+            'avg_fill_price' => $orderEecutionResponse['avgPx'], // Exec price
+            'order_price' => $orderEecutionResponse['price'], // In case of amend-market order, will be the price which goes to opposite side of order book
+
+            'trade_commission_percent' => $orderEecutionResponse['commission'],
             'volume_reminder' => $orderEecutionResponse['leavesQty'],
-            'type' => $orderEecutionResponse['execType']
+            'type' => $orderEecutionResponse['execType'],
+            'order_id' => $orderEecutionResponse['orderID']
+            //
         ]);
     }
 
@@ -38,13 +43,58 @@ class SignalTable
      * This happens when an order gets filled immediately.
      * @param $orderEecutionResponse
      */
-    public static function updateSignalStatus($botId){
+    public static function updateSignalStatusToClose($botId, $orderEecutionResponse){
         DB::table('signal_' . $botId)
             ->where('type', 'signal')
             ->where('status', 'pending')
             ->orwhere('status', 'new')
             ->update([
                 'status' => 'closed'
+            ]);
+
+        // When closed -> prepare the row with price
+        // Now we take avg price from last execution - later we should calculate it
+        // Add avg_fill_price to avg_fill_price where type = signal, status = closed
+        DB::table('signal_' . $botId)
+            ->where('type', 'signal')
+            ->where('status', 'closed')
+            ->update([
+                'avg_fill_price' => $orderEecutionResponse['avgPx'], // Exec price
+            ]);
+
+    }
+
+    /**
+     * Once a limit order is places.
+     *
+     * @param $botId
+     * @param $response
+     */
+    public static  function updateSignalInfo($botId, $response){
+        DB::table('signal_' . $botId)
+            ->where('type', 'signal')
+            ->where('status', 'pending')
+            ->update([
+                'date' => gmdate("Y-m-d G:i:s", $response['timestamp'] / 1000), // mysql date format
+                'time_stamp' => $response['timestamp'],
+                'order_id' => $response['info']['orderID'],
+                'signal_price' => $response['info']['price']
+            ]);
+    }
+
+    /**
+     * Once a limit order is placed - status chnages to pending.
+     * When it gets filled, order is updated. Status remains the same.
+     * Status changes to close on when full volume is filled.
+     *
+     * @param $botId
+     */
+    public static function updateSignalStatus($botId){
+        DB::table('signal_' . $botId)
+            ->where('type', 'signal')
+            ->where('status', 'new')
+            ->update([
+                'status' => 'pending'
             ]);
     }
 }

@@ -32,8 +32,10 @@ class SignalTables extends Migration
 
                 /* Profit, etc */
                 $table->dateTime('trade_date')->nullable();
-                $table->double('trade_price')->nullable();
-                $table->double('trade_commission')->nullable();
+                $table->double('order_price')->nullable();
+                $table->double('avg_fill_price')->nullable();
+                $table->double('trade_commission_percent')->nullable();
+                $table->double('trade_commission_value')->nullable();
                 $table->double('accumulated_commission')->nullable();
                 $table->string('trade_direction')->nullable();
                 $table->double('trade_volume')->nullable();

@@ -95,7 +95,8 @@ class Exchange
         $exchange->secret = $botSettings['apiSecret'];
 
         try{
-            self::$response = $exchange->createLimitSellOrder($botSettings['executionSymbolName'], $volume, $price, array('clOrdID' => $limitOrderObj['clOrdID']));
+            //self::$response = $exchange->createLimitSellOrder($botSettings['executionSymbolName'], $volume, $price, array('clOrdID' => $limitOrderObj['clOrdID']));
+            self::$response = $exchange->createLimitSellOrder($botSettings['executionSymbolName'], $volume, $price);
             echo "Limit order placement response: \n";
         }
         catch (\Exception $e)
@@ -113,6 +114,9 @@ class Exchange
             $limitOrderObj['orderID'] = self::$response['info']['orderID'];
             Cache::put('bot_' . $botId, $limitOrderObj, now()->addMinute(30));
             echo('SELL Limit order placed (Exchnage.php). MUST NOT BE EMPTY! orderID: ' . self::$response['info']['orderID'] . "\n");
+
+            /* Update signal. Add orderId, date, timestamp, etc. */
+            \App\Classes\DB\SignalTable::updateSignalInfo($botId, self::$response);
         }
 
         self::checkResponse($limitOrderObj);
@@ -132,7 +136,8 @@ class Exchange
         $exchange->secret = $botSettings['apiSecret'];
 
         try{
-            self::$response = $exchange->createLimitBuyOrder($botSettings['executionSymbolName'], $volume, $price, array('clOrdID' => $limitOrderObj['clOrdID']));
+            //self::$response = $exchange->createLimitBuyOrder($botSettings['executionSymbolName'], $volume, $price, array('clOrdID' => $limitOrderObj['clOrdID']));
+            self::$response = $exchange->createLimitBuyOrder($botSettings['executionSymbolName'], $volume, $price);
         }
         catch (\Exception $e)
         {
@@ -149,6 +154,9 @@ class Exchange
             $limitOrderObj['orderID'] = self::$response['info']['orderID'];
             Cache::put('bot_' . $botId, $limitOrderObj, now()->addMinute(30));
             echo('BUY Limit order placed (Exchnage.php). MUST NOT BE EMPTY! orderID: ' . self::$response['info']['orderID'] . "\n");
+
+            /* Update signal. Add orderId, date, timestamp, etc. */
+            \App\Classes\DB\SignalTable::updateSignalInfo($botId, self::$response);
         }
 
         self::checkResponse($limitOrderObj);

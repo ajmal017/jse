@@ -289,7 +289,7 @@ class LimitOrderMessage
         } else {
             /* Time force exit */
             if(self::limitOrderExecutionTimeCheck()){
-                self::timeForceExitBuy();
+                self::timeForceExitBuy($bid, $botSettings);
             }
             /* Amend */
             self::$limitOrderObj = Cache::get('bot_' . self::$botId);

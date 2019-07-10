@@ -69,6 +69,7 @@ class SignalTable extends ProfitSignal
             ->where('order_id', $orderExecutionResponse['orderID'])
             ->update([
                 'avg_fill_price' => $orderExecutionResponse['avgPx'], // Exec price
+                'trade_commission_percent' => $orderExecutionResponse['commission']
             ]);
 
         // profit goes here

@@ -86,7 +86,7 @@ class TestProfit extends Command
                 "simpleCumQty" => null,
                 "cumQty" => 1,
                 "avgPx" => 12000,
-                "commission" => 0.00075,
+                "commission" => -0.025,
                 "tradePublishIndicator" => "PublishTrade",
                 "multiLegReportingType" => "SingleSecurity",
                 "text" => "",
@@ -140,7 +140,7 @@ class TestProfit extends Command
                 "simpleCumQty" => null,
                 "cumQty" => 1,
                 "avgPx" => 13000,
-                "commission" => 0.00075,
+                "commission" => -0.025,
                 "tradePublishIndicator" => "PublishTrade",
                 "multiLegReportingType" => "SingleSecurity",
                 "text" => "",
@@ -194,7 +194,7 @@ class TestProfit extends Command
                 "simpleCumQty" => null,
                 "cumQty" => 1,
                 "avgPx" => 8000,
-                "commission" => 0.00075,
+                "commission" => -0.025,
                 "tradePublishIndicator" => "PublishTrade",
                 "multiLegReportingType" => "SingleSecurity",
                 "text" => "",
@@ -230,7 +230,8 @@ class TestProfit extends Command
             'info' => [],
             'orderID' => 'c54a781d-7168-dbf2-d99d-72dc7fc6c013',
             'price' => 12000,
-            'symbol' => 'XBTUSD'
+            'symbol' => 'XBTUSD',
+            'commission' => -0.025
         ]);
 
 
@@ -261,7 +262,8 @@ class TestProfit extends Command
             'info' => [],
             'orderID' => 'c54a781d-7168-dbf2-d99d-72dc7fc6124',
             'price' => 13000,
-            'symbol' => 'XBTUSD'
+            'symbol' => 'XBTUSD',
+            'commission' => -0.025
         ]);
 
 
@@ -292,7 +294,8 @@ class TestProfit extends Command
             'info' => [],
             'orderID' => 'c54a781d-7168-dbf2-d99d-72dc7fc8888',
             'price' => 8000,
-            'symbol' => 'XBTUSD'
+            'symbol' => 'XBTUSD',
+            'commission' => -0.025
         ]);
 
 

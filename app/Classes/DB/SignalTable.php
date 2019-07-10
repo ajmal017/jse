@@ -7,32 +7,39 @@
  */
 
 namespace App\Classes\DB;
+use App\Classes\Trading\ProfitSignal;
 use Illuminate\Support\Facades\DB;
 
-class SignalTable
+class SignalTable extends ProfitSignal
 {
+
+    /* ProfitSignal.php vars */
+    protected $lastRow;
+    protected $penUltimanteRow;
+    protected $botId;
+
     /**
      * Add execution records to DB.
      * One limit order can have many executions.
      * Once a first record is added - change signal status from new to pending.
      *
-     * @param $orderEecutionResponse
+     * @param $orderExecutionResponse
      */
-    public static function insertRecord($orderEecutionResponse, $botId){
+    public static function insertRecord($orderExecutionResponse, $botId){
         DB::table('signal_' . $botId)->insert([
-            'order_type' => $orderEecutionResponse['ordType'],
-            'direction' => $orderEecutionResponse['side'],
-            'volume' => $orderEecutionResponse['lastQty'],
-            'time_stamp' => strtotime($orderEecutionResponse['timestamp']) * 1000, // 13 digits
-            'trade_date' => gmdate("Y-m-d G:i:s", strtotime($orderEecutionResponse['timestamp'])), // mysql date format
+            'order_type' => $orderExecutionResponse['ordType'],
+            'direction' => $orderExecutionResponse['side'],
+            'volume' => $orderExecutionResponse['lastQty'],
+            'time_stamp' => strtotime($orderExecutionResponse['timestamp']) * 1000, // 13 digits
+            'trade_date' => gmdate("Y-m-d G:i:s", strtotime($orderExecutionResponse['timestamp'])), // mysql date format
 
-            'avg_fill_price' => $orderEecutionResponse['avgPx'], // Exec price
-            'order_price' => $orderEecutionResponse['price'], // In case of amend-market order, will be the price which goes to opposite side of order book
+            'avg_fill_price' => $orderExecutionResponse['avgPx'], // Exec price
+            'order_price' => $orderExecutionResponse['price'], // In case of amend-market order, will be the price which goes to opposite side of order book
 
-            'trade_commission_percent' => $orderEecutionResponse['commission'],
-            'volume_reminder' => $orderEecutionResponse['leavesQty'],
-            'type' => $orderEecutionResponse['execType'],
-            'order_id' => $orderEecutionResponse['orderID']
+            'trade_commission_percent' => $orderExecutionResponse['commission'],
+            'volume_reminder' => $orderExecutionResponse['leavesQty'],
+            'type' => $orderExecutionResponse['execType'],
+            'order_id' => $orderExecutionResponse['orderID']
             //
         ]);
     }
@@ -41,9 +48,10 @@ class SignalTable
      * Once a limit order is fully filled change its status from pending to closed.
      * There can be a case when there is no pending status assigned - change to close as well.
      * This happens when an order gets filled immediately.
-     * @param $orderEecutionResponse
+     * @param $orderExecutionResponse
      */
-    public static function updateSignalStatusToClose($botId, $orderEecutionResponse){
+    public static function updateSignalStatusToClose($botId, $orderExecutionResponse){
+        
         DB::table('signal_' . $botId)
             ->where('type', 'signal')
             ->where('status', 'pending')
@@ -58,10 +66,13 @@ class SignalTable
         DB::table('signal_' . $botId)
             ->where('type', 'signal')
             ->where('status', 'closed')
+            ->where('order_id', $orderExecutionResponse['orderID'])
             ->update([
-                'avg_fill_price' => $orderEecutionResponse['avgPx'], // Exec price
+                'avg_fill_price' => $orderExecutionResponse['avgPx'], // Exec price
             ]);
 
+        // profit goes here
+        \App\Classes\Trading\ProfitSignal::calc($botId, $orderExecutionResponse);
     }
 
     /**

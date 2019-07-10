@@ -10,6 +10,13 @@ namespace App\Classes\Trading;
 use App\Classes\LogToFile;
 use Illuminate\Support\Facades\DB;
 
+/**
+ * Back testing profit calculation.
+ * This class is inherited in classes: Chart.php, MacdTradesTrigger.php and other strategies.
+ *
+ * Class Profit
+ * @package App\Classes\Trading
+ */
 abstract class Profit
 {
     public function calc($mode, $backTestRowId){

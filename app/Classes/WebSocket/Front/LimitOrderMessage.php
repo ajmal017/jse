@@ -188,7 +188,7 @@ class LimitOrderMessage
                                     /* Data object can contain multiple executions! https://dacoders.myjetbrains.com/youtrack/issue/JSE-195 */
                                     if (count($message) > 0){
                                         //dump('Execution DATA object contains more than 1 record. foreach it!!! LimitOrderMessage');
-
+                                        //dump($message);
                                         foreach ($message as $execution){
                                             /* Check if fully filled. leavesQty - volume reminder */
                                             if(($execution['leavesQty']) == 0){

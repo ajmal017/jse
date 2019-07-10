@@ -255,15 +255,7 @@ class LimitOrderMessage
              * Once expired: send ask - 10% from the price - it will execute the limit order as market.
              */
             if(self::limitOrderExecutionTimeCheck()){
-                dump('------------------------------------------------------------------ FORCE TIME SELL LIMIT CLOSE! --------- ' . now());
-                self::amendSellLimitOrder($ask - 100, $botSettings, 'time force amend');
-
-                /**
-                 * Set flag to true. Do not amend the order after time force exit
-                 * https://dacoders.myjetbrains.com/youtrack/issue/JSE-227
-                 */
-                self::$limitOrderObj['isLimitOrderPlaced'] = true;
-                Cache::put('bot_' . self::$botId, self::$limitOrderObj, now()->addMinute(30));
+                self::timeForceExitSell($ask, $botSettings);
             }
             /**
              * Amend.
@@ -289,7 +281,7 @@ class LimitOrderMessage
             if(self::$signalRow[0]->status != 'pending'){
                 self::placeBuyLimitOrder($bid, $botSettings);
                 /* Start time force exit timer */
-                self::limitOrderExecutionTimeCheck();
+                self::limitOrderExecutionTimeCheck($bid, $botSettings);
             } else {
                 dump('Tried to place a BUY order while there is a PENDING order already. Die LimitOrderMessage.php ppooii');
                 die();
@@ -297,12 +289,7 @@ class LimitOrderMessage
         } else {
             /* Time force exit */
             if(self::limitOrderExecutionTimeCheck()){
-                dump('------------------------------------------------------------------ FORCE TIME BUY LIMIT CLOSE! --------- ' . now());
-                self::amendBuyLimitOrder($bid + 100, $botSettings, 'force time close');
-
-                /* Set flag to true. Do not amend the order after time forece exit*/
-                self::$limitOrderObj['isLimitOrderPlaced'] = true;
-                Cache::put('bot_' . self::$botId, self::$limitOrderObj, now()->addMinute(30));
+                self::timeForceExitBuy();
             }
             /* Amend */
             self::$limitOrderObj = Cache::get('bot_' . self::$botId);
@@ -415,5 +402,39 @@ class LimitOrderMessage
                 dump('********************** Waiting the order to be placed and timestamp returned. TIMESTAMP: ' . self::$limitOrderObj['limitOrderTimestamp']);
             }
         }
+    }
+
+    private static function timeForceExitBuy($bid, $botSettings){
+        dump('------------------------------------------------------------------ FORCE TIME BUY LIMIT CLOSE! --------- ' . now());
+        self::amendBuyLimitOrder($bid + self::limitToMarketOrderPrice($bid), $botSettings, 'force time close');
+
+        /* Set flag to true. Do not amend the order after time forece exit*/
+        self::$limitOrderObj['isLimitOrderPlaced'] = true;
+        Cache::put('bot_' . self::$botId, self::$limitOrderObj, now()->addMinute(30));
+    }
+
+    private static function timeForceExitSell($ask, $botSettings){
+        dump('------------------------------------------------------------------ FORCE TIME SELL LIMIT CLOSE! --------- ' . now());
+        self::amendSellLimitOrder($ask - self::limitToMarketOrderPrice($ask), $botSettings, 'time force amend');
+
+        /**
+         * Set flag to true. Do not amend the order after time force exit
+         * https://dacoders.myjetbrains.com/youtrack/issue/JSE-227
+         */
+        self::$limitOrderObj['isLimitOrderPlaced'] = true;
+        Cache::put('bot_' . self::$botId, self::$limitOrderObj, now()->addMinute(30));
+    }
+
+    /**
+     * When we need to execute a limit order fast - we transfer it to makrket by adding a 10% increment.
+     * It causes limit order to execute as market.
+     * In this case regular commission is payed indtead of a rebate
+     *
+     * @param $price
+     * @return double $increment
+     */
+    private static function limitToMarketOrderPrice($price){
+        $increment = $price * 10 / 100;
+        return $increment;
     }
 }

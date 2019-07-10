@@ -21,6 +21,7 @@ class ProfitSignal
 {
     private static $lastRow;
     private static $penUltimanteRow;
+    private static $tradeCommissionValue;
 
     public static function calc($botId, $orderExecutionResponse){
 
@@ -53,7 +54,7 @@ class ProfitSignal
                 if($orderExecutionResponse['symbol'] == 'XBTUSD'){
                     dump('FORMULA: BTC. ProfitSignal.php');
                     // BTC: 1 / (exit Price - entry Price) * volume
-                    $profit = (1 / $penultimateRow->avg_fill_price - 1 / $lastRow->avg_fill_price) * $lastRow->signal_volume;
+                    $profit = (1 / $lastRow->avg_fill_price - 1 / $penultimateRow->avg_fill_price) * $lastRow->signal_volume;
                 }
                 if($orderExecutionResponse['symbol'] == 'ETHUSD'){
                     dump('FORMULA: ETH. ProfitSignal.php');
@@ -63,7 +64,7 @@ class ProfitSignal
                 dump('sell');
                 if($orderExecutionResponse['symbol'] == 'XBTUSD'){
                     dump('FORMULA: BTC. ProfitSignal.php');
-                    $profit = (1 / $lastRow->avg_fill_price - 1 / $penultimateRow->avg_fill_price) * $lastRow->signal_volume;
+                    $profit = (1 / $penultimateRow->avg_fill_price - 1 / $lastRow->avg_fill_price) * $lastRow->signal_volume;
                 }
                 if($orderExecutionResponse['symbol'] == 'ETHUSD'){
                     dump('FORMULA: ETH. ProfitSignal.php');
@@ -74,12 +75,19 @@ class ProfitSignal
             dump($lastRow->signal_volume);
             dump($profit);
 
-            /* Trade profit, commission */
+            /* Commission calculation */
+            if ($orderExecutionResponse['symbol'] == 'XBTUSD')
+                self::$tradeCommissionValue = 1 / $lastRow->avg_fill_price * $lastRow->signal_volume * $lastRow->trade_commission_percent;
+
+            if ($orderExecutionResponse['symbol'] == 'ETHUSD')
+                self::$tradeCommissionValue = $lastRow->avg_fill_price * 0.000001 * $lastRow->signal_volume * $lastRow->trade_commission_percent;
+
+            /* Trade profit, comission update*/
             DB::table('signal_' . $botId)
                 ->where('id', $lastRow->id)
                 ->update([
                     'trade_profit' => $profit,
-                    'trade_commission_value' => 1 / $lastRow->avg_fill_price * $lastRow->signal_volume * $lastRow->trade_commission_percent //$profit * $lastRow->trade_commission_percent
+                    'trade_commission_value' => self::$tradeCommissionValue
                 ]);
 
             /* Accumulated profit */

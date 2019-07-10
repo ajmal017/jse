@@ -406,6 +406,7 @@ class LimitOrderMessage
 
     private static function timeForceExitBuy($bid, $botSettings){
         dump('------------------------------------------------------------------ FORCE TIME BUY LIMIT CLOSE! --------- ' . now());
+        dump(self::limitToMarketOrderPrice($bid));
         self::amendBuyLimitOrder($bid + self::limitToMarketOrderPrice($bid), $botSettings, 'force time close');
 
         /* Set flag to true. Do not amend the order after time forece exit*/
@@ -415,6 +416,7 @@ class LimitOrderMessage
 
     private static function timeForceExitSell($ask, $botSettings){
         dump('------------------------------------------------------------------ FORCE TIME SELL LIMIT CLOSE! --------- ' . now());
+        dump(self::limitToMarketOrderPrice($ask));
         self::amendSellLimitOrder($ask - self::limitToMarketOrderPrice($ask), $botSettings, 'time force amend');
 
         /**
@@ -434,7 +436,7 @@ class LimitOrderMessage
      * @return double $increment
      */
     private static function limitToMarketOrderPrice($price){
-        $increment = $price * 10 / 100;
-        return $increment;
+        $increment = $price * 5 / 100;  // 5%
+        return ceil($increment);
     }
 }

@@ -54,21 +54,21 @@ class ProfitSignal
                 if($orderExecutionResponse['symbol'] == 'XBTUSD'){
                     dump('FORMULA: BTC. ProfitSignal.php');
                     // BTC: 1 / (exit Price - entry Price) * volume
-                    $profit = (1 / $lastRow->avg_fill_price - 1 / $penultimateRow->avg_fill_price) * $lastRow->signal_volume;
+                    $profit = (1 / $lastRow->avg_fill_price - 1 / $penultimateRow->avg_fill_price) * $lastRow->signal_volume / 2;
                 }
                 if($orderExecutionResponse['symbol'] == 'ETHUSD'){
                     dump('FORMULA: ETH. ProfitSignal.php');
-                    $profit = ($penultimateRow->avg_fill_price - $lastRow->avg_fill_price) * 0.000001 * $lastRow->signal_volume;
+                    $profit = ($penultimateRow->avg_fill_price - $lastRow->avg_fill_price) * 0.000001 * $lastRow->signal_volume / 2;
                 }
             } else {
                 dump('sell');
                 if($orderExecutionResponse['symbol'] == 'XBTUSD'){
                     dump('FORMULA: BTC. ProfitSignal.php');
-                    $profit = (1 / $penultimateRow->avg_fill_price - 1 / $lastRow->avg_fill_price) * $lastRow->signal_volume;
+                    $profit = (1 / $penultimateRow->avg_fill_price - 1 / $lastRow->avg_fill_price) * $lastRow->signal_volume / 2;
                 }
                 if($orderExecutionResponse['symbol'] == 'ETHUSD'){
                     dump('FORMULA: ETH. ProfitSignal.php');
-                    $profit = ($lastRow->avg_fill_price - $penultimateRow->avg_fill_price) * 0.000001 * $lastRow->signal_volume;
+                    $profit = ($lastRow->avg_fill_price - $penultimateRow->avg_fill_price) * 0.000001 * $lastRow->signal_volume / 2;
                 }
             }
 
@@ -94,7 +94,16 @@ class ProfitSignal
             DB::table('signal_' . $botId)
                 ->where('id', $lastRow->id)
                 ->update([
-                    'accumulated_profit' => DB::table('signal_' . $botId)->sum('trade_profit')
+                    'accumulated_profit' => DB::table('signal_' . $botId)->sum('trade_profit'),
+                    'accumulated_commission' => DB::table('signal_' . $botId)->sum('trade_commission_value')
+                ]);
+
+            /* Net profit */
+            DB::table('signal_' . $botId)
+                ->where('id', $lastRow->id)
+                ->update([
+                    'net_profit' => DB::table('signal_' . $botId)->sum('trade_profit') +
+                        DB::table('signal_' . $botId)->sum('trade_commission_value')
                 ]);
 
 

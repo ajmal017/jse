@@ -99,6 +99,10 @@ class LimitOrderMessage
                     if (array_key_exists('orderID', self::$limitOrderObj))
                         if (self::$limitOrderObj['orderID'])
                             \App\Classes\Trading\Exchange::getOrders($botSettings, self::$limitOrderObj);
+
+        /* Start 55 seconds timer for getting executions */
+        // Once over add a record to signals
+        // Set limitOrderObj to 'after fully filled' state
     }
 
     /**
@@ -139,7 +143,7 @@ class LimitOrderMessage
     private static function limitOrderExecutionTimeCheck(){
         if (self::$isFirstTimeTickCheck2 || strtotime(now()) >= self::$addedTickTime2) {
             self::$isFirstTimeTickCheck2 = false;
-            self::$addedTickTime2 = strtotime(now()) + 45; // Seconds
+            self::$addedTickTime2 = strtotime(now()) + 40; // Seconds
             return true;
         }
     }
@@ -188,7 +192,6 @@ class LimitOrderMessage
                                     /* Data object can contain multiple executions! https://dacoders.myjetbrains.com/youtrack/issue/JSE-195 */
                                     if (count($message) > 0){
                                         //dump('Execution DATA object contains more than 1 record. foreach it!!! LimitOrderMessage');
-                                        //dump($message);
                                         foreach ($message as $execution){
                                             /* Check if fully filled. leavesQty - volume reminder */
                                             if(($execution['leavesQty']) == 0){
@@ -209,25 +212,23 @@ class LimitOrderMessage
                                         // Refresh flags and clOrdID in order to place new limit order
 
                                         if(($execution['leavesQty']) == 0) {
-                                            //self::$limitOrderObj = Cache::get('bot_1');
                                             self::$limitOrderObj['orderID'] = null;
-                                            //self::$limitOrderObj['clOrdID'] = 'abc-123-' . now();
                                             self::$limitOrderObj['isLimitOrderPlaced'] = false;
                                             self::$limitOrderObj['limitOrderPrice'] = null;
                                             self::$limitOrderObj['limitOrderTimestamp'] = null;
                                             Cache::put('bot_' . self::$botId, self::$limitOrderObj, now()->addMinute(30));
                                         }
                                     } else {
-                                        dump('Message count = 0 LimitOrderMessage.php uuyytt');
+                                        dump('Message count = 0 LimitOrderMessage.php Code: uuyytt');
                                     }
                     } else {
-                        dump('Can not find order ID. LimitOrderMessage.php in execution qqwwee44');
+                        dump('Can not find order ID. LimitOrderMessage.php in execution Code: qqwwee44');
                         //die();
                     }
 
             }
             else {
-                echo "CANT FIND orderID field. jjkkll\n";
+                echo "CANT FIND orderID field. Code: jjkkll\n";
             }
         }
     }
@@ -251,7 +252,7 @@ class LimitOrderMessage
         } else {
             /**
              * Time force exit.
-             * We calculate 50 seconds here (or other time delat).
+             * We calculate 40-something seconds here (or other time delat).
              * Once expired: send ask - 10% from the price - it will execute the limit order as market.
              */
             if(self::limitOrderExecutionTimeCheck()){
@@ -406,9 +407,7 @@ class LimitOrderMessage
 
     private static function timeForceExitBuy($bid, $botSettings){
         dump('------------------------------------------------------------------ FORCE TIME BUY LIMIT CLOSE! --------- ' . now());
-        dump(self::limitToMarketOrderPrice($bid));
         self::amendBuyLimitOrder($bid + self::limitToMarketOrderPrice($bid), $botSettings, 'force time close');
-
         /* Set flag to true. Do not amend the order after time forece exit*/
         self::$limitOrderObj['isLimitOrderPlaced'] = true;
         Cache::put('bot_' . self::$botId, self::$limitOrderObj, now()->addMinute(30));
@@ -416,9 +415,7 @@ class LimitOrderMessage
 
     private static function timeForceExitSell($ask, $botSettings){
         dump('------------------------------------------------------------------ FORCE TIME SELL LIMIT CLOSE! --------- ' . now());
-        dump(self::limitToMarketOrderPrice($ask));
         self::amendSellLimitOrder($ask - self::limitToMarketOrderPrice($ask), $botSettings, 'time force amend');
-
         /**
          * Set flag to true. Do not amend the order after time force exit
          * https://dacoders.myjetbrains.com/youtrack/issue/JSE-227

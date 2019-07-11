@@ -193,11 +193,8 @@ class Exchange
     }
 
     public static function getOrders($botSettings, $limitOrderObj){
-
         echo '****   GET TRADES FOR PLACED ORDER (Exchange.php). orderID: ' . $limitOrderObj['orderID'] . " line: " . __LINE__ . "\n";
-
         $exchange = new bitmex();
-
         if($botSettings['isTestnet'] == 1){
             $exchange->urls['api'] = $exchange->urls['test']; // Testnet or live. test or api
         } else {

@@ -44,9 +44,9 @@ class LimitOrderMessage
                 ->get();
 
         if (count(self::$signalRow) > 1) {
-            $message = 'There are more than onw record with New status in signals. Die from LimitOrderMessage.php';
+            $message = 'There are more than onw record with New status in signals. LimitOrderMessage.php';
             Log::emergency($message);
-            die ($message);
+            //die ($message);
         }
 
         /**

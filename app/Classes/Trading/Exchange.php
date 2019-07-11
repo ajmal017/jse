@@ -110,8 +110,9 @@ class Exchange
          * If string - error. It will be catch in checkResponse
          */
         if (gettype(self::$response) == 'array'){
-            $limitOrderObj['limitOrderTimestamp'] = 12345;
+            $limitOrderObj['limitOrderTimestamp'] = self::$response['datetime'];
             $limitOrderObj['orderID'] = self::$response['info']['orderID'];
+            $limitOrderObj['price'] = self::$response['info']['price'];
             Cache::put('bot_' . $botId, $limitOrderObj, now()->addMinute(30));
             echo('SELL Limit order placed (Exchnage.php). MUST NOT BE EMPTY! orderID: ' . self::$response['info']['orderID'] . "\n");
 
@@ -150,8 +151,9 @@ class Exchange
          * If string - error. It will be proceeded in checkResponse
          */
         if (gettype(self::$response) == 'array'){
-            $limitOrderObj['limitOrderTimestamp'] = 12345;
+            $limitOrderObj['limitOrderTimestamp'] = self::$response['datetime'];
             $limitOrderObj['orderID'] = self::$response['info']['orderID'];
+            $limitOrderObj['price'] = self::$response['info']['price'];
             Cache::put('bot_' . $botId, $limitOrderObj, now()->addMinute(30));
             echo('BUY Limit order placed (Exchnage.php). MUST NOT BE EMPTY! orderID: ' . self::$response['info']['orderID'] . "\n");
 

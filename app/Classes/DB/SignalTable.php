@@ -40,7 +40,6 @@ class SignalTable extends ProfitSignal
             'volume_reminder' => $orderExecutionResponse['leavesQty'],
             'type' => $orderExecutionResponse['execType'],
             'order_id' => $orderExecutionResponse['orderID']
-            //
         ]);
     }
 
@@ -74,6 +73,33 @@ class SignalTable extends ProfitSignal
 
         // profit goes here
         \App\Classes\Trading\ProfitSignal::calc($botId, $orderExecutionResponse);
+    }
+
+    public static function signalFinish($botId, $orderExecutionResponse){
+
+        DB::table('signal_' . $botId)
+            ->where('type', 'signal')
+            ->where('status', 'pending')
+            ->orwhere('status', 'new')
+            ->update([
+                'status' => 'closed'
+            ]);
+
+        // When closed -> prepare the row with price
+        // Now we take avg price from last execution - later we should calculate it
+        // Add avg_fill_price to avg_fill_price where type = signal, status = closed
+        DB::table('signal_' . $botId)
+            ->where('type', 'signal')
+            ->where('status', 'closed')
+            ->where('order_id', $orderExecutionResponse['orderID'])
+            ->update([
+                'avg_fill_price' => $orderExecutionResponse['avgPx'], // Exec price
+                'trade_commission_percent' => $orderExecutionResponse['commission']
+            ]);
+
+        // profit goes here
+        \App\Classes\Trading\ProfitSignal::calc($botId, $orderExecutionResponse);
+        //  die('code: gghhjj77');
     }
 
     /**

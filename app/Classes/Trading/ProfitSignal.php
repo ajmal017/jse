@@ -102,7 +102,7 @@ class ProfitSignal
             DB::table('signal_' . $botId)
                 ->where('id', $lastRow->id)
                 ->update([
-                    'net_profit' => DB::table('signal_' . $botId)->sum('trade_profit') +
+                    'net_profit' => DB::table('signal_' . $botId)->sum('trade_profit') -
                         DB::table('signal_' . $botId)->sum('trade_commission_value')
                 ]);
 

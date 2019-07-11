@@ -27,6 +27,9 @@ class LimitOrderMessage
     private static $addedTickTime2;
     private static $addedTickTimeAmend;
 
+    private static $isGetExecutionsTickCheck = true;
+    private static $addedTickGetExcutions;
+
     public static function parse(array $message, $botId){
         self::$limitOrderObj = Cache::get('bot_' . $botId);
         self::$botId = $botId;
@@ -100,9 +103,12 @@ class LimitOrderMessage
                         if (self::$limitOrderObj['orderID'])
                             \App\Classes\Trading\Exchange::getOrders($botSettings, self::$limitOrderObj);
 
+
         /* Start 55 seconds timer for getting executions */
         // Once over add a record to signals
         // Set limitOrderObj to 'after fully filled' state
+        if(self::getExecutionsTimeRangeCheck())
+            self::forceSignalFinish();
     }
 
     /**
@@ -144,6 +150,28 @@ class LimitOrderMessage
         if (self::$isFirstTimeTickCheck2 || strtotime(now()) >= self::$addedTickTime2) {
             self::$isFirstTimeTickCheck2 = false;
             self::$addedTickTime2 = strtotime(now()) + 40; // Seconds
+            return true;
+        }
+    }
+
+
+    /**
+     * A time range during which an execution response must be received from Bitmex.
+     * If it is not - a signal will be closed with force and with execution data taken from limit order placement response.
+     * This may cause a trading balance not be equal to a signal.
+     *
+     * ATTENTION!
+     * This value must be longer than limitOrderExecutionTimeCheck!
+     * if it is 40
+     * and getExecutionsTimeRangeCheck is 55
+     * Then we have 15 seconds to pull executions out of Bitmex in case of force market order execution
+     *
+     * @return bool
+     */
+    private static function getExecutionsTimeRangeCheck(){
+        if (self::$isGetExecutionsTickCheck || strtotime(now()) >= self::$addedTickGetExcutions) {
+            self::$isGetExecutionsTickCheck = false;
+            self::$addedTickGetExcutions = strtotime(now()) + 55; // Seconds
             return true;
         }
     }
@@ -244,6 +272,8 @@ class LimitOrderMessage
                 self::placeSellLimitOrder($ask, $botSettings);
                 /* Start time force exit timer */
                 self::limitOrderExecutionTimeCheck();
+                /* Start execution receive time range timer*/
+                self::getExecutionsTimeRangeCheck();
             }
             else {
              dump('Tried to place a SELL order while there is a PENDING order already. Die LimitOrderMessage.php ttyyuu');
@@ -283,6 +313,8 @@ class LimitOrderMessage
                 self::placeBuyLimitOrder($bid, $botSettings);
                 /* Start time force exit timer */
                 self::limitOrderExecutionTimeCheck($bid, $botSettings);
+                /* Start execution receive time range timer*/
+                self::getExecutionsTimeRangeCheck();
             } else {
                 dump('Tried to place a BUY order while there is a PENDING order already. Die LimitOrderMessage.php ppooii');
                 die();
@@ -435,5 +467,40 @@ class LimitOrderMessage
     private static function limitToMarketOrderPrice($price){
         $increment = $price * 5 / 100;  // 5%
         return ceil($increment);
+    }
+
+    /**
+     * Close signal when a time is over and no execution received from Bitmex.
+     */
+    private static function forceSignalFinish(){
+
+        echo "**************************\n";
+        echo "** FORCE SIGNAL CLOSE!  **\n";
+        echo "**************************\n";
+
+        self::$limitOrderObj = Cache::get('bot_' . self::$botId);
+        $execution = [
+            'ordType' => 'not_used',
+            'side' => 'Buy',
+            'lastQty' => 0,
+            'timestamp' => self::$limitOrderObj['limitOrderTimestamp'],
+            //'time_stamp' => strtotime($orderExecutionResponse['timestamp']) * 1000, // 13 digits
+
+            'trade_date' => gmdate("Y-m-d G:i:s", strtotime(self::$limitOrderObj['limitOrderTimestamp'])), // mysql date format
+            'avgPx' => self::$limitOrderObj['price'], // Exec price
+            'price' => self::$limitOrderObj['price'], // In case of amend-market order, will be the price which goes to opposite side of order book
+            'commission' => 0,
+            'leavesQty' => 0,
+            'execType' => 'forceTrade',
+            'orderID' => self::$limitOrderObj['orderID']
+        ];
+
+        \App\Classes\DB\SignalTable::insertRecord($execution, self::$botId);
+
+        \App\Classes\DB\SignalTable::signalFinish(self::$botId, [
+            'orderID' => self::$limitOrderObj['orderID'],
+            'avgPx' => self::$limitOrderObj['price'],
+            'commission' => 0
+        ]);
     }
 }

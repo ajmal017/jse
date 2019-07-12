@@ -26,6 +26,9 @@ class HistoryBars extends \App\Http\Controllers\Controller
         $accumulatedProfit = [];
         $seriesData = [];
 
+        $executionLongMarkers = [];
+        $executionShortMarkers = [];
+
         $allDbValues = DB::table('bot_' . $botId)->get();
         foreach ($allDbValues as $rowValue) { // Go through all DB records
             $candles[] = [
@@ -77,6 +80,22 @@ class HistoryBars extends \App\Http\Controllers\Controller
                 $rowValue->time_stamp,
                 $rowValue->macd_signal_line
             ];
+
+            // Get all rows from signal_ . $botId
+            // Make first collection where direction = Buy
+            // Make second collection where direction == sell
+
+            /* Execution long markers */
+            $executionLongMarkers = DB::table('signal_' . $botId)
+                ->where('direction', 'buy')
+                ->get();
+
+            $executionLongMarkers = DB::table('signal_' . $botId)
+                ->where('direction', 'sell')
+                ->get();
+
+
+            /* Execution short markers */
         }
         if ($allDbValues->count() != 0)
             $seriesData = array(

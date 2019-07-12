@@ -77,14 +77,14 @@ class Chart extends Profit
          * $this->trade_flag == "all" is used only when the first trade occurs, then it turns to "long" or "short".
          * SMA filter is always on. SMA filter is a simple SMA with period = 2;
          */
-        if (($this->lastRow[0]->sma1 > $this->penUltimanteRow->price_channel_high_value) && ($this->trade_flag == "all" || $this->trade_flag == "long")){
+        if (($this->lastRow[0]->sma1 > $this->penUltimanteRow->price_channel_high_value) &&
+            ($this->trade_flag == "all" || $this->trade_flag == "long")){
             echo "####### HIGH TRADE!<br>\n";
-            // Is it the first trade ever?
+
+            /* Is it the first trade ever? */
             if ($this->trade_flag == "all"){
                 echo "---------------------- FIRST EVER TRADE<br>\n";
                 if($mode != 'backtest')
-                    // PlaceOrder::dispatch('buy', $this->botSettings['volume'], $this->botSettings);
-                    //DB::table('signal_1')
                     DB::table($this->botSettings['signalTable'])
                         ->insert([
                             'type' => 'signal',
@@ -106,20 +106,25 @@ class Chart extends Profit
                             'signal_volume' => $this->botSettings['volume'] * 2
                         ]);
             }
+
             // Trade flag. If this flag set to short -> don't enter this IF and wait for channel low crossing (IF below)
-            $this->trade_flag = 'short'; $this->position = "long"; $this->add_bar_long = true;
+            $this->trade_flag = 'short';
+            $this->position = "long";
+            $this->add_bar_long = true;
+
             /* Update the last bar/record in the DB */
             \App\Classes\Accounting\TradeBar::update($this->botSettings, "buy", $this->lastRow[0]->close, $this->lastRow[0]->id);
             \App\Classes\Accounting\Commission::accumulate($this->botSettings);
         }
 
-        if (($this->lastRow[0]->sma1 < $this->penUltimanteRow->price_channel_low_value) && ($this->trade_flag == "all"  || $this->trade_flag == "short")) {
+        if (($this->lastRow[0]->sma1 < $this->penUltimanteRow->price_channel_low_value) &&
+            ($this->trade_flag == "all"  || $this->trade_flag == "short")) {
             echo "####### LOW TRADE!<br>\n";
             // Is the the first trade ever?
             if ($this->trade_flag == "all"){
                 echo "---------------------- FIRST EVER TRADE<br>\n";
                 if($mode != 'backtest')
-                    // PlaceOrder::dispatch('sell', $this->botSettings['volume'], $this->botSettings);
+
                     DB::table($this->botSettings['signalTable'])
                         ->insert([
                             'type' => 'signal',
@@ -132,7 +137,6 @@ class Chart extends Profit
             {
                 echo "---------------------- NOT FIRST EVER TRADE. CLOSE + OPEN. VOL * 2\n";
                 if($mode != 'backtest')
-                    // PlaceOrder::dispatch('sell', $this->botSettings['volume'] * 2, $this->botSettings);
                     DB::table($this->botSettings['signalTable'])
                         ->insert([
                             'type' => 'signal',
@@ -141,7 +145,12 @@ class Chart extends Profit
                             'signal_volume' => $this->botSettings['volume'] * 2
                         ]);
             }
-            $this->trade_flag = 'long'; $this->position = "short"; $this->add_bar_short = true;
+
+            $this->trade_flag = 'long';
+            $this->position = "short";
+            $this->add_bar_short = true;
+
+            /* Update the last bar/record in the DB */
             \App\Classes\Accounting\TradeBar::update($this->botSettings, "sell", $this->lastRow[0]->close, $this->lastRow[0]->id);
             \App\Classes\Accounting\Commission::accumulate($this->botSettings);
         }

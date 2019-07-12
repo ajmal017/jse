@@ -47,7 +47,11 @@ abstract class Profit
          * Realtime mode: we use not ID, we just get the last record from the DB.
          */
         $backTestRowId = $this->lastRow[0]->id;
-        $this->penUltimanteRow = DB::table($this->botSettings['botTitle'])->where('id', $this->lastRow[0]->id - 1)->get()->first();
+        $this->penUltimanteRow =
+            DB::table($this->botSettings['botTitle'])
+                ->where('id', $this->lastRow[0]->id - 1)
+                ->get()
+                ->first();
 
         /**
          * Do not calculate profit if there is no open position. If do not do this check - zeros in table occur
@@ -63,8 +67,27 @@ abstract class Profit
                     ->orderBy('id', 'desc') // Form biggest to smallest values
                     ->value('trade_price');
 
-            $this->tradeProfit =
-                (($this->position == "long" ? ($this->lastRow[0]->close - $lastTradePrice) * $this->volume : ($lastTradePrice - $this->lastRow[0]->close) * $this->volume));
+            //$this->tradeProfit =
+            //    (($this->position == "long" ?
+            // ($this->lastRow[0]->close - $lastTradePrice) * $this->volume : ($lastTradePrice - $this->lastRow[0]->close) * $this->volume));
+
+            // $this->lastRow[0]->close - out
+            // $lastTradePrice - in
+            // $this->volume - vol
+
+
+            /* Profit for BTC */
+            if($this->position == 'long'){
+                // $profit = (1 / $lastRow->avg_fill_price - 1 / $penultimateRow->avg_fill_price) * $lastRow->signal_volume / 2;
+                $this->tradeProfit = (1 / $lastTradePrice - 1 / $this->lastRow[0]->close) * 10000;
+                //$this->tradeProfit = $this->lastRow[0]->close;
+
+            } else {
+                $this->tradeProfit = (1 / $this->lastRow[0]->close - 1 / $lastTradePrice) * 10000;
+                //$this->tradeProfit = $this->lastRow[0]->close;
+            }
+
+            /* Profit for ETH */
 
             \App\Classes\Accounting\TradeProfit::calculate($this->botSettings, $this->tradeProfit, $backTestRowId);
         }
@@ -76,7 +99,7 @@ abstract class Profit
          * If trade_flag is set to all, it means that no trades have been executed yet.
          */
         if ($this->trade_flag != "all") {
-            \App\Classes\Accounting\AccumulatedProfit::calculate($this->botSettings, $this->lastRow[0]->id);
+            //\App\Classes\Accounting\AccumulatedProfit::calculate($this->botSettings, $this->lastRow[0]->id);
             //\App\Classes\Accounting\NetProfit::calculate($this->position, $this->botSettings, $this->lastRow[0]->id);
         }
     }

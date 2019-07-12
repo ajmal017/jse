@@ -45,8 +45,6 @@ class ProfitSignal
                 ->take(1)
                 ->get()[0];
 
-            //echo "Last row: " . $lastRow->id . " ";
-            //echo " Penultimate row: " . $penultimateRow->id . " \n";
             $direction = $lastRow->direction;
 
             if($direction == "buy"){
@@ -108,7 +106,6 @@ class ProfitSignal
 
 
         }
-
 
 
     }

@@ -37,10 +37,6 @@ class BacktestController extends Controller
     public function store(Request $request)
     {
 
-        //LogToFile::add('BacktestController', json_encode($request));
-        //return($request);
-        //die();
-
         $strategy = $request['strategy'];
 
         if ($strategy == 'pc')

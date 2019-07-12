@@ -23,7 +23,8 @@ class TradeProfit
             ->update([
                 // Calculate trade profit only if the position is open.
                 // Because we reach this code on each new bar is issued when high or low price channel boundary is exceeded
-                'trade_profit' => round($tradeProfit, 4),
+                //'trade_profit' => round($tradeProfit, 4),
+                'trade_profit' => $tradeProfit,
             ]);
         echo __FILE__ . " " . __LINE__ . " Profit calculated:" . $tradeProfit . " lastRowId: " . $lastRowId . "\n";
     }

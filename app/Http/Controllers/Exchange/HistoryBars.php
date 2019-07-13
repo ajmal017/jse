@@ -86,13 +86,30 @@ class HistoryBars extends \App\Http\Controllers\Controller
             // Make second collection where direction == sell
 
             /* Execution long markers */
-            $executionLongMarkers = DB::table('signal_' . $botId)
+            /*$executionLongMarkers = DB::table('signal_' . $botId)
+                ->where('type', 'signal')
                 ->where('direction', 'buy')
                 ->get();
 
             $executionLongMarkers = DB::table('signal_' . $botId)
+                ->where('type', 'signal')
                 ->where('direction', 'sell')
-                ->get();
+                ->get();*/
+
+
+            $executions = DB::table('signal_' . $botId)->get();
+            foreach ($executions as $execution) {
+                if($execution->direction == 'buy' && $execution->type == 'signal')
+                    $executionLongMarkers[] = [
+                        $execution->time_stamp,
+                        $execution->avg_fill_price
+                    ];
+                if($execution->direction == 'sell' && $execution->type == 'signal')
+                    $executionShortMarkers[] = [
+                        $execution->time_stamp,
+                        $execution->avg_fill_price
+                    ];
+            }
 
 
             /* Execution short markers */
@@ -110,7 +127,9 @@ class HistoryBars extends \App\Http\Controllers\Controller
                 "macdLine" => $macdLine,
                 "macdSignalLine" => $macdSignalLine,
                 "symbol" => $allDbValues[0]->symbol,
-                "rawTable" => $allDbValues
+                "rawTable" => $allDbValues,
+                'executionLongMarkers' => $executionLongMarkers,
+                'executionShortMarkers' => $executionShortMarkers
             );
         return json_encode($seriesData);
     }

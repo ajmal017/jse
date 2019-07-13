@@ -22,7 +22,7 @@ class LimitOrderMessage
     /* Rate limit vars */
     private static $isFirstTimeTickCheck = true;
     private static $isFirstTimeTickCheck2 = true;
-    private static $isAmendOrderRateLimitheck = true;
+    private static $isAmendOrderRateLimitCheck = true;
     private static $addedTickTime;
     private static $addedTickTime2;
     private static $addedTickTimeAmend;
@@ -132,8 +132,8 @@ class LimitOrderMessage
      * @return bool
      */
     private static function amendOrderRateLimitheck(){
-        if (self::isAmendOrderRateLimitheck || strtotime(now()) >= self::$addedTickTimeAmend) {
-            self::$isAmendOrderRateLimitheck = false;
+        if (self::$isAmendOrderRateLimitCheck || strtotime(now()) >= self::$addedTickTimeAmend) {
+            self::$isAmendOrderRateLimitCheck = false;
             self::$addedTickTimeAmend = strtotime(now()) + 3; // Seconds
             return true;
         }
@@ -191,14 +191,6 @@ class LimitOrderMessage
                         }
     }
 
-    /**
-     * Not used.
-     *
-     * @param array $message
-     */
-
-
-    // Second version.
     public static function executionParse2(array $message){
         foreach($message as $msg){
             if(array_key_exists('orderID', $msg)){
@@ -294,10 +286,10 @@ class LimitOrderMessage
              * https://dacoders.myjetbrains.com/youtrack/issue/JSE-228
              */
             self::$limitOrderObj = Cache::get('bot_' . self::$botId);
-            if(!self::$limitOrderObj['isLimitOrderPlaced'])
-                /* https://dacoders.myjetbrains.com/youtrack/issue/JSE-229 */
-                if (self::amendOrderRateLimitheck())
-                    self::amendSellLimitOrder($ask, $botSettings, 'regular amend');
+
+            if (self::amendOrderRateLimitheck())
+                self::amendSellLimitOrder($ask, $botSettings, 'regular amend');
+
         }
     }
 
@@ -326,9 +318,9 @@ class LimitOrderMessage
             }
             /* Amend */
             self::$limitOrderObj = Cache::get('bot_' . self::$botId);
-            if(!self::$limitOrderObj['isLimitOrderPlaced'])
-                if (self::amendOrderRateLimitheck())
-                    self::amendBuyLimitOrder($bid, $botSettings, 'regular amend');
+
+            if (self::amendOrderRateLimitheck())
+                self::amendBuyLimitOrder($bid, $botSettings, 'regular amend');
         }
     }
 
@@ -382,8 +374,9 @@ class LimitOrderMessage
 
     private static function amendBuyLimitOrder($bid, $botSettings, $amendReason){
         //if ($bid - self::$limitOrderObj['step'] == self::$limitOrderObj['limitOrderPrice']){
+        dump('amend price sell trace. ask: ' . $bid . " limit order price: " . self::$limitOrderObj['limitOrderPrice'] . " code: uu88");
         if ($bid == self::$limitOrderObj['limitOrderPrice']){
-            //dump('Ask == best ASK!');
+            dump('Bid == best BID!');
         } else {
             echo ('PREPARE TO AMEND BUY ORDER! if the order really placed? Limit price: '
                     . self::$limitOrderObj['limitOrderPrice']) . "\n";
@@ -411,8 +404,9 @@ class LimitOrderMessage
 
     private static function amendSellLimitOrder($ask, $botSettings, $amendReason){
         //if ($ask + self::$limitOrderObj['step'] == self::$limitOrderObj['limitOrderPrice']){
+        dump('amend price sell trace. ask: ' . $ask . " limit order price: " . self::$limitOrderObj['limitOrderPrice'] . " code: uu87");
         if ($ask == self::$limitOrderObj['limitOrderPrice']){
-            //dump('Ask == best ASK!');
+            dump('Ask == best ASK!');
         } else {
             echo ('PREPARE TO AMEND SELL ORDER! if the order really placed? Limit price: ' . self::$limitOrderObj['limitOrderPrice']) . "\n";
 
@@ -426,7 +420,7 @@ class LimitOrderMessage
                     $amendReason
                 );
 
-                // Put price to cache in order no to amend more than needed
+                // Put price to cache in order not to amend more than needed
                 //self::$limitOrderObj['limitOrderPrice'] = $ask + self::$limitOrderObj['step'];
                 self::$limitOrderObj['limitOrderPrice'] = $ask;
                 Cache::put('bot_' . self::$botId, self::$limitOrderObj, now()->addMinute(30));

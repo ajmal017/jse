@@ -28,7 +28,7 @@ class SignalTable extends ProfitSignal
     public static function insertRecord($orderExecutionResponse, $botId){
         DB::table('signal_' . $botId)->insert([
             'order_type' => $orderExecutionResponse['ordType'],
-            'direction' => $orderExecutionResponse['side'],
+            'direction' => strtolower($orderExecutionResponse['side']), // to lower case
             'volume' => $orderExecutionResponse['lastQty'],
             'time_stamp' => strtotime($orderExecutionResponse['timestamp']) * 1000, // 13 digits
             'trade_date' => gmdate("Y-m-d G:i:s", strtotime($orderExecutionResponse['timestamp'])), // mysql date format
@@ -71,7 +71,7 @@ class SignalTable extends ProfitSignal
                 'trade_commission_percent' => $orderExecutionResponse['commission']
             ]);
 
-        // profit goes here
+        /* Profit calculation */
         \App\Classes\Trading\ProfitSignal::calc($botId, $orderExecutionResponse);
     }
 

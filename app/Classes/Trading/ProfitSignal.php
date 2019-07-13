@@ -23,6 +23,15 @@ class ProfitSignal
     private static $penUltimanteRow;
     private static $tradeCommissionValue;
 
+    /**
+     * Profit calculation. Profit is calculated between signals.
+     * When on order is fully filed, the price where leavesVolume = 0 is copied to the signal row.
+     * Also for more precise calculation an average from all executions can be used.
+     * Now - we don't have it.
+     *
+     * @param $botId
+     * @param $orderExecutionResponse
+     */
     public static function calc($botId, $orderExecutionResponse){
 
         self::$penUltimanteRow = DB::table('signal_' . $botId)
@@ -69,9 +78,6 @@ class ProfitSignal
                     $profit = ($lastRow->avg_fill_price - $penultimateRow->avg_fill_price) * 0.000001 * $lastRow->signal_volume / 2;
                 }
             }
-
-            dump($lastRow->signal_volume);
-            dump($profit);
 
             /* Commission calculation */
             if ($orderExecutionResponse['symbol'] == 'XBTUSD')

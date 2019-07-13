@@ -27,7 +27,7 @@ class SignalTable extends ProfitSignal
      */
     public static function insertRecord($orderExecutionResponse, $botId){
         DB::table('signal_' . $botId)->insert([
-            'symbol' => $orderExecutionResponse['info']['symbol'],
+            //'symbol' => $orderExecutionResponse['symbol'],
             'order_type' => $orderExecutionResponse['ordType'],
             'direction' => strtolower($orderExecutionResponse['side']), // to lower case
             'volume' => $orderExecutionResponse['lastQty'],

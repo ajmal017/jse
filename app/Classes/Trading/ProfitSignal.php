@@ -23,6 +23,9 @@ class ProfitSignal
     private static $penUltimanteRow;
     private static $tradeCommissionValue;
 
+    /* @todo remove this. Used only signal force finis is fired */
+    private static $profit = 1;
+
     /**
      * Profit calculation. Profit is calculated between signals.
      * When on order is fully filed, the price where leavesVolume = 0 is copied to the signal row.
@@ -61,21 +64,23 @@ class ProfitSignal
                 if($orderExecutionResponse['symbol'] == 'XBTUSD'){
                     dump('FORMULA: BTC. ProfitSignal.php');
                     // BTC: 1 / (exit Price - entry Price) * volume
-                    $profit = (1 / $lastRow->avg_fill_price - 1 / $penultimateRow->avg_fill_price) * $lastRow->signal_volume / 2;
+                    self::$profit = (1 / $lastRow->avg_fill_price - 1 / $penultimateRow->avg_fill_price) * $lastRow->signal_volume / 2;
                 }
                 if($orderExecutionResponse['symbol'] == 'ETHUSD'){
                     dump('FORMULA: ETH. ProfitSignal.php');
-                    $profit = ($penultimateRow->avg_fill_price - $lastRow->avg_fill_price) * 0.000001 * $lastRow->signal_volume / 2;
+                    self::$profit = ($penultimateRow->avg_fill_price - $lastRow->avg_fill_price) * 0.000001 * $lastRow->signal_volume / 2;
                 }
-            } else {
+            }
+
+            if($direction == "sell"){
                 dump('sell');
                 if($orderExecutionResponse['symbol'] == 'XBTUSD'){
                     dump('FORMULA: BTC. ProfitSignal.php');
-                    $profit = (1 / $penultimateRow->avg_fill_price - 1 / $lastRow->avg_fill_price) * $lastRow->signal_volume / 2;
+                    self::$profit = (1 / $penultimateRow->avg_fill_price - 1 / $lastRow->avg_fill_price) * $lastRow->signal_volume / 2;
                 }
                 if($orderExecutionResponse['symbol'] == 'ETHUSD'){
                     dump('FORMULA: ETH. ProfitSignal.php');
-                    $profit = ($lastRow->avg_fill_price - $penultimateRow->avg_fill_price) * 0.000001 * $lastRow->signal_volume / 2;
+                    self::$profit = ($lastRow->avg_fill_price - $penultimateRow->avg_fill_price) * 0.000001 * $lastRow->signal_volume / 2;
                 }
             }
 
@@ -90,7 +95,7 @@ class ProfitSignal
             DB::table('signal_' . $botId)
                 ->where('id', $lastRow->id)
                 ->update([
-                    'trade_profit' => $profit,
+                    'trade_profit' => self::$profit,
                     'trade_commission_value' => self::$tradeCommissionValue
                 ]);
 

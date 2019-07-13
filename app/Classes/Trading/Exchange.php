@@ -168,7 +168,7 @@ class Exchange
         dump("****   AMEND ORDER. Reason: $amendReason ****");
         echo  "Exchnage.php. line: " . __LINE__ . "\n";
         Echo "orderID: " . $orderID . " MUST NOT BE NULL or EMPTY (Exchnage.php) code: ffddss\n";
-        if($orderID == null) die();
+        //if($orderID == null) die();
 
         $exchange = new bitmex();
 

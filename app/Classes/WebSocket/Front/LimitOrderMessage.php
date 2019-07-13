@@ -461,25 +461,47 @@ class LimitOrderMessage
         echo "**************************\n";
 
         self::$limitOrderObj = Cache::get('bot_' . self::$botId);
+
+
+        /* In case even no order placment reponse was received */
+        if (array_key_exists('limitOrderTimestamp', self::$limitOrderObj)){
+            $timeStamp = self::$limitOrderObj['limitOrderTimestamp'];
+        } else {
+            $timeStamp = 123456778899;
+        }
+
+        if (array_key_exists('price', self::$limitOrderObj)){
+            $price = self::$limitOrderObj['price'];
+        } else {
+            $price = 123456775421;
+        }
+
+        if (array_key_exists('orderID', self::$limitOrderObj)){
+            $orderID = self::$limitOrderObj['price'];
+        } else {
+            $orderID = 12345677654;
+        }
+
         $execution = [
             'symbol' => 'XXCCVV78',
             'ordType' => 'not_used',
             'side' => 'Buy',
             'lastQty' => 0,
-            'timestamp' => self::$limitOrderObj['limitOrderTimestamp'],
+            'timestamp' => $timeStamp,
 
-            'trade_date' => gmdate("Y-m-d G:i:s", strtotime(self::$limitOrderObj['limitOrderTimestamp'])), // mysql date format
-            'avgPx' => self::$limitOrderObj['price'], // Exec price
-            'price' => self::$limitOrderObj['price'], // In case of amend-market order, will be the price which goes to opposite side of order book
+            'trade_date' => gmdate("Y-m-d G:i:s", strtotime($timeStamp)), // mysql date format
+            'avgPx' => $price, // Exec price
+            'price' => $price, // In case of amend-market order, will be the price which goes to opposite side of order book
             'commission' => 0,
             'leavesQty' => 0,
             'execType' => 'forceTrade',
-            'orderID' => self::$limitOrderObj['orderID']
+            'orderID' => $orderID
         ];
 
         \App\Classes\DB\SignalTable::insertRecord($execution, self::$botId);
 
         \App\Classes\DB\SignalTable::signalFinish(self::$botId, [
+            'symbol' => 'XXCCVV78',
             'orderID' => self::$limitOrderObj['orderID'],
             'avgPx' => self::$limitOrderObj['price'],
             'commission' => 0

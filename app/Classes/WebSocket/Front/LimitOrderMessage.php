@@ -104,14 +104,14 @@ class LimitOrderMessage
                             \App\Classes\Trading\Exchange::getOrders($botSettings, self::$limitOrderObj);
 
 
-        /* Start 55 seconds timer for getting executions */
-        // Once over add a record to signals
-        // Set limitOrderObj to 'after fully filled' state
-
-
-        /* Force time exit*/
-        //if(self::getExecutionsTimeRangeCheck())
-            //self::forceSignalFinish();
+        /**
+         * Start 55 seconds timer for getting executions.
+         * Force time signal close.
+         * Once 55 seconds are over and no response has been receivd from Bitmex - finish the signal.
+         * Add an artificial trade and continue trading.
+         */
+        if(self::getExecutionsTimeRangeCheck())
+            self::forceSignalFinish();
     }
 
     /**
@@ -420,22 +420,22 @@ class LimitOrderMessage
     }
 
     private static function timeForceExitBuy($bid, $botSettings){
-        //dump('------------------------------------------------------------------ FORCE TIME BUY LIMIT CLOSE! --------- ' . now());
-        //self::amendBuyLimitOrder($bid + self::limitToMarketOrderPrice($bid), $botSettings, 'force time close');
+        dump('------------------------------------------------------------------ FORCE TIME BUY LIMIT CLOSE! --------- ' . now());
+        self::amendBuyLimitOrder($bid + self::limitToMarketOrderPrice($bid), $botSettings, 'force time close');
         /* Set flag to true. Do not amend the order after time forece exit*/
-        //self::$limitOrderObj['isLimitOrderPlaced'] = true;
-        //Cache::put('bot_' . self::$botId, self::$limitOrderObj, now()->addMinute(30));
+        self::$limitOrderObj['isLimitOrderPlaced'] = true;
+        Cache::put('bot_' . self::$botId, self::$limitOrderObj, now()->addMinute(30));
     }
 
     private static function timeForceExitSell($ask, $botSettings){
-        //dump('------------------------------------------------------------------ FORCE TIME SELL LIMIT CLOSE! --------- ' . now());
-        //self::amendSellLimitOrder($ask - self::limitToMarketOrderPrice($ask), $botSettings, 'time force amend');
+        dump('------------------------------------------------------------------ FORCE TIME SELL LIMIT CLOSE! --------- ' . now());
+        self::amendSellLimitOrder($ask - self::limitToMarketOrderPrice($ask), $botSettings, 'time force amend');
         /**
          * Set flag to true. Do not amend the order after time force exit
          * https://dacoders.myjetbrains.com/youtrack/issue/JSE-227
          */
-        //self::$limitOrderObj['isLimitOrderPlaced'] = true;
-        ///Cache::put('bot_' . self::$botId, self::$limitOrderObj, now()->addMinute(30));
+        self::$limitOrderObj['isLimitOrderPlaced'] = true;
+        Cache::put('bot_' . self::$botId, self::$limitOrderObj, now()->addMinute(30));
     }
 
     /**
@@ -462,11 +462,11 @@ class LimitOrderMessage
 
         self::$limitOrderObj = Cache::get('bot_' . self::$botId);
         $execution = [
+            'symbol' => 'XXCCVV78',
             'ordType' => 'not_used',
             'side' => 'Buy',
             'lastQty' => 0,
             'timestamp' => self::$limitOrderObj['limitOrderTimestamp'],
-            //'time_stamp' => strtotime($orderExecutionResponse['timestamp']) * 1000, // 13 digits
 
             'trade_date' => gmdate("Y-m-d G:i:s", strtotime(self::$limitOrderObj['limitOrderTimestamp'])), // mysql date format
             'avgPx' => self::$limitOrderObj['price'], // Exec price

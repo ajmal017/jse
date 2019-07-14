@@ -60,7 +60,6 @@ class ProfitSignal
             $direction = $lastRow->direction;
 
             if($direction == "buy"){
-                dump('buy');
                 if($orderExecutionResponse['symbol'] == 'XBTUSD'){
                     dump('FORMULA: BTC. ProfitSignal.php');
                     // BTC: 1 / (exit Price - entry Price) * volume

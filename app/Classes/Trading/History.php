@@ -7,6 +7,7 @@
  */
 
 namespace App\Classes\Trading;
+use App\Classes\LogToFile;
 use Illuminate\Support\Facades\DB;
 
 /**
@@ -37,10 +38,15 @@ class History
         }
 
         curl_close($ch);
-        if (!$bars) throw new \Exception('History is not loaded. Symbol may be wrong. Die');
+        if (!$bars) throw new \Exception('History is not loaded. Symbol may be wrong. Die. History.php' );
+
+        //LogToFile::add(__FILE__, json_encode($botSettings['botTitle']));
 
         DB::table($botSettings['botTitle'])->truncate();
+
+
         foreach(array_reverse($bars) as $bar){
+
             DB::table($botSettings['botTitle'])->insert(array(
                 'symbol' => $symbol,
                 'date' => gmdate("Y-m-d G:i:s", strtotime($bar->timestamp)), // Regular date

@@ -19,6 +19,8 @@ use Illuminate\Support\Facades\DB;
  */
 abstract class Profit
 {
+    private static $tradeProfit;
+
     public function calc($mode, $backTestRowId){
         /**
          * Backtest mode:
@@ -76,8 +78,8 @@ abstract class Profit
             // $this->volume - vol
 
 
-            /* Profit for BTC */
-            if($this->position == 'long'){
+            /* Profit for BTC OLD*/
+            /*if($this->position == 'long'){
                 // $profit = (1 / $lastRow->avg_fill_price - 1 / $penultimateRow->avg_fill_price) * $lastRow->signal_volume / 2;
                 $this->tradeProfit = (1 / $lastTradePrice - 1 / $this->lastRow[0]->close) * 10000;
                 //$this->tradeProfit = $this->lastRow[0]->close;
@@ -85,21 +87,53 @@ abstract class Profit
             } else {
                 $this->tradeProfit = (1 / $this->lastRow[0]->close - 1 / $lastTradePrice) * 10000;
                 //$this->tradeProfit = $this->lastRow[0]->close;
+            }*/
+
+
+            /* New profit */
+            $orderExecutionResponse['symbol'] = 'XBTUSD';
+
+            if($this->position == "long"){
+                if($orderExecutionResponse['symbol'] == 'XBTUSD'){
+                    self::$tradeProfit = (1 / $lastTradePrice - 1 / $this->lastRow[0]->close) * $this->volume / 2;
+                }
+                if($orderExecutionResponse['symbol'] == 'ETHUSD'){
+                    //self::$tradeProfit = ($this->lastRow[0]->close - $lastTradePrice) * 0.000001 * $this->volume / 2;
+                }
             }
 
-            /* Profit for ETH */
+            if($this->position == "short"){
+                if($orderExecutionResponse['symbol'] == 'XBTUSD'){
+                    self::$tradeProfit = (1 / $this->lastRow[0]->close - 1 / $lastTradePrice) * $this->volume / 2;
+                }
+                if($orderExecutionResponse['symbol'] == 'ETHUSD'){
+                    //self::$tradeProfit = ($lastTradePrice - $this->lastRow[0]->close) * 0.000001 * $this->volume / 2;
+                }
+            }
 
-            \App\Classes\Accounting\TradeProfit::calculate($this->botSettings, $this->tradeProfit, $backTestRowId);
+            /* Update trade profit */
+            \App\Classes\Accounting\TradeProfit::calculate($this->botSettings, self::$tradeProfit, $backTestRowId);
+
+
+            /* Net profit */
+            DB::table($this->botSettings['botTitle'])
+                ->where('id', $backTestRowId)
+                ->update([
+                    'net_profit' => DB::table($this->botSettings['botTitle'])->sum('trade_profit') -
+                        DB::table($this->botSettings['botTitle'])->sum('trade_commission')
+                ]);
+
         }
     }
 
+    /* Not used */
     public function finish(){
         /**
          * Do not calculate profit if there are no trades.
          * If trade_flag is set to all, it means that no trades have been executed yet.
          */
         if ($this->trade_flag != "all") {
-            //\App\Classes\Accounting\AccumulatedProfit::calculate($this->botSettings, $this->lastRow[0]->id);
+            \App\Classes\Accounting\AccumulatedProfit::calculate($this->botSettings, $this->lastRow[0]->id);
             //\App\Classes\Accounting\NetProfit::calculate($this->position, $this->botSettings, $this->lastRow[0]->id);
         }
     }

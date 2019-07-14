@@ -26,6 +26,5 @@ class TradeProfit
                 //'trade_profit' => round($tradeProfit, 4),
                 'trade_profit' => $tradeProfit,
             ]);
-        echo __FILE__ . " " . __LINE__ . " Profit calculated:" . $tradeProfit . " lastRowId: " . $lastRowId . "\n";
     }
 }

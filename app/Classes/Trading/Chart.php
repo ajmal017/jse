@@ -112,7 +112,7 @@ class Chart extends Profit
             $this->position = "long";
             $this->add_bar_long = true;
 
-            /* Update the last bar/record in the DB */
+            /* Update the last bar/record in the DB + calculate comission */
             \App\Classes\Accounting\TradeBar::update($this->botSettings, "buy", $this->lastRow[0]->close, $this->lastRow[0]->id);
             \App\Classes\Accounting\Commission::accumulate($this->botSettings);
         }

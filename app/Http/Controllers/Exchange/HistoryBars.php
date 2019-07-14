@@ -81,11 +81,6 @@ class HistoryBars extends \App\Http\Controllers\Controller
                 $rowValue->macd_signal_line
             ];
 
-            // Get all rows from signal_ . $botId
-            // Make first collection where direction = Buy
-            // Make second collection where direction == sell
-
-            /* Execution long markers */
             /*$executionLongMarkers = DB::table('signal_' . $botId)
                 ->where('type', 'signal')
                 ->where('direction', 'buy')
@@ -96,23 +91,22 @@ class HistoryBars extends \App\Http\Controllers\Controller
                 ->where('direction', 'sell')
                 ->get();*/
 
-
-            $executions = DB::table('signal_' . $botId)->get();
-            foreach ($executions as $execution) {
-                if($execution->direction == 'buy' && $execution->type == 'signal')
-                    $executionLongMarkers[] = [
-                        $execution->time_stamp,
-                        $execution->avg_fill_price
-                    ];
-                if($execution->direction == 'sell' && $execution->type == 'signal')
-                    $executionShortMarkers[] = [
-                        $execution->time_stamp,
-                        $execution->avg_fill_price
-                    ];
+            /* Don't output execution markers when the back tester is used */
+            if ($botId =! 5){
+                $executions = DB::table('signal_' . $botId)->get();
+                foreach ($executions as $execution) {
+                    if($execution->direction == 'buy' && $execution->type == 'signal')
+                        $executionLongMarkers[] = [
+                            $execution->time_stamp,
+                            $execution->avg_fill_price
+                        ];
+                    if($execution->direction == 'sell' && $execution->type == 'signal')
+                        $executionShortMarkers[] = [
+                            $execution->time_stamp,
+                            $execution->avg_fill_price
+                        ];
+                }
             }
-
-
-            /* Execution short markers */
         }
         if ($allDbValues->count() != 0)
             $seriesData = array(

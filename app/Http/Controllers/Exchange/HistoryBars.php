@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers\Exchange;
+use App\Classes\LogToFile;
 use Illuminate\Support\Facades\DB;
 
 /**
@@ -30,7 +31,7 @@ class HistoryBars extends \App\Http\Controllers\Controller
         $executionShortMarkers = [];
 
         $allDbValues = DB::table('bot_' . $botId)->get();
-        foreach ($allDbValues as $rowValue) { // Go through all DB records
+        foreach ($allDbValues as $rowValue) {
             $candles[] = [
                 $rowValue->time_stamp,
                 $rowValue->open,
@@ -80,34 +81,27 @@ class HistoryBars extends \App\Http\Controllers\Controller
                 $rowValue->time_stamp,
                 $rowValue->macd_signal_line
             ];
+        }
 
-            /*$executionLongMarkers = DB::table('signal_' . $botId)
-                ->where('type', 'signal')
-                ->where('direction', 'buy')
-                ->get();
 
-            $executionLongMarkers = DB::table('signal_' . $botId)
-                ->where('type', 'signal')
-                ->where('direction', 'sell')
-                ->get();*/
-
-            /* Don't output execution markers when the back tester is used */
-            if ($botId =! 5){
-                $executions = DB::table('signal_' . $botId)->get();
-                foreach ($executions as $execution) {
-                    if($execution->direction == 'buy' && $execution->type == 'signal')
-                        $executionLongMarkers[] = [
-                            $execution->time_stamp,
-                            $execution->avg_fill_price
-                        ];
-                    if($execution->direction == 'sell' && $execution->type == 'signal')
-                        $executionShortMarkers[] = [
-                            $execution->time_stamp,
-                            $execution->avg_fill_price
-                        ];
-                }
+        // $botIs != 5 condition does not work, nobody knows why
+        if ($botId == 1 || $botId == 2 || $botId == 3 || $botId == 4){
+            //if (true){
+            $executions = DB::table('signal_' . $botId)->get();
+            foreach ($executions as $execution) {
+                if($execution->direction == 'buy' && $execution->type == 'signal')
+                    $executionLongMarkers[] = [
+                        $execution->time_stamp,
+                        $execution->avg_fill_price
+                    ];
+                if($execution->direction == 'sell' && $execution->type == 'signal')
+                    $executionShortMarkers[] = [
+                        $execution->time_stamp,
+                        $execution->avg_fill_price
+                    ];
             }
         }
+
         if ($allDbValues->count() != 0)
             $seriesData = array(
                 "candles" => $candles,
@@ -123,7 +117,8 @@ class HistoryBars extends \App\Http\Controllers\Controller
                 "symbol" => $allDbValues[0]->symbol,
                 "rawTable" => $allDbValues,
                 'executionLongMarkers' => $executionLongMarkers,
-                'executionShortMarkers' => $executionShortMarkers
+                'executionShortMarkers' => $executionShortMarkers,
+                'botId' => $botId
             );
         return json_encode($seriesData);
     }

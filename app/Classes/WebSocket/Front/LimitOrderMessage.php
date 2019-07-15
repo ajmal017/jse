@@ -365,8 +365,8 @@ class LimitOrderMessage
             //$response = \App\Classes\Trading\Exchange::amendOrder($bid - self::$limitOrderObj['step'], Cache::get('bot_' . self::$botId)['orderID'], $botSettings);
             \App\Jobs\AmendOrder::dispatch(
                 $bid,
-                (array_key_exists('orderID', Cache::get('bot_' . self::$botId) ?
-                    Cache::get('bot_' . self::$botId)['orderID'] : 33445566)),
+                (isset(Cache::get('bot_' . self::$botId)['orderID']) ?
+                    Cache::get('bot_' . self::$botId)['orderID'] : 33445566),
                 $botSettings,
                 $amendReason
             );

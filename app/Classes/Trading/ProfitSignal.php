@@ -24,7 +24,7 @@ class ProfitSignal
     private static $tradeCommissionValue;
 
     /* @todo remove this. Used only signal force finis is fired */
-    private static $profit = 1;
+    private static $profit = 0.000000001;
 
     /**
      * Profit calculation. Profit is calculated between signals.

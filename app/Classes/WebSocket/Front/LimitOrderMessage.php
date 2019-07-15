@@ -436,9 +436,9 @@ class LimitOrderMessage
      */
     private static function forceSignalFinish(){
 
-        echo "**************************\n";
+        echo "*****************************************************\n";
         echo "** FORCE SIGNAL FINISH (bitmex sent no response)!  **\n";
-        echo "**************************\n";
+        echo "*****************************************************\n";
 
         self::$limitOrderObj = Cache::get('bot_' . self::$botId);
 
@@ -473,8 +473,8 @@ class LimitOrderMessage
             'timestamp' => $timeStamp,
 
             'trade_date' => gmdate("Y-m-d G:i:s", strtotime($timeStamp)), // mysql date format
-            'avgPx' => $price, // Exec price
-            'price' => $price, // In case of amend-market order, will be the price which goes to opposite side of order book
+            'avgPx' => ($price ? $price : 0.000000066), // Exec price. It can be null
+            'price' => ($price ? $price : 0.000000077), // In case of amend-market order, will be the price which goes to opposite side of order book
             'commission' => 0,
             'leavesQty' => 0,
             'execType' => 'forceTrade',

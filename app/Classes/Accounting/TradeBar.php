@@ -15,8 +15,6 @@ class TradeBar
         //if ($orderExecutionResponse['symbol'] == 'XBTUSD')
             $tradeCommissionValue = 1 / $lastRow[0]->close * $botSettings['volume'] * $botSettings['commission'];
 
-
-
         DB::table($botSettings['botTitle'])
             ->where('id', $lastRowId)
             ->update([
@@ -24,7 +22,6 @@ class TradeBar
                 'trade_price' => $tradePrice,
                 'trade_direction' => $direction ,
                 'trade_volume' => $botSettings['volume'],
-                //'trade_commission' => round(($lastRow[0]->close * $botSettings['commission'] / 100) * $botSettings['volume'], 4),
                 'trade_commission' => $tradeCommissionValue
             ]);
     }

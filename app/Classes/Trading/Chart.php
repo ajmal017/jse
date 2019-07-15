@@ -155,6 +155,7 @@ class Chart extends Profit
             \App\Classes\Accounting\Commission::accumulate($this->botSettings);
         }
 
+        /* Calculate net profit */
         $this->finish();
     }
 }

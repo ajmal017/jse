@@ -95,11 +95,7 @@ abstract class Profit
                 }
             }
 
-
-
-
-
-
+            // Commission is calculated in TradeBar.php
 
             /* Update trade profit */
             DB::table($this->botSettings['botTitle'])
@@ -128,7 +124,6 @@ abstract class Profit
          */
         if ($this->trade_flag != "all") {
             \App\Classes\Accounting\AccumulatedProfit::calculate($this->botSettings, $this->lastRow[0]->id);
-            //\App\Classes\Accounting\NetProfit::calculate($this->position, $this->botSettings, $this->lastRow[0]->id);
         }
     }
 }

@@ -41,10 +41,10 @@ class BacktestController extends Controller
 
         if ($strategy == 'pc')
             $botSettings = [
-                'botTitle' => 'bot_5',
+                'botTitle' => 'bot_5', // Back testing table
                 'executionSymbolName' => $request['execution_symbol_name'], // ETH/USD
                 'historySymbolName' => $request['history_symbol_name'], // ETHUSD
-                'volume' => 1000000,
+                'volume' => 1000,
                 'commission' => -0.0250, // Taker: 0.0750
                 'strategy' => 'pc',
                 'strategyParams' => [
@@ -60,7 +60,7 @@ class BacktestController extends Controller
                 'botTitle' => 'bot_5',
                 'executionSymbolName' => $request['execution_symbol_name'], // ETH/USD
                 'historySymbolName' => $request['history_symbol_name'], // ETHUSD
-                'volume' => 1000000,
+                'volume' => 1000,
                 'commission' => -0.0250, // Taker: 0.0750
                 'strategy' => 'macd',
                 'strategyParams' => [

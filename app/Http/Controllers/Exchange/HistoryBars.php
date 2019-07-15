@@ -83,7 +83,6 @@ class HistoryBars extends \App\Http\Controllers\Controller
             ];
         }
 
-
         // $botIs != 5 condition does not work, nobody knows why
         if ($botId == 1 || $botId == 2 || $botId == 3 || $botId == 4){
             //if (true){

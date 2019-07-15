@@ -17,9 +17,9 @@ class BacktestingFront
 {
     static public function start($botSettings){
         /* Empty backtesting bars table */
-        DB::table('bot_5')->truncate();
+        //DB::table('bot_5')->truncate();
 
-        \App\Classes\Trading\History::loadPeriod($botSettings);
+        //\App\Classes\Trading\History::loadPeriod($botSettings);
 
         if ($botSettings['strategy'] == 'pc'){
             \App\Classes\Indicators\PriceChannel::calculate($botSettings[
@@ -40,10 +40,6 @@ class BacktestingFront
                 $botSettings, true);
             // @todo 25.05.19 SEND ONE OBJECT! NOT 3 PARAMS!
             $macd = new \App\Classes\Trading\MacdTradesTrigger($botSettings);
-            /*DB::table('bot_5')->update([
-                'price_channel_high_value' => null,
-                'price_channel_low_value' => null
-            ]);*/
         }
 
         /** Empty calculated data like position, profit, accumulated profit, etc */
@@ -62,7 +58,6 @@ class BacktestingFront
             ]);
 
         $allDbValues = DB::table($botSettings['botTitle'])->get();
-
 
 
         $isFirstRecord = false;

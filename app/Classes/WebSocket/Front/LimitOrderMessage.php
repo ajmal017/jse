@@ -486,8 +486,8 @@ class LimitOrderMessage
 
         \App\Classes\DB\SignalTable::signalFinish(self::$botId, [
             'symbol' => 'XXCCVV78',
-            'orderID' => self::$limitOrderObj['orderID'],
-            'avgPx' => self::$limitOrderObj['price'],
+            'orderID' => (isset(self::$limitOrderObj['orderID'] ? self::$limitOrderObj['orderID'] : 'order_789369')),
+            'avgPx' => (isset(self::$limitOrderObj['price']) ? self::$limitOrderObj['price'] : 789369),
             'commission' => 0
         ]);
 

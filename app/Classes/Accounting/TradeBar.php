@@ -16,6 +16,7 @@ class TradeBar
             $tradeCommissionValue = 1 / $lastRow[0]->close * $botSettings['volume'] * $botSettings['commission'];
 
 
+
         DB::table($botSettings['botTitle'])
             ->where('id', $lastRowId)
             ->update([

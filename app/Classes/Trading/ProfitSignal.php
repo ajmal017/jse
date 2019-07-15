@@ -61,12 +61,15 @@ class ProfitSignal
 
             if($direction == "buy"){
                 if($orderExecutionResponse['symbol'] == 'XBTUSD'){
-                    dump('FORMULA: BTC. ProfitSignal.php');
-                    // BTC: 1 / (exit Price - entry Price) * volume
+                    /**
+                     * BTC profit formula: (1 / out - 1 / in) * volume / 2
+                     */
                     self::$profit = (1 / $lastRow->avg_fill_price - 1 / $penultimateRow->avg_fill_price) * $lastRow->signal_volume / 2;
                 }
                 if($orderExecutionResponse['symbol'] == 'ETHUSD'){
-                    dump('FORMULA: ETH. ProfitSignal.php');
+                    /**
+                     * ETH formula: (out - in) * 0.000001 * volume / 2
+                     */
                     self::$profit = ($penultimateRow->avg_fill_price - $lastRow->avg_fill_price) * 0.000001 * $lastRow->signal_volume / 2;
                 }
             }
@@ -74,7 +77,6 @@ class ProfitSignal
             if($direction == "sell"){
                 dump('sell');
                 if($orderExecutionResponse['symbol'] == 'XBTUSD'){
-                    dump('FORMULA: BTC. ProfitSignal.php');
                     self::$profit = (1 / $penultimateRow->avg_fill_price - 1 / $lastRow->avg_fill_price) * $lastRow->signal_volume / 2;
                 }
                 if($orderExecutionResponse['symbol'] == 'ETHUSD'){

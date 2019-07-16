@@ -70,7 +70,7 @@ abstract class Profit
                     ->value('trade_price');
 
             /* New profit */
-            $orderExecutionResponse['symbol'] = 'XBTUSD';
+            //$orderExecutionResponse['symbol'] = 'XBTUSD';
 
             if($this->position == "long"){
                 if ($botSettings['historySymbolName'] == 'XBTUSD'){

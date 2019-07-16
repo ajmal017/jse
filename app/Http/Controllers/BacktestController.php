@@ -43,7 +43,7 @@ class BacktestController extends Controller
                 'botTitle' => 'bot_5', // Back testing table
                 'executionSymbolName' => $request['execution_symbol_name'], // ETH/USD
                 'historySymbolName' => $request['history_symbol_name'], // ETHUSD
-                'volume' => 1000,
+                'volume' => $request['volume'],
                 'commission' => -0.00025, // Taker: 0.000750 - such values come from Bitmex
                 'strategy' => 'pc',
                 'strategyParams' => [
@@ -59,7 +59,7 @@ class BacktestController extends Controller
                 'botTitle' => 'bot_5',
                 'executionSymbolName' => $request['execution_symbol_name'], // ETH/USD
                 'historySymbolName' => $request['history_symbol_name'], // ETHUSD
-                'volume' => 1000,
+                'volume' => $request['volume'],
                 'commission' => -0.00025, // Taker: 0.000750
                 'strategy' => 'macd',
                 'strategyParams' => [

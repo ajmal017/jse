@@ -69,22 +69,22 @@ abstract class Profit
                     ->orderBy('id', 'desc') // Form biggest to smallest values
                     ->value('trade_price');
 
-            /* New profit */
+            /* Trade profit */
             if($this->position == "long"){
                 if ($botSettings['historySymbolName'] == 'XBTUSD'){
-                    self::$tradeProfit = (1 / $lastTradePrice - 1 / $this->lastRow[0]->close) * $this->botSettings['volume'] / 2;
+                    self::$tradeProfit = (1 / $lastTradePrice - 1 / $this->lastRow[0]->close) * $this->botSettings['volume'];
                 }
                 if ($botSettings['historySymbolName'] == 'ETHUSD'){
-                    self::$tradeProfit = ($lastTradePrice - $this->lastRow[0]->close) * 0.000001 * $this->botSettings['volume'] / 2;
+                    self::$tradeProfit = ($this->lastRow[0]->close - $lastTradePrice) * 0.000001 * $this->botSettings['volume'];
                 }
             }
 
             if($this->position == "short"){
                 if ($botSettings['historySymbolName'] == 'XBTUSD'){
-                    self::$tradeProfit = (1 / $this->lastRow[0]->close - 1 / $lastTradePrice) * $this->botSettings['volume'] / 2;
+                    self::$tradeProfit = (1 / $this->lastRow[0]->close - 1 / $lastTradePrice) * $this->botSettings['volume'];
                 }
                 if ($botSettings['historySymbolName'] == 'ETHUSD'){
-                    self::$tradeProfit = ($this->lastRow[0]->close - $lastTradePrice) * 0.000001 * $this->botSettings['volume'] / 2;
+                    self::$tradeProfit = ($lastTradePrice - $this->lastRow[0]->close) * 0.000001 * $this->botSettings['volume'];
                 }
             }
 

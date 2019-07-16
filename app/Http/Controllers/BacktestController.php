@@ -36,7 +36,6 @@ class BacktestController extends Controller
      */
     public function store(Request $request)
     {
-
         $strategy = $request['strategy'];
 
         if ($strategy == 'pc')

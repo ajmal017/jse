@@ -17,9 +17,9 @@ class BacktestingFront
 {
     static public function start($botSettings){
         /* Empty backtesting bars table */
-        //DB::table('bot_5')->truncate();
+        DB::table('bot_5')->truncate();
 
-        //\App\Classes\Trading\History::loadPeriod($botSettings);
+        \App\Classes\Trading\History::loadPeriod($botSettings);
 
         if ($botSettings['strategy'] == 'pc'){
             \App\Classes\Indicators\PriceChannel::calculate($botSettings[

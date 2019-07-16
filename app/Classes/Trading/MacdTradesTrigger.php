@@ -55,14 +55,19 @@ class MacdTradesTrigger extends Profit
         $this->botSettings = $botSettings;
     }
 
-    // Macd line > Macd signal line => go long
-    // Macd line < Macd signal line => go short
+    /**
+     * Macd line > Macd signal line => go long
+     * Macd line < Macd signal line => go short
+     *
+     * @param null $mode
+     * @param null $backTestRowId
+     */
 
     public function index($mode = null, $backTestRowId = null)
     {
         echo __FILE__ . "\n" ;
-        /* Extended class method call */
-        $this->calc($mode, $backTestRowId);
+        /* Abstract class method call */
+        $this->calc($mode, $backTestRowId, $this->botSettings);
 
         /* Wait until MACD generates a signal */
         if (($this->lastRow[0]->macd_line > $this->lastRow[0]->macd_signal_line) || ($this->lastRow[0]->macd_line < $this->lastRow[0]->macd_signal_line)){
@@ -110,7 +115,7 @@ class MacdTradesTrigger extends Profit
             $this->add_bar_long = true;
 
             \App\Classes\Accounting\TradeBar::update($this->botSettings, "buy", $this->lastRow[0]->close, $this->lastRow[0]->id);
-            \App\Classes\Accounting\Commission::accumulate($this->botSettings);
+            \App\Classes\Accounting\Commission::accumulate($this->botSettings, $backTestRowId);
         }
 
         if (($this->lastRow[0]->macd_line < $this->lastRow[0]->macd_signal_line) && ($this->trade_flag == "all"  || $this->trade_flag == "short")) {
@@ -147,7 +152,7 @@ class MacdTradesTrigger extends Profit
 
             /* Update the last bar/record in the DB */
             \App\Classes\Accounting\TradeBar::update($this->botSettings, "sell", $this->lastRow[0]->close, $this->lastRow[0]->id);
-            \App\Classes\Accounting\Commission::accumulate($this->botSettings);
+            \App\Classes\Accounting\Commission::accumulate($this->botSettings, $backTestRowId);
         }
 
         $this->finish();

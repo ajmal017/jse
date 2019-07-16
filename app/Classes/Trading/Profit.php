@@ -21,7 +21,7 @@ abstract class Profit
 {
     private static $tradeProfit;
 
-    public function calc($mode, $backTestRowId){
+    public function calc($mode, $backTestRowId, $botSettings){
         /**
          * Backtest mode:
          * Bars are loaded into the DB and then read one by one in Backtesting.php and sent here.
@@ -69,33 +69,27 @@ abstract class Profit
                     ->orderBy('id', 'desc') // Form biggest to smallest values
                     ->value('trade_price');
 
-
-
-
             /* New profit */
             $orderExecutionResponse['symbol'] = 'XBTUSD';
 
             if($this->position == "long"){
-                if($orderExecutionResponse['symbol'] == 'XBTUSD'){
-                    //self::$tradeProfit = (1 / $this->lastRow[0]->close - 1 / $lastTradePrice) * $this->volume / 2;
-                    self::$tradeProfit = (1 / $lastTradePrice - 1 / $this->lastRow[0]->close) * $this->botSettings['volume'];
+                if ($botSettings['historySymbolName'] == 'XBTUSD'){
+                    self::$tradeProfit = (1 / $lastTradePrice - 1 / $this->lastRow[0]->close) * $this->botSettings['volume'] / 2;
                 }
-                if($orderExecutionResponse['symbol'] == 'ETHUSD'){
-                    //self::$tradeProfit = ($lastTradePrice - $this->lastRow[0]->close) * 0.000001 * $this->volume / 2;
+                if ($botSettings['historySymbolName'] == 'ETHUSD'){
+                    self::$tradeProfit = ($lastTradePrice - $this->lastRow[0]->close) * 0.000001 * $this->botSettings['volume'] / 2;
                 }
             }
 
             if($this->position == "short"){
-                if($orderExecutionResponse['symbol'] == 'XBTUSD'){
-                    //self::$tradeProfit = (1 / $lastTradePrice - 1 / $this->lastRow[0]->close) * $this->volume / 2;
-                    self::$tradeProfit = (1 / $this->lastRow[0]->close - 1 / $lastTradePrice) * $this->botSettings['volume'];
+                if ($botSettings['historySymbolName'] == 'XBTUSD'){
+                    self::$tradeProfit = (1 / $this->lastRow[0]->close - 1 / $lastTradePrice) * $this->botSettings['volume'] / 2;
                 }
-                if($orderExecutionResponse['symbol'] == 'ETHUSD'){
-                    //self::$tradeProfit = ($this->lastRow[0]->close - $lastTradePrice) * 0.000001 * $this->volume / 2;
+                //if($orderExecutionResponse['symbol'] == 'ETHUSD'){
+                if ($botSettings['historySymbolName'] == 'XBTUSD'){
+                    self::$tradeProfit = ($this->lastRow[0]->close - $lastTradePrice) * 0.000001 * $this->botSettings['volume'] / 2;
                 }
             }
-
-            // Commission is calculated in TradeBar.php
 
             /* Update trade profit */
             DB::table($this->botSettings['botTitle'])
@@ -104,14 +98,7 @@ abstract class Profit
                     'trade_profit' => self::$tradeProfit
                 ]);
 
-
-            /* Net profit */
-            /*DB::table($this->botSettings['botTitle'])
-                ->where('id', $backTestRowId)
-                ->update([
-                    'net_profit' => DB::table($this->botSettings['botTitle'])->sum('trade_profit') -
-                        DB::table($this->botSettings['botTitle'])->sum('trade_commission')
-                ]);*/
+            /* Commission is calculated in TradeBar.php called from Chart.php */
 
         }
     }

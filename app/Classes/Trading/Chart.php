@@ -71,7 +71,7 @@ class Chart extends Profit
          * Profit calculation inherited class.
          * This class is attached to all strategies.
          */
-        $this->calc($mode, $backTestRowId);
+        $this->calc($mode, $backTestRowId, $this->botSettings);
 
         /**
          * $this->trade_flag == "all" is used only when the first trade occurs, then it turns to "long" or "short".

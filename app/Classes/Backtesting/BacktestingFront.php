@@ -28,7 +28,6 @@ class BacktestingFront
                 true);
 
             \App\Classes\Indicators\Sma::calculate('close', 2, 'sma1', $botSettings['botTitle'], true);
-
             $chart = new \App\Classes\Trading\Chart($botSettings);
         }
 
@@ -59,24 +58,15 @@ class BacktestingFront
 
         $allDbValues = DB::table($botSettings['botTitle'])->get();
 
-
         $isFirstRecord = false;
         foreach ($allDbValues as $rowValue) { // Go through all DB records
-
              /** We need to pass the first bar. It is needed to avoid null price channel trade check because
              * in Chart.php the penultimate value of the price channel is taken for calculation
              * for the first iteration of foreach this value is always null*/
-
             if ($isFirstRecord){
-                // Used bar close crossing price channel
-                //$chart->index("backtest", $rowValue->date, $rowValue->time_stamp, $rowValue->close, $rowValue->id);
-
-                // IF PC
                 if ($botSettings['strategy'] == 'pc'){
                     $chart->index("backtest", $rowValue->id);
                 }
-
-                // IF MC
                 if ($botSettings['strategy'] == 'macd'){
                     $macd->index("backtest", $rowValue->id);
                 }

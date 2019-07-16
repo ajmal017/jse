@@ -106,12 +106,12 @@ abstract class Profit
 
 
             /* Net profit */
-            DB::table($this->botSettings['botTitle'])
+            /*DB::table($this->botSettings['botTitle'])
                 ->where('id', $backTestRowId)
                 ->update([
                     'net_profit' => DB::table($this->botSettings['botTitle'])->sum('trade_profit') -
                         DB::table($this->botSettings['botTitle'])->sum('trade_commission')
-                ]);
+                ]);*/
 
         }
     }
@@ -124,6 +124,7 @@ abstract class Profit
          */
         if ($this->trade_flag != "all") {
             \App\Classes\Accounting\AccumulatedProfit::calculate($this->botSettings, $this->lastRow[0]->id);
+            \App\Classes\Accounting\NetProfit::calculate($this->position, $this->botSettings, $this->lastRow[0]->id);
         }
     }
 }

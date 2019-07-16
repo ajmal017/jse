@@ -114,7 +114,7 @@ class Chart extends Profit
 
             /* Update the last bar/record in the DB + calculate comission */
             \App\Classes\Accounting\TradeBar::update($this->botSettings, "buy", $this->lastRow[0]->close, $this->lastRow[0]->id);
-            \App\Classes\Accounting\Commission::accumulate($this->botSettings);
+            \App\Classes\Accounting\Commission::accumulate($this->botSettings, $backTestRowId);
         }
 
         if (($this->lastRow[0]->sma1 < $this->penUltimanteRow->price_channel_low_value) &&
@@ -152,7 +152,7 @@ class Chart extends Profit
 
             /* Update the last bar/record in the DB */
             \App\Classes\Accounting\TradeBar::update($this->botSettings, "sell", $this->lastRow[0]->close, $this->lastRow[0]->id);
-            \App\Classes\Accounting\Commission::accumulate($this->botSettings);
+            \App\Classes\Accounting\Commission::accumulate($this->botSettings, $backTestRowId);
         }
 
         /* Calculate net profit */

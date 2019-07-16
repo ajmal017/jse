@@ -70,8 +70,6 @@ abstract class Profit
                     ->value('trade_price');
 
             /* New profit */
-            //$orderExecutionResponse['symbol'] = 'XBTUSD';
-
             if($this->position == "long"){
                 if ($botSettings['historySymbolName'] == 'XBTUSD'){
                     self::$tradeProfit = (1 / $lastTradePrice - 1 / $this->lastRow[0]->close) * $this->botSettings['volume'] / 2;
@@ -85,8 +83,7 @@ abstract class Profit
                 if ($botSettings['historySymbolName'] == 'XBTUSD'){
                     self::$tradeProfit = (1 / $this->lastRow[0]->close - 1 / $lastTradePrice) * $this->botSettings['volume'] / 2;
                 }
-                //if($orderExecutionResponse['symbol'] == 'ETHUSD'){
-                if ($botSettings['historySymbolName'] == 'XBTUSD'){
+                if ($botSettings['historySymbolName'] == 'ETHUSD'){
                     self::$tradeProfit = ($this->lastRow[0]->close - $lastTradePrice) * 0.000001 * $this->botSettings['volume'] / 2;
                 }
             }

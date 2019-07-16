@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Classes\Backtesting\BacktestingFront;
 use App\Classes\LogToFile;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class BacktestController extends Controller
 {
@@ -90,6 +91,41 @@ class BacktestController extends Controller
             echo __FILE__ . " " . __LINE__ . "\n";
             dump($e);
         }
+
+        /* Show pop up message at the front end with back tester result in it */
+
+        $lastRow =
+            DB::table($botSettings['botTitle'])
+                ->orderBy('id', 'desc')->take(1)
+                ->get();
+
+        $accumulated_commission =
+            DB::table($botSettings['botTitle'])
+                ->orderBy('id', 'desc')->take(1)
+                ->where('trade_price', '!=', null)
+                ->value('accumulated_commission');
+
+        $trades_quantity =
+            DB::table($botSettings['botTitle'])
+                ->where('trade_price', '!=', null)
+                ->count();
+
+        try{
+            event(new \App\Events\jseevent([
+                'clientId' => $botSettings['frontEndId'],
+                'messageType' => 'backTestingResult',
+                'payload' => [
+                    'netProfit' => $lastRow[0]->net_profit,
+                    'trades' => $trades_quantity,
+                    'accumulatedCommission' => $accumulated_commission
+                ]
+            ]));
+        } catch (\Exception $e)
+        {
+            echo __FILE__ . " " . __LINE__ . "\n";
+            dump($e);
+        }
+
     }
 
     /**

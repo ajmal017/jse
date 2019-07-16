@@ -44,7 +44,8 @@ class BacktestController extends Controller
                 'executionSymbolName' => $request['execution_symbol_name'], // ETH/USD
                 'historySymbolName' => $request['history_symbol_name'], // ETHUSD
                 'volume' => $request['volume'],
-                'commission' => -0.00025, // Taker: 0.000750 - such values come from Bitmex
+                //'commission' => -0.00025, // Taker: 0.000750 - such values come from Bitmex
+                'commission' => $request['commission'] / 100,
                 'strategy' => 'pc',
                 'strategyParams' => [
                     'priceChannelPeriod' => $request['time_frame']
@@ -60,7 +61,8 @@ class BacktestController extends Controller
                 'executionSymbolName' => $request['execution_symbol_name'], // ETH/USD
                 'historySymbolName' => $request['history_symbol_name'], // ETHUSD
                 'volume' => $request['volume'],
-                'commission' => -0.00025, // Taker: 0.000750
+                //'commission' => -0.00025, // Taker: 0.000750
+                'commission' => $request['commission'] / 100,
                 'strategy' => 'macd',
                 'strategyParams' => [
                     'emaPeriod' => 2,

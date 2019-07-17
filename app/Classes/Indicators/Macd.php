@@ -41,13 +41,13 @@ class Macd
             $bars = DB::table($botSettings['botTitle'])
                 ->where('ema2','!=', null)
                 ->orderBy('time_stamp', 'asc')
-                ->take(5)
+                ->take($macdSettings['ema3Period'])
                 ->get();
 
         }
 
         /* MACD line calculation */
-        //dump($bars);
+        /
         foreach ($bars as $bar){
             DB::table($botSettings['botTitle'])
                 ->where('time_stamp', $bar->time_stamp)

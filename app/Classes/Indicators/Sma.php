@@ -62,7 +62,7 @@ class Sma
                 for ($j = $elementIndex  ; $j < $elementIndex + $smaPeriod; $j++)
                 {
                     /** SMA calculation */
-                    $sma += $records[$j]->$close; // SMA based on close value
+                    $sma += $records[$j]->$close; // SMA is based on close value
                 }
 
                 /** Update high and low values, sma values in DB */

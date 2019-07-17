@@ -142,8 +142,6 @@ class CandleMaker
              */
             $messageArray['flag'] = true;
 
-            /* Shrink tables */
-            \App\Classes\Trading\ShrinkDbTables::deleteRow($this->botSettings);
         }
 
         /* Prepare message array */
@@ -196,6 +194,8 @@ class CandleMaker
     }
 
     private function addBarToDb($tableName, $tickDateFullTime, $tickPrice, $tickVolume){
+        /* Shrink DB tables if quantity of records exceeds */
+        \App\Classes\Trading\ShrinkDbTables::deleteRow($this->botSettings);
         DB::table($tableName)->insert(array(
             'date' => gmdate("Y-m-d G:i:s", strtotime($tickDateFullTime)), // Date in regular format. Converted from unix timestamp
             'time_stamp' => strtotime($tickDateFullTime) * 1000,

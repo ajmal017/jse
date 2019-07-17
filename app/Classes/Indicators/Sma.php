@@ -30,7 +30,8 @@ class Sma
 
         $records = DB::table($tableName)
             ->orderBy('time_stamp', 'desc')
-            ->get(); // desc, asc - order. Read the whole table from BD to $records
+            ->take(100)
+            ->get();
 
         /** @var int $quantityOfBars The quantity of bars for which the price channel will be calculated */
         if ($isInitialCalculation){
@@ -56,13 +57,11 @@ class Sma
              */
             if ($elementIndex <= $quantityOfBars)
             {
-                // Go from right to left (from present to last bar)
-
-                // For SMA
+                /* For SMA. Go from right to left (from present to last bar) */
                 for ($j = $elementIndex  ; $j < $elementIndex + $smaPeriod; $j++)
                 {
-                    /** SMA calculation */
-                    $sma += $records[$j]->$close; // SMA is based on close value
+                    /* SMA calculation */
+                    $sma += $records[$j]->$close; // Use close as SMA calculation value. It can be calculated on open, high or low.
                 }
 
                 /** Update high and low values, sma values in DB */

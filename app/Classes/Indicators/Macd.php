@@ -32,20 +32,22 @@ class Macd
 
         /* @var int $quantityOfBars The quantity of bars for which the price channel will be calculated */
         if ($isInitialCalculation){
-            /*$bars = (DB::table($botSettings['botTitle'])
-                    ->orderBy('id', 'desc')
-                    ->first())->id - $priceChannelPeriod - 1;*/
-
             $bars = DB::table($botSettings['botTitle'])
                 ->where('ema2','!=', null)
-                ->orderBy('time_stamp', 'asc') // desc, asc - order. Read the whole table from BD to $records
+                ->orderBy('time_stamp', 'asc')
+                ->get();
+        } else {
+            //$bars = $macdSettings['ema3Period'];
+            $bars = DB::table($botSettings['botTitle'])
+                ->where('ema2','!=', null)
+                ->orderBy('time_stamp', 'asc')
+                ->take(5)
                 ->get();
 
-        } else {
-            $bars = $macdSettings['ema3Period'];
         }
 
         /* MACD line calculation */
+        dump($bars);
         foreach ($bars as $bar){
             DB::table($botSettings['botTitle'])
                 ->where('time_stamp', $bar->time_stamp)
@@ -54,7 +56,11 @@ class Macd
                         DB::table($botSettings['botTitle'])->where('id', $bar->id)->value('sma2')
                 ]);
         }
-        /* MACD signal line calculation */
-        Sma::calculate('macd_line', $macdSettings['ema3Period'], 'macd_signal_line', $botSettings['botTitle'], $isInitialCalculation); // MACD signal line as SMA from MACD line
+
+        /**
+         * MACD signal line calculation.
+         * MACD signal line as SMA from MACD line.
+         */
+        Sma::calculate('macd_line', $macdSettings['ema3Period'], 'macd_signal_line', $botSettings['botTitle'], $isInitialCalculation);
     }
 }

@@ -194,8 +194,10 @@ class CandleMaker
     }
 
     private function addBarToDb($tableName, $tickDateFullTime, $tickPrice, $tickVolume){
+
         /* Shrink DB tables if quantity of records exceeds */
         \App\Classes\Trading\ShrinkDbTables::deleteRow($this->botSettings);
+
         DB::table($tableName)->insert(array(
             'date' => gmdate("Y-m-d G:i:s", strtotime($tickDateFullTime)), // Date in regular format. Converted from unix timestamp
             'time_stamp' => strtotime($tickDateFullTime) * 1000,
@@ -215,15 +217,16 @@ class CandleMaker
                 2,
                 'sma1',
                 $tableName,
-                false); // Calculate SMA together with price channel. This sam used as a filter.
+                false); // Calculate SMA together with price channel. This SMA used as a filter.
         }
         if ($this->indicator == 'macd') {
             Macd::calculate($macdSettings = [
                 'ema1Period' => $macdSettings['emaPeriod'],
                 'ema2Period' => $macdSettings['macdLinePeriod'],
-                'ema3Period' => $macdSettings['macdSignalLinePeriod']],
+                'ema3Period' => $macdSettings['macdSignalLinePeriod']
+            ],
                 $this->botSettings,
-                true);
+                false); // Used to be true
         }
     }
 }

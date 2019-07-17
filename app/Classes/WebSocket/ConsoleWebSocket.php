@@ -20,7 +20,14 @@ use Illuminate\Console\Command;
  */
 class ConsoleWebSocket
 {
-    public static function messageParse(array $message, Command $command, CandleMaker $candleMaker, $chart, $priceChannelSettings, $macdSettings){
+    public static function messageParse(
+        array $message,
+        Command $command,
+        CandleMaker $candleMaker,
+        $chart,
+        $priceChannelSettings,
+        $macdSettings){
+
         $candleMaker->index(
             $message['data'][0]['lastPrice'], // Tick price
             $message['data'][0]['timestamp'], // Tick timestamp

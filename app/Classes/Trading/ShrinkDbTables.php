@@ -16,7 +16,7 @@ use \Illuminate\Support\Facades\DB;
 class ShrinkDbTables
 {
     public static function deleteRow($botSettings){
-        if(DB::table($botSettings['botTitle'])->count() > 101){
+        if(DB::table($botSettings['botTitle'])->count() > 100){
             DB::table($botSettings['botTitle'])
                 ->delete(
                     DB::table($botSettings['botTitle'])

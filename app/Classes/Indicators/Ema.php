@@ -32,7 +32,8 @@ class Ema
         if ($isInitialCalculation){
             $bars = DB::table($table)
                 ->where($smaColumn,'!=', null)
-                ->orderBy('time_stamp', 'asc') // desc, asc - order. Read the whole table from BD to $records
+                ->orderBy('time_stamp', 'asc')
+                ->take(100)
                 ->get();
         } else {
             $bars = DB::table($table)
@@ -43,7 +44,6 @@ class Ema
         }
 
         $isFirstValue = true;
-
         foreach ($bars as $bar){
             if($isFirstValue){
                 self::$emaValue = DB::table($table)->where('id', $bar->id)->value($smaColumn);

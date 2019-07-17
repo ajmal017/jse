@@ -26,7 +26,8 @@ class Macd
     public static function calculate($macdSettings, $botSettings, $isInitialCalculation){
         Sma::calculate('close',$macdSettings['ema1Period'], 'sma1', $botSettings['botTitle'], $isInitialCalculation); // SMA1
         Sma::calculate('close',$macdSettings['ema2Period'], 'sma2', $botSettings['botTitle'], $isInitialCalculation); // SMA2
-        // Where MACD signal line?
+
+
         Ema::calculate('close', $macdSettings['ema1Period'], 'sma1', 'ema1', $botSettings['botTitle'], $isInitialCalculation); // EMA1
         Ema::calculate('close', $macdSettings['ema2Period'], 'sma2', 'ema2', $botSettings['botTitle'], $isInitialCalculation); // EMA2
 
@@ -39,9 +40,10 @@ class Macd
         } else {
             //$bars = $macdSettings['ema3Period'];
             $bars = DB::table($botSettings['botTitle'])
+                //->where('ema2','!=', null)
                 ->where('ema2','!=', null)
                 ->orderBy('time_stamp', 'asc')
-                ->take($macdSettings['ema3Period'])
+                //->take($macdSettings['ema3Period'])
                 ->get();
 
         }

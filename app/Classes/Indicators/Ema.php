@@ -29,7 +29,7 @@ class Ema
     public static function calculate($close, $period, $smaColumn, $emaColumn, $table, $isInitialCalculation){
         self::$multiplier = (2 / ($period + 1));
         /* @var int $quantityOfBars The quantity of bars for which the price channel will be calculated */
-        if ($isInitialCalculation){
+        /*if ($isInitialCalculation){
             $bars = DB::table($table)
                 ->where($smaColumn,'!=', null)
                 ->orderBy('time_stamp', 'asc')
@@ -41,10 +41,18 @@ class Ema
                 ->orderBy('time_stamp', 'asc')
                 ->take($period)
                 ->get();
-        }
+        }*/
+
+        $bars = DB::table($table)
+            ->orderBy('time_stamp', 'asc')
+            ->where($smaColumn,'!=', null)
+            ->take(100)
+            ->get();
 
         $isFirstValue = true;
+
         foreach ($bars as $bar){
+
             if($isFirstValue){
                 self::$emaValue = DB::table($table)->where('id', $bar->id)->value($smaColumn);
                 $isFirstValue = false;
@@ -52,6 +60,7 @@ class Ema
                 $ema1Penultimate = DB::table($table)->where('id', $bar->id-1)->value($emaColumn);
                 self::$emaValue = self::$multiplier * ($bar->$close - $ema1Penultimate) + $ema1Penultimate;
             }
+
             DB::table($table)
                 ->where('time_stamp', $bar->time_stamp)
                 ->update([

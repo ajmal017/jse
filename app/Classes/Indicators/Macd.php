@@ -47,7 +47,7 @@ class Macd
         }
 
         /* MACD line calculation */
-        dump($bars);
+        //dump($bars);
         foreach ($bars as $bar){
             DB::table($botSettings['botTitle'])
                 ->where('time_stamp', $bar->time_stamp)

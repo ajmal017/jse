@@ -59,9 +59,6 @@ class LimitOrderWs
         });*/
 
         $loop->addPeriodicTimer(1, function() use($connector, $loop, $console, $botId, $net) {
-            // Get settings object
-            // Get strategies settings object
-
             self::$accountSettingsObject = \App\Classes\WebSocket\Front\TradingAccount::getSettings($botId);
             self::$isBotRunning =  Cache::get('status_bot_' . $botId);
             self::$symbol = self::$accountSettingsObject['historySymbolName'];
@@ -69,7 +66,6 @@ class LimitOrderWs
             //dump(now() . " status: " . Bot::where('id', $botId)->value('status'));
 
             if (Bot::where('id', $botId)->value('status') == 'running' && !self::$isBotRunning){
-
                 dump('FIREEEEEEEEEEED ' . self::$accountSettingsObject['historySymbolName']);
                 Cache::put('status_bot_' . $botId, true, now()->addMinute(30));
                 self::listen($connector, $loop, $console, $botId, $net);
@@ -83,16 +79,7 @@ class LimitOrderWs
             }
         });
 
-
-        //self::$symbol = 'XBTUSD'; // XBTUSD ADAU19
-
         /** Pick up the right websocket endpoint accordingly to the exchange */
-        /*if(self::$accountSettingsObject['isTestnet']){
-            $exchangeWebSocketEndPoint = "wss://testnet.bitmex.com/realtime";
-        } else {
-            $exchangeWebSocketEndPoint = "wss://www.bitmex.com/realtime";
-        }*/
-
         if($net == 'testnet'){
             $exchangeWebSocketEndPoint = "wss://testnet.bitmex.com/realtime";
         } else {

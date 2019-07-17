@@ -100,7 +100,7 @@ class CandleMaker
          */
         if (floor(strtotime($tickDateFullTime)) >= $this->tt){
             $command->info("------------------- NEW BAR ISSUED ----------------------");
-            \App\Classes\Trading\ShrinkDbTables::deleteRow($this->botSettings);
+
             /**
              * This price channel calculation is used specially for SMA value. Nothing is gonna change visually if to disable this
              * method call. The only affected variable is SMA. If to disable this call - sma value at the chart and the
@@ -141,6 +141,9 @@ class CandleMaker
              * not adding new bar and updating the current one
              */
             $messageArray['flag'] = true;
+
+            /* Shrink tables */
+            \App\Classes\Trading\ShrinkDbTables::deleteRow($this->botSettings);
         }
 
         /* Prepare message array */

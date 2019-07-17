@@ -238,6 +238,7 @@ class Exchange
             switch(false){
                 case !strpos(self::$response, 'Account has insufficient');
                     $error = 'Account has insufficient funds. Die.' . __FILE__ . ' '. __LINE__;
+                    dump('Account has insufficient funds. Die. Exchnage.php line: ' . __LINE__);
                     Log::notice($error);
                     die(__FILE__ . ' ' . __LINE__);
                 case !strpos(self::$response, 'does not have market symbol'); // bitmex does not have market symbol

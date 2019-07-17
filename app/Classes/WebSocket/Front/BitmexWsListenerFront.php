@@ -33,9 +33,7 @@ class BitmexWsListenerFront
         /* Endless loop. Executes once per second */
         /* @todo Do we need $loop in hre? */
         $loop->addPeriodicTimer(1, function() use($loop, $botId, $self) {
-
             echo (Bot::where('id', $botId)->value('status') == 'running' ? 'running' : 'idle') . "\n";
-
             /* Get strategies settings object*/
             self::$strategiesSettingsObject = \App\Classes\WebSocket\Front\Strategies::getSettings($botId);
             /* Get account settings object */
@@ -125,7 +123,6 @@ class BitmexWsListenerFront
 
     private static function trace(){
         /* Trace: */
-        // dump(self::$accountSettingsObject);
         dump(self::$strategiesSettingsObject);
     }
 
@@ -134,7 +131,6 @@ class BitmexWsListenerFront
 
             /* DELETE IT FROM HERE! TESTING ONLY! */
             self::truncateSignalsTable();
-
 
             \App\Classes\Trading\History::loadPeriod(self::$accountSettingsObject);
             dump('History loaded (Price Channel)');

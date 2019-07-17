@@ -8,14 +8,14 @@ use Illuminate\Console\Command;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Cache;
 
-class test extends Command
+class test2 extends Command
 {
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
-    protected $signature = 'test';
+    protected $signature = 'test2';
 
     /**
      * The console command description.
@@ -41,6 +41,21 @@ class test extends Command
      */
     public function handle()
     {
+        $botSettings =
+            [
+                'botTitle' => 'bot_1',
+                'executionSymbol' => 'BTC/USD',
+                'historySymbol' => 'XBTUSD',
+                'timeFrame' => 1, // 1 or 5 minutes. https://www.bitmex.com/api/explorer/#!/Trade/Trade_getBucketed
+                'barsToLoad' => 40,
+                'api_path' => 1,
+                'api_key' => 'ikeCK-6ZRWtItOkqvqo8F6wO',
+                'secret' => 'JfmMTXx3YruSP3OSBKQvULTg4sgQJKZkFI2Zy7TZXniOUbeK'
+            ];
+        \App\Classes\Trading\ShrinkDbTables::deleteRow($botSettings);
+        die('dd');
+
+
 
         $exchange = new \ccxt\bitmex();
         $exchange->urls['api'] = $exchange->urls['test'];

@@ -13,8 +13,6 @@ use App\Classes\Indicators\Sma;
 use App\Classes\WebSocket\PusherApiMessage;
 use App\Console\Commands\RatchetPawlSocket;
 use Illuminate\Support\Facades\DB;
-//use Mockery\Exception;
-//use Illuminate\Support\Facades\Log;
 
 /**
  * Class CandleMaker
@@ -102,6 +100,7 @@ class CandleMaker
          */
         if (floor(strtotime($tickDateFullTime)) >= $this->tt){
             $command->info("------------------- NEW BAR ISSUED ----------------------");
+            \App\Classes\Trading\ShrinkDbTables::deleteRow($this->botSettings);
             /**
              * This price channel calculation is used specially for SMA value. Nothing is gonna change visually if to disable this
              * method call. The only affected variable is SMA. If to disable this call - sma value at the chart and the

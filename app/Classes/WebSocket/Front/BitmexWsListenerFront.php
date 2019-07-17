@@ -75,7 +75,6 @@ class BitmexWsListenerFront
         /**
          * Pick up the right websocket endpoint accordingly to the exchange
          */
-
         // HERE IT IS!
         $exchangeWebSocketEndPoint = "wss://www.bitmex.com/realtime";
 

@@ -24,6 +24,7 @@ class LimitOrderWs
     public static $console;
     private static $botId;
     private static $net;
+    private static $orderBookMessage;
 
 
     public static function listen($connector, $loop, $console, $botId, $net){
@@ -34,8 +35,13 @@ class LimitOrderWs
         self::$console = $console;
         self::$botId = $botId;
         self::$net = $net;
+        self::$orderBookMessage = null;
 
-        $loop->addPeriodicTimer(1, function() use($connector, $loop, $console, $botId, $net) {
+        /**
+         * Check start stop status each x seconds.
+         * Within the same period of time we send order book message for parsing.
+         */
+        $loop->addPeriodicTimer(2, function() use($connector, $loop, $console, $botId, $net) {
             self::$accountSettingsObject = \App\Classes\WebSocket\Front\TradingAccount::getSettings($botId);
             self::$isBotRunning =  Cache::get('status_bot_' . $botId);
             self::$symbol = self::$accountSettingsObject['historySymbolName'];
@@ -51,6 +57,12 @@ class LimitOrderWs
                 self::$isBotRunning = false;
                 Cache::put('status_bot_' . $botId, false, now()->addMinute(30));
             }
+
+            /* Orderbook parse */
+            if (self::$orderBookMessage)
+                \App\Classes\WebSocket\Front\LimitOrderMessage::parse(self::$orderBookMessage, self::$botId);
+
+            echo "addPeriodicTimer event: " . now() . "\n";
         });
 
         /** Pick up the right websocket endpoint accordingly to the exchange */
@@ -74,7 +86,8 @@ class LimitOrderWs
                     if(array_key_exists('table', $jsonMessage))
                         if($jsonMessage['table'] == 'orderBook10')
                             if($jsonMessage['data'][0]['symbol'] == self::$symbol)
-                                \App\Classes\WebSocket\Front\LimitOrderMessage::parse($jsonMessage, self::$botId);
+                                //\App\Classes\WebSocket\Front\LimitOrderMessage::parse($jsonMessage, self::$botId);
+                                self::$orderBookMessage = $jsonMessage;
                 });
 
                 $conn->on('close', function($code = null, $reason = null) use ($loop) {

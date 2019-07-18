@@ -45,7 +45,6 @@ class LimitOrderMessage
         if (count(self::$signalRow) > 1) {
             $message = 'There are more than onw record with New status in signals. LimitOrderMessage.php';
             Log::emergency($message);
-            //die ($message);
         }
 
         /**
@@ -228,7 +227,6 @@ class LimitOrderMessage
                         dump('Can not find order ID. LimitOrderMessage.php in execution Code: qqwwee44');
                         //die();
                     }
-
             }
             else {
                 echo "CANT FIND orderID field. Code: jjkkll\n";
@@ -495,7 +493,6 @@ class LimitOrderMessage
          *  Set limit object to initial start.
          * Do not place ot amend orders. Wait for other signals.
          */
-
         $limitOrderObj = [
             'orderID' => null,
             'clOrdID' => 'abc-123-' . now(),

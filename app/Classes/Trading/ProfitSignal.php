@@ -67,7 +67,7 @@ class ProfitSignal
             if($lastRow->signal_volume == 0)
                 $lastRow->signal_volume = 0.0000001;
 
-            
+
             if($direction == "buy"){
                 if($orderExecutionResponse['symbol'] == 'XBTUSD'){
                     /**

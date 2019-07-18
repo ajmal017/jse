@@ -28,42 +28,17 @@ class LimitOrderWs
 
     public static function listen($connector, $loop, $console, $botId, $net){
 
-        /**
-         * Vars for self-call listen method in case of recconection.
-         */
+        /* Vars for self-call listen method in case of recconection */
         self::$connector = $connector;
         self::$loop = $loop;
         self::$console = $console;
         self::$botId = $botId;
         self::$net = $net;
 
-
-        /*$loop->addPeriodicTimer(1, function() use($connector, $loop, $console, $botId) {
-
-            // Get settings object
-            // Get strategies settings object
-            self::$accountSettingsObject = \App\Classes\WebSocket\Front\TradingAccount::getSettings($botId);
-            self::$isBotRunning =  Cache::get('status_bot_' . $botId);
-
-            if (Bot::where('id', $botId)->value('status') == 'running' && !self::$isBotRunning){
-                dump('FIREEEEEEEEEEED');
-                Cache::put('status_bot_' . $botId, true, now()->addMinute(30));
-                self::listen($connector, $loop, $console, $botId);
-            }
-
-            if (Bot::where('id', $botId)->value('status') == 'idle' && self::$isBotRunning){
-                dump('---------- got into idle');
-                self::$isBotRunning = false;
-                Cache::put('status_bot_' . $botId, false, now()->addMinute(30));
-            }
-        });*/
-
         $loop->addPeriodicTimer(1, function() use($connector, $loop, $console, $botId, $net) {
             self::$accountSettingsObject = \App\Classes\WebSocket\Front\TradingAccount::getSettings($botId);
             self::$isBotRunning =  Cache::get('status_bot_' . $botId);
             self::$symbol = self::$accountSettingsObject['historySymbolName'];
-
-            //dump(now() . " status: " . Bot::where('id', $botId)->value('status'));
 
             if (Bot::where('id', $botId)->value('status') == 'running' && !self::$isBotRunning){
                 dump('FIREEEEEEEEEEED ' . self::$accountSettingsObject['historySymbolName']);
@@ -73,7 +48,6 @@ class LimitOrderWs
 
             if (Bot::where('id', $botId)->value('status') == 'idle' && self::$isBotRunning){
                 dump('---------- got into idle');
-
                 self::$isBotRunning = false;
                 Cache::put('status_bot_' . $botId, false, now()->addMinute(30));
             }
@@ -91,9 +65,8 @@ class LimitOrderWs
                 self::$connection = $conn;
                 $conn->on('message', function(\Ratchet\RFC6455\Messaging\MessageInterface $socketMessage) use ($conn, $loop) {
                     $jsonMessage = json_decode($socketMessage->getPayload(), true);
-                    /**
-                     * Parse all websocket messages.
-                     */
+
+                    /** Parse all websocket messages */
 
                     if(array_key_exists('info', $jsonMessage))
                         dump("Bitmex end point: " . $jsonMessage['docs']);
@@ -102,10 +75,6 @@ class LimitOrderWs
                         if($jsonMessage['table'] == 'orderBook10')
                             if($jsonMessage['data'][0]['symbol'] == self::$symbol)
                                 \App\Classes\WebSocket\Front\LimitOrderMessage::parse($jsonMessage, self::$botId);
-                                //echo now() . " " . $jsonMessage['data'][0]['symbol'] . "\n";
-                                //echo '';
-                                //echo(now() . " " . $jsonMessage['data'][0]['asks'][0][0] . "\n");
-
                 });
 
                 $conn->on('close', function($code = null, $reason = null) use ($loop) {
@@ -124,9 +93,6 @@ class LimitOrderWs
                  * You just auth the whole WS connection.
                  * WS auth connection working example.
                  */
-
-                /*$api = "ikeCK-6ZRWtItOkqvqo8F6wO"; // testnet
-                $secret = "JfmMTXx3YruSP3OSBKQvULTg4sgQJKZkFI2Zy7TZXniOUbeK";*/
 
                 $api = "ct5AF7LcE3bsfz4gR5yTfvBq";
                 $secret = "Zy9UDdTGojC_T6RE2JjOY0N2F4EhQXqBxo92DSxU1_f0pXLg";
@@ -176,10 +142,9 @@ class LimitOrderWs
                 $errorString = "RatchetPawlSocket.php Could not connect. Reconnect in 5 sec. \n Reason: {$e->getMessage()} \n";
                 echo $errorString;
                 sleep(5); // Wait 5 seconds before next connection try will attempt
-                //$this->handle(); // Call the main method of this class
-                self::subscribe();
-                //$loop->stop();
+                self::listen(self::$connector, self::$loop, self::$console, self::$botId, self::$net); // Call the main method of this class
             });
+
         $loop->run();
     }
 }

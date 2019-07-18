@@ -15,7 +15,6 @@ use App\Symbol;
 class TradingAccount
 {
     public static function getSettings($botId){
-
         $accountId = Bot::where('id', $botId)->value('account_id');
         $symbolId = Bot::where('id', $botId)->value('symbol_id');
         

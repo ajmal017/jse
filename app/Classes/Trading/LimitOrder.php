@@ -12,8 +12,8 @@ class LimitOrder
 {
     public function start($console, $botId, $net){
         /**
-         * Websocket connection
-         * Ratchet/pawl websocket library
+         * Websocket connection.
+         * Ratchet/pawl websocket library.
          * @see https://github.com/ratchetphp/Pawl
          */
         $loop = \React\EventLoop\Factory::create();

@@ -65,7 +65,10 @@ class Limit extends Command
          */
         Cache::put('bot_' . $this->argument('botId'), $limitOrderObj, now()->addMinute(30));
 
-        /* Truncate signal table */
+        /**
+         * Truncate signal table.
+         * This table gets truncated on bot start/stop button click as well.
+         */
         DB::table('signal_' . $this->argument('botId'))->truncate();
 
         /* Stop chart worker when console command is executed */

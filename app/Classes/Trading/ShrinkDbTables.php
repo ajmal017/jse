@@ -22,6 +22,8 @@ class ShrinkDbTables
                     DB::table($botSettings['botTitle'])
                         ->orderBy('id', 'asc')->take(1)->value('id')
                 );
+        }
+        if(DB::table('signal_' . substr($botSettings['botTitle'], -1))->count() > 100){
             DB::table('signal_' . substr($botSettings['botTitle'], -1))
                 ->delete(
                     DB::table('signal_' . substr($botSettings['botTitle'], -1))

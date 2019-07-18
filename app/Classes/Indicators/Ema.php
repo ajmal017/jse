@@ -46,7 +46,7 @@ class Ema
         $bars = DB::table($table)
             ->orderBy('time_stamp', 'asc')
             ->where($smaColumn,'!=', null)
-            ->take(100)
+            //->take(100)
             ->get();
 
         $isFirstValue = true;

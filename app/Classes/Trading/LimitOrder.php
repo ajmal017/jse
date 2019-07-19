@@ -7,6 +7,7 @@
  */
 
 namespace App\Classes\Trading;
+use ccxt\bitmex;
 
 class LimitOrder
 {
@@ -21,8 +22,15 @@ class LimitOrder
         $connector = new \Ratchet\Client\Connector($loop, $reactConnector);
 
         /**
+         * Create CCXT instance. JSE-254.
+         * It will be used in Exchnage.php. This instance will go through the whole chain of classes, including
+         * job dispatch.
+         */
+        $exchnage = new bitmex();
+
+        /**
          * Subscribe to WS and start working with limit orders
          */
-        \App\Classes\WebSocket\Front\LimitOrderWs::listen($connector, $loop, $console, $botId, $net);
+        \App\Classes\WebSocket\Front\LimitOrderWs::listen($connector, $loop, $console, $botId, $net, $exchnage);
     }
 }

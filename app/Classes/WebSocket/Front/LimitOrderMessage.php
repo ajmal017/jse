@@ -29,10 +29,12 @@ class LimitOrderMessage
 
     private static $isGetExecutionsTickCheck = true;
     private static $addedTickGetExcutions;
+    private static $exchange;
 
-    public static function parse(array $message, $botId){
+    public static function parse(array $message, $botId, $exchnage){
         self::$limitOrderObj = Cache::get('bot_' . $botId);
         self::$botId = $botId;
+        self::$exchange = $exchnage;
         /**
          * Check DB for new signals
          */
@@ -81,7 +83,7 @@ class LimitOrderMessage
                 if (self::$limitOrderObj['isLimitOrderPlaced'])
                     if (array_key_exists('orderID', self::$limitOrderObj))
                         if (self::$limitOrderObj['orderID'])
-                            \App\Classes\Trading\Exchange::getOrders($botSettings, self::$limitOrderObj);
+                            \App\Classes\Trading\Exchange::getOrders($botSettings, self::$limitOrderObj, self::$exchange);
 
 
         /**
@@ -319,7 +321,8 @@ class LimitOrderMessage
             //$bid - self::$limitOrderObj['step'],
             $bid,
             self::$limitOrderObj,
-            self::$botId
+            self::$botId,
+            self::$exchange
         );
 
         \App\Classes\DB\SignalTable::updateSignalStatus(self::$botId);
@@ -343,7 +346,8 @@ class LimitOrderMessage
             //$ask + self::$limitOrderObj['step'],
             $ask,
             self::$limitOrderObj,
-            self::$botId
+            self::$botId,
+            self::$exchange
         );
 
         // Update to pending
@@ -366,7 +370,8 @@ class LimitOrderMessage
                 (isset(Cache::get('bot_' . self::$botId)['orderID']) ?
                     Cache::get('bot_' . self::$botId)['orderID'] : 33445566),
                 $botSettings,
-                $amendReason
+                $amendReason,
+                self::$exchange
             );
             // Put price to cache in order not to amend more than needed
             //self::$limitOrderObj['limitOrderPrice'] = $bid - self::$limitOrderObj['step'];
@@ -387,7 +392,8 @@ class LimitOrderMessage
                 $ask,
                 (isset(Cache::get('bot_' . self::$botId)['orderID']) ? Cache::get('bot_' . self::$botId)['orderID'] : 'NO_ORDERID_776676'),
                 $botSettings,
-                $amendReason
+                $amendReason,
+                self::$exchange
             );
 
             // Put price to cache in order not to amend more than needed

@@ -19,6 +19,7 @@ class PlaceLimitOrder implements ShouldQueue
     private $limitOrderPrice;
     private $limitOrderObj;
     private $botId;
+    private $exchange;
 
     /**
      * The list of all possible variables to set.
@@ -32,7 +33,7 @@ class PlaceLimitOrder implements ShouldQueue
      *
      * @return void
      */
-    public function __construct($direction, $volume, $botSettings, $limitOrderPrice, $limitOrderObj, $botId)
+    public function __construct($direction, $volume, $botSettings, $limitOrderPrice, $limitOrderObj, $botId, $exchange)
     {
         $this->direction = $direction;
         $this->volume = $volume;
@@ -40,6 +41,7 @@ class PlaceLimitOrder implements ShouldQueue
         $this->limitOrderPrice = $limitOrderPrice;
         $this->limitOrderObj = $limitOrderObj;
         $this->botId = $botId;
+        $this->exchange = $exchange;
     }
 
     /**
@@ -50,9 +52,9 @@ class PlaceLimitOrder implements ShouldQueue
     public function handle()
     {
         if($this->direction == 'buy'){
-            Exchange::placeLimitBuyOrder($this->botSettings, $this->limitOrderPrice, $this->volume, $this->limitOrderObj, $this->botId);
+            Exchange::placeLimitBuyOrder($this->botSettings, $this->limitOrderPrice, $this->volume, $this->limitOrderObj, $this->botId, $this->exchange);
         } else {
-            Exchange::placeLimitSellOrder($this->botSettings, $this->limitOrderPrice, $this->volume, $this->limitOrderObj, $this->botId);
+            Exchange::placeLimitSellOrder($this->botSettings, $this->limitOrderPrice, $this->volume, $this->limitOrderObj, $this->botId, $this->exchange);
         }
     }
 }

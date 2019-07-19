@@ -11,7 +11,7 @@ use ccxt\bitmex;
 use Mockery\Exception;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Cache;
-use Illuminate\Support\Facades\DB;
+//use Illuminate\Support\Facades\DB;
 
 /**
  * Market order execution.
@@ -24,9 +24,9 @@ use Illuminate\Support\Facades\DB;
 class Exchange
 {
     private static $response;
-    public static function placeMarketBuyOrder($botSettings, $volume){
+    public static function placeMarketBuyOrder($botSettings, $volume, $exchange){
         echo __FILE__ . " line: " . __LINE__ . "\n";
-        $exchange = new bitmex();
+        //$exchange = new bitmex();
 
         if($botSettings['isTestnet'] == 1){
             $exchange->urls['api'] = $exchange->urls['test']; // Testnet or live. test or api
@@ -53,9 +53,9 @@ class Exchange
         self::checkResponse();
     }
 
-    public static function placeMarketSellOrder($botSettings, $volume){
+    public static function placeMarketSellOrder($botSettings, $volume, $exchange){
         echo __FILE__ . " line: " . __LINE__ . "\n";
-        $exchange = new bitmex();
+        //$exchange = new bitmex();
 
         if($botSettings['isTestnet'] == 1){
             $exchange->urls['api'] = $exchange->urls['test']; // Testnet or live. test or api
@@ -79,11 +79,11 @@ class Exchange
         self::checkResponse();
     }
 
-    public static function placeLimitSellOrder($botSettings, $price, $volume, $limitOrderObj, $botId){
+    public static function placeLimitSellOrder($botSettings, $price, $volume, $limitOrderObj, $botId, $exchange){
         dump('placeBuySellOrder. Exchange.php line: ' . __LINE__);
         echo __FILE__ . " line: " . __LINE__ . "\n";
 
-        $exchange = new bitmex();
+        //$exchange = new bitmex();
 
         if($botSettings['isTestnet'] == 1){
             $exchange->urls['api'] = $exchange->urls['test']; // Testnet or live. test or api
@@ -123,9 +123,9 @@ class Exchange
         self::checkResponse($limitOrderObj);
     }
 
-    public static function placeLimitBuyOrder($botSettings, $price, $volume, $limitOrderObj, $botId){
+    public static function placeLimitBuyOrder($botSettings, $price, $volume, $limitOrderObj, $botId, $exchange){
         echo "placeLimitBuyOrder. Exchnage.php line: " . __LINE__ . "\n";
-        $exchange = new bitmex();
+        //$exchange = new bitmex();
 
         if($botSettings['isTestnet'] == 1){
             $exchange->urls['api'] = $exchange->urls['test']; // Testnet or live. test or api
@@ -164,13 +164,13 @@ class Exchange
         self::checkResponse($limitOrderObj);
     }
 
-    public static function amendOrder($newPrice, $orderID, $botSettings, $amendReason){
+    public static function amendOrder($newPrice, $orderID, $botSettings, $amendReason, $exchange){
         dump("****   AMEND ORDER. Reason: $amendReason ****");
         echo  "Exchnage.php. line: " . __LINE__ . "\n";
         Echo "orderID: " . $orderID . " MUST NOT BE NULL or EMPTY (Exchnage.php) code: ffddss\n";
         //if($orderID == null) die();
 
-        $exchange = new bitmex();
+        //$exchange = new bitmex();
 
         if($botSettings['isTestnet'] == 1){
             $exchange->urls['api'] = $exchange->urls['test']; // Testnet or live. test or api
@@ -194,9 +194,9 @@ class Exchange
         self::checkResponse();
     }
 
-    public static function getOrders($botSettings, $limitOrderObj){
+    public static function getOrders($botSettings, $limitOrderObj, $exchange){
         echo '****   GET TRADES FOR PLACED ORDER (Exchange.php). orderID: ' . $limitOrderObj['orderID'] . " line: " . __LINE__ . "\n";
-        $exchange = new bitmex();
+        //$exchange = new bitmex();
         if($botSettings['isTestnet'] == 1){
             $exchange->urls['api'] = $exchange->urls['test']; // Testnet or live. test or api
         } else {
@@ -268,13 +268,4 @@ class Exchange
             }
         }
     }
-
-    // Can use it for market order record insertion
-    /*public static function insertRecordToSignalTable($botSettings, $response){
-        DB::table($botSettings['signalTable'])->insert([
-            'order_type' => 'limit',
-            'volume' => 999, // execution_volume
-            // self::$response['info']['orderID'];
-        ]);
-    }*/
 }

@@ -25,9 +25,10 @@ class LimitOrderWs
     private static $botId;
     private static $net;
     private static $orderBookMessage;
+    private static $exchange;
 
 
-    public static function listen($connector, $loop, $console, $botId, $net){
+    public static function listen($connector, $loop, $console, $botId, $net, $exchnage){
 
         /* Vars for self-call listen method in case of recconection */
         self::$connector = $connector;
@@ -36,6 +37,7 @@ class LimitOrderWs
         self::$botId = $botId;
         self::$net = $net;
         self::$orderBookMessage = null;
+        self::$exchange = $exchnage;
 
         /**
          * Check start stop status each x seconds.
@@ -49,7 +51,7 @@ class LimitOrderWs
             if (Bot::where('id', $botId)->value('status') == 'running' && !self::$isBotRunning){
                 dump('FIREEEEEEEEEEED ' . self::$accountSettingsObject['historySymbolName']);
                 Cache::put('status_bot_' . $botId, true, now()->addMinute(30));
-                self::listen($connector, $loop, $console, $botId, $net);
+                self::listen($connector, $loop, $console, $botId, $net, self::$exchange);
             }
 
             if (Bot::where('id', $botId)->value('status') == 'idle' && self::$isBotRunning){
@@ -60,7 +62,7 @@ class LimitOrderWs
 
             /* Orderbook parse */
             if (self::$orderBookMessage)
-                \App\Classes\WebSocket\Front\LimitOrderMessage::parse(self::$orderBookMessage, self::$botId);
+                \App\Classes\WebSocket\Front\LimitOrderMessage::parse(self::$orderBookMessage, self::$botId, self::$exchange);
 
             echo "addPeriodicTimer event: " . now() . "Bot ID: " . self::$botId . "\n";
         });
@@ -98,7 +100,7 @@ class LimitOrderWs
                     sleep(5); // Wait 5 seconds before next connection try will attempt
 
                     //self::$console->handle(); // Call the main method of this class. It calls the first console command! Not this class!
-                    self::listen(self::$connector, self::$loop, self::$console, self::$botId, self::$net);
+                    self::listen(self::$connector, self::$loop, self::$console, self::$botId, self::$net, self::$exchange);
                 });
 
                 /**
@@ -155,7 +157,7 @@ class LimitOrderWs
                 $errorString = "RatchetPawlSocket.php Could not connect. Reconnect in 5 sec. \n Reason: {$e->getMessage()} \n";
                 echo $errorString;
                 sleep(5); // Wait 5 seconds before next connection try will attempt
-                self::listen(self::$connector, self::$loop, self::$console, self::$botId, self::$net); // Call the main method of this class
+                self::listen(self::$connector, self::$loop, self::$console, self::$botId, self::$net, self::$exchange); // Call the main method of this class
             });
 
         $loop->run();

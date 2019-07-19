@@ -62,7 +62,7 @@ class LimitOrderWs
             if (self::$orderBookMessage)
                 \App\Classes\WebSocket\Front\LimitOrderMessage::parse(self::$orderBookMessage, self::$botId);
 
-            echo "addPeriodicTimer event: " . now() . "\n";
+            echo "addPeriodicTimer event: " . now() . "Bot ID: " . self::$botId . "\n";
         });
 
         /** Pick up the right websocket endpoint accordingly to the exchange */

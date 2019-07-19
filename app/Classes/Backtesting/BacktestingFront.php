@@ -60,9 +60,11 @@ class BacktestingFront
 
         $isFirstRecord = false;
         foreach ($allDbValues as $rowValue) { // Go through all DB records
-             /** We need to pass the first bar. It is needed to avoid null price channel trade check because
-             * in Chart.php the penultimate value of the price channel is taken for calculation
-             * for the first iteration of foreach this value is always null*/
+             /**
+              * We need to pass the first bar. It is needed to avoid null price channel trade check because
+              * in Chart.php the penultimate value of the price channel is taken for calculation
+              * for the first iteration of foreach this value is always null
+              */
             if ($isFirstRecord){
                 if ($botSettings['strategy'] == 'pc'){
                     $chart->index("backtest", $rowValue->id);

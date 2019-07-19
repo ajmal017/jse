@@ -97,7 +97,6 @@ class Chart extends Profit
             {
                 echo "---------------------- NOT FIRST EVER TRADE. CLOSE + OPEN. VOL * 2\n";
                 if($mode != 'backtest')
-                    // PlaceOrder::dispatch('buy', $this->botSettings['volume'] * 2, $this->botSettings);
                     DB::table($this->botSettings['signalTable'])
                         ->insert([
                             'type' => 'signal',

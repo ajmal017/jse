@@ -51,9 +51,7 @@ class CandleMaker
      * @param date          $priceChannelPeriod
      */
     public function index($tickPrice, $tickDateFullTime, $tickVolume, $chart, $command, $priceChannelPeriod, $macdSettings){
-
         echo "********************************************** CandleMaker\n";
-
         /** First time ever application run check. Table is empty */
         $lastRecordId = DB::table($this->tableName)->orderBy('time_stamp', 'desc')->first()->id;
 

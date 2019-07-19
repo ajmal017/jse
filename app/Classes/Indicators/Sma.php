@@ -28,17 +28,27 @@ class Sma
          */
         $elementIndex = 0;
 
-        $records = DB::table($tableName)
-            ->orderBy('time_stamp', 'desc')
-            ->take(100)
-            ->get();
 
-        /** @var int $quantityOfBars The quantity of bars for which the price channel will be calculated */
+
+        /**
+         * @var int $quantityOfBars The quantity of bars for which the price channel will be calculated.
+         * When the back tester is executed - all indicators are calculated with initialStart flag = true.
+         * In This case all bars from DB are loaded. No shrink is applied.
+         */
         if ($isInitialCalculation){
+            $records = DB::table($tableName)
+                ->orderBy('time_stamp', 'desc')
+                ->get();
+
             $quantityOfBars = (DB::table($tableName)
                     ->orderBy('id', 'desc')
                     ->first())->id - $period - 1;
         } else {
+
+            $records = DB::table($tableName)
+                ->orderBy('time_stamp', 'desc')
+                ->take(100)
+                ->get();
             $quantityOfBars = $period;
         }
 

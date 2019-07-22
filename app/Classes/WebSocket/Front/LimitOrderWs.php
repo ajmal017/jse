@@ -9,6 +9,7 @@
 namespace App\Classes\WebSocket\Front;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use App\Bot;
 
 
@@ -30,7 +31,7 @@ class LimitOrderWs
 
     public static function listen($connector, $loop, $console, $botId, $net, $exchnage){
 
-        /* Vars for self-call listen method in case of recconection */
+        /* Vars for self-call listen method in case of reconnection */
         self::$connector = $connector;
         self::$loop = $loop;
         self::$console = $console;
@@ -44,11 +45,12 @@ class LimitOrderWs
          * Within the same period of time we send order book message for parsing.
          */
         $loop->addPeriodicTimer(2, function() use($connector, $loop, $console, $botId, $net) {
+
             self::$accountSettingsObject = \App\Classes\WebSocket\Front\TradingAccount::getSettings($botId);
-            self::$isBotRunning =  Cache::get('status_bot_' . $botId);
+            //self::$isBotRunning =  Cache::get('status_bot_' . $botId);
             self::$symbol = self::$accountSettingsObject['historySymbolName'];
 
-            if (Bot::where('id', $botId)->value('status') == 'running' && !self::$isBotRunning){
+            /*if (Bot::where('id', $botId)->value('status') == 'running' && !self::$isBotRunning){
                 dump('FIREEEEEEEEEEED ' . self::$accountSettingsObject['historySymbolName']);
                 Cache::put('status_bot_' . $botId, true, now()->addMinute(30));
                 self::listen($connector, $loop, $console, $botId, $net, self::$exchange);
@@ -58,13 +60,15 @@ class LimitOrderWs
                 dump('---------- got into idle');
                 self::$isBotRunning = false;
                 Cache::put('status_bot_' . $botId, false, now()->addMinute(30));
-            }
+            }*/
 
             /* Orderbook parse */
             if (self::$orderBookMessage)
                 \App\Classes\WebSocket\Front\LimitOrderMessage::parse(self::$orderBookMessage, self::$botId, self::$exchange);
 
-            echo "addPeriodicTimer event: " . now() . "Bot ID: " . self::$botId . "\n";
+            echo "addPeriodicTimer event: " . now() . "Bot ID: " . self::$botId . " Symbol: " .
+                self::$orderBookMessage['data'][0]['symbol'] . " " . Bot::where('id', $botId)->value('status') .  "\n";
+            //dump(self::$orderBookMessage['data'][0]['symbol']);
         });
 
         /** Pick up the right websocket endpoint accordingly to the exchange */
@@ -81,14 +85,12 @@ class LimitOrderWs
                     $jsonMessage = json_decode($socketMessage->getPayload(), true);
 
                     /** Parse all websocket messages */
-
                     if(array_key_exists('info', $jsonMessage))
                         dump("Bitmex end point: " . $jsonMessage['docs']);
 
                     if(array_key_exists('table', $jsonMessage))
                         if($jsonMessage['table'] == 'orderBook10')
                             if($jsonMessage['data'][0]['symbol'] == self::$symbol)
-                                //\App\Classes\WebSocket\Front\LimitOrderMessage::parse($jsonMessage, self::$botId);
                                 self::$orderBookMessage = $jsonMessage;
                 });
 
@@ -157,7 +159,8 @@ class LimitOrderWs
                 $errorString = "RatchetPawlSocket.php Could not connect. Reconnect in 5 sec. \n Reason: {$e->getMessage()} \n";
                 echo $errorString;
                 sleep(5); // Wait 5 seconds before next connection try will attempt
-                self::listen(self::$connector, self::$loop, self::$console, self::$botId, self::$net, self::$exchange); // Call the main method of this class
+                //self::listen(self::$connector, self::$loop, self::$console, self::$botId, self::$net, self::$exchange); // Call the main method of this class
+                $loop->stop();
             });
 
         $loop->run();

@@ -15,7 +15,30 @@ use App\Symbol;
 class TradingAccount
 {
     public static function getSettings($botId){
-        $accountId = Bot::where('id', $botId)->value('account_id');
+
+        $bot = Bot::where('id', $botId);
+        $accountId = $bot->value('account_id');
+        $symbolId = $bot->value('symbol_id');
+        $account = Account::where('id', $accountId);
+        $symbol = Symbol::where('id', $symbolId);
+
+        $accountSettingsObject = array(
+            'botTitle' => $bot->value('db_table_name'),
+            'barsToLoad' => $bot->value('bars_to_load'),
+            'timeFrame' => $bot->value('time_frame'),
+            'api' => $account->value('api'),
+            'apiSecret' => $account->value('api_secret'),
+            'isTestnet' => $account->value('is_testnet'),
+            'executionSymbolName' => $symbol->value('execution_symbol_name'),
+            'historySymbolName' => $symbol->value('history_symbol_name'),
+            'commission' => $symbol->value('commission'),
+            'frontEndId' => $bot->value('front_end_id'),
+            'volume' => $bot->value('volume'),
+            'rateLimit' => $bot->value('rate_limit'),
+            'signalTable' => 'signal_' . $botId
+        );
+
+        /*$accountId = Bot::where('id', $botId)->value('account_id');
         $symbolId = Bot::where('id', $botId)->value('symbol_id');
         
         $accountSettingsObject = array(
@@ -32,7 +55,7 @@ class TradingAccount
             'volume' => Bot::where('id', $botId)->value('volume'),
             'rateLimit' => Bot::where('id', $botId)->value('rate_limit'),
             'signalTable' => 'signal_' . $botId
-        );
+        );*/
         return $accountSettingsObject;
     }
 }

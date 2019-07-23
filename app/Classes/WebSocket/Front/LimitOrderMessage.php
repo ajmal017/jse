@@ -67,7 +67,10 @@ class LimitOrderMessage
         }
     }
 
-    private static function orderBookTick($ask, $bid){
+    private static function orderBookTick($message){
+        // strtotime($message['data'][0]['timestamp']) * 1000
+        $ask = $message['data'][0]['asks'][0][0];
+        $bid = $message['data'][0]['bids'][0][0];
         $botSettings = \App\Classes\WebSocket\Front\TradingAccount::getSettings(self::$botId);
 
         /* Place and amend order */
@@ -91,9 +94,10 @@ class LimitOrderMessage
          * Force time signal close.
          * Once 55 seconds are over and no response has been receivd from Bitmex - finish the signal.
          * Add an artificial trade and continue trading.
+         * We send bid as a parameter. In case returned avgFill price = null, bid will be used instead.
          */
         if(self::getExecutionsTimeRangeCheck())
-            self::forceSignalFinish();
+            self::forceSignalFinish($message);
     }
 
     /**
@@ -171,7 +175,7 @@ class LimitOrderMessage
                              * Rate limit. Order amend - once per 2 (or other delay) seconds.
                              * Otherwise we get to many amends and it gets flooded.
                              */
-                            self::orderBookTick($message['data'][0]['asks'][0][0], $message['data'][0]['bids'][0][0]);
+                            self::orderBookTick($message);
                         }
     }
 
@@ -439,7 +443,11 @@ class LimitOrderMessage
      * Close signal when a time is over and no execution received from Bitmex.
      * Close a signal artificially and continue trading.
      */
-    private static function forceSignalFinish(){
+    private static function forceSignalFinish($message){
+
+        // strtotime($message['data'][0]['timestamp']) * 1000
+        //$ask = $message['data'][0]['asks'][0][0];
+        //$bid = $message['data'][0]['bids'][0][0];
 
         echo "*****************************************************\n";
         echo "** FORCE SIGNAL FINISH (bitmex sent no response)!  **\n";
@@ -455,13 +463,13 @@ class LimitOrderMessage
         if (array_key_exists('limitOrderTimestamp', self::$limitOrderObj)){
             $timeStamp = self::$limitOrderObj['limitOrderTimestamp'];
         } else {
-            $timeStamp = 123456778899;
+            $timeStamp = strtotime($message['data'][0]['timestamp']) * 1000;
         }
 
         if (array_key_exists('price', self::$limitOrderObj)){
             $price = self::$limitOrderObj['price'];
         } else {
-            $price = 123456775421;
+            $price = $message['data'][0]['bids'][0][0];
         }
 
         if (array_key_exists('price', self::$limitOrderObj)){
@@ -476,10 +484,9 @@ class LimitOrderMessage
             'side' => 'Buy',
             'lastQty' => 0,
             'timestamp' => $timeStamp,
-
             'trade_date' => gmdate("Y-m-d G:i:s", strtotime($timeStamp)), // mysql date format
-            'avgPx' => ($price ? $price : 0.000000066), // Exec price. It can be null
-            'price' => ($price ? $price : 0.000000077), // In case of amend-market order, will be the price which goes to opposite side of order book
+            'avgPx' => ($price ? $price : $bid), // Exec price. It can be null
+            'price' => ($price ? $price : $bid), // In case of amend-market order, will be the price which goes to opposite side of order book
             'commission' => 0,
             'leavesQty' => 0,
             'execType' => 'forceTrade',

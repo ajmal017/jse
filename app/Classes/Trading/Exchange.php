@@ -11,7 +11,7 @@ use ccxt\bitmex;
 use Mockery\Exception;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Cache;
-//use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\DB;
 
 /**
  * Market order execution.
@@ -50,7 +50,7 @@ class Exchange
             self::$response = $e->getMessage();
 
         }
-        self::checkResponse();
+        self::checkResponse($botSettings);
     }
 
     public static function placeMarketSellOrder($botSettings, $volume, $exchange){
@@ -76,7 +76,7 @@ class Exchange
         {
             self::$response = $e->getMessage();
         }
-        self::checkResponse();
+        self::checkResponse($botSettings);
     }
 
     public static function placeLimitSellOrder($botSettings, $price, $volume, $limitOrderObj, $botId, $exchange){
@@ -120,7 +120,7 @@ class Exchange
             \App\Classes\DB\SignalTable::updateSignalInfo($botId, self::$response);
         }
 
-        self::checkResponse($limitOrderObj);
+        self::checkResponse($botSettings);
     }
 
     public static function placeLimitBuyOrder($botSettings, $price, $volume, $limitOrderObj, $botId, $exchange){
@@ -161,7 +161,7 @@ class Exchange
             \App\Classes\DB\SignalTable::updateSignalInfo($botId, self::$response);
         }
 
-        self::checkResponse($limitOrderObj);
+        self::checkResponse($botSettings);
     }
 
     public static function amendOrder($newPrice, $orderID, $botSettings, $amendReason, $exchange){
@@ -191,7 +191,7 @@ class Exchange
             self::$response = $e->getMessage();
         }
 
-        self::checkResponse();
+        self::checkResponse($botSettings);
     }
 
     public static function getOrders($botSettings, $limitOrderObj, $exchange){
@@ -224,11 +224,11 @@ class Exchange
         if(gettype(self::$response) == 'array'){
             \App\Classes\WebSocket\Front\LimitOrderMessage::executionParse2(self::$response);
         } else {
-            self::checkResponse();
+            self::checkResponse($botSettings);
         }
     }
 
-    private static function checkResponse(){
+    private static function checkResponse($botSettings){
         if (gettype(self::$response) == 'array'){
             dump(self::$response);
         }
@@ -238,9 +238,23 @@ class Exchange
             switch(false){
                 case !strpos(self::$response, 'Account has insufficient');
                     $error = 'Account has insufficient funds. Die.' . __FILE__ . ' '. __LINE__;
-                    dump('Account has insufficient funds. Die. Exchnage.php line: ' . __LINE__);
+                    dump('Account has insufficient funds. Workers stopped. Die. Exchange.php line: ' . __LINE__);
                     Log::notice($error);
-                    die(__FILE__ . ' ' . __LINE__);
+
+                    // Stop workers here
+
+                    dump('dump from Exchnage.php code: yyhhgg55');
+                    dump($botSettings['botTitle']);
+
+                    DB::table('bots')
+                        ->where('db_table_name', $botSettings['botTitle'])
+                        //->where('db_table_name', 'bot_1')
+                        ->update([
+                            'status' => 'idle'
+                        ]);
+
+                    die();
+
                 case !strpos(self::$response, 'does not have market symbol'); // bitmex does not have market symbol
                     $error = 'Bitmex does not have market symbol. Execution is not possible';
                     throw new Exception($error);

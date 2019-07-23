@@ -138,7 +138,7 @@ class LimitOrderMessage
     private static function limitOrderExecutionTimeCheck(){
         if (self::$isFirstTimeTickCheck2 || strtotime(now()) >= self::$addedTickTime2) {
             self::$isFirstTimeTickCheck2 = false;
-            self::$addedTickTime2 = strtotime(now()) + 10; // Seconds
+            self::$addedTickTime2 = strtotime(now()) + 15; // Seconds
             return true;
         }
     }
@@ -159,7 +159,7 @@ class LimitOrderMessage
     private static function getExecutionsTimeRangeCheck(){
         if (self::$isGetExecutionsTickCheck || strtotime(now()) >= self::$addedTickGetExcutions) {
             self::$isGetExecutionsTickCheck = false;
-            self::$addedTickGetExcutions = strtotime(now()) + 45; // Seconds
+            self::$addedTickGetExcutions = strtotime(now()) + 30; // Seconds
             return true;
         }
     }
@@ -355,7 +355,6 @@ class LimitOrderMessage
         );
 
         // Update to pending
-        //self::updateSignalStatus();
         \App\Classes\DB\SignalTable::updateSignalStatus(self::$botId);
 
     }
@@ -447,7 +446,7 @@ class LimitOrderMessage
 
         // strtotime($message['data'][0]['timestamp']) * 1000
         //$ask = $message['data'][0]['asks'][0][0];
-        //$bid = $message['data'][0]['bids'][0][0];
+        $bid = $message['data'][0]['bids'][0][0];
 
         echo "*****************************************************\n";
         echo "** FORCE SIGNAL FINISH (bitmex sent no response)!  **\n";
@@ -472,8 +471,8 @@ class LimitOrderMessage
             $price = $message['data'][0]['bids'][0][0];
         }
 
-        if (array_key_exists('price', self::$limitOrderObj)){
-            $orderID = self::$limitOrderObj['price'];
+        if (array_key_exists('orderID', self::$limitOrderObj)){
+            $orderID = self::$limitOrderObj['orderID'];
         } else {
             $orderID = 12345677654;
         }
@@ -483,7 +482,7 @@ class LimitOrderMessage
             'ordType' => 'not_used',
             'side' => 'Buy',
             'lastQty' => 0,
-            'timestamp' => $timeStamp,
+            'timestamp' => ($timeStamp ? $timeStamp : strtotime($message['data'][0]['timestamp']) * 1000),
             'trade_date' => gmdate("Y-m-d G:i:s", strtotime($timeStamp)), // mysql date format
             'avgPx' => ($price ? $price : $bid), // Exec price. It can be null
             'price' => ($price ? $price : $bid), // In case of amend-market order, will be the price which goes to opposite side of order book
@@ -495,15 +494,17 @@ class LimitOrderMessage
 
         \App\Classes\DB\SignalTable::insertRecord($execution, self::$botId);
 
-        \App\Classes\DB\SignalTable::signalFinish(self::$botId, [
+        \App\Classes\DB\SignalTable::signalFinish(self::$botId,$execution);
+
+        /*\App\Classes\DB\SignalTable::signalFinish(self::$botId, [
             'symbol' => 'XXCCVV78',
             'orderID' => (isset(self::$limitOrderObj['orderID']) ? self::$limitOrderObj['orderID'] : 'order_789369'),
             'avgPx' => (isset(self::$limitOrderObj['price']) ? self::$limitOrderObj['price'] : 789369),
             'commission' => 0
-        ]);
+        ]);*/
 
         /**
-         *  Set limit object to initial start.
+         * Set limit object to initial start.
          * Do not place ot amend orders. Wait for other signals.
          */
         $limitOrderObj = [

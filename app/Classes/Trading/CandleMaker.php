@@ -151,7 +151,11 @@ class CandleMaker
         $messageArray['tradeBarHigh'] = $this->barHigh; // High value of the bar
         $messageArray['tradeBarLow'] = $this->barLow; // Low value of the bar
 
-        $messageArray['priceChannelHighValue'] =
+        $row = DB::table($this->tableName)->where('id', $lastRecordId - 1);
+        $messageArray['priceChannelHighValue'] = $row->value('price_channel_high_value');
+        $messageArray['priceChannelLowValue'] = $row->value('price_channel_low_value');
+
+        /*$messageArray['priceChannelHighValue'] =
             (DB::table($this->tableName)
                 ->where('id', $lastRecordId - 1)
                 ->value('price_channel_high_value'));
@@ -159,7 +163,7 @@ class CandleMaker
         $messageArray['priceChannelLowValue'] =
             (DB::table($this->tableName)
                 ->where('id', $lastRecordId - 1)
-                ->value('price_channel_low_value'));
+                ->value('price_channel_low_value'));*/
 
         /* Send the information to the chart. Event is received in Chart.vue */
         $pusherApiMessage = new PusherApiMessage();

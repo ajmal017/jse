@@ -98,7 +98,8 @@ class HistoryBars extends \App\Http\Controllers\Controller
                         $execution->avg_fill_price
                     ];
 
-                if($execution->type == 'signal' && $execution->net_profit){
+                //if($execution->type == 'signal' && $execution->net_profit){
+                if($execution->type == 'signal'){
                     // Accumulated profit
                     $accumulatedProfit[] = [
                         $execution->time_stamp,
@@ -111,8 +112,6 @@ class HistoryBars extends \App\Http\Controllers\Controller
                     ];
                 }
             }
-
-
         }
 
         if ($allDbValues->count() != 0)

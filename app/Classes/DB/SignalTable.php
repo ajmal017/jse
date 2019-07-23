@@ -33,10 +33,8 @@ class SignalTable extends ProfitSignal
             'volume' => $orderExecutionResponse['lastQty'],
             'time_stamp' => strtotime($orderExecutionResponse['timestamp']) * 1000, // 13 digits
             'trade_date' => gmdate("Y-m-d G:i:s", strtotime($orderExecutionResponse['timestamp'])), // mysql date format
-
             'avg_fill_price' => $orderExecutionResponse['avgPx'], // Exec price
             'order_price' => $orderExecutionResponse['price'], // In case of amend-market order, will be the price which goes to opposite side of order book
-
             'trade_commission_percent' => $orderExecutionResponse['commission'],
             'volume_reminder' => $orderExecutionResponse['leavesQty'],
             'type' => $orderExecutionResponse['execType'],
@@ -98,9 +96,8 @@ class SignalTable extends ProfitSignal
                 'trade_commission_percent' => $orderExecutionResponse['commission']
             ]);
 
-        // profit goes here
+        /* Calculate profit */
         \App\Classes\Trading\ProfitSignal::calc($botId, $orderExecutionResponse);
-        //  die('code: gghhjj77');
     }
 
     /**

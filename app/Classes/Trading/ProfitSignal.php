@@ -23,7 +23,7 @@ class ProfitSignal
     private static $penUltimanteRow;
     private static $tradeCommissionValue;
 
-    /* @todo remove this. Used only signal force finis is fired */
+    /* @todo remove this. Used only signal when force finiss is fired */
     private static $profit = 0.000000001;
 
     /**
@@ -36,7 +36,6 @@ class ProfitSignal
      * @param $orderExecutionResponse
      */
     public static function calc($botId, $orderExecutionResponse){
-
         self::$penUltimanteRow = DB::table('signal_' . $botId)
             ->where('type', 'signal')
             ->where('status', 'closed')
@@ -46,7 +45,15 @@ class ProfitSignal
         $closedRows  = DB::table('signal_' . $botId)
             ->where('status', 'closed');
 
-        /* Do not calculate profit for a first record in DB - this is a first position ever*/
+        /* Set 0 accumulated profit and net profit for the first record in DB */
+        DB::table('signal_' . $botId)
+            ->where('id', 1)
+            ->update([
+                'net_profit' => 0,
+                'accumulated_profit' => 0
+            ]);
+
+        /* Do not calculate profit for a first record in DB - this is a first position ever */
         if (count(self::$penUltimanteRow) > 0){
             $lastRow = $closedRows
                 ->get()
@@ -66,7 +73,6 @@ class ProfitSignal
                 $penultimateRow->avg_fill_price = 0.0000001;
             if($lastRow->signal_volume == 0)
                 $lastRow->signal_volume = 0.0000001;
-
 
             if($direction == "buy"){
                 if($orderExecutionResponse['symbol'] == 'XBTUSD'){
@@ -124,11 +130,7 @@ class ProfitSignal
                     'net_profit' => DB::table('signal_' . $botId)->sum('trade_profit') -
                         DB::table('signal_' . $botId)->sum('trade_commission_value')
                 ]);
-
-
         }
-
-
     }
 
     public function finish(){
@@ -138,7 +140,6 @@ class ProfitSignal
          */
         if ($this->trade_flag != "all") {
             \App\Classes\Accounting\AccumulatedProfit::calculate($this->botSettings, $this->lastRow[0]->id);
-            //\App\Classes\Accounting\NetProfit::calculate($this->position, $this->botSettings, $this->lastRow[0]->id);
         }
     }
 }

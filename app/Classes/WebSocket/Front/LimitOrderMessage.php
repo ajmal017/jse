@@ -159,7 +159,7 @@ class LimitOrderMessage
     private static function getExecutionsTimeRangeCheck(){
         if (self::$isGetExecutionsTickCheck || strtotime(now()) >= self::$addedTickGetExcutions) {
             self::$isGetExecutionsTickCheck = false;
-            self::$addedTickGetExcutions = strtotime(now()) + 20; // Seconds
+            self::$addedTickGetExcutions = strtotime(now()) + 45; // Seconds
             return true;
         }
     }

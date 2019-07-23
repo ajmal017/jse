@@ -481,13 +481,13 @@ class LimitOrderMessage
             'symbol' => 'XXCCVV78',
             'ordType' => 'not_used',
             'side' => 'Buy',
-            'lastQty' => self::$signalRow[0]->volume,
+            'lastQty' => self::$signalRow[0]->signal_volume, // Signal row
             'timestamp' => strtotime($message['data'][0]['timestamp']) * 1000,
             'trade_date' => gmdate("Y-m-d G:i:s", strtotime($timeStamp)), // mysql date format
             'avgPx' => ($price ? $price : $bid), // Exec price. It can be null
             'price' => ($price ? $price : $bid), // In case of amend-market order, will be the price which goes to opposite side of order book
-            'commission' => 0,
-            'leavesQty' => 0,
+            'commission' => self::$signalRow[0]->trade_commission_percent, // Signal row
+            'leavesQty' => 7894,
             'execType' => 'forceTrade',
             'orderID' => $orderID
         ];

@@ -210,7 +210,12 @@ class BitmexWsListenerFront
                 "op" => "subscribe",
                 "args" => "instrument:" . self::$accountSettingsObject['historySymbolName']
             ]);
-            self::$connection->send($requestObject);
+            if (self::$connection){
+                self::$connection->send($requestObject);
+            } else {
+                dump('self::$connection is not created. Can not send WS obj. ' . __FILE__ . ' ' . __LINE__);
+            }
+
             self::$isHistoryLoaded = false;
             self::$isUnsubscribed = true;
         }

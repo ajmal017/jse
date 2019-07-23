@@ -69,8 +69,10 @@ class ProfitSignal
             // REMOVE THIS@!!! JSE-253 DEVIZION BY ZERO AFTER FORCE CLOSE
             if ($lastRow->avg_fill_price == 0)
                 $lastRow->avg_fill_price = 0.0000001;
+
             if ($penultimateRow->avg_fill_price == 0)
                 $penultimateRow->avg_fill_price = 0.0000001;
+
             if($lastRow->signal_volume == 0)
                 $lastRow->signal_volume = 0.0000001;
 

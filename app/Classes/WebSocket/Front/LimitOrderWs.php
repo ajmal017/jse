@@ -153,7 +153,12 @@ class LimitOrderWs
                 //$conn->send($requestObject2); /* Connection authenticate  */
                 //$conn->send($requestObject3); /* Subscribe to order channel */
                 //$conn->send($requestObject4); /* Subscribe to order executions */
-                $conn->send($requestObject6); /* Subscribe to order book with a specific symbol */
+
+                if ($conn){
+                    $conn->send($requestObject6); /* Subscribe to order book with a specific symbol */
+                } else {
+                    dump('$conn is not created. Can not send WS obj. ' . __FILE__ . ' ' . __LINE__);
+                }
 
             }, function(\Exception $e) use ($loop) {
                 $errorString = "RatchetPawlSocket.php Could not connect. Reconnect in 5 sec. \n Reason: {$e->getMessage()} \n";

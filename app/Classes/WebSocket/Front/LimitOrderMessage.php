@@ -478,7 +478,7 @@ class LimitOrderMessage
         }
 
         $execution = [
-            'symbol' => 'XXCCVV78',
+            'symbol' => 'XXCCVV78', // Use real symbol. It can break profit calculation coz there we check symbol name
             'ordType' => 'not_used',
             'side' => 'Buy',
             'lastQty' => self::$signalRow[0]->signal_volume, // Signal row
@@ -495,13 +495,6 @@ class LimitOrderMessage
         \App\Classes\DB\SignalTable::insertRecord($execution, self::$botId);
 
         \App\Classes\DB\SignalTable::signalFinish(self::$botId,$execution);
-
-        /*\App\Classes\DB\SignalTable::signalFinish(self::$botId, [
-            'symbol' => 'XXCCVV78',
-            'orderID' => (isset(self::$limitOrderObj['orderID']) ? self::$limitOrderObj['orderID'] : 'order_789369'),
-            'avgPx' => (isset(self::$limitOrderObj['price']) ? self::$limitOrderObj['price'] : 789369),
-            'commission' => 0
-        ]);*/
 
         /**
          * Set limit object to initial start.

@@ -74,6 +74,19 @@ class SignalTable extends ProfitSignal
         \App\Classes\Trading\ProfitSignal::calc($botId, $orderExecutionResponse);
     }
 
+    /**
+     * Update signal's status to close + update average fill price and trade commission %.
+     * IMOPRTANT!
+     * Commission percent value is taken from a trade. It can be -0.00025 or -0.00075. Rebate/Fee correspondingly.
+     * What a force trade is activated, Bitmex respond with no execution information and we make it ourselves in
+     * LimitOrderMessage.php forceSignalFinish()
+     * When trades are added to the table. One signal can have multiple trades. The commission value is copied to the signal!
+     * That's why we have all these updates!
+     *
+     * @param $botId
+     * @param $orderExecutionResponse
+     *
+     */
     public static function signalFinish($botId, $orderExecutionResponse){
 
         DB::table('signal_' . $botId)

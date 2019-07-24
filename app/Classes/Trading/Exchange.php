@@ -130,7 +130,7 @@ class Exchange
         if($botSettings['isTestnet'] == 1){
             $exchange->urls['api'] = $exchange->urls['test']; // Testnet or live. test or api
         } else {
-            $exchange->urls['api'] = $exchange->urls['api']; // Testnet or live. test or api
+            $exchange->urls['api'] = $exchange->urls['api'];
         }
 
         $exchange->apiKey = $botSettings['api'];

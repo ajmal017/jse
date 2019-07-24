@@ -93,7 +93,7 @@ class SignalTable extends ProfitSignal
             ->where('order_id', $orderExecutionResponse['orderID'])
             ->update([
                 'avg_fill_price' => $orderExecutionResponse['avgPx'], // Exec price
-                'trade_commission_percent' => $orderExecutionResponse['commission'] // Why do we update commission percent?
+                'trade_commission_percent' => $orderExecutionResponse['commission'] // Update commission. It is assigned to -0.00025 when force close
             ]);
 
         /* Calculate profit */

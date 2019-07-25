@@ -94,20 +94,19 @@ class SignalTable extends ProfitSignal
             ->where('status', 'pending')
             ->orwhere('status', 'new')
             ->update([
-                'status' => 'closed'
+                'status' => 'closed',
+                'avg_fill_price' => $orderExecutionResponse['avgPx'], // Exec price
+                'trade_commission_percent' => $orderExecutionResponse['commission']
             ]);
 
-        // When closed -> prepare the row with price
-        // Now we take avg price from last execution - later we should calculate it
-        // Add avg_fill_price to avg_fill_price where type = signal, status = closed
-        DB::table('signal_' . $botId)
+        /*DB::table('signal_' . $botId)
             ->where('type', 'signal')
             ->where('status', 'closed')
             ->where('order_id', $orderExecutionResponse['orderID'])
             ->update([
                 'avg_fill_price' => $orderExecutionResponse['avgPx'], // Exec price
                 'trade_commission_percent' => $orderExecutionResponse['commission'] // Update commission. It is assigned to -0.00025 when force close
-            ]);
+            ]);*/
 
         /* Calculate profit */
         \App\Classes\Trading\ProfitSignal::calc($botId, $orderExecutionResponse);
@@ -136,14 +135,28 @@ class SignalTable extends ProfitSignal
      * When it gets filled, order is updated. Status remains the same.
      * Status changes to close on when full volume is filled.
      *
+     * Once a limit order is placed - we add to the signal:
+     * time stamp, commission % and avereage fill prcie.
+     * All these values are taken from the order book. Later this values will be overwritten with information from
+     * limit order placement responce.
+     * The reason that we put these initial values is that no information about order placement may be recieved.
+     * In this case all profit calculation is broken. As well as chart, because there is a point with null value in time stamp
+     * which goes right in the begging of the chart.
+     *
      * @param $botId
+     * @param $message
      */
-    public static function updateSignalStatus($botId){
+    public static function updateSignalStatus($botId, $message){
         DB::table('signal_' . $botId)
             ->where('type', 'signal')
             ->where('status', 'new')
             ->update([
-                'status' => 'pending'
+                'order_id' => 'initial_order_id',
+                'status' => 'pending',
+                'time_stamp' => $message['timestamp'],
+                'trade_commission_percent' => -0.000123,
+                'avg_fill_price' => $message['avgFillPrice'],
+                'order_type' => 'initial_insertion'
             ]);
     }
 }

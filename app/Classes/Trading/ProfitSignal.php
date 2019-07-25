@@ -36,6 +36,7 @@ class ProfitSignal
      * @param $orderExecutionResponse
      */
     public static function calc($botId, $orderExecutionResponse){
+
         self::$penUltimanteRow = DB::table('signal_' . $botId)
             ->where('type', 'signal')
             ->where('status', 'closed')
@@ -53,11 +54,13 @@ class ProfitSignal
                 'accumulated_profit' => 0
             ]);
 
-        /* Do not calculate profit for a first record in DB - this is a first position ever */
+        /* Do not calculate profit for the first record in DB - this is a first position ever */
         if (count(self::$penUltimanteRow) > 0){
+
             $lastRow = $closedRows
                 ->get()
                 ->last();
+
             $penultimateRow = $closedRows
                 ->orderBy('id', 'desc')
                 ->skip(1)
@@ -67,14 +70,29 @@ class ProfitSignal
             $direction = $lastRow->direction;
 
             // REMOVE THIS@!!! JSE-253 DEVIZION BY ZERO AFTER FORCE CLOSE
-            if ($lastRow->avg_fill_price == 0)
+            /*if ($lastRow->avg_fill_price == 0)
                 $lastRow->avg_fill_price = 0.0000001;
 
             if ($penultimateRow->avg_fill_price == 0)
                 $penultimateRow->avg_fill_price = 0.0000001;
 
             if($lastRow->signal_volume == 0)
-                $lastRow->signal_volume = 0.0000001;
+                $lastRow->signal_volume = 0.0000001;*/
+
+
+            dump('Profit debug ProfitSignal.php');
+            //dump($penultimateRow);
+
+            echo('lastRow->avg_fill_price: ');
+            printf("%0.6f", $lastRow->avg_fill_price);
+            echo "\n";
+
+            echo('penultimateRow->avg_fill_price: ' . $penultimateRow->avg_fill_price);
+            printf("%0.6f", $penultimateRow->avg_fill_price);
+            echo "\n";
+
+            dump(' lastRow->signal_volume: ' . $lastRow->signal_volume);
+
 
             if($direction == "buy"){
                 if($orderExecutionResponse['symbol'] == 'XBTUSD'){
@@ -92,7 +110,7 @@ class ProfitSignal
             }
 
             if($direction == "sell"){
-                dump('sell');
+
                 if($orderExecutionResponse['symbol'] == 'XBTUSD'){
                     self::$profit = (1 / $penultimateRow->avg_fill_price - 1 / $lastRow->avg_fill_price) * $lastRow->signal_volume / 2;
                 }
@@ -109,7 +127,7 @@ class ProfitSignal
             if ($orderExecutionResponse['symbol'] == 'ETHUSD')
                 self::$tradeCommissionValue = $lastRow->avg_fill_price * 0.000001 * $lastRow->signal_volume * $lastRow->trade_commission_percent;
 
-            /* Trade profit, comission update*/
+            /* Trade profit, commission update*/
             DB::table('signal_' . $botId)
                 ->where('id', $lastRow->id)
                 ->update([

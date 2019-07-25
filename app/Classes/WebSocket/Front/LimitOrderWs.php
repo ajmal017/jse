@@ -68,7 +68,6 @@ class LimitOrderWs
 
             echo "addPeriodicTimer event: " . now() . "Bot ID: " . self::$botId . " Symbol: " .
                 self::$orderBookMessage['data'][0]['symbol'] . " " . Bot::where('id', $botId)->value('status') .  "\n";
-            //dump(self::$orderBookMessage['data'][0]['symbol']);
         });
 
         /** Pick up the right websocket endpoint accordingly to the exchange */

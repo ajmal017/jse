@@ -31,8 +31,21 @@ class LimitOrderMessage
     private static $addedTickGetExcutions;
     private static $exchange;
 
+    /* Time (sec) during which a limit order will located in order book. If it is not filled, it will be amend (turn to market) */
+    private static $limitOrderExecutionTime;
+    /**
+     * If during this time an execution information is not received, mark the order as closed with price from order book.
+     * This value can not be shorter than $limitOrderExecutionTime
+     */
+    private static $timeRange;
+    private static $limitOrderOffset;
+
     public static function parse(array $message, $botId, $exchnage){
+        /**
+         * ddd
+         */
         self::$limitOrderObj = Cache::get('bot_' . $botId);
+
         self::$botId = $botId;
         self::$exchange = $exchnage;
         /**
@@ -51,6 +64,7 @@ class LimitOrderMessage
 
         /**
          * Status of the signal is sent to pending once a limit order is placed. In Exchnage.php. placeLimitBuyOrder/placeLimitSellOrder
+         * Signals are added to signal_1.. table from Chart.php or MacdTradesTrigger.php
          */
         if (count(self::$signalRow) == 1){
             if (self::$signalRow[0]->status != 'closed' ){
@@ -68,17 +82,26 @@ class LimitOrderMessage
     }
 
     private static function orderBookTick($message){
-        // strtotime($message['data'][0]['timestamp']) * 1000
-        $ask = $message['data'][0]['asks'][0][0];
-        $bid = $message['data'][0]['bids'][0][0];
+
+        /* Get settings on each tick - once per 2 seconds. This limit is set in LimitOrderWs.php */
         $botSettings = \App\Classes\WebSocket\Front\TradingAccount::getSettings(self::$botId);
+        /* Set limit order params */
+        self::$limitOrderExecutionTime = $botSettings['executionTime'];
+        self::$timeRange = $botSettings['timeRange'];
+        self::$limitOrderOffset = $botSettings['offset'];
+
+        dump('Limit order params LimitOrderMessage.php');
+        dump(self::$limitOrderExecutionTime . ' ' . self::$timeRange . ' ' . self::$limitOrderOffset);
+
+        /* Limit order offset. If this value is negative - the limit order will be converted to market */
+        self::$limitOrderOffset = ceil($message['data'][0]['bids'][0][0] * $botSettings['offset'] / 100);
 
         /* Place and amend order */
         if (self::$signalRow[0]->direction == "sell")
-            self::handleSellLimitOrder($ask, $botSettings);
+            self::handleSellLimitOrder($message, $botSettings);
 
         if (self::$signalRow[0]->direction == "buy")
-            self::handleBuyLimitOrder($bid, $botSettings);
+            self::handleBuyLimitOrder($message, $botSettings);
 
         /* Get trades-executions for a placed limit order */
         if(self::rateLimitheck2())
@@ -97,7 +120,7 @@ class LimitOrderMessage
          * We send bid as a parameter. In case returned avgFill price = null, bid will be used instead.
          */
         if(self::getExecutionsTimeRangeCheck())
-            self::forceSignalFinish($message);
+            self::forceSignalFinish($message, $botSettings);
     }
 
     /**
@@ -138,7 +161,7 @@ class LimitOrderMessage
     private static function limitOrderExecutionTimeCheck(){
         if (self::$isFirstTimeTickCheck2 || strtotime(now()) >= self::$addedTickTime2) {
             self::$isFirstTimeTickCheck2 = false;
-            self::$addedTickTime2 = strtotime(now()) + 15; // Seconds
+            self::$addedTickTime2 = strtotime(now()) + self::$limitOrderExecutionTime; // Seconds
             return true;
         }
     }
@@ -159,7 +182,7 @@ class LimitOrderMessage
     private static function getExecutionsTimeRangeCheck(){
         if (self::$isGetExecutionsTickCheck || strtotime(now()) >= self::$addedTickGetExcutions) {
             self::$isGetExecutionsTickCheck = false;
-            self::$addedTickGetExcutions = strtotime(now()) + 30; // Seconds
+            self::$addedTickGetExcutions = strtotime(now()) + self::$timeRange; // Seconds
             return true;
         }
     }
@@ -240,7 +263,7 @@ class LimitOrderMessage
         }
     }
 
-    private static function handleSellLimitOrder($ask, $botSettings){
+    private static function handleSellLimitOrder($message, $botSettings){
         if(!self::$limitOrderObj['isLimitOrderPlaced']){
             /**
              * Don't place limit order if status is new or pending
@@ -248,7 +271,7 @@ class LimitOrderMessage
              * I suspect that isLimitOrderPlaced flag does not properly work.
              */
             if (self::$signalRow[0]->status != 'pending'){
-                self::placeSellLimitOrder($ask, $botSettings);
+                self::placeSellLimitOrder($message, $botSettings);
                 /* Start time force exit timer */
                 self::limitOrderExecutionTimeCheck();
                 /* Start execution receive time range timer*/
@@ -265,7 +288,7 @@ class LimitOrderMessage
              * Once expired: send ask - 10% from the price - it will execute the limit order as market.
              */
             if(self::limitOrderExecutionTimeCheck()){
-                self::timeForceExitSell($ask, $botSettings);
+                self::timeForceExitSell($message['data'][0]['asks'][0][0], $botSettings);
             }
             /**
              * Amend.
@@ -275,7 +298,7 @@ class LimitOrderMessage
             self::$limitOrderObj = Cache::get('bot_' . self::$botId);
 
             if (self::amendOrderRateLimitheck())
-                self::amendSellLimitOrder($ask, $botSettings, 'regular amend');
+                self::amendSellLimitOrder($message['data'][0]['asks'][0][0], $botSettings, 'regular amend');
         }
     }
 
@@ -285,12 +308,12 @@ class LimitOrderMessage
      * @param $bid
      * @param $botSettings
      */
-    private static function handleBuyLimitOrder($bid, $botSettings){
+    private static function handleBuyLimitOrder($message, $botSettings){
         if(!self::$limitOrderObj['isLimitOrderPlaced']){
             if(self::$signalRow[0]->status != 'pending'){
-                self::placeBuyLimitOrder($bid, $botSettings);
+                self::placeBuyLimitOrder($message, $botSettings);
                 /* Start time force exit timer */
-                self::limitOrderExecutionTimeCheck($bid, $botSettings);
+                self::limitOrderExecutionTimeCheck();
                 /* Start execution receive time range timer*/
                 self::getExecutionsTimeRangeCheck();
             } else {
@@ -300,20 +323,20 @@ class LimitOrderMessage
         } else {
             /* Time force exit */
             if(self::limitOrderExecutionTimeCheck()){
-                self::timeForceExitBuy($bid, $botSettings);
+                self::timeForceExitBuy($message['data'][0]['bids'][0][0], $botSettings);
             }
             /* Amend */
             self::$limitOrderObj = Cache::get('bot_' . self::$botId);
 
             if (self::amendOrderRateLimitheck())
-                self::amendBuyLimitOrder($bid, $botSettings, 'regular amend');
+                self::amendBuyLimitOrder($message['data'][0]['bids'][0][0], $botSettings, 'regular amend');
         }
     }
 
-    private static function placeBuyLimitOrder($bid, $botSettings){
+    private static function placeBuyLimitOrder($message, $botSettings){
         dump('~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~PLACE BUY LIMIT ORDERRRRR (LimitOrderMessage.php) code:rreeww ' . now());
-        //self::$limitOrderObj['limitOrderPrice'] = $bid - self::$limitOrderObj['step'];
-        self::$limitOrderObj['limitOrderPrice'] = $bid;
+        self::$limitOrderObj['limitOrderPrice'] = $message['data'][0]['bids'][0][0] - self::$limitOrderOffset;
+        //self::$limitOrderObj['limitOrderPrice'] = $message['data'][0]['bids'][0][0];
         self::$limitOrderObj['isLimitOrderPlaced'] = true;
         Cache::put('bot_' . self::$botId, self::$limitOrderObj, now()->addMinute(30));
 
@@ -322,54 +345,60 @@ class LimitOrderMessage
             'buy',
             self::$signalRow[0]->signal_volume,
             $botSettings,
-            //$bid - self::$limitOrderObj['step'],
-            $bid,
+            $message['data'][0]['bids'][0][0] - self::$limitOrderOffset,
+            //$message['data'][0]['bids'][0][0],
             self::$limitOrderObj,
             self::$botId,
             self::$exchange
         );
 
-        \App\Classes\DB\SignalTable::updateSignalStatus(self::$botId);
+        \App\Classes\DB\SignalTable::updateSignalStatus(
+            self::$botId,
+            [
+                'timestamp' => strtotime($message['data'][0]['timestamp']) * 1000,
+                'avgFillPrice' => $message['data'][0]['bids'][0][0]
+            ]);
     }
 
-    private static function placeSellLimitOrder($ask, $botSettings){
+    private static function placeSellLimitOrder($message, $botSettings){
         dump('~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~PLACE SELL LIMIT ORDERRRRR LimitOrderMessage.php code: rrffgg ' . now());
-        //self::$limitOrderObj['limitOrderPrice'] = $ask + self::$limitOrderObj['step'];
-        self::$limitOrderObj['limitOrderPrice'] = $ask;
+        self::$limitOrderObj['limitOrderPrice'] = $message['data'][0]['asks'][0][0] + self::$limitOrderOffset;
+        //self::$limitOrderObj['limitOrderPrice'] = $message['data'][0]['asks'][0][0];
         self::$limitOrderObj['isLimitOrderPlaced'] = true;
         Cache::put('bot_' . self::$botId, self::$limitOrderObj, now()->addMinute(30));
 
-        /**
-         * Use bid/ask price + step/increment for testing purposes.
-         *
-         */
+        /* Use bid/ask price + step/increment for testing purposes */
         PlaceLimitOrder::dispatch(
             'sell',
             self::$signalRow[0]->signal_volume,
             $botSettings,
-            //$ask + self::$limitOrderObj['step'],
-            $ask,
+            $message['data'][0]['asks'][0][0] + self::$limitOrderOffset,
+            //$message['data'][0]['asks'][0][0],
             self::$limitOrderObj,
             self::$botId,
             self::$exchange
         );
 
-        // Update to pending
-        \App\Classes\DB\SignalTable::updateSignalStatus(self::$botId);
-
+        /* Update signal's status to pending and add initial values to the signal*/
+        \App\Classes\DB\SignalTable::updateSignalStatus(self::$botId,
+            [
+                'timestamp' => strtotime($message['data'][0]['timestamp']) * 1000,
+                'avgFillPrice' => $message['data'][0]['asks'][0][0]
+            ]);
     }
 
     private static function amendBuyLimitOrder($bid, $botSettings, $amendReason){
-        //if ($bid - self::$limitOrderObj['step'] == self::$limitOrderObj['limitOrderPrice']){
+
         dump('amend price sell trace. ask: ' . $bid . " limit order price: " . self::$limitOrderObj['limitOrderPrice'] . " code: uu88");
-        if ($bid == self::$limitOrderObj['limitOrderPrice']){
+        if ($bid - self::$limitOrderOffset == self::$limitOrderObj['limitOrderPrice']){
+        //if ($bid == self::$limitOrderObj['limitOrderPrice']){
             dump('Bid == best BID!');
         } else {
             dump('PRICE CHANGED! ask: ' . $bid . " limit order price: " . self::$limitOrderObj['limitOrderPrice'] . " code: uu95");
             dump('---------------NOW CAN AMEND BUY ORDER (LimitOrderMessage.php line)' . __LINE__);
-            //$response = \App\Classes\Trading\Exchange::amendOrder($bid - self::$limitOrderObj['step'], Cache::get('bot_' . self::$botId)['orderID'], $botSettings);
+
             \App\Jobs\AmendOrder::dispatch(
-                $bid,
+                $bid - self::$limitOrderOffset,
                 (isset(Cache::get('bot_' . self::$botId)['orderID']) ?
                     Cache::get('bot_' . self::$botId)['orderID'] : 33445566),
                 $botSettings,
@@ -377,31 +406,31 @@ class LimitOrderMessage
                 self::$exchange
             );
             // Put price to cache in order not to amend more than needed
-            //self::$limitOrderObj['limitOrderPrice'] = $bid - self::$limitOrderObj['step'];
-            self::$limitOrderObj['limitOrderPrice'] = $bid;
+            self::$limitOrderObj['limitOrderPrice'] = $bid - self::$limitOrderOffset;
+            //self::$limitOrderObj['limitOrderPrice'] = $bid;
             Cache::put('bot_' . self::$botId, self::$limitOrderObj, now()->addMinute(30));
         }
     }
 
     private static function amendSellLimitOrder($ask, $botSettings, $amendReason){
-        //if ($ask + self::$limitOrderObj['step'] == self::$limitOrderObj['limitOrderPrice']){
         dump('amend price sell trace. ask: ' . $ask . " limit order price: " . self::$limitOrderObj['limitOrderPrice'] . " code: uu87");
-        if ($ask == self::$limitOrderObj['limitOrderPrice']){
+        if ($ask + self::$limitOrderOffset == self::$limitOrderObj['limitOrderPrice']){
+        //if ($ask == self::$limitOrderObj['limitOrderPrice']){
             dump('Ask == best ASK!');
         } else {
             dump('PRICE CHANGED! ask: ' . $ask . " limit order price: " . self::$limitOrderObj['limitOrderPrice'] . " code: uu954");
             dump('---------------NOW CAN AMEND SELL ORDER');
+
             \App\Jobs\AmendOrder::dispatch(
-                $ask,
+                $ask + self::$limitOrderOffset,
                 (isset(Cache::get('bot_' . self::$botId)['orderID']) ? Cache::get('bot_' . self::$botId)['orderID'] : 'NO_ORDERID_776676'),
                 $botSettings,
                 $amendReason,
                 self::$exchange
             );
 
-            // Put price to cache in order not to amend more than needed
-            //self::$limitOrderObj['limitOrderPrice'] = $ask + self::$limitOrderObj['step'];
-            self::$limitOrderObj['limitOrderPrice'] = $ask;
+            /* Put price to cache in order not to amend more than needed */
+            self::$limitOrderObj['limitOrderPrice'] = $ask + self::$limitOrderOffset;
             Cache::put('bot_' . self::$botId, self::$limitOrderObj, now()->addMinute(30));
         }
     }
@@ -442,7 +471,7 @@ class LimitOrderMessage
      * Close signal when a time is over and no execution received from Bitmex.
      * Close a signal artificially and continue trading.
      */
-    private static function forceSignalFinish($message){
+    private static function forceSignalFinish($message, $botSettings){
 
         // strtotime($message['data'][0]['timestamp']) * 1000
         //$ask = $message['data'][0]['asks'][0][0];
@@ -478,9 +507,10 @@ class LimitOrderMessage
         }
 
         $execution = [
-            'symbol' => 'XXCCVV78', // Use real symbol. It can break profit calculation coz there we check symbol name
+            'symbol' => $botSettings['historySymbolName'], // Use real symbol. It can break profit calculation coz there we check symbol name
             'ordType' => 'not_used',
-            'side' => 'Buy',
+            //'side' => 'Buy',
+            'side' => self::$signalRow[0]->direction,
             'lastQty' => self::$signalRow[0]->signal_volume, // Signal row
             'timestamp' => strtotime($message['data'][0]['timestamp']) * 1000,
             'trade_date' => gmdate("Y-m-d G:i:s", strtotime($timeStamp)), // mysql date format
@@ -494,7 +524,7 @@ class LimitOrderMessage
 
         \App\Classes\DB\SignalTable::insertRecord($execution, self::$botId);
 
-        \App\Classes\DB\SignalTable::signalFinish(self::$botId,$execution);
+        \App\Classes\DB\SignalTable::signalFinish(self::$botId, $execution);
 
         /**
          * Set limit object to initial start.
@@ -507,7 +537,7 @@ class LimitOrderMessage
             'isLimitOrderPlaced' => false,
             'limitOrderPrice' => null,
             'limitOrderTimestamp' => null,
-            'step' => 0 // Limit order position placement. Used for testing purpuses. If set - order will be locate deeper in the book.
+            //'step' => 0 // Limit order position placement. Used for testing purpuses. If set - order will be locate deeper in the book.
         ];
 
         Cache::put('bot_' . self::$botId, $limitOrderObj, now()->addMinute(30));

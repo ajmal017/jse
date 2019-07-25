@@ -35,7 +35,17 @@ class TradingAccount
             'frontEndId' => $bot->value('front_end_id'),
             'volume' => $bot->value('volume'),
             'rateLimit' => $bot->value('rate_limit'),
-            'signalTable' => 'signal_' . $botId
+            'signalTable' => 'signal_' . $botId,
+
+            /**
+             * If 0, a limit order will be placed on best bid/ask.
+             * Value in $.
+             * if -5%, the limit order will be placed on another side of the order book.
+             * And the placed limit order will be executed as market.
+             */
+            'offset' => $bot->value('offset'),
+            'executionTime' => $bot->value('execution_time'),
+            'timeRange' => $bot->value('time_range')
         );
 
         /*$accountId = Bot::where('id', $botId)->value('account_id');

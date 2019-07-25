@@ -26,6 +26,11 @@ class CreateBotsTable extends Migration
             $table->string('db_table_name')->nullable();
             $table->integer('account_id')->nullable();
             $table->integer('symbol_id')->nullable();
+
+            $table->integer('offset')->nullable();
+            $table->integer('execution_time')->nullable();
+            $table->integer('time_range')->nullable();
+
             $table->integer('time_frame')->nullable();
             $table->integer('bars_to_load')->nullable();
             $table->integer('volume')->nullable();

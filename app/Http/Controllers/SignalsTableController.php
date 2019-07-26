@@ -31,7 +31,7 @@ class SignalsTableController extends Controller
                 'trade_commission_percent' => $record->trade_commission_percent,
                 'trade_profit' => $record->trade_profit,
                 'accumulated_profit' => $record->accumulated_profit,
-                'record->net_profit' => $record->net_profit
+                'net_profit' => $record->net_profit
             ];
         }
         return ($this->table ? $this->table : null);

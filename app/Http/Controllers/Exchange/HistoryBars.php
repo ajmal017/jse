@@ -25,6 +25,8 @@ class HistoryBars extends \App\Http\Controllers\Controller
         $shortTradeMarkers = array();
         $netProfit = [];
         $accumulatedProfit = [];
+        $netProfitBacktest = [];
+        $accumulatedProfitBackTest = [];
         $seriesData = [];
 
         $executionLongMarkers = [];
@@ -65,14 +67,17 @@ class HistoryBars extends \App\Http\Controllers\Controller
                 $rowValue->time_stamp,
                 $rowValue->sma1
             ];
-            /*$accumulatedProfit[] = [
+
+            /* Used only in back test chart */
+            $accumulatedProfitBackTest[] = [
                 $rowValue->time_stamp,
                 $rowValue->accumulated_profit
             ];
-            $netProfit[] = [
+            $netProfitBacktest[] = [
                 $rowValue->time_stamp,
                 $rowValue->net_profit
-            ];*/
+            ];
+
             $macdLine[] = [
                 $rowValue->time_stamp,
                 $rowValue->macd_line
@@ -122,6 +127,10 @@ class HistoryBars extends \App\Http\Controllers\Controller
                 "longTradeMarkers" => $longTradeMarkers,
                 "shortTradeMarkers" => $shortTradeMarkers,
                 "sma1" => $sma1,
+
+                "accumulatedProfitBackTest" => $accumulatedProfitBackTest,
+                "netProfitBackTest" => $netProfitBacktest,
+
                 "accumulatedProfit" => $accumulatedProfit,
                 "netProfit" => $netProfit,
                 "macdLine" => $macdLine,

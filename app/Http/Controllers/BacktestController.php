@@ -66,9 +66,9 @@ class BacktestController extends Controller
                 'commission' => $request['commission'] / 100,
                 'strategy' => 'macd',
                 'strategyParams' => [
-                    'emaPeriod' => 2,
-                    'macdLinePeriod' => 5,
-                    'macdSignalLinePeriod' => 5
+                    'emaPeriod' => $request['ema_period'],
+                    'macdLinePeriod' => $request['macd_line_period'],
+                    'macdSignalLinePeriod' => $request['macd_signalline_period']
                 ],
                 'timeFrame' => $request['bar_time_frame'], // 1 or 5 minutes. https://www.bitmex.com/api/explorer/#!/Trade/Trade_getBucketed
                 'barsToLoad' => $request['bars_to_load'],

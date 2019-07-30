@@ -48,7 +48,7 @@ class LimitOrderMessage
         self::$limitOrderObj = Cache::get('bot_' . $botId);
 
         self::$botId = $botId;
-        self::$queIdId = $queId;
+        self::$queId = $queId;
 
         self::$exchange = $exchnage;
         /**

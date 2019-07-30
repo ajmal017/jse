@@ -34,6 +34,12 @@ class BitmexWsListenerFront
         /* @todo Do we need $loop in hre? */
         $loop->addPeriodicTimer(1, function() use($loop, $botId, $self) {
             echo (Bot::where('id', $botId)->value('status') == 'running' ? 'running' : 'idle') . "\n";
+            /* Update loop time stamp in bots table jse-274 */
+            DB::table('bots')
+                ->where('id', $botId)
+                ->update([
+                    'front_worker_update_time' => time()
+                ]);
             /* Get strategies settings object*/
             self::$strategiesSettingsObject = \App\Classes\WebSocket\Front\Strategies::getSettings($botId);
             /* Get account settings object */

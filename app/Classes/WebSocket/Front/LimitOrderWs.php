@@ -45,9 +45,14 @@ class LimitOrderWs
          * Within the same period of time we send order book message for parsing.
          */
         $loop->addPeriodicTimer(2, function() use($connector, $loop, $console, $botId, $net) {
+            /* Update loop time stamp in bots table jse-274 */
+            DB::table('bots')
+                ->where('id', $botId)
+                ->update([
+                    'execution_worker_update_time' => time()
+                ]);
 
             self::$accountSettingsObject = \App\Classes\WebSocket\Front\TradingAccount::getSettings($botId);
-            //self::$isBotRunning =  Cache::get('status_bot_' . $botId);
             self::$symbol = self::$accountSettingsObject['historySymbolName'];
 
             /*if (Bot::where('id', $botId)->value('status') == 'running' && !self::$isBotRunning){

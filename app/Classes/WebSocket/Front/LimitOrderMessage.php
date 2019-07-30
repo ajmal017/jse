@@ -42,7 +42,7 @@ class LimitOrderMessage
 
     public static function parse(array $message, $botId, $exchnage){
         /**
-         * ddd
+         * Get limit order object
          */
         self::$limitOrderObj = Cache::get('bot_' . $botId);
 
@@ -350,7 +350,7 @@ class LimitOrderMessage
             self::$limitOrderObj,
             self::$botId,
             self::$exchange
-        );
+        )->onQueue('bot_' . self::$botId);
 
         \App\Classes\DB\SignalTable::updateSignalStatus(
             self::$botId,
@@ -377,7 +377,7 @@ class LimitOrderMessage
             self::$limitOrderObj,
             self::$botId,
             self::$exchange
-        );
+        )->onQueue('bot_' . self::$botId);
 
         /* Update signal's status to pending and add initial values to the signal*/
         \App\Classes\DB\SignalTable::updateSignalStatus(self::$botId,
@@ -404,7 +404,7 @@ class LimitOrderMessage
                 $botSettings,
                 $amendReason,
                 self::$exchange
-            );
+            )->onQueue('bot_' . self::$botId);
             // Put price to cache in order not to amend more than needed
             self::$limitOrderObj['limitOrderPrice'] = $bid - self::$limitOrderOffset;
             //self::$limitOrderObj['limitOrderPrice'] = $bid;
@@ -427,7 +427,7 @@ class LimitOrderMessage
                 $botSettings,
                 $amendReason,
                 self::$exchange
-            );
+            )->onQueue('bot_' . self::$botId);
 
             /* Put price to cache in order not to amend more than needed */
             self::$limitOrderObj['limitOrderPrice'] = $ask + self::$limitOrderOffset;

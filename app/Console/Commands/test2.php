@@ -41,6 +41,13 @@ class test2 extends Command
      */
     public function handle()
     {
+        $row = DB::table('bots')
+            ->where('id',1)
+            ->get();
+
+        dump($row[0]->id);
+        die('dfggg');
+
         $botSettings =
             [
                 'botTitle' => 'bot_1',

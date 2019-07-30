@@ -30,7 +30,7 @@ class LimitOrderWs
     private static $exchange;
 
 
-    public static function listen($connector, $loop, $console, $botId, $queId, $queId, $net, $exchnage){
+    public static function listen($connector, $loop, $console, $botId, $queId, $net, $exchnage){
 
         /* Vars for self-call listen method in case of reconnection */
         self::$connector = $connector;

@@ -73,8 +73,11 @@ class LimitOrderWs
             if (self::$orderBookMessage)
                 \App\Classes\WebSocket\Front\LimitOrderMessage::parse(self::$orderBookMessage, self::$botId, self::$queId, self::$exchange);
 
-            echo "addPeriodicTimer event: " . now() . "Bot ID: " . self::$botId . " Symbol: " .
-                self::$orderBookMessage['data'][0]['symbol'] . " " . Bot::where('id', $botId)->value('status') .  "\n";
+            echo now() .
+                "Bot ID: " . self::$botId .
+                " Que ID: " . self::$queId .
+                " Symbol: " . self::$orderBookMessage['data'][0]['symbol'] .
+                " Status: " . Bot::where('id', $botId)->value('status') .  "\n";
         });
 
         /** Pick up the right websocket endpoint accordingly to the exchange */

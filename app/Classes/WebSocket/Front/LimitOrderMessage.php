@@ -18,6 +18,7 @@ class LimitOrderMessage
     private static $limitOrderObj;
     private static $signalRow;
     private static $botId;
+    private static $queId;
 
     /* Rate limit vars */
     private static $isFirstTimeTickCheck = true;
@@ -40,13 +41,15 @@ class LimitOrderMessage
     private static $timeRange;
     private static $limitOrderOffset;
 
-    public static function parse(array $message, $botId, $exchnage){
+    public static function parse(array $message, $botId, $queId, $exchnage){
         /**
          * Get limit order object
          */
         self::$limitOrderObj = Cache::get('bot_' . $botId);
 
         self::$botId = $botId;
+        self::$queIdId = $queId;
+
         self::$exchange = $exchnage;
         /**
          * Check DB for new signals
@@ -350,7 +353,7 @@ class LimitOrderMessage
             self::$limitOrderObj,
             self::$botId,
             self::$exchange
-        )->onQueue('bot_' . self::$botId);
+        )->onQueue('bot_' . self::$queId);
 
         \App\Classes\DB\SignalTable::updateSignalStatus(
             self::$botId,
@@ -377,7 +380,7 @@ class LimitOrderMessage
             self::$limitOrderObj,
             self::$botId,
             self::$exchange
-        )->onQueue('bot_' . self::$botId);
+        )->onQueue('bot_' . self::$queId);
 
         /* Update signal's status to pending and add initial values to the signal*/
         \App\Classes\DB\SignalTable::updateSignalStatus(self::$botId,
@@ -404,7 +407,7 @@ class LimitOrderMessage
                 $botSettings,
                 $amendReason,
                 self::$exchange
-            )->onQueue('bot_' . self::$botId);
+            )->onQueue('bot_' . self::$queId);
             // Put price to cache in order not to amend more than needed
             self::$limitOrderObj['limitOrderPrice'] = $bid - self::$limitOrderOffset;
             //self::$limitOrderObj['limitOrderPrice'] = $bid;
@@ -427,7 +430,7 @@ class LimitOrderMessage
                 $botSettings,
                 $amendReason,
                 self::$exchange
-            )->onQueue('bot_' . self::$botId);
+            )->onQueue('bot_' . self::$queId);
 
             /* Put price to cache in order not to amend more than needed */
             self::$limitOrderObj['limitOrderPrice'] = $ask + self::$limitOrderOffset;

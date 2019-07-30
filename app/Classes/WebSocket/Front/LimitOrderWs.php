@@ -24,18 +24,20 @@ class LimitOrderWs
     public static $loop;
     public static $console;
     private static $botId;
+    private static $queId;
     private static $net;
     private static $orderBookMessage;
     private static $exchange;
 
 
-    public static function listen($connector, $loop, $console, $botId, $net, $exchnage){
+    public static function listen($connector, $loop, $console, $botId, $queId, $queId, $net, $exchnage){
 
         /* Vars for self-call listen method in case of reconnection */
         self::$connector = $connector;
         self::$loop = $loop;
         self::$console = $console;
         self::$botId = $botId;
+        self::$queId = $queId;
         self::$net = $net;
         self::$orderBookMessage = null;
         self::$exchange = $exchnage;
@@ -69,7 +71,7 @@ class LimitOrderWs
 
             /* Orderbook parse */
             if (self::$orderBookMessage)
-                \App\Classes\WebSocket\Front\LimitOrderMessage::parse(self::$orderBookMessage, self::$botId, self::$exchange);
+                \App\Classes\WebSocket\Front\LimitOrderMessage::parse(self::$orderBookMessage, self::$botId, self::$queId, self::$exchange);
 
             echo "addPeriodicTimer event: " . now() . "Bot ID: " . self::$botId . " Symbol: " .
                 self::$orderBookMessage['data'][0]['symbol'] . " " . Bot::where('id', $botId)->value('status') .  "\n";
@@ -104,9 +106,7 @@ class LimitOrderWs
                     self::$console->info("Connection closed. " . __LINE__);
                     self::$console->error("Reconnecting back!");
                     sleep(5); // Wait 5 seconds before next connection try will attempt
-
-                    //self::$console->handle(); // Call the main method of this class. It calls the first console command! Not this class!
-                    self::listen(self::$connector, self::$loop, self::$console, self::$botId, self::$net, self::$exchange);
+                    self::listen(self::$connector, self::$loop, self::$console, self::$botId, self::$queId, self::$net, self::$exchange);
                 });
 
                 /**

@@ -16,7 +16,7 @@ class Limit extends Command
      *
      * @var string
      */
-    protected $signature = 'limit {botId} {net}';
+    protected $signature = 'limit {botId} {queId} {net}';
 
     /**
      * The console command description.
@@ -83,6 +83,6 @@ class Limit extends Command
          * Send $this - it will allow to output colored console messages.
          */
         $limitOrder = new LimitOrder();
-        $limitOrder->start($this, $this->argument('botId'), $this->argument('net'));
+        $limitOrder->start($this, $this->argument('botId'), $this->argument('queId'), $this->argument('net'));
     }
 }

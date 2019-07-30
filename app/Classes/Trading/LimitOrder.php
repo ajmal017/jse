@@ -11,7 +11,7 @@ use ccxt\bitmex;
 
 class LimitOrder
 {
-    public function start($console, $botId, $net){
+    public function start($console, $botId, $queId, $net){
         /**
          * Websocket connection.
          * Ratchet/pawl websocket library.
@@ -31,6 +31,6 @@ class LimitOrder
         /**
          * Subscribe to WS and start working with limit orders
          */
-        \App\Classes\WebSocket\Front\LimitOrderWs::listen($connector, $loop, $console, $botId, $net, $exchnage);
+        \App\Classes\WebSocket\Front\LimitOrderWs::listen($connector, $loop, $console, $botId, $queId, $net, $exchnage);
     }
 }

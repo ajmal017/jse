@@ -16,7 +16,7 @@ class WorkerStatusController extends Controller
     private $response;
     public function get($botId){
         $row = DB::table('bots')
-            ->where('id',1)
+            ->where('id',$botId)
             ->get()[0];
 
         if (time() - $row->front_worker_update_time > 10){

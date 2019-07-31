@@ -107,6 +107,8 @@ class BotController extends Controller
         } else {
             $bot->update($request->all());
         }*/
+
+        $bot->update($request->all());
     }
 
     /**

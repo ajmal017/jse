@@ -101,12 +101,12 @@ class BotController extends Controller
         }
 
         /* Check whether there are record in jobs table. If so - the que worker does not work */
-        if (Job::all()->count() != 0){
+        /*if (Job::all()->count() != 0){
             return response('Jobs table is not empty!<br>' . __FILE__, 422)
                 ->header('Content-Type', 'text/plain');
         } else {
             $bot->update($request->all());
-        }
+        }*/
     }
 
     /**

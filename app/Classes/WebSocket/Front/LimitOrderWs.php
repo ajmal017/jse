@@ -55,7 +55,7 @@ class LimitOrderWs
                     'execution_worker_update_time' => time()
                 ]);
 
-            GetQueWorkerStatus::dispatch($botId)->onQueue('bot_' . $botId);
+            GetQueWorkerStatus::dispatch($botId)->onQueue('bot_' . self::$queId);
 
             self::$accountSettingsObject = \App\Classes\WebSocket\Front\TradingAccount::getSettings($botId);
             self::$symbol = self::$accountSettingsObject['historySymbolName'];

@@ -99,15 +99,6 @@ class SignalTable extends ProfitSignal
                 'trade_commission_percent' => $orderExecutionResponse['commission']
             ]);
 
-        /*DB::table('signal_' . $botId)
-            ->where('type', 'signal')
-            ->where('status', 'closed')
-            ->where('order_id', $orderExecutionResponse['orderID'])
-            ->update([
-                'avg_fill_price' => $orderExecutionResponse['avgPx'], // Exec price
-                'trade_commission_percent' => $orderExecutionResponse['commission'] // Update commission. It is assigned to -0.00025 when force close
-            ]);*/
-
         /* Calculate profit */
         \App\Classes\Trading\ProfitSignal::calc($botId, $orderExecutionResponse);
     }

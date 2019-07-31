@@ -95,6 +95,11 @@ class BotController extends Controller
                 ->header('Content-Type', 'text/plain');
         }
 
+        if (time() - $row->que_worker_update_time > 10){
+            return response('Que worker is offline!<br>' . __FILE__, 422)
+                ->header('Content-Type', 'text/plain');
+        }
+
         /* Check whether there are record in jobs table. If so - the que worker does not work */
         if (Job::all()->count() != 0){
             return response('Jobs table is not empty!<br>' . __FILE__, 422)

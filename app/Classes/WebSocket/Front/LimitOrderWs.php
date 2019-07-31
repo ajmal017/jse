@@ -7,6 +7,7 @@
  */
 
 namespace App\Classes\WebSocket\Front;
+use App\Jobs\GetQueWorkerStatus;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
@@ -53,6 +54,8 @@ class LimitOrderWs
                 ->update([
                     'execution_worker_update_time' => time()
                 ]);
+
+            GetQueWorkerStatus::dispatch($botId)->onQueue('bot_' . $botId);
 
             self::$accountSettingsObject = \App\Classes\WebSocket\Front\TradingAccount::getSettings($botId);
             self::$symbol = self::$accountSettingsObject['historySymbolName'];

@@ -216,9 +216,9 @@ class LimitOrderMessage
                         /**
                          * Check execType.
                          * Can be:
-                         * Trade - when order gets filled. Can be partial or full
-                         * New - fresh order is placed
-                         * Replaced - order amend
+                         * Trade - when order gets filled. Can be partial or full.
+                         * New - fresh order is placed.
+                         * Replaced - order amend.
                          */
                         if(array_key_exists('execType', $msg))
                             if (($msg['execType']  == 'Trade'))
@@ -475,11 +475,7 @@ class LimitOrderMessage
      * Close a signal artificially and continue trading.
      */
     private static function forceSignalFinish($message, $botSettings){
-
-        // strtotime($message['data'][0]['timestamp']) * 1000
-        //$ask = $message['data'][0]['asks'][0][0];
         $bid = $message['data'][0]['bids'][0][0];
-
         echo "*****************************************************\n";
         echo "** FORCE SIGNAL FINISH (bitmex sent no response)!  **\n";
         echo "*****************************************************\n";
@@ -519,14 +515,13 @@ class LimitOrderMessage
             'trade_date' => gmdate("Y-m-d G:i:s", strtotime($timeStamp)), // mysql date format
             'avgPx' => ($price ? $price : $bid), // Exec price. It can be null
             'price' => ($price ? $price : $bid), // In case of amend-market order, will be the price which goes to opposite side of order book
-            'commission' => -0.00025, // Signal row
+            'commission' => 0.00075, // Signal row
             'leavesQty' => 7894,
             'execType' => 'forceTrade',
             'orderID' => $orderID
         ];
 
         \App\Classes\DB\SignalTable::insertRecord($execution, self::$botId);
-
         \App\Classes\DB\SignalTable::signalFinish(self::$botId, $execution);
 
         /**

@@ -32,6 +32,12 @@ class WorkerStatusController extends Controller
             $this->response .= 'Execution worker is online<br>';
         }
 
+        if (time() - $row->que_worker_update_time > 10){
+            $this->response .= 'Que worker is offline<br>';
+        } else {
+            $this->response .= 'Que worker is online<br>';
+        }
+
         return($this->response);
     }
 }

@@ -40,6 +40,7 @@ class CreateBotsTable extends Migration
             $table->unsignedInteger('strategy_id')->nullable(); // Key
             $table->bigInteger('front_worker_update_time')->nullable(); // jse-274
             $table->bigInteger('execution_worker_update_time')->nullable();
+            $table->bigInteger('que_worker_update_time')->nullable();
             $table->string('memo')->nullable();
         });
 

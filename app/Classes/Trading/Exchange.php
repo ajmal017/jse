@@ -107,7 +107,7 @@ class Exchange
 
         /**
          * Set values if array is returned - success.
-         * If string - error. It will be catch in checkResponse
+         * If string - error. It will be caught in checkResponse
          */
         if (gettype(self::$response) == 'array'){
             $limitOrderObj['limitOrderTimestamp'] = self::$response['datetime'];

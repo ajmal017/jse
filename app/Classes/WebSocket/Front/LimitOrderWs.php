@@ -74,7 +74,8 @@ class LimitOrderWs
 
             /* Orderbook parse */
             if (self::$orderBookMessage)
-                \App\Classes\WebSocket\Front\LimitOrderMessage::parse(self::$orderBookMessage, self::$botId, self::$queId, self::$exchange);
+                //\App\Classes\WebSocket\Front\LimitOrderMessage::parse(self::$orderBookMessage, self::$botId, self::$queId, self::$exchange);
+                \App\Classes\Trading\Orders\LimitOrderMessage::parse(self::$orderBookMessage, self::$botId, self::$queId, self::$exchange);
 
             echo now() .
                 "Bot ID: " . self::$botId .

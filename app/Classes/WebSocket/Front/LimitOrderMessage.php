@@ -7,12 +7,20 @@
  */
 
 namespace App\Classes\WebSocket\Front;
-use App\Jobs\AmendOrder;
+//use App\Jobs\AmendOrder;
 use App\Jobs\PlaceLimitOrder;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
+/**
+ * OLD CLASS!
+ * NOT USED!!
+ * DELETE IT!
+ *
+ * Class LimitOrderMessage
+ * @package App\Classes\WebSocket\Front
+ */
 class LimitOrderMessage
 {
     private static $limitOrderObj;
@@ -42,18 +50,14 @@ class LimitOrderMessage
     private static $limitOrderOffset;
 
     public static function parse(array $message, $botId, $queId, $exchnage){
-        /**
-         * Get limit order object
-         */
+        /* Get limit order object */
         self::$limitOrderObj = Cache::get('bot_' . $botId);
 
         self::$botId = $botId;
         self::$queId = $queId;
 
         self::$exchange = $exchnage;
-        /**
-         * Check DB for new signals
-         */
+        /*  Check DB for new signals */
         self::$signalRow =
             DB::table('signal_' . $botId)
                 ->where('status', 'new')

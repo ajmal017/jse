@@ -101,6 +101,7 @@ class BotController extends Controller
         }
 
         /* Check whether there are record in jobs table. If so - the que worker does not work */
+        // Disabled. This check can not pass after que worker discover has benn added. There jobs all the time.
         /*if (Job::all()->count() != 0){
             return response('Jobs table is not empty!<br>' . __FILE__, 422)
                 ->header('Content-Type', 'text/plain');

@@ -54,6 +54,7 @@ abstract class OrderBook extends Signal
 
         // Market/Limit orderder go here.
         // If Market - don't even start limit and timers/
+        $isPlaceAsMarketOrder = true;
 
         /* Place and amend order */
         if (LimitOrderMessage::$signalRow[0]->direction == "sell")

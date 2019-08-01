@@ -92,7 +92,6 @@ class LimitOrderMessage extends OrderBook
                  * Used for limit order placement and order amend.
                  */
                 parent::orderBookParse($message);
-                //orderBookParse($message);
             } else {
                 dump('No new signals. LimitOrderMessage.php ' . now());
             }

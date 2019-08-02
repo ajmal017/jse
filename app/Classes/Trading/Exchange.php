@@ -61,7 +61,7 @@ class Exchange
 
             /* Insert a record */
             self::$response['info']['lastQty'] = 6789; // There is no lastQty index in the response
-            self::$response['info']['commission'] = 0.05;
+            self::$response['info']['commission'] = -0.0075;
             self::$response['info']['execType'] = 'exet_ttyyppe';
             \App\Classes\DB\SignalTable::insertRecord(self::$response['info'], $botId);
 

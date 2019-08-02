@@ -25,7 +25,7 @@ class Exchange
 {
     private static $response;
 
-    public static function placeMarketBuyOrder($botSettings, $volume, $exchange){
+    public static function placeMarketBuyOrder($botSettings, $volume, $botId, $exchange){
         dump('placeMarketBuyOrder. Exchange.php line: ' . __LINE__);
 
         /* Testnet or live. test or api */
@@ -50,10 +50,32 @@ class Exchange
             dump('--------- in exception line (code: ttggff): ' . __LINE__);
             self::$response = $e->getMessage();
         }
+
+        if (gettype(self::$response) == 'array'){
+            /* Update signal. Add orderId, date, timestamp, etc. */
+            \App\Classes\DB\SignalTable::updateSignalInfo($botId, self::$response);
+
+            /* Update status. Initial insertion. DO WE NEED IT? */
+            self::$response['avgFillPrice'] = self::$response['price'];
+            \App\Classes\DB\SignalTable::updateSignalStatus($botId, self::$response);
+
+            /* Insert a record */
+            self::$response['info']['lastQty'] = 6789; // There is no lastQty index in the response
+            self::$response['info']['commission'] = 0.05;
+            self::$response['info']['execType'] = 'exet_ttyyppe';
+            \App\Classes\DB\SignalTable::insertRecord(self::$response['info'], $botId);
+
+            /* Close the signa; */
+            \App\Classes\DB\SignalTable::updateSignalStatusToClose($botId, self::$response['info']);
+
+            $limitOrderObj['isLimitOrderPlaced'] = false;
+            Cache::put('bot_' . $botId, $limitOrderObj, now()->addMinute(30));
+        }
+
         self::checkResponse($botSettings);
     }
 
-    public static function placeMarketSellOrder($botSettings, $volume, $exchange){
+    public static function placeMarketSellOrder($botSettings, $volume, $botId, $exchange){
         dump('placeMarketSellOrder. Exchange.php line: ' . __LINE__);
 
         /* Testnet or live. test or api */
@@ -77,6 +99,28 @@ class Exchange
             dump('--------- in exception line (code uuiiee): ' . __LINE__);
             self::$response = $e->getMessage();
         }
+
+        if (gettype(self::$response) == 'array'){
+            /* Update signal. Add orderId, date, timestamp, etc. */
+            \App\Classes\DB\SignalTable::updateSignalInfo($botId, self::$response);
+
+            /* Update status. Initial insertion. DO WE NEED IT? */
+            self::$response['avgFillPrice'] = self::$response['price'];
+            \App\Classes\DB\SignalTable::updateSignalStatus($botId, self::$response);
+
+            /* Insert a record */
+            self::$response['info']['lastQty'] = 6789; // There is no lastQty index in the response
+            self::$response['info']['commission'] = 0.05;
+            self::$response['info']['execType'] = 'exet_ttyyppe';
+            \App\Classes\DB\SignalTable::insertRecord(self::$response['info'], $botId);
+
+            /* Close the signa; */
+            \App\Classes\DB\SignalTable::updateSignalStatusToClose($botId, self::$response['info']);
+
+            $limitOrderObj['isLimitOrderPlaced'] = false;
+            Cache::put('bot_' . $botId, $limitOrderObj, now()->addMinute(30));
+        }
+
         self::checkResponse($botSettings);
     }
 

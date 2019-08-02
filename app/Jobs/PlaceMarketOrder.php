@@ -18,6 +18,7 @@ class PlaceMarketOrder implements ShouldQueue
     private $volume;
     private $botSettings;
     private $exchange;
+    private $botId;
 
     /**
      * The list of all possible variables to set.
@@ -38,11 +39,12 @@ class PlaceMarketOrder implements ShouldQueue
      *
      * @return void
      */
-    public function __construct($direction, $volume, $botSettings, $exchange)
+    public function __construct($direction, $volume, $botSettings, $botId, $exchange)
     {
         $this->direction = $direction;
         $this->volume = $volume;
         $this->botSettings = $botSettings;
+        $this->botId = $botId;
         $this->exchange = $exchange;
     }
 
@@ -54,9 +56,9 @@ class PlaceMarketOrder implements ShouldQueue
     public function handle()
     {
         if($this->direction == 'buy'){
-            Exchange::placeMarketBuyOrder($this->botSettings, $this->volume, $this->exchange);
+            Exchange::placeMarketBuyOrder($this->botSettings, $this->volume, $this->botId, $this->exchange);
         } else {
-            Exchange::placeMarketSellOrder($this->botSettings, $this->volume, $this->exchange);
+            Exchange::placeMarketSellOrder($this->botSettings, $this->volume, $this->botId, $this->exchange);
         }
     }
 }

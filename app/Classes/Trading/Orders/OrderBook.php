@@ -8,6 +8,7 @@
 
 namespace App\Classes\Trading\Orders;
 use App\Jobs\PlaceMarketOrder;
+use Illuminate\Support\Facades\Cache;
 
 /**
  * Parse order book messages.
@@ -39,15 +40,17 @@ abstract class OrderBook extends Signal
     }
 
     public static function orderBookTick($message){
+
         /* Get settings on each tick - once per 2 seconds. This limit is set in LimitOrderWs.php */
         $botSettings = \App\Classes\WebSocket\Front\TradingAccount::getSettings(LimitOrderMessage::$botId);
+
         /* Set limit order params */
         LimitOrderMessage::$limitOrderExecutionTime = $botSettings['executionTime'];
         LimitOrderMessage::$timeRange = $botSettings['timeRange'];
         LimitOrderMessage::$limitOrderOffset = $botSettings['offset'];
 
-        dump('Limit order params LimitOrderMessage.php');
-        dump(LimitOrderMessage::$limitOrderExecutionTime . ' ' . LimitOrderMessage::$timeRange . ' ' . LimitOrderMessage::$limitOrderOffset);
+        //dump('Limit order params LimitOrderMessage.php');
+        //dump(LimitOrderMessage::$limitOrderExecutionTime . ' ' . LimitOrderMessage::$timeRange . ' ' . LimitOrderMessage::$limitOrderOffset);
 
         /* Limit order offset. If this value is negative - the limit order will be converted to market */
         LimitOrderMessage::$limitOrderOffset = ceil($message['data'][0]['bids'][0][0] * $botSettings['offset'] / 100);
@@ -59,27 +62,22 @@ abstract class OrderBook extends Signal
 
         /* Place and amend order */
         if (LimitOrderMessage::$signalRow[0]->direction == "sell")
-            if($isPlaceAsMarketOrder){
-                // market order goes here
-                PlaceMarketOrder::dispatch(
-                    'sell',
-                    LimitOrderMessage::$signalRow[0]->signal_volume,
-                    $botSettings,
-                    LimitOrderMessage::$exchange
-                )->onQueue('bot_' . LimitOrderMessage::$queId);
+            if($isPlaceAsMarketOrder ){
 
+                if(!LimitOrderMessage::$limitOrderObj['isLimitOrderPlaced']){
 
-        /*PlaceLimitOrder::dispatch(
-            'buy',
-            LimitOrderMessage::$signalRow[0]->signal_volume,
-            $botSettings,
-            $message['data'][0]['bids'][0][0] - LimitOrderMessage::$limitOrderOffset,
-            //$message['data'][0]['bids'][0][0],
-            LimitOrderMessage::$limitOrderObj,
-            LimitOrderMessage::$botId,
-            LimitOrderMessage::$exchange
-        )->onQueue('bot_' . LimitOrderMessage::$queId);*/
+                    PlaceMarketOrder::dispatch(
+                        'sell',
+                        LimitOrderMessage::$signalRow[0]->signal_volume,
+                        $botSettings,
+                        LimitOrderMessage::$botId,
+                        LimitOrderMessage::$exchange
+                    )->onQueue('bot_' . LimitOrderMessage::$queId);
 
+                    /* This flag is reset in Exchange.php when the order is filled. */
+                    $limitOrderObj['isLimitOrderPlaced'] = true;
+                    Cache::put('bot_' . LimitOrderMessage::$botId, $limitOrderObj, now()->addMinute(30));
+                }
 
             } else {
                 LimitOrder::handleSellLimitOrder($message, $botSettings);
@@ -87,14 +85,20 @@ abstract class OrderBook extends Signal
 
 
         if (LimitOrderMessage::$signalRow[0]->direction == "buy")
+
             if($isPlaceAsMarketOrder){
-                // market
-                PlaceMarketOrder::dispatch(
-                    'buy',
-                    LimitOrderMessage::$signalRow[0]->signal_volume,
-                    $botSettings,
-                    LimitOrderMessage::$exchange
-                )->onQueue('bot_' . LimitOrderMessage::$queId);
+
+                if(!LimitOrderMessage::$limitOrderObj['isLimitOrderPlaced']){
+                    PlaceMarketOrder::dispatch(
+                        'buy',
+                        LimitOrderMessage::$signalRow[0]->signal_volume,
+                        $botSettings,
+                        LimitOrderMessage::$botId,
+                        LimitOrderMessage::$exchange
+                    )->onQueue('bot_' . LimitOrderMessage::$queId);
+                    $limitOrderObj['isLimitOrderPlaced'] = true;
+                    Cache::put('bot_' . LimitOrderMessage::$botId, $limitOrderObj, now()->addMinute(30));
+                }
 
             } else {
                 LimitOrder::handleBuyLimitOrder($message, $botSettings);

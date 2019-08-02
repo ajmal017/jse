@@ -12,7 +12,6 @@ use Illuminate\Support\Facades\DB;
 
 class SignalTable extends ProfitSignal
 {
-
     /* ProfitSignal.php vars */
     protected $lastRow;
     protected $penUltimanteRow;
@@ -104,7 +103,7 @@ class SignalTable extends ProfitSignal
     }
 
     /**
-     * Once a limit order is places.
+     * Once a limit order is placed.
      *
      * @param $botId
      * @param $response

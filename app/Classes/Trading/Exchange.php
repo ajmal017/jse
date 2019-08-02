@@ -24,14 +24,15 @@ use Illuminate\Support\Facades\DB;
 class Exchange
 {
     private static $response;
-    public static function placeMarketBuyOrder($botSettings, $volume, $exchange){
-        echo __FILE__ . " line: " . __LINE__ . "\n";
-        //$exchange = new bitmex();
 
+    public static function placeMarketBuyOrder($botSettings, $volume, $exchange){
+        dump('placeMarketBuyOrder. Exchange.php line: ' . __LINE__);
+
+        /* Testnet or live. test or api */
         if($botSettings['isTestnet'] == 1){
-            $exchange->urls['api'] = $exchange->urls['test']; // Testnet or live. test or api
+            $exchange->urls['api'] = $exchange->urls['test'];
         } else {
-            $exchange->urls['api'] = $exchange->urls['api']; // Testnet or live. test or api
+            $exchange->urls['api'] = $exchange->urls['api'];
         }
 
         $exchange->apiKey = $botSettings['api'];
@@ -42,23 +43,22 @@ class Exchange
             echo "Symbol: " . $botSettings['executionSymbolName'] . " in Exchnage.php \n";
             self::$response = $exchange->createMarketBuyOrder($botSettings['executionSymbolName'], $volume, []); // BTC/USD ETH/USD
             echo "Execution response: \n";
-            dump(self::$response);
+            //dump(self::$response);
         }
         catch (\Exception $e)
         {
-            dump('--------- in exception line 40');
+            dump('--------- in exception line (code: ttggff): ' . __LINE__);
             self::$response = $e->getMessage();
-
         }
         self::checkResponse($botSettings);
     }
 
     public static function placeMarketSellOrder($botSettings, $volume, $exchange){
-        echo __FILE__ . " line: " . __LINE__ . "\n";
-        //$exchange = new bitmex();
+        dump('placeMarketSellOrder. Exchange.php line: ' . __LINE__);
 
+        /* Testnet or live. test or api */
         if($botSettings['isTestnet'] == 1){
-            $exchange->urls['api'] = $exchange->urls['test']; // Testnet or live. test or api
+            $exchange->urls['api'] = $exchange->urls['test'];
         } else {
             $exchange->urls['api'] = $exchange->urls['api'];
         }
@@ -70,10 +70,11 @@ class Exchange
             echo "API path. test or api:" . $exchange->urls['api'] . "\n";
             self::$response = $exchange->createMarketSellOrder($botSettings['executionSymbolName'], $volume, []); // BTC/USD ETH/USD
             echo "Execution response: \n";
-            dump(self::$response);
+            //dump(self::$response);
         }
         catch (\Exception $e)
         {
+            dump('--------- in exception line (code uuiiee): ' . __LINE__);
             self::$response = $e->getMessage();
         }
         self::checkResponse($botSettings);
@@ -88,7 +89,7 @@ class Exchange
         if($botSettings['isTestnet'] == 1){
             $exchange->urls['api'] = $exchange->urls['test']; // Testnet or live. test or api
         } else {
-            $exchange->urls['api'] = $exchange->urls['api']; // Testnet or live. test or api
+            $exchange->urls['api'] = $exchange->urls['api'];
         }
 
         $exchange->apiKey = $botSettings['api'];

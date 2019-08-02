@@ -7,6 +7,7 @@
  */
 
 namespace App\Classes\Trading\Orders;
+use App\Jobs\PlaceMarketOrder;
 
 /**
  * Parse order book messages.
@@ -52,19 +53,55 @@ abstract class OrderBook extends Signal
         LimitOrderMessage::$limitOrderOffset = ceil($message['data'][0]['bids'][0][0] * $botSettings['offset'] / 100);
 
 
-        // Market/Limit orderder go here.
-        // If Market - don't even start limit and timers/
+        /* If Market - don't even start limit and timers */
+        // TESTING! Get this value from $botSettings
         $isPlaceAsMarketOrder = true;
 
         /* Place and amend order */
         if (LimitOrderMessage::$signalRow[0]->direction == "sell")
-            LimitOrder::handleSellLimitOrder($message, $botSettings);
+            if($isPlaceAsMarketOrder){
+                // market order goes here
+                PlaceMarketOrder::dispatch(
+                    'sell',
+                    LimitOrderMessage::$signalRow[0]->signal_volume,
+                    $botSettings,
+                    LimitOrderMessage::$exchange
+                )->onQueue('bot_' . LimitOrderMessage::$queId);
+
+
+        /*PlaceLimitOrder::dispatch(
+            'buy',
+            LimitOrderMessage::$signalRow[0]->signal_volume,
+            $botSettings,
+            $message['data'][0]['bids'][0][0] - LimitOrderMessage::$limitOrderOffset,
+            //$message['data'][0]['bids'][0][0],
+            LimitOrderMessage::$limitOrderObj,
+            LimitOrderMessage::$botId,
+            LimitOrderMessage::$exchange
+        )->onQueue('bot_' . LimitOrderMessage::$queId);*/
+
+
+            } else {
+                LimitOrder::handleSellLimitOrder($message, $botSettings);
+            }
+
 
         if (LimitOrderMessage::$signalRow[0]->direction == "buy")
-            LimitOrder::handleBuyLimitOrder($message, $botSettings);
+            if($isPlaceAsMarketOrder){
+                // market
+                PlaceMarketOrder::dispatch(
+                    'buy',
+                    LimitOrderMessage::$signalRow[0]->signal_volume,
+                    $botSettings,
+                    LimitOrderMessage::$exchange
+                )->onQueue('bot_' . LimitOrderMessage::$queId);
+
+            } else {
+                LimitOrder::handleBuyLimitOrder($message, $botSettings);
+            }
 
         /* Get trades-executions for a placed limit order */
-        if(self::rateLimitheck2())
+        if(self::rateLimitheck2() && !$isPlaceAsMarketOrder)
             if (array_key_exists('isLimitOrderPlaced', LimitOrderMessage::$limitOrderObj))
                 if (LimitOrderMessage::$limitOrderObj['isLimitOrderPlaced'])
                     if (array_key_exists('orderID', LimitOrderMessage::$limitOrderObj))
@@ -79,7 +116,7 @@ abstract class OrderBook extends Signal
          * Add an artificial trade and continue trading.
          * We send bid as a parameter. In case returned avgFill price = null, bid will be used instead.
          */
-        if(self::getExecutionsTimeRangeCheck())
+        if(self::getExecutionsTimeRangeCheck() && !$isPlaceAsMarketOrder)
             ForceSignalFinish::execute($message, $botSettings);
     }
 

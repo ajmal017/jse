@@ -13,6 +13,8 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
 /**
+ * REMOVE THE PREVIOUS(BIG) OF THE LimitOrderMessage.php class!
+ *
  * Inheritance secuence:
  * 1. OrderBook
  * 2. Signal

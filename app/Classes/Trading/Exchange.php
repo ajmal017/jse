@@ -7,6 +7,7 @@
  */
 
 namespace App\Classes\Trading;
+use App\Classes\Trading\Orders\LimitOrderMessage;
 use ccxt\bitmex;
 use Mockery\Exception;
 use Illuminate\Support\Facades\Log;
@@ -43,7 +44,6 @@ class Exchange
             echo "Symbol: " . $botSettings['executionSymbolName'] . " in Exchnage.php \n";
             self::$response = $exchange->createMarketBuyOrder($botSettings['executionSymbolName'], $volume, []); // BTC/USD ETH/USD
             echo "Execution response: \n";
-            //dump(self::$response);
         }
         catch (\Exception $e)
         {
@@ -60,9 +60,9 @@ class Exchange
             \App\Classes\DB\SignalTable::updateSignalStatus($botId, self::$response);
 
             /* Insert a record */
-            self::$response['info']['lastQty'] = 6789; // There is no lastQty index in the response
-            self::$response['info']['commission'] = -0.0075;
-            self::$response['info']['execType'] = 'exet_ttyyppe';
+            self::$response['info']['lastQty'] = self::$response['price']; // There is no lastQty index in the response
+            self::$response['info']['commission'] = 0.0075;
+            self::$response['info']['execType'] = 'market or time force';
             \App\Classes\DB\SignalTable::insertRecord(self::$response['info'], $botId);
 
             /* Close the signa; */
@@ -92,7 +92,6 @@ class Exchange
             echo "API path. test or api:" . $exchange->urls['api'] . "\n";
             self::$response = $exchange->createMarketSellOrder($botSettings['executionSymbolName'], $volume, []); // BTC/USD ETH/USD
             echo "Execution response: \n";
-            //dump(self::$response);
         }
         catch (\Exception $e)
         {
@@ -109,12 +108,12 @@ class Exchange
             \App\Classes\DB\SignalTable::updateSignalStatus($botId, self::$response);
 
             /* Insert a record */
-            self::$response['info']['lastQty'] = 6789; // There is no lastQty index in the response
-            self::$response['info']['commission'] = -0.0075;
-            self::$response['info']['execType'] = 'exet_ttyyppe';
+            self::$response['info']['lastQty'] = self::$response['price']; // There is no lastQty index in the response
+            self::$response['info']['commission'] = 0.0075;
+            self::$response['info']['execType'] = 'market or time force';
             \App\Classes\DB\SignalTable::insertRecord(self::$response['info'], $botId);
 
-            /* Close the signa; */
+            /* Close the signal; */
             \App\Classes\DB\SignalTable::updateSignalStatusToClose($botId, self::$response['info']);
 
             $limitOrderObj['isLimitOrderPlaced'] = false;
@@ -160,6 +159,7 @@ class Exchange
             $limitOrderObj['price'] = self::$response['info']['price'];
             Cache::put('bot_' . $botId, $limitOrderObj, now()->addMinute(30));
             echo('SELL Limit order placed (Exchnage.php). MUST NOT BE EMPTY! orderID: ' . self::$response['info']['orderID'] . "\n");
+            //dump(Cache::get('bot_' . $botId)); // Object writes correctly
 
             /* Update signal. Add orderId, date, timestamp, etc. */
             \App\Classes\DB\SignalTable::updateSignalInfo($botId, self::$response);
@@ -182,7 +182,6 @@ class Exchange
         $exchange->secret = $botSettings['apiSecret'];
 
         try{
-            //self::$response = $exchange->createLimitBuyOrder($botSettings['executionSymbolName'], $volume, $price, array('clOrdID' => $limitOrderObj['clOrdID']));
             self::$response = $exchange->createLimitBuyOrder($botSettings['executionSymbolName'], $volume, $price);
         }
         catch (\Exception $e)
@@ -201,6 +200,7 @@ class Exchange
             $limitOrderObj['price'] = self::$response['info']['price'];
             Cache::put('bot_' . $botId, $limitOrderObj, now()->addMinute(30));
             echo('BUY Limit order placed (Exchnage.php). MUST NOT BE EMPTY! orderID: ' . self::$response['info']['orderID'] . "\n");
+            //dump(Cache::get('bot_' . $botId));
 
             /* Update signal. Add orderId, date, timestamp, etc. */
             \App\Classes\DB\SignalTable::updateSignalInfo($botId, self::$response);
@@ -213,9 +213,6 @@ class Exchange
         dump("****   AMEND ORDER. Reason: $amendReason ****");
         echo  "Exchnage.php. line: " . __LINE__ . "\n";
         Echo "orderID: " . $orderID . " MUST NOT BE NULL or EMPTY (Exchnage.php) code: ffddss\n";
-        //if($orderID == null) die();
-
-        //$exchange = new bitmex();
 
         if($botSettings['isTestnet'] == 1){
             $exchange->urls['api'] = $exchange->urls['test']; // Testnet or live. test or api
@@ -271,6 +268,47 @@ class Exchange
         } else {
             self::checkResponse($botSettings);
         }
+    }
+
+
+
+
+
+
+
+    public static function cancelOrder($botSettings, $exchange){
+        dump('cancelOrder. Exchange.php line: ' . __LINE__);
+
+        /* Testnet or live. test or api */
+        if($botSettings['isTestnet'] == 1){
+            $exchange->urls['api'] = $exchange->urls['test'];
+        } else {
+            $exchange->urls['api'] = $exchange->urls['api'];
+        }
+
+        $exchange->apiKey = $botSettings['api'];
+        $exchange->secret = $botSettings['apiSecret'];
+
+        try{
+            echo "API path. test or api:" . $exchange->urls['api'] . "\n";
+            //dump('orderID:');
+            //dump(LimitOrderMessage::$limitOrderObj);
+
+            // REMOVE !! TESTING ONLY!
+            self::$response = $exchange->cancelOrder(Cache::get('bot_1')['orderID']);
+            echo "Order cancel response: \n";
+        }
+        catch (\Exception $e)
+        {
+            dump('--------- in exception line (code ffddee): ' . __LINE__);
+            self::$response = $e->getMessage();
+        }
+
+        if (gettype(self::$response) == 'array'){
+            Dump('Order canceled. OK. Exchange.php' . __LINE__);
+        }
+
+        self::checkResponse($botSettings);
     }
 
     private static function checkResponse($botSettings){

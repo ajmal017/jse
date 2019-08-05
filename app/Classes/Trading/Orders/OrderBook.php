@@ -48,21 +48,18 @@ abstract class OrderBook extends Signal
         LimitOrderMessage::$limitOrderExecutionTime = $botSettings['executionTime'];
         LimitOrderMessage::$timeRange = $botSettings['timeRange'];
         LimitOrderMessage::$limitOrderOffset = $botSettings['offset'];
+        /* Place order as market or limit */
+        $isPlaceAsMarketOrder = $botSettings['isPlaceAsMarket'];
 
-        //dump('Limit order params LimitOrderMessage.php');
-        //dump(LimitOrderMessage::$limitOrderExecutionTime . ' ' . LimitOrderMessage::$timeRange . ' ' . LimitOrderMessage::$limitOrderOffset);
+        dump('Limit order params LimitOrderMessage.php code: kkoo99');
+        dump($botSettings);
 
         /* Limit order offset. If this value is negative - the limit order will be converted to market */
         LimitOrderMessage::$limitOrderOffset = ceil($message['data'][0]['bids'][0][0] * $botSettings['offset'] / 100);
-
-
-        /* If Market - don't even start limit and timers */
-        // TESTING! Get this value from $botSettings
-        $isPlaceAsMarketOrder = true;
-
+        
         /* Place and amend order */
         if (LimitOrderMessage::$signalRow[0]->direction == "sell")
-            if($isPlaceAsMarketOrder ){
+            if($isPlaceAsMarketOrder){
 
                 if(!LimitOrderMessage::$limitOrderObj['isLimitOrderPlaced']){
 
@@ -114,14 +111,17 @@ abstract class OrderBook extends Signal
 
 
         /**
+         * In bot settings - Time range.
          * Start 55 seconds timer for getting executions.
          * Force time signal close.
          * Once 55 seconds are over and no response has been receivd from Bitmex - finish the signal.
          * Add an artificial trade and continue trading.
          * We send bid as a parameter. In case returned avgFill price = null, bid will be used instead.
          */
-        if(self::getExecutionsTimeRangeCheck() && !$isPlaceAsMarketOrder)
-            ForceSignalFinish::execute($message, $botSettings);
+
+        // DISABLED
+        //if(self::getExecutionsTimeRangeCheck() && !$isPlaceAsMarketOrder)
+        //    ForceSignalFinish::execute($message, $botSettings);
     }
 
     /**

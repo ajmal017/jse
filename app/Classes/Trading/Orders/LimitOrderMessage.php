@@ -68,7 +68,7 @@ class LimitOrderMessage extends OrderBook
 
         /* Get limit order object */
         self::$limitOrderObj = Cache::get('bot_' . $botId);
-
+        
         self::$exchange = $exchnage;
         /*  Check DB for new signals */
         self::$signalRow =

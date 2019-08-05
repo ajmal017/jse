@@ -30,6 +30,7 @@ class CreateBotsTable extends Migration
             $table->integer('offset')->nullable();
             $table->integer('execution_time')->nullable();
             $table->integer('time_range')->nullable();
+            $table->integer('place_as_market')->nullable();
 
             $table->integer('time_frame')->nullable();
             $table->integer('bars_to_load')->nullable();

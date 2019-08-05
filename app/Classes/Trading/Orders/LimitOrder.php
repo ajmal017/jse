@@ -35,7 +35,7 @@ abstract class LimitOrder extends ForceSignalFinish
         } else {
             /**
              * Time force exit.
-             * We calculate 40-something seconds here (or other time delat).
+             * We calculate 40-something seconds here (or other time delay).
              * Once expired: send ask - 10% from the price - it will execute the limit order as market.
              */
             if(self::limitOrderExecutionTimeCheck()){
@@ -47,7 +47,7 @@ abstract class LimitOrder extends ForceSignalFinish
              * https://dacoders.myjetbrains.com/youtrack/issue/JSE-228
              */
             LimitOrderMessage::$limitOrderObj = Cache::get('bot_' . LimitOrderMessage::$botId);
-
+            /* Amend */
             if (LimitOrderMessage::amendOrderRateLimitheck())
                 self::amendSellLimitOrder($message['data'][0]['asks'][0][0], $botSettings, 'regular amend');
         }
@@ -78,9 +78,8 @@ abstract class LimitOrder extends ForceSignalFinish
             if(LimitOrderMessage::limitOrderExecutionTimeCheck()){
                 self::timeForceExitBuy($message['data'][0]['bids'][0][0], $botSettings);
             }
-            /* Amend */
             LimitOrderMessage::$limitOrderObj = Cache::get('bot_' . LimitOrderMessage::$botId);
-
+            /* Amend */
             if (LimitOrderMessage::amendOrderRateLimitheck())
                 self::amendBuyLimitOrder($message['data'][0]['bids'][0][0], $botSettings, 'regular amend');
         }
@@ -89,7 +88,6 @@ abstract class LimitOrder extends ForceSignalFinish
     public static function placeBuyLimitOrder($message, $botSettings){
         dump('~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~PLACE BUY LIMIT ORDERRRRR (LimitOrderMessage.php) code:rreeww ' . now());
         LimitOrderMessage::$limitOrderObj['limitOrderPrice'] = $message['data'][0]['bids'][0][0] - LimitOrderMessage::$limitOrderOffset;
-        //self::$limitOrderObj['limitOrderPrice'] = $message['data'][0]['bids'][0][0];
         LimitOrderMessage::$limitOrderObj['isLimitOrderPlaced'] = true;
         Cache::put('bot_' . LimitOrderMessage::$botId, LimitOrderMessage::$limitOrderObj, now()->addMinute(30));
 
@@ -99,7 +97,6 @@ abstract class LimitOrder extends ForceSignalFinish
             LimitOrderMessage::$signalRow[0]->signal_volume,
             $botSettings,
             $message['data'][0]['bids'][0][0] - LimitOrderMessage::$limitOrderOffset,
-            //$message['data'][0]['bids'][0][0],
             LimitOrderMessage::$limitOrderObj,
             LimitOrderMessage::$botId,
             LimitOrderMessage::$exchange
@@ -116,7 +113,6 @@ abstract class LimitOrder extends ForceSignalFinish
     public static function placeSellLimitOrder($message, $botSettings){
         dump('~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~PLACE SELL LIMIT ORDERRRRR LimitOrderMessage.php code: rrffgg ' . now());
         LimitOrderMessage::$limitOrderObj['limitOrderPrice'] = $message['data'][0]['asks'][0][0] + LimitOrderMessage::$limitOrderOffset;
-        //self::$limitOrderObj['limitOrderPrice'] = $message['data'][0]['asks'][0][0];
         LimitOrderMessage::$limitOrderObj['isLimitOrderPlaced'] = true;
         Cache::put('bot_' . LimitOrderMessage::$botId, LimitOrderMessage::$limitOrderObj, now()->addMinute(30));
 
@@ -126,13 +122,12 @@ abstract class LimitOrder extends ForceSignalFinish
             LimitOrderMessage::$signalRow[0]->signal_volume,
             $botSettings,
             $message['data'][0]['asks'][0][0] + LimitOrderMessage::$limitOrderOffset,
-            //$message['data'][0]['asks'][0][0],
             LimitOrderMessage::$limitOrderObj,
             LimitOrderMessage::$botId,
             LimitOrderMessage::$exchange
         )->onQueue('bot_' . LimitOrderMessage::$queId);
 
-        /* Update signal's status to pending and add initial values to the signal*/
+        /* Update signal's status to pending and add initial values to the signal */
         \App\Classes\DB\SignalTable::updateSignalStatus(LimitOrderMessage::$botId,
             [
                 'timestamp' => strtotime($message['data'][0]['timestamp']) * 1000,

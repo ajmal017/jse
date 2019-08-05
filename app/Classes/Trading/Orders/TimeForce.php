@@ -7,6 +7,8 @@
  */
 
 namespace App\Classes\Trading\Orders;
+use App\Jobs\CancelOrder;
+use App\Jobs\PlaceMarketOrder;
 use Illuminate\Support\Facades\Cache;
 
 /**
@@ -23,15 +25,40 @@ abstract class TimeForce
 {
     public static function timeForceExitBuy($bid, $botSettings){
         dump('------------------------------------------------------------------ FORCE TIME BUY LIMIT CLOSE! --------- ' . now());
-        AmendOrder::amendBuyLimitOrder($bid + self::limitToMarketOrderPrice($bid), $botSettings, 'force time close');
-        /* Set flag to true. Do not amend the order after time forece exit*/
+        CancelOrder::dispatch(
+            $botSettings,
+            LimitOrderMessage::$exchange)
+            ->onQueue('bot_' . LimitOrderMessage::$queId);
+
+        PlaceMarketOrder::dispatch(
+            'buy',
+            LimitOrderMessage::$signalRow[0]->signal_volume,
+            $botSettings,
+            LimitOrderMessage::$botId,
+            LimitOrderMessage::$exchange
+        )->onQueue('bot_' . LimitOrderMessage::$queId);
+
+        /* Set flag to true. Do not amend the order after time force exit*/
         LimitOrderMessage::$limitOrderObj['isLimitOrderPlaced'] = true;
         Cache::put('bot_' . LimitOrderMessage::$botId, LimitOrderMessage::$limitOrderObj, now()->addMinute(30));
     }
 
     public static function timeForceExitSell($ask, $botSettings){
         dump('------------------------------------------------------------------ FORCE TIME SELL LIMIT CLOSE! --------- ' . now());
-        AmendOrder::amendSellLimitOrder($ask - self::limitToMarketOrderPrice($ask), $botSettings, 'time force amend');
+
+        CancelOrder::dispatch(
+            $botSettings,
+            LimitOrderMessage::$exchange)
+            ->onQueue('bot_' . LimitOrderMessage::$queId);
+
+        PlaceMarketOrder::dispatch(
+            'sell',
+            LimitOrderMessage::$signalRow[0]->signal_volume,
+            $botSettings,
+            LimitOrderMessage::$botId,
+            LimitOrderMessage::$exchange
+        )->onQueue('bot_' . LimitOrderMessage::$queId);
+
         /**
          * Set flag to true. Do not amend the order after time force exit
          * https://dacoders.myjetbrains.com/youtrack/issue/JSE-227

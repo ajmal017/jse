@@ -21,6 +21,7 @@ class Bot extends Model
         'offset',
         'execution_time',
         'time_range',
+        'place_as_market',
         'time_frame',
         'bars_to_load',
         'volume',

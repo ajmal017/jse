@@ -14,11 +14,16 @@ abstract class ForceSignalFinish extends AmendOrder
     /**
      * Close signal when a time is over and no execution received from Bitmex.
      * Close a signal artificially and continue trading.
+     * This is the case when a signal is placed and no any responce is received.
+     * This works only with liit orders. In case with market orders - there is no need to get the response because it is
+     * returned automatically.
+     *
+     * Called from OrderBook.php
      */
     public static function execute($message, $botSettings){
         $bid = $message['data'][0]['bids'][0][0];
         echo "*****************************************************\n";
-        echo "** FORCE SIGNAL FINISH (Bitmex sent no response)!  **\n";
+        echo "** FORCE SIGNAL FINISH (Bitmex returned no response)!  **\n";
         echo "*****************************************************\n";
 
         LimitOrderMessage::$limitOrderObj = Cache::get('bot_' . LimitOrderMessage::$botId);

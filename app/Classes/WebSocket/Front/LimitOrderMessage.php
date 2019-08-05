@@ -250,6 +250,7 @@ class LimitOrderMessage
                                         // Refresh flags and clOrdID in order to place new limit order
 
                                         if(($execution['leavesQty']) == 0) {
+                                            die('GOT INTO FLAGS NULL. ' . __FILE__ . ' ' . __LINE__);
                                             self::$limitOrderObj['orderID'] = null;
                                             self::$limitOrderObj['isLimitOrderPlaced'] = false;
                                             self::$limitOrderObj['limitOrderPrice'] = null;

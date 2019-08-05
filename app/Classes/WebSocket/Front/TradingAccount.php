@@ -36,6 +36,7 @@ class TradingAccount
             'volume' => $bot->value('volume'),
             'rateLimit' => $bot->value('rate_limit'),
             'signalTable' => 'signal_' . $botId,
+            'isPlaceAsMarket' => $bot->value('place_as_market'),
 
             /**
              * If 0, a limit order will be placed on best bid/ask.
@@ -48,24 +49,6 @@ class TradingAccount
             'timeRange' => $bot->value('time_range')
         );
 
-        /*$accountId = Bot::where('id', $botId)->value('account_id');
-        $symbolId = Bot::where('id', $botId)->value('symbol_id');
-        
-        $accountSettingsObject = array(
-            'botTitle' => Bot::where('id', $botId)->value('db_table_name'),
-            'barsToLoad' => Bot::where('id', $botId)->value('bars_to_load'),
-            'timeFrame' => Bot::where('id', $botId)->value('time_frame'),
-            'api' => Account::where('id', $accountId)->value('api'),
-            'apiSecret' => Account::where('id', $accountId)->value('api_secret'),
-            'isTestnet' => Account::where('id', $accountId)->value('is_testnet'),
-            'executionSymbolName' => Symbol::where('id', $symbolId)->value('execution_symbol_name'),
-            'historySymbolName' => Symbol::where('id', $symbolId)->value('history_symbol_name'),
-            'commission' => Symbol::where('id', $symbolId)->value('commission'),
-            'frontEndId' => Bot::where('id', $botId)->value('front_end_id'),
-            'volume' => Bot::where('id', $botId)->value('volume'),
-            'rateLimit' => Bot::where('id', $botId)->value('rate_limit'),
-            'signalTable' => 'signal_' . $botId
-        );*/
         return $accountSettingsObject;
     }
 }

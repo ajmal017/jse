@@ -16,7 +16,7 @@ use Illuminate\Support\Facades\DB;
 class BacktestingFront
 {
     static public function start($botSettings){
-        /* Empty backtesting bars table */
+        /* Empty backtesting bars table. bot_5 */
         DB::table('bot_5')->truncate();
 
         \App\Classes\Trading\History::loadPeriod($botSettings);
@@ -59,7 +59,7 @@ class BacktestingFront
         $allDbValues = DB::table($botSettings['botTitle'])->get();
 
         $isFirstRecord = false;
-        foreach ($allDbValues as $rowValue) { // Go through all DB records
+        foreach ($allDbValues as $rowValue) {
              /**
               * We need to pass the first bar. It is needed to avoid null price channel trade check because
               * in Chart.php the penultimate value of the price channel is taken for calculation

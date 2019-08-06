@@ -45,8 +45,7 @@ class BacktestController extends Controller
                 'executionSymbolName' => $request['execution_symbol_name'], // ETH/USD
                 'historySymbolName' => $request['history_symbol_name'], // ETHUSD
                 'volume' => $request['volume'],
-                //'commission' => -0.00025, // Taker: 0.000750 - such values come from Bitmex
-                'commission' => $request['commission'] / 100,
+                'commission' => $request['commission'] / 100, // Maker: -0.00025, Taker: 0.000750 - such values come from Bitmex
                 'strategy' => 'pc',
                 'strategyParams' => [
                     'priceChannelPeriod' => $request['time_frame']
@@ -62,8 +61,7 @@ class BacktestController extends Controller
                 'executionSymbolName' => $request['execution_symbol_name'], // ETH/USD
                 'historySymbolName' => $request['history_symbol_name'], // ETHUSD
                 'volume' => $request['volume'],
-                //'commission' => -0.00025, // Taker: 0.000750
-                'commission' => $request['commission'] / 100,
+                'commission' => $request['commission'] / 100, // Taker: 0.000750
                 'strategy' => 'macd',
                 'strategyParams' => [
                     'emaPeriod' => $request['ema_period'],
@@ -76,10 +74,8 @@ class BacktestController extends Controller
             ];
 
         BacktestingFront::start($botSettings);
-        // reload chart goes here. exclude reload chart method from pc, mc to a separate class. located in trading. name: Chart::reload
-        // Rename Chart.php to PcTradesTrigger
 
-        // @todo Exclude to a separate class
+        /* @todo Exclude to a separate class */
         $pusherApiMessage = new \App\Classes\WebSocket\PusherApiMessage();
         $pusherApiMessage->clientId = $botSettings['frontEndId'];
         $pusherApiMessage->messageType = 'reloadChartAfterHistoryLoaded';

@@ -41,14 +41,8 @@ class test2 extends Command
      */
     public function handle()
     {
-        $row = DB::table('bots')
-            ->where('id',1)
-            ->get();
 
-        dump($row[0]->id);
-        die('dfggg');
-
-        $botSettings =
+        /*$botSettings =
             [
                 'botTitle' => 'bot_1',
                 'executionSymbol' => 'BTC/USD',
@@ -60,8 +54,7 @@ class test2 extends Command
                 'secret' => 'JfmMTXx3YruSP3OSBKQvULTg4sgQJKZkFI2Zy7TZXniOUbeK'
             ];
         \App\Classes\Trading\ShrinkDbTables::deleteRow($botSettings);
-        die('dd');
-
+        die('dd');*/
 
 
         $exchange = new \ccxt\bitmex();
@@ -73,8 +66,9 @@ class test2 extends Command
         //dump($response['info']['tickSize']); // Tick size. Works good
         //$response = $exchange->privatePutOrder(array('orderID' => Cache::get('bot_1')['orderID'], 'price' => 15000)); // Works good
         //$response = $exchange->fetchMyTrades('BTC/USD', $exchange->milliseconds()-86400000); // Works good
-        $response = $exchange->privateGetExecutionTradeHistory(array('reverse' => true, 'count' => 5)); // Works good!
-        $response = $exchange->privateGetExecutionTradeHistory(array('count' => 5, 'filter' => ['orderID' => 'e1524040-0678-c66a-a33c-744fe7a5cf12_'])); // Works GOOD!
+        //$response = $exchange->privateGetExecutionTradeHistory(array('reverse' => true, 'count' => 5)); // Works good!
+        //$response = $exchange->privateGetExecutionTradeHistory(array('count' => 5, 'filter' => ['orderID' => 'e1524040-0678-c66a-a33c-744fe7a5cf12_'])); // Works GOOD!
+        $response = $exchange->fetchOrderBook('ETH/USD', 1);
         dump($response);
         die();
 

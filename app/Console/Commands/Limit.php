@@ -76,7 +76,6 @@ class Limit extends Command
             ->where('id', $this->argument('botId'))
             ->update([
                 'status' => 'idle'
-                //'memo' => ''
             ]);
 
         /**

@@ -60,21 +60,8 @@ class LimitOrderWs
             self::$accountSettingsObject = \App\Classes\WebSocket\Front\TradingAccount::getSettings($botId);
             self::$symbol = self::$accountSettingsObject['historySymbolName'];
 
-            /*if (Bot::where('id', $botId)->value('status') == 'running' && !self::$isBotRunning){
-                dump('FIREEEEEEEEEEED ' . self::$accountSettingsObject['historySymbolName']);
-                Cache::put('status_bot_' . $botId, true, now()->addMinute(30));
-                self::listen($connector, $loop, $console, $botId, $net, self::$exchange);
-            }
-
-            if (Bot::where('id', $botId)->value('status') == 'idle' && self::$isBotRunning){
-                dump('---------- got into idle');
-                self::$isBotRunning = false;
-                Cache::put('status_bot_' . $botId, false, now()->addMinute(30));
-            }*/
-
-            /* Orderbook parse */
+            /* Order book parse */
             if (self::$orderBookMessage)
-                //\App\Classes\WebSocket\Front\LimitOrderMessage::parse(self::$orderBookMessage, self::$botId, self::$queId, self::$exchange);
                 \App\Classes\Trading\Orders\LimitOrderMessage::parse(self::$orderBookMessage, self::$botId, self::$queId, self::$exchange);
 
             echo now() .

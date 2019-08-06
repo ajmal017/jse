@@ -24,6 +24,12 @@ use Illuminate\Support\Facades\Cache;
  */
 abstract class OrderBook extends Signal
 {
+    /**
+     * This method is used when WS order book message is parsed.
+     * In case of the same message returned from REST API call, orderBookTick is called instead.
+     *
+     * @param array $message
+     */
     public static function orderBookParse(array $message){
         if(array_key_exists('table', $message))
             if($message['table'] == 'orderBook10')
@@ -56,7 +62,7 @@ abstract class OrderBook extends Signal
 
         /* Limit order offset. If this value is negative - the limit order will be converted to market */
         LimitOrderMessage::$limitOrderOffset = ceil($message['data'][0]['bids'][0][0] * $botSettings['offset'] / 100);
-        
+
         /* Place and amend order */
         if (LimitOrderMessage::$signalRow[0]->direction == "sell")
             if($isPlaceAsMarketOrder){

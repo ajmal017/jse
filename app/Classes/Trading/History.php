@@ -55,14 +55,23 @@ class History
         }
     }
 
-    public static function loadPeriod($botSettings){
-        $barsToLoad = $botSettings['barsToLoad'];
-        $timeFrame = $botSettings['timeFrame'] . 'm';
+    public static function loadStep($botSettings){
+        $barsToLoad = 100;
+        $timeFrame = $botSettings['timeFrame'];
         $symbol = $botSettings['historySymbolName'];
+
+        /* Get the last loaded date. Next history portion will be loaded from it */
+        $lastDate = DB::table($botSettings['botTitle'])
+            ->orderBy('id', 'desc')
+            ->take(1)
+            ->value('time_stamp');
+
+        $lastDateEncoded = urlencode(date('c', $lastDate / 1000));
+
 
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_URL,
-            "https://www.bitmex.com/api/v1/trade/bucketed?binSize=$timeFrame&partial=false&symbol=$symbol&count=$barsToLoad&reverse=true");
+            "https://www.bitmex.com/api/v1/trade/bucketed?binSize=$timeFrame&partial=true&symbol=XBTUSD&count=$barsToLoad&reverse=false&startTime=$lastDateEncoded");
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
         curl_setopt($ch, CURLOPT_HEADER, FALSE);
         $bars = json_decode(curl_exec($ch));
@@ -73,9 +82,8 @@ class History
 
         curl_close($ch);
         if (!$bars) throw new \Exception('History is not loaded. Symbol may be wrong. Die. History.php' );
-        DB::table($botSettings['botTitle'])->truncate();
 
-        foreach(array_reverse($bars) as $bar){
+        foreach($bars as $bar){
             DB::table($botSettings['botTitle'])->insert(array(
                 'symbol' => $symbol,
                 'date' => gmdate("Y-m-d G:i:s", strtotime($bar->timestamp)), // Regular date
@@ -87,5 +95,11 @@ class History
                 'volume' => $bar->volume,
             ));
         }
+
+        return([
+            'barsLoaded' => DB::table($botSettings['botTitle'])->count(),
+            'startDate' => DB::table($botSettings['botTitle'])->orderBy('id', 'asc')->take(1)->value('date'),
+            'endDate' => DB::table($botSettings['botTitle'])->orderBy('id', 'desc')->take(1)->value('date')
+        ]);
     }
 }

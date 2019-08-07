@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Classes\Backtesting\BacktestingFront;
 use App\Classes\LogToFile;
+use App\Classes\Trading\History;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -39,6 +40,30 @@ class BacktestController extends Controller
     {
         $strategy = $request['strategy'];
 
+        /**
+         * Load step history.
+         * This is not a strategy.
+         */
+        if($strategy == 'historyStep') {
+            $botSettings = [
+                'botTitle' => 'bot_5', // Back testing table
+                'executionSymbolName' => $request['execution_symbol_name'], // ETH/USD
+                'historySymbolName' => $request['history_symbol_name'], // ETHUSD
+                'timeFrame' => $request['bar_time_frame']
+            ];
+            return(History::loadStep($botSettings));
+        }
+
+        /* Truncate history table */
+        if($strategy == 'truncate') {
+            DB::table('bot_5')->truncate();
+            return([
+                'barsLoaded' => 0,
+                'startDate' => 'none',
+                'endDate' => 'none'
+            ]);
+        }
+
         if ($strategy == 'pc')
             $botSettings = [
                 'botTitle' => 'bot_5', // Back testing table
@@ -73,6 +98,7 @@ class BacktestController extends Controller
                 'frontEndId' => '12350',
             ];
 
+        /* Load history and run back tester */
         BacktestingFront::start($botSettings);
 
         /* @todo Exclude to a separate class */

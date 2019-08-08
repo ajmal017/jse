@@ -7,6 +7,7 @@ use App\Classes\LogToFile;
 use App\Classes\Trading\History;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Mockery\Exception;
 
 class BacktestController extends Controller
 {
@@ -115,7 +116,6 @@ class BacktestController extends Controller
         }
 
         /* Show pop up message at the front end with back tester result in it */
-
         $lastRow =
             DB::table($botSettings['botTitle'])
                 ->orderBy('id', 'desc')->take(1)
@@ -144,8 +144,7 @@ class BacktestController extends Controller
             ]));
         } catch (\Exception $e)
         {
-            echo __FILE__ . " " . __LINE__ . "\n";
-            dump($e);
+            throw new Exception($e);
         }
 
     }

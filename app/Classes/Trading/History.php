@@ -62,7 +62,7 @@ class History
 
     public static function loadStep($botSettings){
 
-        $barsToLoad = 10;
+        $barsToLoad = 200;
         $timeFrame = $botSettings['timeFrame'];
         $symbol = $botSettings['historySymbolName'];
         /* Get the last loaded date. Next history portion will be loaded from it */

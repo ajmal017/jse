@@ -4,8 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Classes\Backtesting\BacktestingFront;
 use App\Classes\LogToFile;
+use App\Classes\Trading\History;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Mockery\Exception;
 
 class BacktestController extends Controller
 {
@@ -38,6 +40,30 @@ class BacktestController extends Controller
     public function store(Request $request)
     {
         $strategy = $request['strategy'];
+
+        /**
+         * Load step history.
+         * This is not a strategy.
+         */
+        if($strategy == 'historyStep') {
+            $botSettings = [
+                'botTitle' => 'bot_5', // Back testing table
+                'executionSymbolName' => $request['execution_symbol_name'], // ETH/USD
+                'historySymbolName' => $request['history_symbol_name'], // ETHUSD
+                'timeFrame' => $request['bar_time_frame']
+            ];
+            return(History::loadStep($botSettings));
+        }
+
+        /* Truncate history table */
+        if($strategy == 'truncate') {
+            DB::table('bot_5')->truncate();
+            return([
+                'barsLoaded' => 0,
+                'startDate' => 'none',
+                'endDate' => 'none'
+            ]);
+        }
 
         if ($strategy == 'pc')
             $botSettings = [
@@ -73,6 +99,7 @@ class BacktestController extends Controller
                 'frontEndId' => '12350',
             ];
 
+        /* Load history and run back tester */
         BacktestingFront::start($botSettings);
 
         /* @todo Exclude to a separate class */
@@ -89,7 +116,6 @@ class BacktestController extends Controller
         }
 
         /* Show pop up message at the front end with back tester result in it */
-
         $lastRow =
             DB::table($botSettings['botTitle'])
                 ->orderBy('id', 'desc')->take(1)
@@ -118,8 +144,7 @@ class BacktestController extends Controller
             ]));
         } catch (\Exception $e)
         {
-            echo __FILE__ . " " . __LINE__ . "\n";
-            dump($e);
+            throw new Exception($e);
         }
 
     }

@@ -65,8 +65,6 @@ class Chart extends Profit
 
     public function index($mode = null, $backTestRowId = null)
     {
-        echo(__FILE__ . "\n");
-
         /**
          * Profit calculation inherited class.
          * This class is attached to all strategies.
@@ -79,11 +77,11 @@ class Chart extends Profit
          */
         if (($this->lastRow[0]->sma1 > $this->penUltimanteRow->price_channel_high_value) &&
             ($this->trade_flag == "all" || $this->trade_flag == "long")){
-            echo "####### HIGH TRADE!<br>\n";
+            //echo "####### HIGH TRADE!<br>\n";
 
             /* Is it the first trade ever? */
             if ($this->trade_flag == "all"){
-                echo "---------------------- FIRST EVER TRADE<br>\n";
+                //echo "---------------------- FIRST EVER TRADE<br>\n";
                 if($mode != 'backtest')
                     DB::table($this->botSettings['signalTable'])
                         ->insert([
@@ -95,7 +93,7 @@ class Chart extends Profit
             }
             else // Not the first trade. Close the current position and open opposite trade. vol = vol * 2
             {
-                echo "---------------------- NOT FIRST EVER TRADE. CLOSE + OPEN. VOL * 2\n";
+                //echo "---------------------- NOT FIRST EVER TRADE. CLOSE + OPEN. VOL * 2\n";
                 if($mode != 'backtest')
                     DB::table($this->botSettings['signalTable'])
                         ->insert([
@@ -118,10 +116,10 @@ class Chart extends Profit
 
         if (($this->lastRow[0]->sma1 < $this->penUltimanteRow->price_channel_low_value) &&
             ($this->trade_flag == "all"  || $this->trade_flag == "short")) {
-            echo "####### LOW TRADE!<br>\n";
+            //echo "####### LOW TRADE!<br>\n";
             // Is the the first trade ever?
             if ($this->trade_flag == "all"){
-                echo "---------------------- FIRST EVER TRADE<br>\n";
+                //echo "---------------------- FIRST EVER TRADE<br>\n";
                 if($mode != 'backtest')
 
                     DB::table($this->botSettings['signalTable'])
@@ -134,7 +132,7 @@ class Chart extends Profit
             }
             else // Not the first trade. Close the current position and open opposite trade. vol = vol * 2
             {
-                echo "---------------------- NOT FIRST EVER TRADE. CLOSE + OPEN. VOL * 2\n";
+                //echo "---------------------- NOT FIRST EVER TRADE. CLOSE + OPEN. VOL * 2\n";
                 if($mode != 'backtest')
                     DB::table($this->botSettings['signalTable'])
                         ->insert([

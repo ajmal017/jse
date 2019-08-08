@@ -85,7 +85,7 @@ class LimitRest extends Command
         $this->exchange->urls['api'] = $this->exchange->urls['api'];
 
         while (true){
-         sleep(3);
+         sleep(10);
          $this->listen();
         }
     }

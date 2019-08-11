@@ -83,6 +83,7 @@ class LimitRest extends Command
             ]);
         $this->exchange = new \ccxt\bitmex();
         $this->exchange->urls['api'] = $this->exchange->urls['api'];
+        $this->exchange->timeout = 30000; // 30 seconds. https://github.com/ccxt/ccxt/wiki/Manual#exchange-properties
 
         while (true){
          sleep(10);
@@ -102,12 +103,22 @@ class LimitRest extends Command
         $accountSettingsObject = \App\Classes\WebSocket\Front\TradingAccount::getSettings($this->argument('botId'));
         $symbol = $accountSettingsObject['historySymbolName'];
 
-        /* Exchange request */
-        try{
+        /* Handle exception https://github.com/ccxt/ccxt/wiki/Manual#error-handling */
+        try {
             $orderBookMessage = $this->exchange->fetchOrderBook($accountSettingsObject['executionSymbolName'], 1);
-        } catch (Exception $e)
-        {
-            dump($e);
+            dump($orderBookMessage);
+        } catch (\ccxt\NetworkError $e) {
+            echo 'Request failed due to a network error: ' . $e->getMessage () . "\n";
+            // retry or whatever
+            // ...
+        } catch (\ccxt\ExchangeError $e) {
+            echo 'Request failed due to exchange error: ' . $e->getMessage () . "\n";
+            // retry or whatever
+            // ...
+        } catch (Exception $e) {
+            echo 'Request failed with: ' . $e->getMessage () . "\n";
+            // retry or whatever
+            // ...
         }
 
 

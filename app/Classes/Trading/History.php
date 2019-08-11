@@ -78,7 +78,8 @@ class History
 
         if(!self::$lastDate){
             self::$endTime = time();
-            self::$endTime = date('Y-m-d\TH:i:s', self::$endTime - 86400);
+            //self::$endTime = date('Y-m-d\TH:i:s', self::$endTime - 86400); // Start loading from the previous day
+            self::$endTime = date('Y-m-d\TH:i:s', self::$endTime - 3600);
         } else {
             /* Add one step. Otherwise, betwwen groups, you will have two bars with the same time */
             self::$endTime = date('Y-m-d\TH:i:s', strtotime(self::$lastDate . "+1 minute"));

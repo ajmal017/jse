@@ -24,7 +24,7 @@ use Illuminate\Support\Facades\Log;
 class History
 {
     private static $lastDate;
-    private static $endTime;
+    private static $startTime;
     private static $lastDateEncoded;
 
     public static function loadPeriod($botSettings)
@@ -65,27 +65,39 @@ class History
     public static function loadStep($botSettings)
     {
 
-        $barsToLoad = 4;
-        //$timeFrame = $botSettings['timeFrame'];
-        $timeFrame = '1m'; // 1m/5m/1h/1d
+        $barsToLoad = 250;
+        $timeFrame = $botSettings['timeFrame'];
+        //$timeFrame = '5m'; // 1m/5m/1h/1d
         $symbol = $botSettings['historySymbolName'];
 
-        /* Get the last loaded date. Next history portion will be loaded from it */
+        /* Get the latest loaded date. Next history portion will be loaded from it */
         self::$lastDate = DB::table($botSettings['botTitle'])
             ->orderBy('id', 'desc')
             ->take(1)
             ->value('date');
 
-        if(!self::$lastDate){
-            self::$endTime = time();
-            //self::$endTime = date('Y-m-d\TH:i:s', self::$endTime - 86400); // Start loading from the previous day
-            self::$endTime = date('Y-m-d\TH:i:s', self::$endTime - 3600);
-        } else {
-            /* Add one step. Otherwise, betwwen groups, you will have two bars with the same time */
-            self::$endTime = date('Y-m-d\TH:i:s', strtotime(self::$lastDate . "+1 minute"));
+
+        /* Get the current date when a first portion of bars is loaded */
+        if(!self::$lastDate) {
+            //self::$startTime = time(); // Timestamp 10 digits
+            self::$startTime = $botSettings['startTime'];
+            /* Step back three hours (or other time). History data appears at the servers not in the real-time */
+            self::$startTime = date('Y-m-d\TH:i:s', strtotime(self::$startTime)); // - 3600
         }
 
-        $url = "https://www.bitmex.com/api/v1/trade/bucketed?binSize=$timeFrame&partial=false&symbol=$symbol&reverse=false&count=$barsToLoad&startTime=" . self::$endTime;
+        /**
+         * When the first portion of bars is already loaded to DB.
+         * Add one step. Otherwise, between groups, you will have two bars with the same time
+         */
+        if(self::$lastDate) {
+            if($timeFrame == '1m') $addedTime = '+1 minute';
+            if($timeFrame == '5m') $addedTime = '+5 minutes';
+            if($timeFrame == '1h') $addedTime = '+1 hour';
+            if($timeFrame == '1d') $addedTime = '+1 day';
+            self::$startTime = date('Y-m-d\TH:i:s', strtotime(self::$lastDate . $addedTime));
+        }
+
+        $url = "https://www.bitmex.com/api/v1/trade/bucketed?binSize=$timeFrame&partial=false&symbol=$symbol&reverse=false&count=$barsToLoad&startTime=" . self::$startTime;
 
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_URL,
@@ -93,11 +105,14 @@ class History
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
         curl_setopt($ch, CURLOPT_HEADER, FALSE);
         $bars = json_decode(curl_exec($ch));
+
         if (curl_errno($ch)) {
             throw new \Exception(curl_error($ch));
         }
         curl_close($ch);
-        if (!$bars) throw new \Exception('History is not loaded. Symbol may be wrong. Die. History.php');
+
+        if (!$bars) throw new \Exception('History is not loaded. Symbol may be wrong or no bars for requested date.');
+
         foreach ($bars as $bar) {
             DB::table($botSettings['botTitle'])
                 ->where('id', 1)
@@ -114,7 +129,7 @@ class History
         }
         return ([
             'barsLoaded' => DB::table($botSettings['botTitle'])->count(),
-            'startDate' => DB::table($botSettings['botTitle'])->orderBy('id', 'asc')->take(1)->value('date'),
+            //'startDate' => DB::table($botSettings['botTitle'])->orderBy('id', 'asc')->take(1)->value('date'),
             'endDate' => DB::table($botSettings['botTitle'])->orderBy('id', 'desc')->take(1)->value('date')
         ]);
 

@@ -50,7 +50,8 @@ class BacktestController extends Controller
                 'botTitle' => 'bot_5', // Back testing table
                 'executionSymbolName' => $request['execution_symbol_name'], // ETH/USD
                 'historySymbolName' => $request['history_symbol_name'], // ETHUSD
-                'timeFrame' => $request['bar_time_frame']
+                'timeFrame' => $request['bar_time_frame'],
+                'startTime' => $request['start_date'],
             ];
             return(History::loadStep($botSettings));
         }
@@ -62,6 +63,22 @@ class BacktestController extends Controller
                 'barsLoaded' => 0,
                 'startDate' => 'none',
                 'endDate' => 'none'
+            ]);
+        }
+
+        if($strategy == 'loadedBarsInfo') {
+            return([
+                'loadedBars' => DB::table('bot_5')->count(),
+                'startDate' =>
+                    DB::table('bot_5')
+                        ->orderBy('id', 'asc')
+                        ->take(1)
+                        ->value('date'),
+                'latestLoadedBarDate' =>
+                    DB::table('bot_5')
+                        ->orderBy('id', 'desc')
+                        ->take(1)
+                        ->value('date')
             ]);
         }
 

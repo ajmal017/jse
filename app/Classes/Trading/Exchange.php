@@ -291,9 +291,6 @@ class Exchange
 
         try{
             echo "API path. test or api:" . $exchange->urls['api'] . "\n";
-            //dump('orderID:');
-            //dump(LimitOrderMessage::$limitOrderObj);
-
             // REMOVE !! TESTING ONLY!
             self::$response = $exchange->cancelOrder(Cache::get('bot_1')['orderID']);
             echo "Order cancel response: \n";
@@ -325,7 +322,6 @@ class Exchange
                     Log::notice($error);
 
                     // Stop workers here
-
                     dump('dump from Exchnage.php code: yyhhgg55');
                     dump($botSettings['botTitle']);
 

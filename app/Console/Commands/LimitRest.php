@@ -10,6 +10,7 @@ use Illuminate\Console\Command;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Cache;
 use Mockery\Exception;
+use Illuminate\Support\Facades\Log;
 
 class LimitRest extends Command
 {
@@ -105,53 +106,54 @@ class LimitRest extends Command
 
         /* Handle exception https://github.com/ccxt/ccxt/wiki/Manual#error-handling */
         try {
-            $orderBookMessage = $this->exchange->fetchOrderBook($accountSettingsObject['executionSymbolName'], 1);
-            dump($orderBookMessage);
+            $orderBookMessage = $this->exchange->fetchOrderBook($accountSettingsObject['executionSymbolName'], 1); dump($orderBookMessage);
         } catch (\ccxt\NetworkError $e) {
-            echo 'Request failed due to a network error: ' . $e->getMessage () . "\n";
-            // retry or whatever
-            // ...
+            $error = 'Request failed due to a network error: ' . $e->getMessage () . "\n";
+            echo $error;
+            Log::notice($error);
         } catch (\ccxt\ExchangeError $e) {
-            echo 'Request failed due to exchange error: ' . $e->getMessage () . "\n";
-            // retry or whatever
-            // ...
+            $error = 'Request failed due to exchange error: ' . $e->getMessage () . "\n";
+            echo $error;
+            Log::notice($error);
         } catch (Exception $e) {
-            echo 'Request failed with: ' . $e->getMessage () . "\n";
-            // retry or whatever
-            // ...
+            $error = 'Request failed with: ' . $e->getMessage () . "\n";
+            echo $error;
+            Log::notice($error);
         }
 
-
-        /* Prepare an order book message. Make it the same format is websocket object */
-        $message = [
-            // $message['data'][0]['asks'][0][0]
-            'table' => 'orderBook10',
-            'action' => 'update',
-            'data' => [
-                [
-                    'symbol' => $symbol,
-                    'asks' => [
-                        [
-                            $orderBookMessage['bids'][0][0], $orderBookMessage['bids'][0][1]
-                        ]
-                    ],
-                    'bids' => [
-                        [
-                            $orderBookMessage['asks'][0][0], $orderBookMessage['asks'][0][1]
-                        ]
-                    ],
-                    'timestamp' => date("c", strtotime(now())) // 'datetime': '2017-07-05T18:47:14.692Z', // ISO8601 datetime string with milliseconds
+        /**
+         * Prepare an order book message. Make it the same format is websocket object.
+         * We check the type. If it is text instead of array - it means that an error was thrown.
+         * https://dacoders.myjetbrains.com/youtrack/issue/JSE-289
+         */
+        if (gettype($orderBookMessage == 'array')){
+            $message = [
+                'table' => 'orderBook10',
+                'action' => 'update',
+                'data' => [
+                    [
+                        'symbol' => $symbol,
+                        'asks' => [
+                            [
+                                $orderBookMessage['bids'][0][0], $orderBookMessage['bids'][0][1]
+                            ]
+                        ],
+                        'bids' => [
+                            [
+                                $orderBookMessage['asks'][0][0], $orderBookMessage['asks'][0][1]
+                            ]
+                        ],
+                        'timestamp' => date("c", strtotime(now())) // 'datetime': '2017-07-05T18:47:14.692Z', // ISO8601 datetime string with milliseconds
+                    ]
                 ]
-            ]
-        ];
+            ];
 
-        //dump($message);
+            /* Order book parse */
+            \App\Classes\Trading\Orders\LimitOrderMessage::parse($message, $this->argument('botId'), $this->argument('queId'), $this->exchange);
+        }
 
-        /* Order book parse */
-        \App\Classes\Trading\Orders\LimitOrderMessage::parse($message, $this->argument('botId'), $this->argument('queId'), $this->exchange);
-
-        echo now() .
-            "Bot ID: " . $this->argument('botId') .
+        echo "LimitRest.php " . now() .
+            " Bot ID: " . $this->argument('botId') .
             " Que ID: " . $this->argument('queId') .
             " Symbol: " . $symbol .
             " Status: " . Bot::where('id', $this->argument('botId'))->value('status') .  "\n";

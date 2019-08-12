@@ -106,7 +106,7 @@ class LimitRest extends Command
 
         /* Handle exception https://github.com/ccxt/ccxt/wiki/Manual#error-handling */
         try {
-            $orderBookMessage = $this->exchange->fetchOrderBook($accountSettingsObject['executionSymbolName'], 1); dump($orderBookMessage);
+            $orderBookMessage = $this->exchange->fetchOrderBook($accountSettingsObject['executionSymbolName'], 1);
         } catch (\ccxt\NetworkError $e) {
             $error = 'Request failed due to a network error: ' . $e->getMessage () . "\n";
             echo $error;

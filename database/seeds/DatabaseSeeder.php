@@ -389,5 +389,13 @@ class DatabaseSeeder extends Seeder
         $this->call([
             SignalsSeeder::class
         ]);
+
+        $this->call([
+            SignalSeeder1::class
+        ]);
+
+        $this->call([
+            SignalSeeder2::class
+        ]);
     }
 }

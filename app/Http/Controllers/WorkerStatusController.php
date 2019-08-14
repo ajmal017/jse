@@ -7,13 +7,17 @@ use Illuminate\Support\Facades\DB;
 
 /**
  * Check the state of workers.
- *
+ * There are 3 workers:
+ * 1. Execution: php artisan limit 1 1 live
+ * 2. Charting. php artisan front 1
+ * 2. Que worker - supervisor
  * Class WorkerStatusController
  * @package App\Http\Controllers
  */
 class WorkerStatusController extends Controller
 {
     private $response = array();
+
     public function get($botId){
         $row = DB::table('bots')
             ->where('id',$botId)

@@ -28,7 +28,6 @@ class HistoryBars extends \App\Http\Controllers\Controller
         $netProfitBacktest = [];
         $accumulatedProfitBackTest = [];
         $seriesData = [];
-
         $executionLongMarkers = [];
         $executionShortMarkers = [];
 
@@ -88,7 +87,7 @@ class HistoryBars extends \App\Http\Controllers\Controller
             ];
         }
 
-        // $botIs != 5 condition does not work, nobody knows why
+        /* $botIs != 5 condition does not work, nobody knows why */
         if ($botId == 1 || $botId == 2 || $botId == 3 || $botId == 4){
             $executions = DB::table('signal_' . $botId)->get();
             foreach ($executions as $execution) {
@@ -102,15 +101,11 @@ class HistoryBars extends \App\Http\Controllers\Controller
                         $execution->time_stamp,
                         $execution->avg_fill_price
                     ];
-
-                //if($execution->type == 'signal' && $execution->net_profit){
                 if($execution->type == 'signal'){
-                    // Accumulated profit
                     $accumulatedProfit[] = [
                         $execution->time_stamp,
                         $execution->accumulated_profit
                     ];
-                    // Net profit
                     $netProfit[] = [
                         $execution->time_stamp,
                         $execution->net_profit

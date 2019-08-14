@@ -18,6 +18,9 @@ Route::get('/', function () {
 /* Get exchanges list used in the app. Not all available exchanges from ccxc. Called from accounts.vue */
 Route::get('/api/exchangeslist', 'ExchangesList@index');
 
+/* Get data for cards in the dashboard. Revenue, symbol, trades quantity, etc */
+Route::get('/api/cards', 'CardsController@index');
+
 /* Get signal tables. Called from ChartSignalsTable.vue */
 Route::get('/api/signalstable/{id}', 'SignalsTableController@index');
 

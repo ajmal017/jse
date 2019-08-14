@@ -15,6 +15,7 @@ use Illuminate\Support\Facades\Log;
 class LimitRest extends Command
 {
     private $exchange;
+    private $message = null;
 
     /**
      * The name and signature of the console command.

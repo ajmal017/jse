@@ -35,5 +35,6 @@ Route::apiResources(['bot' => 'BotController']); // http://jse.kk/api/bot
 Route::apiResources(['strategy' => 'StrategyController']); // http://jse.kk/api/strategy
 Route::apiResources(['backtest' => 'BacktestController']);
 Route::apiResources(['job' => 'JobController']); // http://jse.kk/api/job
+Route::apiResources(['logo' => 'LogoController']); // http://jse.kk/api/logo
 
 

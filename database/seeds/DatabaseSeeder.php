@@ -369,6 +369,19 @@ class DatabaseSeeder extends Seeder
                 'strategy_id' => 4
             ]);
 
+        /* Seed logo */
+        DB::table('settings')->insert([
+            'key' => 'logo',
+            'value' => 'vue-logo.png'
+        ]);
+
+        /* Seed app name */
+        DB::table('settings')->insert([
+            'key' => 'app_name',
+            'value' => 'JSEBOT'
+        ]);
+
+
         /* Seed historical bars */
         $this->call([
             HistoryBarsSeeder1::class

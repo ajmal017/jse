@@ -160,7 +160,8 @@ class BitmexWsListenerFront
                 "op" => "subscribe",
                 "args" => "instrument:" . self::$accountSettingsObject['historySymbolName']
             ]);
-            self::$connection->send($requestObject);
+            
+            if(self::$connection) self::$connection->send($requestObject);
             self::$isHistoryLoaded = false;
             self::$isUnsubscribed = true;
         }

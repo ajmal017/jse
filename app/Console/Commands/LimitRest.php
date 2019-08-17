@@ -128,31 +128,32 @@ class LimitRest extends Command
          * We check the type. If it is text instead of array - it means that an error was thrown.
          * https://dacoders.myjetbrains.com/youtrack/issue/JSE-289
          */
-        if (gettype($orderBookMessage == 'array')){
-            $message = [
-                'table' => 'orderBook10',
-                'action' => 'update',
-                'data' => [
-                    [
-                        'symbol' => $symbol,
-                        'asks' => [
-                            [
-                                $orderBookMessage['bids'][0][0], $orderBookMessage['bids'][0][1]
-                            ]
-                        ],
-                        'bids' => [
-                            [
-                                $orderBookMessage['asks'][0][0], $orderBookMessage['asks'][0][1]
-                            ]
-                        ],
-                        'timestamp' => date("c", strtotime(now())) // 'datetime': '2017-07-05T18:47:14.692Z', // ISO8601 datetime string with milliseconds
+        if($orderBookMessage)
+            if(gettype($orderBookMessage == 'array')){
+                $message = [
+                    'table' => 'orderBook10',
+                    'action' => 'update',
+                    'data' => [
+                        [
+                            'symbol' => $symbol,
+                            'asks' => [
+                                [
+                                    $orderBookMessage['bids'][0][0], $orderBookMessage['bids'][0][1]
+                                ]
+                            ],
+                            'bids' => [
+                                [
+                                    $orderBookMessage['asks'][0][0], $orderBookMessage['asks'][0][1]
+                                ]
+                            ],
+                            'timestamp' => date("c", strtotime(now())) // 'datetime': '2017-07-05T18:47:14.692Z', // ISO8601 datetime string with milliseconds
+                        ]
                     ]
-                ]
-            ];
+                ];
 
-            /* Order book parse */
-            \App\Classes\Trading\Orders\LimitOrderMessage::parse($message, $this->argument('botId'), $this->argument('queId'), $this->exchange);
-        }
+                /* Order book parse */
+                \App\Classes\Trading\Orders\LimitOrderMessage::parse($message, $this->argument('botId'), $this->argument('queId'), $this->exchange);
+            }
 
         echo "LimitRest.php " . now() .
             " Bot ID: " . $this->argument('botId') .

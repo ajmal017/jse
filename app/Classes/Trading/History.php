@@ -38,10 +38,12 @@ class History
         $barsToLoad = $botSettings['barsToLoad'];
         $timeFrame = $botSettings['timeFrame'] . 'm';
         $symbol = $botSettings['historySymbolName'];
+        $url = "https://www.bitmex.com/api/v1/trade/bucketed?binSize=$timeFrame&partial=false&symbol=$symbol&count=$barsToLoad&reverse=true";
+        dump('History.php', __LINE__);
+        dump($url);
 
         $ch = curl_init();
-        curl_setopt($ch, CURLOPT_URL,
-            "https://www.bitmex.com/api/v1/trade/bucketed?binSize=$timeFrame&partial=false&symbol=$symbol&count=$barsToLoad&reverse=true");
+        curl_setopt($ch, CURLOPT_URL, $url);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
         curl_setopt($ch, CURLOPT_HEADER, FALSE);
         $bars = json_decode(curl_exec($ch));

@@ -27,6 +27,12 @@ class History
     private static $startTime;
     private static $lastDateEncoded;
 
+    /**
+     * The history loaded to the chart when bot starts.
+     *
+     * @param $botSettings
+     * @throws \Exception
+     */
     public static function loadPeriod($botSettings)
     {
         $barsToLoad = $botSettings['barsToLoad'];
@@ -45,7 +51,10 @@ class History
         }
 
         curl_close($ch);
-        if (!$bars) throw new \Exception('History is not loaded. Symbol may be wrong. Die. History.php');
+        if (!$bars){
+            dump($bars);
+            throw new \Exception('History is not loaded. Symbol may be wrong. Die. History.php');
+        }
         DB::table($botSettings['botTitle'])->truncate();
 
         foreach (array_reverse($bars) as $bar) {
@@ -62,9 +71,15 @@ class History
         }
     }
 
+    /**
+     * The history loaded into the back tester.
+     *
+     * @param $botSettings
+     * @return array
+     * @throws \Exception
+     */
     public static function loadStep($botSettings)
     {
-
         $barsToLoad = 250;
         $timeFrame = $botSettings['timeFrame'];
         //$timeFrame = '5m'; // 1m/5m/1h/1d
@@ -75,7 +90,6 @@ class History
             ->orderBy('id', 'desc')
             ->take(1)
             ->value('date');
-
 
         /* Get the current date when a first portion of bars is loaded */
         if(!self::$lastDate) {

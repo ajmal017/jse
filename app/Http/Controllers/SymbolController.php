@@ -91,12 +91,33 @@ class SymbolController extends Controller
      */
     public function destroy($id)
     {
-        $exchangeId = Symbol::where('id', $id)->get()[0]['exchange_id'];
-        if (Account::where('exchange_id', $exchangeId)->exists()){
+        /* Make sure that symbol is not linked and the bot is not running */
+        //$exchangeId = Symbol::where('id', $id)->get()[0]['exchange_id'];
+
+        /*if (Account::where('exchange_id', $exchangeId)->exists()){
+
             $botId = Account::where('exchange_id', $exchangeId)->get()[0]['bot_id'];
+
             if(Bot::where('id', $botId)->get()[0]['status'] == 'running')
-                throw new \Exception("Symbol is used in Bot: " . Bot::where('id', $botId)->get()[0]['name'] . ' and can not be deleted');
+                throw new \Exception("Symbol is used in Bot: " .
+                    Bot::where('id', $botId)->get()[0]['name'] . ' and can not be deleted');
+        }*/
+
+        // Look for symbol id in bots table, symbol_id column
+        // If found - do not delete the symbol
+        // Bot::where('symbol_id', $id)->get(['id', 'symbol_id'])
+        $busyBots = "";
+        $bots = Bot::where('symbol_id', $id)->get(['id', 'name']);
+        foreach ($bots as $bot){
+            $busyBots .= 'id: ' . $bot['id'] . ' ' . $bot['name'] . "\n";
         }
+
+        if(Bot::where('symbol_id', $id)->exists()){
+            throw new \Exception("Symbol can not be deleted. It is used in: \n" . $busyBots
+
+            );
+        }
+
         Symbol::findOrFail($id)->delete();
     }
 }

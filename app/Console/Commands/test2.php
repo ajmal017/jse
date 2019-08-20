@@ -59,8 +59,8 @@ class test2 extends Command
 
         $exchange = new \ccxt\bitmex();
         $exchange->urls['api'] = $exchange->urls['test'];
-        $exchange->apiKey = 'ikeCK-6ZRWtItOkqvqo8F6wO'; // testnet
-        $exchange->secret = 'JfmMTXx3YruSP3OSBKQvULTg4sgQJKZkFI2Zy7TZXniOUbeK'; //testnet jesse
+        //$exchange->apiKey = 'ikeCK-6ZRWtItOkqvqo8F6wO'; // testnet
+        //$exchange->secret = 'JfmMTXx3YruSP3OSBKQvULTg4sgQJKZkFI2Zy7TZXniOUbeK'; //testnet jesse
         //$response = $exchange->createLimitBuyOrder('BTC/USD', 1, 8000, array('clOrdID' => 'abc-123'));
         //$response = $exchange->fetchTicker('BTC/USD');
         //dump($response['info']['tickSize']); // Tick size. Works good
@@ -68,7 +68,8 @@ class test2 extends Command
         //$response = $exchange->fetchMyTrades('BTC/USD', $exchange->milliseconds()-86400000); // Works good
         //$response = $exchange->privateGetExecutionTradeHistory(array('reverse' => true, 'count' => 5)); // Works good!
         //$response = $exchange->privateGetExecutionTradeHistory(array('count' => 5, 'filter' => ['orderID' => 'e1524040-0678-c66a-a33c-744fe7a5cf12_'])); // Works GOOD!
-        $response = $exchange->fetchOrderBook('ETH/USD', 1);
+        //$response = $exchange->fetchOrderBook('ETH/USD', 1);
+        $response = $exchange->loadMarkets();
         dump($response);
         die();
 

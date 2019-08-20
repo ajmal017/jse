@@ -26,6 +26,7 @@ Route::group(['prefix' => 'auth'], function ($router) {
 
 Route::group(['prefix' => 'trading'], function ($router) {
     Route::get('history/{id}', 'Exchange\HistoryBars@load');
+    Route::get('markets/{id}', 'Exchange\MarketsController@load');
 });
 
 Route::apiResources(['exchange' => 'ExchangeController']); // http://jse.kk/api/exchange
@@ -37,5 +38,6 @@ Route::apiResources(['backtest' => 'BacktestController']);
 Route::apiResources(['job' => 'JobController']); // http://jse.kk/api/job
 Route::apiResources(['logo' => 'LogoController']); // http://jse.kk/api/logo
 Route::apiResources(['user' => 'UserController']); // http://jse.kk/api/user
+
 
 

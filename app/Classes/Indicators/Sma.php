@@ -28,8 +28,6 @@ class Sma
          */
         $elementIndex = 0;
 
-
-
         /**
          * @var int $quantityOfBars The quantity of bars for which the price channel will be calculated.
          * When the back tester is executed - all indicators are calculated with initialStart flag = true.
@@ -39,12 +37,10 @@ class Sma
             $records = DB::table($tableName)
                 ->orderBy('time_stamp', 'desc')
                 ->get();
-
             $quantityOfBars = (DB::table($tableName)
                     ->orderBy('id', 'desc')
                     ->first())->id - $period - 1;
         } else {
-
             $records = DB::table($tableName)
                 ->orderBy('time_stamp', 'desc')
                 ->take(100)
@@ -58,7 +54,6 @@ class Sma
          * Start from the oldest element in the array which is on the right at the chart. The one on the left at the chart
          */
         foreach ($records as $record) {
-
             /* @var double $sma Calculated simple moving average value sma value is reset each iteration */
             $sma = 0;
             /**

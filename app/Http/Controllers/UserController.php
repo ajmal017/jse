@@ -7,6 +7,13 @@ use App\Account;
 use App\Exchange;
 use App\User;
 
+/**
+ * CRUD users.
+ * Called from Settings/Users
+ *
+ * Class UserController
+ * @package App\Http\Controllers
+ */
 class UserController extends Controller
 {
     /**
@@ -88,7 +95,6 @@ class UserController extends Controller
             'email' => 'required',
             'password' => 'required',
         ]);
-
         $user->update($request->all());
     }
 

@@ -82,22 +82,22 @@ class BotController extends Controller
         ]);
 
         $row = DB::table('bots')
-            ->where('id',1)
+            ->where('id',$id)
             ->get()[0];
 
         /* Check whether que worker are running or not */
         if (time() - $row->front_worker_update_time > 10){
-            return response('Front worker is offline!<br>' . __FILE__, 422)
+            return response('Front worker is offline! Id: ' . $row->id . '<br>' . __FILE__, 422)
                 ->header('Content-Type', 'text/plain');
         }
 
         if (time() - $row->execution_worker_update_time > 10){
-            return response('Execution worker is offline!<br>' . __FILE__, 422)
+            return response('Execution worker is offline! Id: ' . $row->id . '<br>' . __FILE__, 422)
                 ->header('Content-Type', 'text/plain');
         }
 
         if (time() - $row->que_worker_update_time > 10){
-            return response('Que worker is offline!<br>' . __FILE__, 422)
+            return response('Que worker is offline! Id: ' . $row->id . '<br>' . __FILE__, 422)
                 ->header('Content-Type', 'text/plain');
         }
 

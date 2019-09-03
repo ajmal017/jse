@@ -381,6 +381,18 @@ class DatabaseSeeder extends Seeder
             'value' => 'JSEBOT'
         ]);
 
+        /* Seed allow bots */
+        DB::table('settings')->insert([
+            'key' => 'allow_bots',
+            'value' => true
+        ]);
+
+        /* Seed allow back tester */
+        DB::table('settings')->insert([
+            'key' => 'allow_backtester',
+            'value' => true
+        ]);
+
 
         /* Seed historical bars */
         $this->call([

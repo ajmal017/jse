@@ -20,7 +20,9 @@ class LogoController extends Controller
     {
         return([
             'logoFileName' => DB::table('settings')->where('key', 'logo')->value('value'),
-            'appName' => DB::table('settings')->where('key', 'app_name')->value('value')
+            'appName' => DB::table('settings')->where('key', 'app_name')->value('value'),
+            'allowBots' => DB::table('settings')->where('key', 'allow_bots')->value('value'),
+            'allowBackTester' => DB::table('settings')->where('key', 'allow_backtester')->value('value')
         ]);
     }
 
@@ -112,7 +114,17 @@ class LogoController extends Controller
                 'value' => $request['appName']
             ]);
 
-        //return $request;
+        DB::table('settings')
+            ->where('key','allow_bots')
+            ->update([
+                'value' => $request['allowBots']
+            ]);
+
+        DB::table('settings')
+            ->where('key','allow_backtester')
+            ->update([
+                'value' => $request['allowBackTester']
+            ]);
     }
 
     /**
@@ -123,6 +135,6 @@ class LogoController extends Controller
      */
     public function destroy($id)
     {
-        DB::table('jobs')->truncate();
+        //
     }
 }

@@ -100,7 +100,8 @@ class BitmexWsListenerFront
                     self::$console->info("Connection closed. " . __LINE__);
                     self::$console->error("Reconnecting back!");
                     sleep(5); // Wait 5 seconds before next connection try will attempt
-                    self::$console->handle(); // Call the main method of this class
+                    //self::$console->handle(); // Call the main method of this class
+                    self::subscribe();
                 });
 
             }, function(\Exception $e) use ($loop) {

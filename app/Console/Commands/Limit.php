@@ -42,6 +42,8 @@ class Limit extends Command
      */
     public function handle()
     {
+        Log::debug("Limit worker started");
+
         $limitOrderObj = [
           'orderID' => null,
           'clOrdID' => 'abc-123-' . now(),

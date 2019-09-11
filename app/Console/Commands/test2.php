@@ -42,6 +42,19 @@ class test2 extends Command
     public function handle()
     {
 
+        $pusherApiMessage = new \App\Classes\WebSocket\PusherApiMessage();
+        $pusherApiMessage->clientId = 123450;
+        $pusherApiMessage->messageType = 'reloadChartAfterHistoryLoaded';
+
+        try{
+            event(new \App\Events\jseevent($pusherApiMessage->toArray()));
+        } catch (\Exception $e)
+        {
+            echo __FILE__ . " " . __LINE__ . "\n";
+            dump($e);
+        }
+        die();
+
         /*$botSettings =
             [
                 'botTitle' => 'bot_1',

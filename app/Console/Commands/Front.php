@@ -3,6 +3,7 @@
 namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
+use Illuminate\Support\Facades\Log;
 
 /**
  * For front end use.
@@ -45,6 +46,8 @@ class Front extends Command
      */
     public function handle()
     {
+        Log::debug("Front worker started");
+
         /**
          * Set bot's instance status to idle (stop the bot)
          * @todo update Bots table once the status is set to idle

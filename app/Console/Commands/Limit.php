@@ -43,7 +43,7 @@ class Limit extends Command
      */
     public function handle()
     {
-        Log::debug("Limit worker started");
+        Log::debug("Limit worker started. Bot id: " . $this->argument('botId'));
 
         $limitOrderObj = [
           'orderID' => null,

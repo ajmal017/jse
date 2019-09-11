@@ -46,7 +46,7 @@ class Front extends Command
      */
     public function handle()
     {
-        Log::debug("Front worker started");
+        Log::debug("Front worker started. Bot id: " . $this->argument('botId'));
 
         /**
          * Set bot's instance status to idle (stop the bot)

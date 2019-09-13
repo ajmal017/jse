@@ -27,10 +27,9 @@ class ConsoleWebSocket
         $chart,
         $priceChannelSettings,
         $macdSettings){
-
         $candleMaker->index(
-            $message['data'][0]['lastPrice'], // Tick price
-            $message['data'][0]['timestamp'], // Tick timestamp
+            $message['data'][0]['lastPrice'], // Tick price: 10245.0
+            $message['data'][0]['timestamp'], // Tick timestamp: 2019-09-13T20:49:45.768Z
             1, // Trade volume. Not used
             $chart, // Classes\Chart $chart Chart class instance
             $command, // Console instance

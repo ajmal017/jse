@@ -10,7 +10,7 @@ namespace App\Classes\WebSocket\Front;
 use App\Bot;
 use Illuminate\Support\Facades\DB;
 
-class BitmexWsListenerFront
+class BitmexWsListenerFrontOld
 {
     public static $console;
     public static $candleMaker;
@@ -31,7 +31,7 @@ class BitmexWsListenerFront
         $self = get_called_class();
 
         /* Endless loop. Executes once per second */
-        /* @todo Do we need $loop in hre? */
+        /* @todo Do we need $loop in here? */
         $loop->addPeriodicTimer(1, function() use($loop, $botId, $self) {
             echo (Bot::where('id', $botId)->value('status') == 'running' ? 'running' : 'idle') . "\n";
             /* Update loop time stamp in bots table jse-274 */
@@ -63,7 +63,7 @@ class BitmexWsListenerFront
                 self::$isCreateClasses = false;
             }
 
-            /* Start the bot */
+            /* Start/stop bots */
             if (Bot::where('id', $botId)->value('status') == 'running'){
                 if(array_key_exists('priceChannel', self::$strategiesSettingsObject)) self::startPriceChannelBot($botId);
                 if(array_key_exists('macd', self::$strategiesSettingsObject)) self::startMacdBot($botId);
@@ -76,12 +76,8 @@ class BitmexWsListenerFront
             }
         });
 
-        /**
-         * Pick up the right websocket endpoint accordingly to the exchange
-         */
-        // HERE IT IS!
+        /* Pick up the right websocket endpoint accordingly to the exchange */
         $exchangeWebSocketEndPoint = "wss://www.bitmex.com/realtime";
-
 
         $connector($exchangeWebSocketEndPoint, [], ['Origin' => 'http://localhost'])
             ->then(function(\Ratchet\Client\WebSocket $conn) use ($loop) {
@@ -136,7 +132,7 @@ class BitmexWsListenerFront
     private static function startPriceChannelBot($botId){
         if (self::$isHistoryLoaded){
 
-            /* DELETE IT FROM HERE! TESTING ONLY! */
+            /* @TODO DELETE IT FROM HERE! TESTING ONLY! */
             self::truncateSignalsTable($botId);
 
             \App\Classes\Trading\History::loadPeriod(self::$accountSettingsObject);
@@ -230,7 +226,6 @@ class BitmexWsListenerFront
     }
 
     private static function stopMacdBot(){
-        
         self::$chart->botSettings = self::$accountSettingsObject;
         self::$chart->trade_flag = 'all';
         self::$candleMaker->indicator = 'macd';

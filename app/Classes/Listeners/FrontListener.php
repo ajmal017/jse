@@ -27,22 +27,13 @@ class FrontListener
     public static function subscribe($console, $botId){
         self::$console = $console;
         self::$botId = $botId;
-
         self::$exchange = new \ccxt\bitmex();
         self::$exchange->urls['api'] = self::$exchange->urls['api'];
 
 
-        /* For static methods call inside an anonymous function */
-        $self = get_called_class();
-
         /* Endless loop. Executes once per second */
-
-        // $loop->addPeriodicTimer(1, function() use($loop, $botId, $self) {
-
         while (true){
-
             echo (Bot::where('id', $botId)->value('status') == 'running' ? 'Bot is: Running ' . now() : 'Bot is: idle ' . now()) . "\n";
-
             /* Update loop time stamp in bots table jse-274 */
             DB::table('bots')
                 ->where('id', $botId)
@@ -54,43 +45,32 @@ class FrontListener
             self::$strategiesSettingsObject = \App\Classes\WebSocket\Front\Strategies::getSettings($botId);
             /* Get account settings object */
             self::$accountSettingsObject = \App\Classes\WebSocket\Front\TradingAccount::getSettings($botId);
-
             /* Trace */
             dump(self::$strategiesSettingsObject);
 
             /* Create Chart and Candle maker classes here. ONCE! Create again after STOP! */
             if (self::$isCreateClasses) {
-
                 self::$candleMaker = new \App\Classes\Trading\CandleMaker(
                     (array_key_exists('priceChannel', self::$strategiesSettingsObject) ? 'priceChannel' : 'macd'),
                     self::$accountSettingsObject);
-
                 dump (__FILE__);
                 dump((array_key_exists('priceChannel', self::$strategiesSettingsObject) ? "!!!!!!! PC" : "!!!!!!!!!! MACD"));
-
                 (array_key_exists('priceChannel', self::$strategiesSettingsObject) ?
                     self::$chart = new \App\Classes\Trading\Chart(self::$accountSettingsObject) :
                     self::$chart = new \App\Classes\Trading\MacdTradesTrigger(self::$accountSettingsObject));
-
                 self::$isCreateClasses = false;
             }
 
             /* Start/stop bots */
             if (Bot::where('id', $botId)->value('status') == 'running'){
-
-                dump('----------------------- BOT RUN');
-
                 if(array_key_exists('priceChannel', self::$strategiesSettingsObject)) self::startPriceChannelBot($botId);
-                //if(array_key_exists('macd', self::$strategiesSettingsObject)) self::startMacdBot($botId);
+                if(array_key_exists('macd', self::$strategiesSettingsObject)) self::startMacdBot($botId);
             }
 
             /* Stop the bot */
             if (Bot::where('id', $botId)->value('status') == 'idle'){
-
-                dump('----------------------- BOT STOP');
-
                 if(array_key_exists('priceChannel', self::$strategiesSettingsObject)) self::stopPriceChannelBot($botId);
-                //if(array_key_exists('macd', self::$strategiesSettingsObject)) self::stopMacdBot($botId);
+                if(array_key_exists('macd', self::$strategiesSettingsObject)) self::stopMacdBot($botId);
             }
 
             if (Bot::where('id', $botId)->value('status') == 'running'){
@@ -113,13 +93,6 @@ class FrontListener
                 }
 
                 /* @TODO need to check ID of the trade. In case of the same trade is received twice - filter it */
-                //dump(self::$message);
-                //dump(self::$message[0]['timestamp']);
-
-                // WS Call here
-                //$message['data'][0]['lastPrice'], // Tick price
-                //$message['data'][0]['timestamp'], // Tick timestamp
-
                 $tradeObj = [
                   'data' => [
                       [
@@ -128,21 +101,14 @@ class FrontListener
                       ]
                   ]
                 ];
-
                 self::messageParse($tradeObj);
-
             }
-
-            sleep(2);
+            sleep(5);
         };
-
     }
 
     private static function startPriceChannelBot($botId){
         if (self::$isHistoryLoaded){
-
-            dump("FrontListener.php startPriceChannelBot");
-
             /* @TODO DELETE IT FROM HERE! TESTING ONLY! */
             self::truncateSignalsTable($botId);
 
@@ -182,18 +148,40 @@ class FrontListener
         /* reset history flag */
         self::$isHistoryLoaded = true;
         self::$isCreateClasses = true; // Chart and CandleMaker will be freshly created
+    }
 
-        if(self::$isUnsubscribed){
-            /* Manual UNsubscription object */
-            /*$requestObject = json_encode([
-                "op" => "unsubscribe",
-                "args" => "instrument:" . self::$accountSettingsObject['historySymbolName']
-            ]);
-            self::$connection->send($requestObject);*/
-            /* Unsubscribed. Then do nothing. Wait for the next bot start */
-            //self::$isUnsubscribed = false;
+    private static function startMacdBot($botId){
+        if (self::$isHistoryLoaded){
+
+            /* DELETE IT FROM HERE! TESTING ONLY! */
+            self::truncateSignalsTable($botId);
+
+            \App\Classes\Trading\History::loadPeriod(self::$accountSettingsObject);
+            dump('History loaded (MACD)');
+
+            \App\Classes\Indicators\Macd::calculate($macdSettings = [
+                'ema1Period' => self::$strategiesSettingsObject['macd']['emaPeriod'],
+                'ema2Period' => self::$strategiesSettingsObject['macd']['macdLinePeriod'],
+                'ema3Period' => self::$strategiesSettingsObject['macd']['macdSignalLinePeriod']],
+                self::$strategiesSettingsObject,
+                true);
+
+            /* Reload chart */
+            self::reloadChart(['frontEndId' => self::$accountSettingsObject['frontEndId']]);
+            self::$isHistoryLoaded = false;
+            self::$isUnsubscribed = true;
         }
     }
+
+    private static function stopMacdBot(){
+        self::$chart->botSettings = self::$accountSettingsObject;
+        self::$chart->trade_flag = 'all';
+        self::$candleMaker->indicator = 'macd';
+        /* reset history flag */
+        self::$isHistoryLoaded = true;
+        self::$isCreateClasses = true; // Chart and CandleMaker will be freshly created
+    }
+
 
     private static function truncateSignalsTable($botId){
         DB::table('signal_' . $botId)->truncate();

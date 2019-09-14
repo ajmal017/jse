@@ -15,7 +15,7 @@ use Illuminate\Support\Facades\Log;
 class LimitRest extends Command
 {
     private $exchange;
-    private $message = null;
+    private $orderBookMessage = null;
 
     /**
      * The name and signature of the console command.
@@ -108,7 +108,7 @@ class LimitRest extends Command
 
         /* Handle exception https://github.com/ccxt/ccxt/wiki/Manual#error-handling */
         try {
-            $orderBookMessage = $this->exchange->fetchOrderBook($accountSettingsObject['executionSymbolName'], 1);
+            self::$orderBookMessage = $this->exchange->fetchOrderBook($accountSettingsObject['executionSymbolName'], 1);
         } catch (\ccxt\NetworkError $e) {
             $error = 'Request failed due to a network error: ' . $e->getMessage () . "\n";
             echo $error;
@@ -128,8 +128,8 @@ class LimitRest extends Command
          * We check the type. If it is text instead of array - it means that an error was thrown.
          * https://dacoders.myjetbrains.com/youtrack/issue/JSE-289
          */
-        if($orderBookMessage)
-            if(gettype($orderBookMessage == 'array')){
+        if(self::$orderBookMessage)
+            if(gettype(self::$orderBookMessage == 'array')){
                 $message = [
                     'table' => 'orderBook10',
                     'action' => 'update',
@@ -138,12 +138,12 @@ class LimitRest extends Command
                             'symbol' => $symbol,
                             'asks' => [
                                 [
-                                    $orderBookMessage['bids'][0][0], $orderBookMessage['bids'][0][1]
+                                    self::$orderBookMessage['bids'][0][0], self::$orderBookMessage['bids'][0][1]
                                 ]
                             ],
                             'bids' => [
                                 [
-                                    $orderBookMessage['asks'][0][0], $orderBookMessage['asks'][0][1]
+                                    self::$orderBookMessage['asks'][0][0], self::$orderBookMessage['asks'][0][1]
                                 ]
                             ],
                             'timestamp' => date("c", strtotime(now())) // 'datetime': '2017-07-05T18:47:14.692Z', // ISO8601 datetime string with milliseconds

@@ -108,7 +108,7 @@ class LimitRest extends Command
 
         /* Handle exception https://github.com/ccxt/ccxt/wiki/Manual#error-handling */
         try {
-            self::$orderBookMessage = $this->exchange->fetchOrderBook($accountSettingsObject['executionSymbolName'], 1);
+            $this->orderBookMessage = $this->exchange->fetchOrderBook($accountSettingsObject['executionSymbolName'], 1);
         } catch (\ccxt\NetworkError $e) {
             $error = 'Request failed due to a network error: ' . $e->getMessage () . "\n";
             echo $error;
@@ -128,8 +128,8 @@ class LimitRest extends Command
          * We check the type. If it is text instead of array - it means that an error was thrown.
          * https://dacoders.myjetbrains.com/youtrack/issue/JSE-289
          */
-        if(self::$orderBookMessage)
-            if(gettype(self::$orderBookMessage == 'array')){
+        if($this->orderBookMessage)
+            if(gettype($this->orderBookMessage == 'array')){
                 $message = [
                     'table' => 'orderBook10',
                     'action' => 'update',
@@ -138,12 +138,12 @@ class LimitRest extends Command
                             'symbol' => $symbol,
                             'asks' => [
                                 [
-                                    self::$orderBookMessage['bids'][0][0], self::$orderBookMessage['bids'][0][1]
+                                    $this->orderBookMessage['bids'][0][0], $this->orderBookMessage['bids'][0][1]
                                 ]
                             ],
                             'bids' => [
                                 [
-                                    self::$orderBookMessage['asks'][0][0], self::$orderBookMessage['asks'][0][1]
+                                    $this->orderBookMessage['asks'][0][0], $this->orderBookMessage['asks'][0][1]
                                 ]
                             ],
                             'timestamp' => date("c", strtotime(now())) // 'datetime': '2017-07-05T18:47:14.692Z', // ISO8601 datetime string with milliseconds

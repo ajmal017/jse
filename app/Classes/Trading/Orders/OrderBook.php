@@ -66,9 +66,7 @@ abstract class OrderBook extends Signal
         /* Place and amend order */
         if (LimitOrderMessage::$signalRow[0]->direction == "sell")
             if($isPlaceAsMarketOrder){
-
                 if(!LimitOrderMessage::$limitOrderObj['isLimitOrderPlaced']){
-
                     PlaceMarketOrder::dispatch(
                         'sell',
                         LimitOrderMessage::$signalRow[0]->signal_volume,
@@ -88,9 +86,7 @@ abstract class OrderBook extends Signal
 
 
         if (LimitOrderMessage::$signalRow[0]->direction == "buy")
-
             if($isPlaceAsMarketOrder){
-
                 if(!LimitOrderMessage::$limitOrderObj['isLimitOrderPlaced']){
                     PlaceMarketOrder::dispatch(
                         'buy',

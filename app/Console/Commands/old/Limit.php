@@ -24,7 +24,7 @@ class Limit extends Command
      *
      * @var string
      */
-    protected $description = 'Command description';
+    protected $description = 'limit {botId} {queId} {net}; net: live/testnet';
 
     /**
      * Create a new command instance.

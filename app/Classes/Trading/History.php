@@ -84,7 +84,6 @@ class History
     {
         $barsToLoad = 250;
         $timeFrame = $botSettings['timeFrame'];
-        //$timeFrame = '5m'; // 1m/5m/1h/1d
         $symbol = $botSettings['historySymbolName'];
 
         /* Get the latest loaded date. Next history portion will be loaded from it */
@@ -178,7 +177,6 @@ class History
                     ));
             }
         }
-
 
         foreach ($bars as $bar) {
             DB::table($botSettings['botTitle'])

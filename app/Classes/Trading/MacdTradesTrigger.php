@@ -65,7 +65,6 @@ class MacdTradesTrigger extends Profit
 
     public function index($mode = null, $backTestRowId = null)
     {
-        echo __FILE__ . "\n" ;
         /* Abstract class method call */
         $this->calc($mode, $backTestRowId, $this->botSettings);
 
@@ -79,11 +78,11 @@ class MacdTradesTrigger extends Profit
 
         if (($this->lastRow[0]->macd_line > $this->lastRow[0]->macd_signal_line) && ($this->trade_flag == "all" || $this->trade_flag == "long")){
 
-            echo "####### HIGH TRADE!<br>\n";
+            //echo "####### HIGH TRADE!<br>\n";
             // Is it the first trade ever?
             if ($this->trade_flag == "all"){
                 // open order buy vol = vol
-                echo "---------------------- FIRST EVER TRADE<br>\n";
+                //echo "---------------------- FIRST EVER TRADE<br>\n";
                 if($mode != 'backtest')
                     //PlaceOrder::dispatch('buy', $this->botSettings['volume'], $this->botSettings);
                     DB::table($this->botSettings['signalTable'])
@@ -97,7 +96,7 @@ class MacdTradesTrigger extends Profit
             else // Not the first trade. Close the current position and open opposite trade. vol = vol * 2
             {
                 // open order buy vol = vol * 2
-                echo "---------------------- NOT FIRST EVER TRADE. CLOSE + OPEN. VOL * 2\n";
+                // echo "---------------------- NOT FIRST EVER TRADE. CLOSE + OPEN. VOL * 2\n";
                 if($mode != 'backtest')
                     //PlaceOrder::dispatch('buy', $this->botSettings['volume'] * 2, $this->botSettings);
                     DB::table($this->botSettings['signalTable'])
@@ -119,11 +118,11 @@ class MacdTradesTrigger extends Profit
         }
 
         if (($this->lastRow[0]->macd_line < $this->lastRow[0]->macd_signal_line) && ($this->trade_flag == "all"  || $this->trade_flag == "short")) {
-            echo "####### LOW TRADE!<br>\n";
+            //echo "####### LOW TRADE!<br>\n";
 
             // Is the the first trade ever?
             if ($this->trade_flag == "all"){
-                echo "---------------------- FIRST EVER TRADE<br>\n";
+                //echo "---------------------- FIRST EVER TRADE<br>\n";
                 if($mode != 'backtest')
                     DB::table($this->botSettings['signalTable'])
                         ->insert([
@@ -135,7 +134,7 @@ class MacdTradesTrigger extends Profit
             }
             else // Not the first trade. Close the current position and open opposite trade. vol = vol * 2
             {
-                echo "---------------------- NOT FIRST EVER TRADE. CLOSE + OPEN. VOL * 2\n";
+                //echo "---------------------- NOT FIRST EVER TRADE. CLOSE + OPEN. VOL * 2\n";
                 if($mode != 'backtest')
                     DB::table($this->botSettings['signalTable'])
                         ->insert([

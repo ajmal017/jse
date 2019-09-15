@@ -32,8 +32,9 @@ class BacktestController extends Controller
     }
 
     /**
-     * Store a newly created resource in storage.
+     * Back tester execution, run from Chart.vue, backtester tab
      *
+     * Store a newly created resource in storage.
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
@@ -42,8 +43,10 @@ class BacktestController extends Controller
         $strategy = $request['strategy'];
 
         /**
-         * Load step history.
-         * This is not a strategy.
+         * Load step history. This is not a strategy.
+         * Executed from History data tab in the backtester.
+         * Usually is executed several times in order to fill the data set, which is going to be used as a source
+         * for the back tester.
          */
         if($strategy == 'historyStep') {
             $botSettings = [
@@ -56,7 +59,7 @@ class BacktestController extends Controller
             return(History::loadStep($botSettings));
         }
 
-        /* Truncate history table */
+        /* Truncate history table. Executed from the same History Data tab */
         if($strategy == 'truncate') {
             DB::table('bot_5')->truncate();
             return([
@@ -66,6 +69,7 @@ class BacktestController extends Controller
             ]);
         }
 
+        /* History data tab. Show quantoty of bars, dates, etc. */
         if($strategy == 'loadedBarsInfo') {
             return([
                 'loadedBars' => DB::table('bot_5')->count(),
@@ -93,8 +97,9 @@ class BacktestController extends Controller
                 'strategyParams' => [
                     'priceChannelPeriod' => $request['time_frame']
                 ],
-                'timeFrame' => $request['bar_time_frame'], // 1 or 5 minutes. https://www.bitmex.com/api/explorer/#!/Trade/Trade_getBucketed
-                'barsToLoad' => $request['bars_to_load'],
+                // remove
+                //'timeFrame' => $request['bar_time_frame'], // 1 or 5 minutes. https://www.bitmex.com/api/explorer/#!/Trade/Trade_getBucketed
+                //'barsToLoad' => $request['bars_to_load'],
                 'frontEndId' => '12350',
             ];
 
@@ -111,8 +116,8 @@ class BacktestController extends Controller
                     'macdLinePeriod' => $request['macd_line_period'],
                     'macdSignalLinePeriod' => $request['macd_signalline_period']
                 ],
-                'timeFrame' => $request['bar_time_frame'], // 1 or 5 minutes. https://www.bitmex.com/api/explorer/#!/Trade/Trade_getBucketed
-                'barsToLoad' => $request['bars_to_load'],
+                //'timeFrame' => $request['bar_time_frame'], // 1 or 5 minutes. https://www.bitmex.com/api/explorer/#!/Trade/Trade_getBucketed
+                //'barsToLoad' => $request['bars_to_load'],
                 'frontEndId' => '12350',
             ];
 

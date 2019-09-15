@@ -15,11 +15,11 @@ use Illuminate\Support\Facades\DB;
  */
 class BacktestingFront
 {
-    static public function start($botSettings){
-        /* Empty backtesting bars table. bot_5 */
-        //DB::table('bot_5')->truncate();
+    private static $chart;
+    private static $macd;
 
-        //\App\Classes\Trading\History::loadPeriod($botSettings);
+    static public function start($botSettings){
+
 
         if ($botSettings['strategy'] == 'pc'){
             \App\Classes\Indicators\PriceChannel::calculate($botSettings[
@@ -28,7 +28,7 @@ class BacktestingFront
                 true);
 
             \App\Classes\Indicators\Sma::calculate('close', 2, 'sma1', $botSettings['botTitle'], true);
-            $chart = new \App\Classes\Trading\Chart($botSettings);
+            self::$chart = new \App\Classes\Trading\Chart($botSettings);
         }
 
         if ($botSettings['strategy'] == 'macd'){
@@ -37,11 +37,11 @@ class BacktestingFront
                 'ema2Period' => $botSettings['strategyParams']['macdLinePeriod'],
                 'ema3Period' => $botSettings['strategyParams']['macdSignalLinePeriod']],
                 $botSettings, true);
-            // @todo 25.05.19 SEND ONE OBJECT! NOT 3 PARAMS!
-            $macd = new \App\Classes\Trading\MacdTradesTrigger($botSettings);
+
+            self::$macd = new \App\Classes\Trading\MacdTradesTrigger($botSettings);
         }
 
-        /** Empty calculated data like position, profit, accumulated profit, etc */
+        /* Empty calculated data like position, profit, accumulated profit, etc */
         DB::table($botSettings['botTitle'])
             ->whereNotNull('price_channel_high_value')
             ->update([
@@ -67,10 +67,10 @@ class BacktestingFront
               */
             if ($isFirstRecord){
                 if ($botSettings['strategy'] == 'pc'){
-                    $chart->index("backtest", $rowValue->id);
+                    self::$chart->index("backtest", $rowValue->id);
                 }
                 if ($botSettings['strategy'] == 'macd'){
-                    $macd->index("backtest", $rowValue->id);
+                    self::$macd->index("backtest", $rowValue->id);
                 }
             }
             else{

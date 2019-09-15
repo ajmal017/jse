@@ -42,6 +42,36 @@ class test2 extends Command
     public function handle()
     {
 
+        $botSettings = [
+            'botTitle' => 'bot_5', // Back testing table
+            'executionSymbolName' => 'ETHUSD', // ETH/USD
+            'historySymbolName' => 'ETHUSD', // ETHUSD
+            'volume' => 100,
+            'commission' => 0.000750 / 100, // Maker: -0.00025, Taker: 0.000750 - such values come from Bitmex
+            'strategy' => 'macd',
+
+
+            'strategyParams' => [
+                'emaPeriod' => 5,
+                'macdLinePeriod' => 10,
+                'macdSignalLinePeriod' => 12
+            ],
+
+            //'timeFrame' => 1, // 1 or 5 minutes. https://www.bitmex.com/api/explorer/#!/Trade/Trade_getBucketed
+            //'barsToLoad' => 10,
+            'frontEndId' => '12350',
+        ];
+
+        // Call back tester here
+        \App\Classes\Backtesting\BacktestingFront::start($botSettings);
+
+        dump('BT finished');
+        die();
+
+
+
+
+
         $pusherApiMessage = new \App\Classes\WebSocket\PusherApiMessage();
         $pusherApiMessage->clientId = 123450;
         $pusherApiMessage->messageType = 'reloadChartAfterHistoryLoaded';

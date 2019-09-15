@@ -77,7 +77,7 @@ class BotController extends Controller
     {
         $bot = Bot::findOrFail($id);
         $this->validate($request, [
-            'time_frame' => ['required', Rule::in(['1', '5', '15'])],
+            'time_frame' => ['required', Rule::in(['1', '5', '15', '30', '60'])],
             'bars_to_load' => 'required|max:100'
         ]);
 

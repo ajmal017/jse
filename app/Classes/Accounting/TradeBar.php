@@ -1,5 +1,6 @@
 <?php
 namespace App\Classes\Accounting;
+use App\Classes\LogToFile;
 use Illuminate\Support\Facades\DB;
 
 class TradeBar
@@ -9,6 +10,8 @@ class TradeBar
             DB::table($botSettings['botTitle'])
                 ->orderBy('id', 'desc')->take(1)
                 ->get();
+
+        //LogToFile::add(__FILE__, $lastRow[0]->close . ' ' . $botSettings['volume'] . ' ' . $botSettings['commission'] );
 
         /* Commission calculation */
         if ($botSettings['historySymbolName'] == 'XBTUSD')

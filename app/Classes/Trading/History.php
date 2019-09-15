@@ -149,7 +149,6 @@ class History
                 $timestamp = 0;
 
                 for($j = 0; $j < $step; $j++){
-
                     /* Calculate Open */
                     if(isset($slice[$j]) && $j == 0){
                         $open = $slice[$j]->open;
@@ -160,13 +159,18 @@ class History
                    if(isset($slice[$j]) && $j == $step - 1 ){
                        $close = $slice[$j]->close;
                    }
+
+                   /* If the quantity of bars in the group - less than slice size and close can not be calculated*/
+                   if ($close == 0) $close = $slice[$j]->open;
+
                     /* High, Low*/
                     if(isset($slice[$j]) && $slice[$j]->high > $high) $high = $slice[$j]->high;
                     if(isset($slice[$j]) && $slice[$j]->low < $low) $low = $slice[$j]->low;
+
+
                 }
 
                 DB::table($botSettings['botTitle'])
-                //DB::table('bot_4') // bot_5
                     ->insert(array(
                         'symbol' => $symbol,
                         'date' => $date,
@@ -175,7 +179,7 @@ class History
                         'close' => $close,
                         'high' => $high,
                         'low' => $low,
-                        'volume' => 0,
+                        'volume' => 1,
                     ));
             }
         }

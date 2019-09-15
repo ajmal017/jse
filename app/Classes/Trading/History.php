@@ -135,6 +135,7 @@ class History
 
         if (!$bars) throw new \Exception('History is not loaded. Symbol may be wrong or no bars for requested date.');
 
+        /* Only for derivative time frames */
         if ($timeFrame == '15m' || $timeFrame == '30m'){
             DB::table('bot_4')->truncate();
             ($timeFrame == '15m' ? $step = 3 : $step = 6);
@@ -164,7 +165,8 @@ class History
                     if(isset($slice[$j]) && $slice[$j]->low < $low) $low = $slice[$j]->low;
                 }
 
-                DB::table('bot_4')
+                DB::table($botSettings['botTitle'])
+                //DB::table('bot_4') // bot_5
                     ->insert(array(
                         'symbol' => $symbol,
                         'date' => $date,
@@ -177,21 +179,24 @@ class History
                     ));
             }
         }
-
-        foreach ($bars as $bar) {
-            DB::table($botSettings['botTitle'])
-                ->where('id', 1)
-                ->insert(array(
-                'symbol' => $symbol,
-                'date' => gmdate("Y-m-d G:i:s", strtotime($bar->timestamp)), // Regular date
-                'time_stamp' => strtotime($bar->timestamp) * 1000, // Timestamp
-                'open' => $bar->open,
-                'close' => $bar->close,
-                'high' => $bar->high,
-                'low' => $bar->low,
-                'volume' => $bar->volume,
-            ));
+        else {
+            /* All other time frames except 15m and 30m */
+            foreach ($bars as $bar) {
+                DB::table($botSettings['botTitle'])
+                    ->where('id', 1)
+                    ->insert(array(
+                        'symbol' => $symbol,
+                        'date' => gmdate("Y-m-d G:i:s", strtotime($bar->timestamp)), // Regular date
+                        'time_stamp' => strtotime($bar->timestamp) * 1000, // Timestamp
+                        'open' => $bar->open,
+                        'close' => $bar->close,
+                        'high' => $bar->high,
+                        'low' => $bar->low,
+                        'volume' => $bar->volume,
+                    ));
+            }
         }
+
 
         return ([
             'barsLoaded' => DB::table($botSettings['botTitle'])->count(),

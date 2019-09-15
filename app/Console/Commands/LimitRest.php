@@ -2,16 +2,21 @@
 
 namespace App\Console\Commands;
 
-use App\Classes\Trading\LimitOrder;
-use App\Job;
 use App\Bot;
 use App\Jobs\GetQueWorkerStatus;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Cache;
 use Mockery\Exception;
 use Illuminate\Support\Facades\Log;
 
+/**
+ *
+ * REST version of the front worker.
+ * This version is a replacement for websocket version.
+ *
+ * Class LimitRest
+ * @package App\Console\Commands
+ */
 class LimitRest extends Command
 {
     private $exchange;
@@ -29,7 +34,7 @@ class LimitRest extends Command
      *
      * @var string
      */
-    protected $description = 'Command description';
+    protected $description = 'limitrest {botId} {queId} {net}. new: live/testnet';
 
     /**
      * Create a new command instance.
@@ -49,29 +54,6 @@ class LimitRest extends Command
 
     public function handle()
     {
-        $limitOrderObj = [
-            'orderID' => null,
-            'clOrdID' => 'abc-123-' . now(),
-            'direction' => 'sell',
-            'isLimitOrderPlaced' => false,
-            'limitOrderPrice' => null,
-            'limitOrderTimestamp' => null,
-            'step' => 0 // Limit order position placement. Used for testing purpuses. If set - order will be locate deeper in the book.
-        ];
-
-        /* For firing subscription from demo to live. In LimitOrderWs.php */
-        //Cache::put('status_bot_' . $this->argument('botId'), true, now()->addMinute(30));
-
-        /**
-         * Set cache object. It will be accesses from other classes and que workers.
-         *
-         * Contains settings and flags of a limit order.
-         * These settings are read by other classes and que workers: market order que, amend order que, etc.
-         * Once a flag is set, other classes can read it.
-         * For example if an order is executed - we need to stop bid/ask order book subscription immediately.
-         */
-        //Cache::put('bot_' . $this->argument('botId'), $limitOrderObj, now()->addMinute(30));
-
         /**
          * Truncate signal table.
          * This table gets truncated on bot start/stop button click as well.

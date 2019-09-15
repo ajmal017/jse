@@ -41,33 +41,23 @@ class test2 extends Command
      */
     public function handle()
     {
-
-        $pusherApiMessage = new \App\Classes\WebSocket\PusherApiMessage();
-        $pusherApiMessage->clientId = 123450;
-        $pusherApiMessage->messageType = 'reloadChartAfterHistoryLoaded';
-
-        try{
-            event(new \App\Events\jseevent($pusherApiMessage->toArray()));
-        } catch (\Exception $e)
-        {
-            echo __FILE__ . " " . __LINE__ . "\n";
-            dump($e);
-        }
-        die();
-
-        /*$botSettings =
+        DB::table('bot_5')->truncate();
+        $botSettings =
             [
-                'botTitle' => 'bot_1',
+                'botTitle' => 'bot_5',
                 'executionSymbol' => 'BTC/USD',
-                'historySymbol' => 'XBTUSD',
-                'timeFrame' => 1, // 1 or 5 minutes. https://www.bitmex.com/api/explorer/#!/Trade/Trade_getBucketed
+                'historySymbolName' => 'XBTUSD',
+                'timeFrame' => '15m', // 1 or 5 minutes. https://www.bitmex.com/api/explorer/#!/Trade/Trade_getBucketed
                 'barsToLoad' => 40,
+                'startTime' => '2019-05-05',
                 'api_path' => 1,
                 'api_key' => 'ikeCK-6ZRWtItOkqvqo8F6wO',
                 'secret' => 'JfmMTXx3YruSP3OSBKQvULTg4sgQJKZkFI2Zy7TZXniOUbeK'
             ];
-        \App\Classes\Trading\ShrinkDbTables::deleteRow($botSettings);
-        die('dd');*/
+
+        $r = \App\Classes\Trading\History::loadStep($botSettings);
+        dump($r);
+        die();
 
 
         $exchange = new \ccxt\bitmex();

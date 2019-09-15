@@ -97,8 +97,7 @@ class History
         if(!self::$lastDate) {
             //self::$startTime = time(); // Timestamp 10 digits
             self::$startTime = $botSettings['startTime'];
-            /* Step back three hours (or other time). History data appears at the servers not in the real-time */
-            self::$startTime = date('Y-m-d\TH:i:s', strtotime(self::$startTime)); // - 3600
+            self::$startTime = date('Y-m-d\TH:i:s', strtotime(self::$startTime));
         }
 
         /**
@@ -108,16 +107,23 @@ class History
         if(self::$lastDate) {
             if($timeFrame == '1m') $addedTime = '+1 minute';
             if($timeFrame == '5m') $addedTime = '+5 minutes';
+            if($timeFrame == '15m') $addedTime = '+15 minutes';
             if($timeFrame == '1h') $addedTime = '+1 hour';
             if($timeFrame == '1d') $addedTime = '+1 day';
             self::$startTime = date('Y-m-d\TH:i:s', strtotime(self::$lastDate . $addedTime));
         }
 
-        $url = "https://www.bitmex.com/api/v1/trade/bucketed?binSize=$timeFrame&partial=false&symbol=$symbol&reverse=false&count=$barsToLoad&startTime=" . self::$startTime;
+        if ($timeFrame != '15m')
+            $url = "https://www.bitmex.com/api/v1/trade/bucketed?binSize=$timeFrame&partial=false&symbol=$symbol&reverse=false&count=$barsToLoad&startTime=" . self::$startTime;
+
+        if ($timeFrame == '15m'){
+            //$timeFrame = '5m';
+            $url = "https://www.bitmex.com/api/v1/trade/bucketed?binSize=5m&partial=false&symbol=$symbol&reverse=false&count=$barsToLoad&startTime=" . self::$startTime;
+        }
+
 
         $ch = curl_init();
-        curl_setopt($ch, CURLOPT_URL,
-            $url); // 2019-08-04
+        curl_setopt($ch, CURLOPT_URL, $url); // 2019-08-04
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
         curl_setopt($ch, CURLOPT_HEADER, FALSE);
         $bars = json_decode(curl_exec($ch));
@@ -128,6 +134,53 @@ class History
         curl_close($ch);
 
         if (!$bars) throw new \Exception('History is not loaded. Symbol may be wrong or no bars for requested date.');
+
+
+        // If 15m timeframe
+        if ($timeFrame == '15m'){
+            DB::table('bot_4')->truncate();
+            $step = 3;
+            for($i = 0; $i < count($bars); $i = $i + $step){
+                $slice = array_slice($bars,$i, 3);
+                $open = 0;
+                $close = 0;
+                $high = 0;
+                $low = 9999999;
+                $date = null;
+                $timestamp = 0;
+                for($j = 0; $j < $step; $j++){
+                    /* First bar*/
+
+                    if(isset($slice[$j]) && $j == 0){
+                        $open = $slice[$j]->open;
+                        $date = gmdate("Y-m-d G:i:s", strtotime($slice[$j]->timestamp));
+                        $timestamp = strtotime($slice[$j]->timestamp) * 1000;
+                    }
+
+                    /* Last bar*/
+                   if(isset($slice[$j]) && $j == $step - 1 )
+                        $close = $slice[$j]->close;
+
+                    /* High low*/
+                    if(isset($slice[$j]) && $slice[$j]->high > $high) $high = $slice[$j]->high;
+                    if(isset($slice[$j]) && $slice[$j]->low < $low) $low = $slice[$j]->low;
+                }
+
+
+                DB::table('bot_4')
+                    ->insert(array(
+                        'symbol' => $symbol,
+                        'date' => $date,
+                        'time_stamp' => $timestamp,
+                        'open' => $open,
+                        'close' => $close,
+                        'high' => $high,
+                        'low' => $low,
+                        'volume' => 0,
+                    ));
+            }
+        }
+
 
         foreach ($bars as $bar) {
             DB::table($botSettings['botTitle'])
@@ -143,6 +196,7 @@ class History
                 'volume' => $bar->volume,
             ));
         }
+
         return ([
             'barsLoaded' => DB::table($botSettings['botTitle'])->count(),
             //'startDate' => DB::table($botSettings['botTitle'])->orderBy('id', 'asc')->take(1)->value('date'),

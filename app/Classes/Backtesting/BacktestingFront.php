@@ -19,8 +19,6 @@ class BacktestingFront
     private static $macd;
 
     static public function start($botSettings){
-
-
         if ($botSettings['strategy'] == 'pc'){
             \App\Classes\Indicators\PriceChannel::calculate($botSettings[
                 'strategyParams']['priceChannelPeriod'],

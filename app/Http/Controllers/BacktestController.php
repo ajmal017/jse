@@ -168,7 +168,6 @@ class BacktestController extends Controller
         {
             throw new Exception($e);
         }
-
     }
 
     /**

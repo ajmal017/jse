@@ -85,19 +85,6 @@ class test2 extends Command
         }
         die();
 
-        /*$botSettings =
-            [
-                'botTitle' => 'bot_1',
-                'executionSymbol' => 'BTC/USD',
-                'historySymbol' => 'XBTUSD',
-                'timeFrame' => 1, // 1 or 5 minutes. https://www.bitmex.com/api/explorer/#!/Trade/Trade_getBucketed
-                'barsToLoad' => 40,
-                'api_path' => 1,
-                'api_key' => 'ikeCK-6ZRWtItOkqvqo8F6wO',
-                'secret' => 'JfmMTXx3YruSP3OSBKQvULTg4sgQJKZkFI2Zy7TZXniOUbeK'
-            ];
-        \App\Classes\Trading\ShrinkDbTables::deleteRow($botSettings);
-        die('dd');*/
 
 
         $exchange = new \ccxt\bitmex();

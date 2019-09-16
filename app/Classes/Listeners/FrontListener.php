@@ -94,7 +94,8 @@ class FrontListener
                     Log::notice($error);
                 }
 
-                if(gettype(self::$message == array())){
+                if(gettype(self::$message) == 'array'){
+
                     /* @TODO need to check ID of the trade. In case of the same trade is received twice - filter it */
                     $tradeObj = [
                         'data' => [

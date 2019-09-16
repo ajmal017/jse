@@ -68,8 +68,8 @@ class LimitOrderMessage extends OrderBook
 
         /* Get limit order object */
         self::$limitOrderObj = Cache::get('bot_' . $botId);
-        
         self::$exchange = $exchnage;
+
         /*  Check DB for new signals */
         self::$signalRow =
             DB::table('signal_' . $botId)
@@ -80,7 +80,7 @@ class LimitOrderMessage extends OrderBook
         if (count(self::$signalRow) > 1) {
             $message = 'There are more than one record with New status in signals. LimitOrderMessage.php';
             Log::emergency($message);
-            // Front end message goes here
+            /* @todo Front end message goes here */
         }
 
         /**

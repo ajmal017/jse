@@ -111,7 +111,7 @@ class LimitRest extends Command
          * https://dacoders.myjetbrains.com/youtrack/issue/JSE-289
          */
         if($this->orderBookMessage)
-            if(gettype($this->orderBookMessage == 'array')){
+            if(gettype($this->orderBookMessage) == 'array'){
                 $message = [
                     'table' => 'orderBook10',
                     'action' => 'update',
@@ -135,6 +135,10 @@ class LimitRest extends Command
 
                 /* Order book parse */
                 \App\Classes\Trading\Orders\LimitOrderMessage::parse($message, $this->argument('botId'), $this->argument('queId'), $this->exchange);
+            } else {
+                $errorMessage = 'Didn not get $this->exchange->fetchOrderBook ot the response is not array';
+                dump(__FILE__ . $errorMessage);
+                Log::error($errorMessage);
             }
 
         echo "LimitRest.php " . now() .

@@ -52,7 +52,7 @@ class Limit extends Command
           'isLimitOrderPlaced' => false,
           'limitOrderPrice' => null,
           'limitOrderTimestamp' => null,
-          'step' => 0 // Limit order position placement. Used for testing purpuses. If set - order will be locate deeper in the book.
+          'step' => 0 // Limit order position placement. Used for testing purposes. If set - order will be locate deeper in the book.
         ];
 
         /* For firing subscription from demo to live. In LimitOrderWs.php */

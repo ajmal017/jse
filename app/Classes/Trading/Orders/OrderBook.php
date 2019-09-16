@@ -47,7 +47,7 @@ abstract class OrderBook extends Signal
 
     public static function orderBookTick($message){
 
-        /* Get settings on each tick - once per 2 seconds. This limit is set in LimitOrderWs.php */
+        /* Get settings on each tick */
         $botSettings = \App\Classes\WebSocket\Front\TradingAccount::getSettings(LimitOrderMessage::$botId);
 
         /* Set limit order params */
@@ -57,7 +57,6 @@ abstract class OrderBook extends Signal
         /* Place order as market or limit */
         $isPlaceAsMarketOrder = $botSettings['isPlaceAsMarket'];
 
-
         /* Limit order offset. If this value is negative - the limit order will be converted to market */
         LimitOrderMessage::$limitOrderOffset = ceil($message['data'][0]['bids'][0][0] * $botSettings['offset'] / 100);
 
@@ -65,6 +64,7 @@ abstract class OrderBook extends Signal
         if (LimitOrderMessage::$signalRow[0]->direction == "sell")
             if($isPlaceAsMarketOrder){
                 if(!LimitOrderMessage::$limitOrderObj['isLimitOrderPlaced']){
+                    dump('OrderBook.php yyttgg dispatch job');
                     PlaceMarketOrder::dispatch(
                         'sell',
                         LimitOrderMessage::$signalRow[0]->signal_volume,

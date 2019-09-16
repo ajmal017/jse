@@ -308,6 +308,12 @@ class Exchange
         self::checkResponse($botSettings);
     }
 
+    /**
+     * Parse Bitmex errors.
+     * strops(self::$response, 'some destinctive text from an error here')
+     *
+     * @param $botSettings
+     */
     private static function checkResponse($botSettings){
         if (gettype(self::$response) == 'array'){
             dump(self::$response);
@@ -331,11 +337,13 @@ class Exchange
                         ->update([
                             'status' => 'idle'
                         ]);
-
                     die();
-
-                case !strpos(self::$response, 'does not have market symbol'); // bitmex does not have market symbol
+                case !strpos(self::$response, 'does not have market symbol');
                     $error = 'Bitmex does not have market symbol. Execution is not possible';
+                    throw new Exception($error);
+                    break;
+                case !strpos(self::$response, 'Access');
+                    $error = 'Access Denied. Most likely API key is wrong';
                     throw new Exception($error);
                     break;
                 /* @see: https://www.bitmex.com/app/restAPI#Overload */
@@ -350,7 +358,8 @@ class Exchange
                     Log::notice('Invalid ordStatus. Usually it happens when trying to amend and order which is already filled' . __FILE__ . ' '. __LINE__);
                     dump('Order amend. It usually happens when the order was fully filled');
                     break;
-                /**
+
+                    /**
                  * https://github.com/BitMEX/api-connectors/issues/202
                  * {"error":{"message":"This request has expired - `expires` is in the past. Current time: 1561918674","name":"HTTPError"}}
                  * Have no idea what does this error do. It seems like nothing happens.

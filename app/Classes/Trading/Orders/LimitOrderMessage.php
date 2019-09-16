@@ -84,7 +84,7 @@ class LimitOrderMessage extends OrderBook
         }
 
         /**
-         * Status of the signal is sent to pending once a limit order is placed. In Exchnage.php. placeLimitBuyOrder/placeLimitSellOrder
+         * Status of the signal is sent to pending once a limit order is placed. In Exchange.php. placeLimitBuyOrder/placeLimitSellOrder
          * Signals are added to signal_1.. table from Chart.php or MacdTradesTrigger.php
          */
         if (count(self::$signalRow) == 1){

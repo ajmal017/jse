@@ -8,6 +8,7 @@ use Illuminate\Console\Command;
 use Illuminate\Support\Facades\DB;
 use Mockery\Exception;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Cache;
 
 /**
  *
@@ -27,14 +28,14 @@ class LimitRest extends Command
      *
      * @var string
      */
-    protected $signature = 'limitrest {botId} {queId} {net}';
+    protected $signature = 'limitrest {botId} {queId}';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = 'limitrest {botId} {queId} {net}. new: live/testnet';
+    protected $description = 'limitrest {botId} {queId}';
 
     /**
      * Create a new command instance.
@@ -54,6 +55,19 @@ class LimitRest extends Command
 
     public function handle()
     {
+        $limitOrderObj = [
+            'orderID' => null,
+            'clOrdID' => 'abc-123-' . now(),
+            'direction' => 'sell',
+            'isLimitOrderPlaced' => false,
+            'limitOrderPrice' => null,
+            'limitOrderTimestamp' => null,
+            'step' => 0 // Limit order position placement. Used for testing purposes. If set - order will be locate deeper in the book.
+        ];
+
+        /* For firing subscription from demo to live. In LimitOrderWs.php */
+        Cache::put('status_bot_' . $this->argument('botId'), true, now()->addMinute(30));
+
         /**
          * Truncate signal table.
          * This table gets truncated on bot start/stop button click as well.
@@ -71,7 +85,7 @@ class LimitRest extends Command
         $this->exchange->timeout = 30000; // 30 seconds. https://github.com/ccxt/ccxt/wiki/Manual#exchange-properties
 
         while (true){
-         sleep(15);
+         sleep(20);
          $this->listen();
         }
     }
@@ -110,7 +124,7 @@ class LimitRest extends Command
          * We check the type. If it is text instead of array - it means that an error was thrown.
          * https://dacoders.myjetbrains.com/youtrack/issue/JSE-289
          */
-        if($this->orderBookMessage)
+        if($this->orderBookMessage){
             if(gettype($this->orderBookMessage) == 'array'){
                 $message = [
                     'table' => 'orderBook10',
@@ -140,6 +154,11 @@ class LimitRest extends Command
                 dump(__FILE__ . $errorMessage);
                 Log::error($errorMessage);
             }
+        } else {
+            dump(__FILE__);
+            Dump('$this->orderBookMessage DID NOT PASS iiuui');
+        }
+
 
         echo "LimitRest.php " . now() .
             " Bot ID: " . $this->argument('botId') .

@@ -85,18 +85,21 @@ class BotController extends Controller
             ->where('id',$id)
             ->get()[0];
 
-        /* Check whether que worker are running or not */
-        if (time() - $row->front_worker_update_time > 10){
+        /**
+         * Check whether que worker are running or not.
+         * Rate limit values are set in Front.php and LimitRest.php
+         */
+        if (time() - $row->front_worker_update_time > 20){
             return response('Front worker is offline! Id: ' . $row->id . '<br>' . __FILE__, 422)
                 ->header('Content-Type', 'text/plain');
         }
 
-        if (time() - $row->execution_worker_update_time > 10){
+        if (time() - $row->execution_worker_update_time > 20){
             return response('Execution worker is offline! Id: ' . $row->id . '<br>' . __FILE__, 422)
                 ->header('Content-Type', 'text/plain');
         }
 
-        if (time() - $row->que_worker_update_time > 10){
+        if (time() - $row->que_worker_update_time > 20){
             return response('Que worker is offline! Id: ' . $row->id . '<br>' . __FILE__, 422)
                 ->header('Content-Type', 'text/plain');
         }

@@ -10,6 +10,9 @@ use Illuminate\Support\Facades\Cache;
 
 class test2 extends Command
 {
+
+    private $resArr = [];
+    private $resArrReverse = [];
     /**
      * The name and signature of the console command.
      *
@@ -41,6 +44,48 @@ class test2 extends Command
      */
     public function handle()
     {
+
+        $arr = [1, 5, 3, 4, 2, 2];
+        $k = 3;
+
+        /* Build an array with all possible combinations and sum of the elements */
+        foreach ($arr as $i)
+            foreach ($arr as $j){
+                $diff = abs($i - $j);
+                if ($diff == $k){
+                    $this->resArr[] = [ 'sum' => $i + $j, 'pair' => [$i, $j]];
+                }
+            }
+
+        /* Get unique values based on sum */
+        $i = 0;
+        $tempArray = array();
+        $keyArray = array();
+        foreach($this->resArr as $val) {
+            if (!in_array($val['sum'], $keyArray)) {
+                $keyArray[$i] = $val['sum'];
+                $tempArray[$i] = $val;
+            }
+            $i++;
+        }
+
+        dump($tempArray);
+
+
+
+        die();
+
+
+
+        /*$string = "This sentence is fine";
+        $expString = explode(" ", $string);
+        $count = 0;
+        foreach($expString as $subString){
+            if (strlen($subString) == 4) $count++;
+        }
+        dump($count);*/
+
+        die();
 
         $botSettings = [
             'botTitle' => 'bot_5', // Back testing table

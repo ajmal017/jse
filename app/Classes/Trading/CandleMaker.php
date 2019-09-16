@@ -52,6 +52,7 @@ class CandleMaker
      */
     public function index($tickPrice, $tickDateFullTime, $tickVolume, $chart, $command, $priceChannelPeriod, $macdSettings){
         echo "********************************************** CandleMaker\n";
+
         /** First time ever application run check. Table is empty */
         $lastRecordId = DB::table($this->tableName)->orderBy('time_stamp', 'desc')->first()->id;
 
@@ -60,8 +61,8 @@ class CandleMaker
             $this->tickDate = strtotime($tickDateFullTime) * 1000;
             $x = date("Y-m-d H:i", $this->tickDate / 1000) . "\n"; // Take seconds off. Convert timestamp to date
             $this->tt = strtotime($x . $this->botSettings['timeFrame'] . "minute"); // // *** TIME FRAME IS HERE!! ***
-            //$this->tt = strtotime($x . "+30seconds"); // Custom time frame
             $this->isFirstTickInBar = false;
+
             /**
              * The first tick after a bar is added can go up or down.
              * At this tick make barHigh and barLow = tickPrice

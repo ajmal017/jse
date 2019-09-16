@@ -40,11 +40,14 @@ class History
         $symbol = $botSettings['historySymbolName'];
 
         /* Load 5m bars when trading time frame set to 15m or 30m */
-        if ($timeFrame == '15m' || $timeFrame == '30m'){
-            $timeFrame = '5m';
-        }
-        dump('time frame: ' . $timeFrame);
+        if ($timeFrame == '15m' || $timeFrame == '30m') $timeFrame = '5m';
+
+        dump('History.php time frame: ' . $timeFrame);
         $url = "https://www.bitmex.com/api/v1/trade/bucketed?binSize=$timeFrame&partial=false&symbol=$symbol&count=$barsToLoad&reverse=true";
+
+        /* Put back the original value */
+        $timeFrame = $botSettings['timeFrame'] . 'm';
+
 
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_URL, $url);

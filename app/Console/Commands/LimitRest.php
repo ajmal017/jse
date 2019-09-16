@@ -71,7 +71,7 @@ class LimitRest extends Command
         $this->exchange->timeout = 30000; // 30 seconds. https://github.com/ccxt/ccxt/wiki/Manual#exchange-properties
 
         while (true){
-         sleep(10);
+         sleep(15);
          $this->listen();
         }
     }

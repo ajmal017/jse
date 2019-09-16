@@ -57,8 +57,6 @@ abstract class OrderBook extends Signal
         /* Place order as market or limit */
         $isPlaceAsMarketOrder = $botSettings['isPlaceAsMarket'];
 
-        dump('Limit order params LimitOrderMessage.php code: kkoo99');
-        dump($botSettings);
 
         /* Limit order offset. If this value is negative - the limit order will be converted to market */
         LimitOrderMessage::$limitOrderOffset = ceil($message['data'][0]['bids'][0][0] * $botSettings['offset'] / 100);

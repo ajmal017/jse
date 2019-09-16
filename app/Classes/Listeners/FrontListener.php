@@ -30,7 +30,6 @@ class FrontListener
         self::$exchange = new \ccxt\bitmex();
         self::$exchange->urls['api'] = self::$exchange->urls['api'];
 
-
         /* Endless loop. Executes once per second */
         while (true){
             echo (Bot::where('id', $botId)->value('status') == 'running' ? 'Bot is: Running ' . now() : 'Bot is: idle ' . now()) . "\n";
@@ -43,8 +42,10 @@ class FrontListener
 
             /* Get strategies settings object*/
             self::$strategiesSettingsObject = \App\Classes\WebSocket\Front\Strategies::getSettings($botId);
+
             /* Get account settings object */
             self::$accountSettingsObject = \App\Classes\WebSocket\Front\TradingAccount::getSettings($botId);
+
             /* Trace */
             dump(self::$strategiesSettingsObject);
 
@@ -54,6 +55,7 @@ class FrontListener
                     (array_key_exists('priceChannel', self::$strategiesSettingsObject) ? 'priceChannel' : 'macd'),
                     self::$accountSettingsObject);
                 dump (__FILE__);
+
                 dump((array_key_exists('priceChannel', self::$strategiesSettingsObject) ? "!!!!!!! PC" : "!!!!!!!!!! MACD"));
                 (array_key_exists('priceChannel', self::$strategiesSettingsObject) ?
                     self::$chart = new \App\Classes\Trading\Chart(self::$accountSettingsObject) :
@@ -92,16 +94,18 @@ class FrontListener
                     Log::notice($error);
                 }
 
-                /* @TODO need to check ID of the trade. In case of the same trade is received twice - filter it */
-                $tradeObj = [
-                  'data' => [
-                      [
-                          'lastPrice' => self::$message[0]['price'],
-                          'timestamp' => self::$message[0]['datetime']
-                      ]
-                  ]
-                ];
-                self::messageParse($tradeObj);
+                if(gettype(self::$message == array())){
+                    /* @TODO need to check ID of the trade. In case of the same trade is received twice - filter it */
+                    $tradeObj = [
+                        'data' => [
+                            [
+                                'lastPrice' => self::$message[0]['price'],
+                                'timestamp' => self::$message[0]['datetime']
+                            ]
+                        ]
+                    ];
+                    self::messageParse($tradeObj);
+                }
             }
             sleep(5);
         };

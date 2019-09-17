@@ -68,6 +68,7 @@ class LimitRest extends Command
         /* For firing subscription from demo to live. In LimitOrderWs.php */
         Cache::put('status_bot_' . $this->argument('botId'), true, now()->addMinute(30));
 
+
         /**
          * Truncate signal table.
          * This table gets truncated on bot start/stop button click as well.

@@ -60,10 +60,14 @@ abstract class OrderBook extends Signal
         /* Limit order offset. If this value is negative - the limit order will be converted to market */
         LimitOrderMessage::$limitOrderOffset = ceil($message['data'][0]['bids'][0][0] * $botSettings['offset'] / 100);
 
+
+        dump(__FILE__ . ' OrderBook 64');
+
         /* Place and amend order */
         if (LimitOrderMessage::$signalRow[0]->direction == "sell")
             if($isPlaceAsMarketOrder){
-                if(!LimitOrderMessage::$limitOrderObj['isLimitOrderPlaced']){
+                //if(!LimitOrderMessage::$limitOrderObj['isLimitOrderPlaced']){
+                if(true){
                     dump('OrderBook.php yyttgg dispatch job');
                     PlaceMarketOrder::dispatch(
                         'sell',

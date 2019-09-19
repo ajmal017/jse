@@ -9,6 +9,8 @@
 namespace App\Classes\Trading;
 use App\Classes\LogToFile;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Facade;
+use Illuminate\Support\Facades\Log;
 
 /**
  * Back testing profit calculation.
@@ -69,24 +71,34 @@ abstract class Profit
                     ->orderBy('id', 'desc') // Form biggest to smallest values
                     ->value('trade_price');
 
-            /* Trade profit */
-            if($this->position == "long"){
-                if ($botSettings['historySymbolName'] == 'XBTUSD'){
-                    self::$tradeProfit = (1 / $lastTradePrice - 1 / $this->lastRow[0]->close) * $this->botSettings['volume'];
+            /**
+             * JSE-333 Make sure that lastTradePrice and close != null.
+             * This happens once in a while!
+             */
+            if($lastTradePrice != 0 || $this->lastRow[0]->close != 0){
+                /* Trade profit */
+                if($this->position == "long"){
+                    if ($botSettings['historySymbolName'] == 'XBTUSD'){
+                        self::$tradeProfit = (1 / $lastTradePrice - 1 / $this->lastRow[0]->close) * $this->botSettings['volume'];
+                    }
+                    if ($botSettings['historySymbolName'] == 'ETHUSD'){
+                        self::$tradeProfit = ($this->lastRow[0]->close - $lastTradePrice) * 0.000001 * $this->botSettings['volume'];
+                    }
                 }
-                if ($botSettings['historySymbolName'] == 'ETHUSD'){
-                    self::$tradeProfit = ($this->lastRow[0]->close - $lastTradePrice) * 0.000001 * $this->botSettings['volume'];
+
+                if($this->position == "short"){
+                    if ($botSettings['historySymbolName'] == 'XBTUSD'){
+                        self::$tradeProfit = (1 / $this->lastRow[0]->close - 1 / $lastTradePrice) * $this->botSettings['volume'];
+                    }
+                    if ($botSettings['historySymbolName'] == 'ETHUSD'){
+                        self::$tradeProfit = ($lastTradePrice - $this->lastRow[0]->close) * 0.000001 * $this->botSettings['volume'];
+                    }
                 }
+            } else {
+                Log::error('Got last price or close = 0. Current profit will not be calculated');
             }
 
-            if($this->position == "short"){
-                if ($botSettings['historySymbolName'] == 'XBTUSD'){
-                    self::$tradeProfit = (1 / $this->lastRow[0]->close - 1 / $lastTradePrice) * $this->botSettings['volume'];
-                }
-                if ($botSettings['historySymbolName'] == 'ETHUSD'){
-                    self::$tradeProfit = ($lastTradePrice - $this->lastRow[0]->close) * 0.000001 * $this->botSettings['volume'];
-                }
-            }
+
 
             /* Update trade profit */
             DB::table($this->botSettings['botTitle'])
